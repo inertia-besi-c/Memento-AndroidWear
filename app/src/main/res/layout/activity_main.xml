@@ -16,29 +16,25 @@
         <Button
             android:id="@+id/EMA"
             android:layout_width="131dp"
-            android:layout_height="57dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="36dp"
+            android:layout_height="76dp"
+            android:layout_marginBottom="40dp"
+            android:background="@color/green"
             android:text="START"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/SLEEP"
-            android:layout_width="74dp"
-            android:layout_height="57dp"
+            android:layout_width="77dp"
+            android:layout_height="76dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginBottom="40dp"
+            android:background="@color/blue"
             android:text="SLEEP"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EMA"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toEndOf="@+id/EMA" />
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>

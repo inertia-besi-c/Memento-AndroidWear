@@ -7,15 +7,14 @@ import android.widget.TextView;
 
 public class MainActivity extends WearableActivity {
 
-    private Button EMA;
-    private Button Sleep;
+    private Button EMA, SLEEP;      // This is the list of buttons
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EMA = (Button) findViewById(R.id.EMA);
-        Sleep = (Button) findViewById(R.id.Sleep);
+        SLEEP = (Button) findViewById(R.id.SLEEP);
 
         // Enables Always-on
         setAmbientEnabled();
