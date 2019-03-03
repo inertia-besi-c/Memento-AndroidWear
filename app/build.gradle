@@ -27,4 +27,5 @@ dependencies {
     implementation 'com.android.support:wear:28.0.0'
     compileOnly 'com.google.android.wearable:wearable:2.4.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
 }
