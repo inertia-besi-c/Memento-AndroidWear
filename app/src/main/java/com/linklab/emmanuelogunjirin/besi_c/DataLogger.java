@@ -52,11 +52,7 @@ public class DataLogger {
     public void LogData(){
 
         if (isExternalStorageWritable()){
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        String timeStamp = dateFormat.format(date); //2016/11/16 12:08:43
-
+            
         try {
             File Besi_dir = new File("/sdcard/BESI_C/");
             if (Besi_dir.isDirectory()){} else {Besi_dir.mkdirs();}
@@ -79,7 +75,7 @@ public class DataLogger {
     }
         else
             {
-                Log.i("Error","Failed to write to file");
+                Log.i("Error","Failed to write to directory");
             }
 
     }

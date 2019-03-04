@@ -55,17 +55,45 @@
 
                 <TextView
                     android:id="@+id/BATTERY_LEVEL"
-                    android:layout_width="79dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="17dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="24dp"
-                    android:text="Battery: "
-                    android:textSize="8sp"
+                    android:text="Battery: %"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.503"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/DATE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Mar 4, 2019"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.503"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/TIME"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="8:58 am"
+                    android:textSize="40sp"
+                    app:layout_constraintBottom_toTopOf="@+id/EMA"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.504"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/DATE" />
 
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>

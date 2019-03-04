@@ -2,7 +2,6 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
