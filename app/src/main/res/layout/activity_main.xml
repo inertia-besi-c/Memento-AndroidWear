@@ -31,7 +31,7 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/EMA"
+                    android:id="@+id/EMA_Start"
                     android:layout_width="138dp"
                     android:layout_height="72dp"
                     android:layout_marginEnd="8dp"
@@ -60,7 +60,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="24dp"
-                    android:text="Battery: %"
+                    android:text="@string/battery"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Mar 4, 2019"
+                    android:text="@string/mar_4_2019"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.503"
@@ -87,9 +87,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="8:58 am"
+                    android:text="@string/_8_58_am"
                     android:textSize="40sp"
-                    app:layout_constraintBottom_toTopOf="@+id/EMA"
+                    app:layout_constraintBottom_toTopOf="@+id/EMA_Start"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.504"
                     app:layout_constraintStart_toStartOf="parent"
