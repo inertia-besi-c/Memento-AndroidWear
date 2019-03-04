@@ -2,13 +2,17 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ema extends WearableActivity {
 
@@ -206,6 +210,19 @@ public class ema extends WearableActivity {
 
     private void Submit()
     {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+
+        String log = dateFormat.format(date);
+
+        for (int i = 0; i < UserResponses.length; i++)
+        {
+            log+=","+UserResponses[i];
+        }
+
+        DataLogger dataLogger = new DataLogger("EMA_Results.csv",log);
+
+        dataLogger.LogData();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";
         int duration = Toast.LENGTH_SHORT;

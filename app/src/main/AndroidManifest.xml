@@ -3,6 +3,7 @@
     package="com.linklab.emmanuelogunjirin.besi_c">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.type.watch" />
 
