@@ -33,7 +33,6 @@ public class EMA extends WearableActivity
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         v.vibrate(300);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
 
@@ -66,6 +65,7 @@ public class EMA extends WearableActivity
     }
 
     // This is Question 1
+    @SuppressLint("SetTextI18n")
     private void q1()
     {
         back.setText("Cancel");
@@ -107,6 +107,7 @@ public class EMA extends WearableActivity
     }
 
     // This is Question 2
+    @SuppressLint("SetTextI18n")
     private void q2()
     {
         back.setText("Back");
