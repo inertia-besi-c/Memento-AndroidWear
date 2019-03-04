@@ -62,8 +62,8 @@ public class ema extends WearableActivity {
         resTaps = 0;
         String question = "Is patient having pain now?";
         responses.clear();
-        responses.add("yes");
-        responses.add("no");
+        responses.add("Yes");
+        responses.add("No");
 
         req.setText(question);
         Cycle_Responses();
@@ -72,7 +72,7 @@ public class ema extends WearableActivity {
             public void onClick(View v)
             {
                 UserResponses[0] = res.getText().toString();
-                if (UserResponses[0] == "yes")
+                if (UserResponses[0] == "Yes")
                     q2();
                 else
                     Cancel();
@@ -185,8 +185,9 @@ public class ema extends WearableActivity {
         String question = "Did patient take an opioid for the pain?";
         responses.clear();
 
-        responses.add("yes");
-        responses.add("no");
+        responses.add("Yes");
+        responses.add("No");
+        responses.add("Unsure");
 
         req.setText(question);
         Cycle_Responses();
