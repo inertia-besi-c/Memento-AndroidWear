@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-@SuppressLint("Registered")
 public class EMA extends WearableActivity
 {
     private int qcount = 5;     // This is the amount of questions to be shown.
