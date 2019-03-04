@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.os.Vibrator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +28,10 @@ public class ema extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+
 
         back = (Button) findViewById(R.id.Back);
         next = (Button) findViewById(R.id.Next);
@@ -58,6 +62,7 @@ public class ema extends WearableActivity {
 
     private void q1()
     {
+        back.setText("Cancel");
         resTaps = 0;
         String question = "Is patient having pain now?";
         responses.clear();
@@ -88,6 +93,7 @@ public class ema extends WearableActivity {
 
     private void q2()
     {
+        back.setText("Back");
         resTaps = 0;
         String question = "What is patient's pain level?";
         responses.clear();

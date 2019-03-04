@@ -34,7 +34,7 @@ public class MainActivity extends WearableActivity {
             try { while (!time_updater.isInterrupted()) { Thread.sleep(1000);runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    DateFormat timeFormat = new SimpleDateFormat("H:mm a");
+                    DateFormat timeFormat = new SimpleDateFormat("h:mm a");
                     DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
                     Date now = new Date();
                     time.setText(timeFormat.format(now));
