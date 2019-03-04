@@ -21,6 +21,7 @@ public class ema extends WearableActivity {
 
     private int resTaps = 0;
     private ArrayList<String> responses = new ArrayList<String>();
+    private Vibrator v;
 
     private String[] UserResponses = new String[qcount];
 
@@ -29,9 +30,8 @@ public class ema extends WearableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(500);
-
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(400);
 
         back = (Button) findViewById(R.id.Back);
         next = (Button) findViewById(R.id.Next);
