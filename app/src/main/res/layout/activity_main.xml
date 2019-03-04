@@ -34,11 +34,12 @@
                 <Button
                     android:id="@+id/EMA_Start"
                     android:layout_width="138dp"
-                    android:layout_height="72dp"
+                    android:layout_height="65dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="48dp"
                     android:background="@color/green"
                     android:text="@string/start"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/SLEEP"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -47,10 +48,11 @@
                 <Button
                     android:id="@+id/SLEEP"
                     android:layout_width="89dp"
-                    android:layout_height="73dp"
+                    android:layout_height="65dp"
                     android:layout_marginBottom="48dp"
                     android:background="@color/blue"
                     android:text="@string/sleep"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -75,7 +77,6 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/mar_4_2019"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.503"
@@ -88,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/_8_58_am"
                     android:textSize="40sp"
                     app:layout_constraintBottom_toTopOf="@+id/EMA_Start"
                     app:layout_constraintEnd_toEndOf="parent"

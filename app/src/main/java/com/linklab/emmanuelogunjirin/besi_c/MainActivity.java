@@ -39,7 +39,7 @@ public class MainActivity extends WearableActivity
                     @Override
                     public void run()
                     {
-                        DateFormat timeFormat = new SimpleDateFormat("H:mm a", Locale.US);
+                        DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.US);
                         DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
                         Date current = new Date();
                         time.setText(timeFormat.format(current));
