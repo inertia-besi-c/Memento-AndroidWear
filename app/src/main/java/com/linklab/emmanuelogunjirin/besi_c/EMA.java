@@ -23,11 +23,17 @@ public class EMA extends WearableActivity
     private int resTaps = 0;
     private ArrayList<String> responses = new ArrayList<>();
     private String[] UserResponses = new String[qcount];
+    public Vibrator v;
+
 
     @Override
     // When the screen is created, this is run.
     protected void onCreate(Bundle savedInstanceState)
     {
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        v.vibrate(300);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
 
@@ -39,8 +45,9 @@ public class EMA extends WearableActivity
 
         res.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 resTaps+=1;
                 Cycle_Responses();
             }
@@ -73,11 +80,13 @@ public class EMA extends WearableActivity
         // If the next button is clicked
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[0] = res.getText().toString();
                 if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
                 {
+
                     q2();
                 }
                 else
@@ -89,8 +98,9 @@ public class EMA extends WearableActivity
         // If the back button is clicked
         back.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 Cancel();
             }
         });
@@ -111,16 +121,18 @@ public class EMA extends WearableActivity
         Cycle_Responses();
         back.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[1] = res.getText().toString();
                 q1();   // Goes back to question 1
             }
         });
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[1] = res.getText().toString();
                 q3();   // Goes back to question 3
             }
@@ -144,16 +156,18 @@ public class EMA extends WearableActivity
         Cycle_Responses();
         back.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[2] = res.getText().toString();
                 q2();   // Goes back to question 2
             }
         });
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[2] = res.getText().toString();
                 q4();   // Goes on to question 4
             }
@@ -177,16 +191,18 @@ public class EMA extends WearableActivity
         Cycle_Responses();
         back.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[3] = res.getText().toString();
                 q3();   // Goes back to question 3
             }
         });
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[3] = res.getText().toString();
                 q5();   // Goes on to question 4
             }
@@ -208,16 +224,18 @@ public class EMA extends WearableActivity
         Cycle_Responses();
         back.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[4] = res.getText().toString();
                 q4();   // Goes back to question 4
             }
         });
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View v)
+            public void onClick(View view)
             {
+                v.vibrate(20);
                 UserResponses[4] = res.getText().toString();
                 Submit();   // Submits the responses.
             }
