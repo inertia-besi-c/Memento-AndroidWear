@@ -11,92 +11,111 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-public class MainActivity extends WearableActivity {
-
-    private Button Ema, Sleep;// This is the list of buttons
-    private TextView batteryLevel,date,time;
-
+public class MainActivity extends WearableActivity
+{
+    private TextView batteryLevel, date, time;    // This is what shows the battery level, date, and time
 
     // Updates the time Every second when UI is in front
-    Thread time_updater = new Thread() {
+    Thread time_updater = new Thread()
+    {
         @Override
-        public void run() {
-            try { while (!time_updater.isInterrupted()) { Thread.sleep(1000);runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    DateFormat timeFormat = new SimpleDateFormat("H:mm a");
-                    DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
-                    Date now = new Date();
-                    time.setText(timeFormat.format(now));
-                    date.setText(dateFormat.format(now));
+        public void run()
+        {
+            try
+            {
+                while (!time_updater.isInterrupted())
+                {
+                    Thread.sleep(1000);runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        DateFormat timeFormat = new SimpleDateFormat("H:mm a", Locale.US);
+                        DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
+                        Date current = new Date();
+                        time.setText(timeFormat.format(current));
+                        date.setText(dateFormat.format(current));
+                    }
+                });
                 }
-            });
             }
-            } catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
+                System.out.print("Catch was run");       // Placeholder until the catch is needed to observe some response
             }
-        }};
+        }
+    };
 
-    // Gets the current battery level and sets the Text of the Battery Indicator
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
+    // Gets the current battery level, date, and time and sets the text field data
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver()
+    {
         @Override
-        public void onReceive(final Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent)
+        {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-            int percent = (level*100)/scale;
-
+            int percent = (level*100)/scale;    // Shows the battery level in percentage value
             final String batLevel = "Battery: " + String.valueOf(percent) + "%";
 
             batteryLevel.setText(batLevel);
-        }};
+        }
+    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Ema = (Button) findViewById(R.id.EMA);
-        Sleep = (Button) findViewById(R.id.SLEEP);
+        Button EMA_Start = findViewById(R.id.EMA_Start);
+        Button SLEEP = findViewById(R.id.SLEEP);
 
-        batteryLevel = (TextView) findViewById(R.id.BATTERY_LEVEL);
+        batteryLevel = findViewById(R.id.BATTERY_LEVEL);
+        registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-        date = (TextView) findViewById(R.id.DATE);
-        time = (TextView) findViewById(R.id.TIME);
+        date = findViewById(R.id.DATE);
+        time = findViewById(R.id.TIME);
 
         time_updater.start();
 
-        registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-        // Checks if Device has permission to write to external data (sdcard), if it does not
-        // it requests the permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
             // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
-        Ema.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(), ema.class);
+        // Listens for the EMA button "START" to be clicked.
+        EMA_Start.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent i = new Intent(getBaseContext(), EMA.class);
                 startActivity(i);
-                //Toast.makeText(this, "Button Clicked", Toast.LENGTH_LONG).show();
+                // Toast.makeText(this, "Button Clicked", Toast.LENGTH_LONG).show();
+            }
+        });
 
+        // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
+        SLEEP.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+//                Intent i = new Intent(getBaseContext(), SLEEP.class );
+//                startActivity(i);
             }
         });
 
         // Enables Always-on
         setAmbientEnabled();
     }
-
 }
