@@ -19,58 +19,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-//public class SensorData extends WearableActivity implements SensorEventListener {
-//
-//    private TextView hrdisp;
-//    private SensorManager mSensorManager;
-//    private Sensor mAccelerometer;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_sensor_data);
-//
-//        hrdisp = findViewById(R.id.textView);
-//
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) != PackageManager.PERMISSION_GRANTED)
-//        {
-//            // Permission is not granted
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BODY_SENSORS}, 0);
-//        }
-//
-//        mSensorManager =
-//                (SensorManager)getSystemService(SENSOR_SERVICE);
-//        mAccelerometer = mSensorManager.getDefaultSensor(
-//                Sensor.TYPE_HEART_RATE);
-//        // Enables Always-on
-//        setAmbientEnabled();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        mSensorManager.registerListener(this, mAccelerometer,
-//                SensorManager.SENSOR_DELAY_NORMAL);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        mSensorManager.unregisterListener(this);
-//    }
-//
-//    @Override
-//    public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
-//    }
-//
-//    @Override
-//    public void onSensorChanged(SensorEvent event) {
-//        Log.d("Test", "Got the heart rate (beats per minute) : " +
-//                String.valueOf(event.values[0]));
-//        hrdisp.setText(String.valueOf(event.values[0]));
-//    }
+public class SensorData extends WearableActivity implements SensorEventListener {
 
-public class SensorData extends WearableActivity{
+    private TextView hrdisp;
+    private SensorManager mSensorManager;
+    private Sensor mHeartRate;
 
     private Button button;
     private int counter = 0;
@@ -109,7 +62,33 @@ public class SensorData extends WearableActivity{
 
         // Enables Always-on
         setAmbientEnabled();
+
+                Intent i = new Intent(getBaseContext(), SensorData.class );
+                startActivity(i);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mHeartRate,
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Log.d("Test", "Got the heart rate (beats per minute) : " +
+                String.valueOf(event.values[0]));
+        hrdisp.setText(String.valueOf(event.values[0]));
+    }
 }
 
