@@ -19,4 +19,5 @@
     <string name="button">Button</string>
     <string name="ema_text">EMA Text</string>
     <string name="title_activity_sensor_data">SensorData</string>
+    <string name="title_activity_accelerometer_sensor_timer">AccelerometerSensorTimer</string>
 </resources>

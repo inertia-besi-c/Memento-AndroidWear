@@ -1,5 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+// Imports
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,11 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends WearableActivity
+public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
-    private TextView batteryLevel, date, time;    // This is what shows the battery level, date, and time
+    private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
 
-    // Updates the time Every second when UI is in front
+    /* This Updates the Date and Time Every second when UI is in the foreground */
     Thread time_updater = new Thread()
     {
         @Override
@@ -52,13 +53,13 @@ public class MainActivity extends WearableActivity
             }
             catch (InterruptedException e)
             {
-                System.out.print("Catch was run");       // Placeholder until the catch is needed to observe some response
+                System.out.print("Catch was run");       // Placeholder until the catch is needed to observe some response from the system
             }
         }
     };
 
-    // Gets the current battery level, date, and time and sets the text field data
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver()
+    /* Gets the current battery level, date, and time and sets the text field data */
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver()        // Just a receiver that gets data from the system
     {
         @Override
         public void onReceive(final Context context, Intent intent)
@@ -66,9 +67,8 @@ public class MainActivity extends WearableActivity
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
             int percent = (level*100)/scale;    // Shows the battery level in percentage value
-            final String batLevel = "Battery: " + String.valueOf(percent) + "%";
-
-            batteryLevel.setText(batLevel);
+            final String batLevel = "Battery: " + String.valueOf(percent) + "%";        // Appends the battery level
+            batteryLevel.setText(batLevel);     // Sets the battery level text view to show the battery level in percentage.
         }
     };
 
@@ -90,18 +90,20 @@ public class MainActivity extends WearableActivity
 
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Button EMA_Start = findViewById(R.id.EMA_Start);
-        Button SLEEP = findViewById(R.id.SLEEP);
+        super.onCreate(savedInstanceState);      // Creates the main screen.
+        setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
 
-        batteryLevel = findViewById(R.id.BATTERY_LEVEL);
+        Button EMA_Start = findViewById(R.id.EMA_Start);    // The Start button is made
+        Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
+
+        batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
         registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-        date = findViewById(R.id.DATE);
-        time = findViewById(R.id.TIME);
+        date = findViewById(R.id.DATE);     // The date ID
+        time = findViewById(R.id.TIME);     // The time ID
 
-        time_updater.start();
+        time_updater.start();       // The time updater
+        StartHRPeriodicService();
 
         // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -116,14 +118,13 @@ public class MainActivity extends WearableActivity
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BODY_SENSORS}, 0);
         }
 
-        // Listens for the EMA button "START" to be clicked.
+        /* Listens for the EMA button "START" to be clicked. */
         EMA_Start.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
-                Intent i = new Intent(getBaseContext(), EMA.class);
-                startActivity(i);
-                // Toast.makeText(this, "Button Clicked", Toast.LENGTH_LONG).show();
+                Intent StartEMAActivity = new Intent(getBaseContext(), EMA.class);      // Links to the EMA File
+                startActivity(StartEMAActivity);    // Starts the EMA file
             }
         });
 
@@ -132,11 +133,16 @@ public class MainActivity extends WearableActivity
         {
             public void onClick(View v)
             {
-
+                // Future spot for a shutdown button for bedtime.
             }
         });
 
         // Enables Always-on
         setAmbientEnabled();
+    }
+    private void StartHRPeriodicService()
+    {
+        final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
+        startService(HRService);
     }
 }

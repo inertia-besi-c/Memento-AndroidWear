@@ -1,18 +1,20 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+// Imports
 import android.annotation.SuppressLint;
 import android.util.Log;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 @SuppressWarnings("ALL")
-public class DataLogger
+public class DataLogger     // A function that runs the data logging data
 {
-    private String FileName,Content;
+    private String FileName, Content;        // Variable names for the file characters and contents.
 
-    public DataLogger(String filename ,String content)
+    public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
         FileName = filename;
         Content = content;
@@ -51,7 +53,7 @@ public class DataLogger
                 fOut.close();
             }
 
-            catch (IOException e)       // If it does not write the file, tell us it failed.
+            catch (IOException e)       // If it does not write the file, imform us it failed.
             {
                 Log.i("Error",e.toString());
                 Log.i("Error","Failed to write file");
@@ -66,7 +68,7 @@ public class DataLogger
 
         else
         {
-            Log.i("Error","Failed to write to directory");
+            Log.i("Error","Failed to write to directory");      // If it could not make the directory, tell us it failed.
         }
     }
 }
