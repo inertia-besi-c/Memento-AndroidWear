@@ -74,12 +74,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     protected void onCreate(Bundle savedInstanceState)
     {
-        Intent HeartRateMeasurement = new Intent(getBaseContext(), HeartRateSensorTimer.class );        // This is where the Heart Rate Measurement is initialized.
-        startActivity(HeartRateMeasurement);        // This is where it starts.
-
-        Intent AccelerometerMeasurement = new Intent(getBaseContext(), HeartRateSensorTimer.class );        // This is where the Accelerometer Measurement is initialized.
-        startActivity(AccelerometerMeasurement);        // This is where it starts.
-
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
 
@@ -93,6 +87,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         time = findViewById(R.id.TIME);     // The time ID
 
         time_updater.start();       // The time updater
+        StartHRPeriodicService();
 
         // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -128,5 +123,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         // Enables Always-on
         setAmbientEnabled();
+    }
+    private void StartHRPeriodicService()
+    {
+        final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
+        startService(HRService);
     }
 }
