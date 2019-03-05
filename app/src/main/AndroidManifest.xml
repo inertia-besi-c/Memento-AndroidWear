@@ -10,16 +10,22 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
+        <service
+            android:name=".HeartRateMonitor"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
-
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -30,11 +36,10 @@
 
         <activity
             android:name=".SensorData"
-            android:label="@string/title_activity_sensor_data">
-        </activity>
+            android:label="@string/title_activity_sensor_data"></activity>
         <activity
             android:name=".ema"
-            android:label="@string/title_activity_ema"></activity>
+            android:label="@string/title_activity_ema" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
