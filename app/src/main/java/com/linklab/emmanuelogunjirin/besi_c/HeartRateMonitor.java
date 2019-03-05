@@ -12,6 +12,11 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class HeartRateMonitor extends Service implements SensorEventListener {
     public HeartRateMonitor() {
     }
@@ -66,9 +71,16 @@ public class HeartRateMonitor extends Service implements SensorEventListener {
         Log.d("Test", "Got the heart rate (beats per minute) : " +
                 String.valueOf(event.values[0]));
         String hrm = String.valueOf(event.values[0]);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss,", Locale.US);
+        Date date = new Date();
+        StringBuilder log = new StringBuilder(dateFormat.format(date));
+        log.append(hrm);
+
         if (hrm != null || hrm != "0")
         {
-            DataLogger dataLogger = new DataLogger("HR_Sensor_Data.csv",hrm);
+            DataLogger dataLogger = new DataLogger("HR_Sensor_Data.csv",log.toString());
+            dataLogger.LogData();
         }
 
     }
