@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -70,6 +72,20 @@ public class MainActivity extends WearableActivity
         }
     };
 
+    public class autostart extends BroadcastReceiver
+    {
+        public void onReceive(Context context, Intent arg1)
+        {
+            Intent intent = new Intent(context, SensorData.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
+            }
+            Log.i("Autostart", "started");
+        }
+    }
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState)
@@ -116,8 +132,7 @@ public class MainActivity extends WearableActivity
         {
             public void onClick(View v)
             {
-                Intent i = new Intent(getBaseContext(), SensorData.class );
-                startActivity(i);
+
             }
         });
 
