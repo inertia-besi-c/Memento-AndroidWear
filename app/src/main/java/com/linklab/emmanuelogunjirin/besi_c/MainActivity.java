@@ -87,7 +87,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         time = findViewById(R.id.TIME);     // The time ID
 
         time_updater.start();       // The time updater
-        StartHRPeriodicService();
+        StartHRPeriodicService();   // This starts the Heart Rate service in the service file.
 
         // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -124,6 +124,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         // Enables Always-on
         setAmbientEnabled();
     }
+
     private void StartHRPeriodicService()
     {
         final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);

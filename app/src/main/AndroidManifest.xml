@@ -32,14 +32,6 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <activity
-            android:name=".AccelerometerSensorTimer"
-            android:label="@string/title_activity_accelerometer_sensor_timer"></activity>
-
-        <service
-            android:name=".AccelerometerSensor"
-            android:enabled="true"
-            android:exported="true" />
         <service
             android:name=".HeartRateMonitor"
             android:enabled="true"
@@ -62,7 +54,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".EMA" />
-        <activity android:name=".HeartRateSensorTimer" />
     </application>
 
 </manifest>

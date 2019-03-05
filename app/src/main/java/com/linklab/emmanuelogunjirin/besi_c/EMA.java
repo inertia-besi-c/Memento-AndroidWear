@@ -261,7 +261,7 @@ public class EMA extends WearableActivity       // This is the main activity for
         }
 
         /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("EMA Results.csv", log.toString());
+        DataLogger dataLogger = new DataLogger("EMA_Results.csv", log.toString());
         dataLogger.LogData();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
