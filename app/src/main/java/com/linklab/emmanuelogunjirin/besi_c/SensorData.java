@@ -92,13 +92,13 @@ public class SensorData extends WearableActivity{
                 {
                     button.setText("Stop");
                     startService(HRService);
-                    button.setBackgroundColor(0xFF252);
+                    button.setBackgroundColor(getResources().getColor(R.color.red));
                 }
                 else
                 {
                     button.setText("Start");
                     stopService(HRService);
-                    button.setBackgroundColor(0x00C853);
+                    button.setBackgroundColor(getResources().getColor(R.color.green));
                 }
                 counter ++;
 

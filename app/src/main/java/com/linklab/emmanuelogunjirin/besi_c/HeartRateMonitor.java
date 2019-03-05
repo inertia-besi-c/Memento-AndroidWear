@@ -62,8 +62,8 @@ public class HeartRateMonitor extends Service implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
-    public void onDestory()
-    {
+    @Override
+    public void onDestroy() {
         mSensorManager.unregisterListener(this);
     }
     public void onDestoryed()
