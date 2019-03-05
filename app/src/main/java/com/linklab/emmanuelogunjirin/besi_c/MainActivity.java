@@ -74,8 +74,12 @@ public class MainActivity extends WearableActivity
 
     protected void onCreate(Bundle savedInstanceState)
     {
+        Intent i = new Intent(getBaseContext(), SensorData.class );
+        startActivity(i);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button EMA_Start = findViewById(R.id.EMA_Start);
         Button SLEEP = findViewById(R.id.SLEEP);
 
@@ -116,8 +120,7 @@ public class MainActivity extends WearableActivity
         {
             public void onClick(View v)
             {
-                Intent i = new Intent(getBaseContext(), SensorData.class );
-                startActivity(i);
+
             }
         });
 
