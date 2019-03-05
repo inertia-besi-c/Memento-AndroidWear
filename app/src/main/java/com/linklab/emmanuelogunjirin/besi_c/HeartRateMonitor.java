@@ -62,6 +62,15 @@ public class HeartRateMonitor extends Service implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
+    public void onDestory()
+    {
+        mSensorManager.unregisterListener(this);
+    }
+    public void onDestoryed()
+    {
+        mSensorManager.unregisterListener(this);
+    }
+
     @Override
     public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
     }
