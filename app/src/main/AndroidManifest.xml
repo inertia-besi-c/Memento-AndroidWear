@@ -24,6 +24,7 @@
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
+
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -33,8 +34,28 @@
             android:value="true" />
 
         <activity
+            android:name=".AccelerometerSensorTimer"
+            android:label="@string/title_activity_accelerometer_sensor_timer">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".AccelerometerSensor"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".HeartRateMonitor"
+            android:enabled="true"
+            android:exported="true" />
+        <service android:name=".HeartRateSensor" />
+
+        <activity
             android:name=".SensorData"
-            android:label="@string/title_activity_sensor_data"></activity>
+            android:label="@string/title_activity_sensor_data" />
         <activity
             android:name=".ema"
             android:label="@string/title_activity_ema" />
@@ -48,6 +69,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EMA" />
+        <activity android:name=".HeartRateSensorTimer" />
     </application>
 
 </manifest>
