@@ -90,8 +90,14 @@ public class MainActivity extends WearableActivity
         // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
-            // Permission is not granted
+            // Permission is not granted, Request permissions
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+        // Checks if device has permission to read Body Sensor Data
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) != PackageManager.PERMISSION_GRANTED)
+        {
+            // Permission is not granted, Request permissions
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BODY_SENSORS}, 0);
         }
 
         // Listens for the EMA button "START" to be clicked.
@@ -110,8 +116,8 @@ public class MainActivity extends WearableActivity
         {
             public void onClick(View v)
             {
-//                Intent i = new Intent(getBaseContext(), SLEEP.class );
-//                startActivity(i);
+                Intent i = new Intent(getBaseContext(), SensorData.class );
+                startActivity(i);
             }
         });
 
