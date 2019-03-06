@@ -41,6 +41,7 @@
             android:enabled="true"
             android:exported="true" />
         <service android:name=".HeartRateSensor" />
+        <service android:name=".AccelerometerSensor" />
 
         <activity
             android:name=".SensorData"

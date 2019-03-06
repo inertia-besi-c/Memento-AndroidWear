@@ -8,29 +8,20 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class AccelSensor extends Service implements SensorEventListener
+public class AccelerometerSensor extends Service implements SensorEventListener
 {
 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private Sensor mAccel;     // Sensor object reference
+    private Sensor mAccelerometer;     // Sensor object reference
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_NORMAL);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
 
     }
@@ -42,7 +33,7 @@ public class AccelSensor extends Service implements SensorEventListener
 
     public void onResume()  // A resume service switch
     {
-        mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
 
@@ -79,21 +70,24 @@ public class AccelSensor extends Service implements SensorEventListener
         lin_accel[1] = event.values[1] - gravity[1];
         lin_accel[2] = event.values[2] - gravity[2];
 
-        StringBuilder log = new StringBuilder(String.valueOf(event.timestamp));// Creates a string out of the date format
+        StringBuilder log = new StringBuilder(String.valueOf(event.timestamp));     // Creates a string out of the date format
         log.append(",");
-        log.append(String.valueOf(lin_accel[0])); // Accel on x-axis
+        log.append(String.valueOf(lin_accel[0])); // Accelerometer on x-axis
         log.append(",");
-        log.append(String.valueOf(lin_accel[1])); // Accel on y-axis
+        log.append(String.valueOf(lin_accel[1])); // Accelerometer on y-axis
         log.append(",");
-        log.append(String.valueOf(lin_accel[2])); // Accel on z-axis
+        log.append(String.valueOf(lin_accel[2])); // Accelerometer on z-axis
 
         final String logstring = log.toString();
 
-        new Thread(new Runnable() {
-            public void run() {
-                DataLogger dataLogger = new DataLogger("AccelData.csv", logstring);       // Logs the data into a file that can be retrieved.
+        new Thread(new Runnable()
+        {
+            public void run()
+            {
+                DataLogger dataLogger = new DataLogger("Accelerometer Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
-            }}).start();
+            }
+        }).start();
     }
 
     @Override

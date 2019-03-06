@@ -10,17 +10,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class HeartRateSensor extends Service implements SensorEventListener     // This is the file heading, it listens to the physical Heart Rate Senor
 {
-    public int Duration = 30000;        // This is the sampling rate
+    public int Duration = 60000;        // This is the sampling rate in milliseconds
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private Sensor mHeartRate;      // Picks out the Heart Rate sensor specifically.
     private int Time_zero;      // Time at start of measurement (milliseconds)
@@ -99,11 +94,14 @@ public class HeartRateSensor extends Service implements SensorEventListener     
 
         final String logstring = log.toString();
 
-        new Thread(new Runnable() {
-        public void run() {
-            DataLogger dataLogger = new DataLogger("Heart Rate Sensor Data.csv", logstring);       // Logs the data into a file that can be retrieved.
-            dataLogger.LogData();   // Logs the data to the computer.
-        }}).start();
+        new Thread(new Runnable()
+        {
+            public void run()
+            {
+                DataLogger dataLogger = new DataLogger("Heart Rate Sensor Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                dataLogger.LogData();   // Logs the data to the computer.
+            }
+        }).start();
 
     }
 

@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class HRPeriodicService extends Service
 {
     public int delay = 0;
-    public int period = 2*60*1000;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
+    public int period = 4*60*1000;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
 
     private void PeriodicService()
     {
