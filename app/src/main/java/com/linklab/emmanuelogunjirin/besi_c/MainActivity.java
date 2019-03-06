@@ -93,7 +93,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
 
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
-        registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        try{
+        registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));}
+        catch(Exception ex){}
 
 
         date = findViewById(R.id.DATE);     // The date ID
@@ -179,7 +181,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     protected void onStop()
     {
-        unregisterReceiver(mBatInfoReceiver);
+        try{
+            unregisterReceiver(mBatInfoReceiver);}
+            catch(Exception ex){}
         super.onStop();
     }
 }

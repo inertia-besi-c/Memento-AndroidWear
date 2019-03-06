@@ -105,7 +105,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         {
             public void run()
             {
-                DataLogger dataLogger = new DataLogger("Heart Rate Sensor Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger("HR_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();

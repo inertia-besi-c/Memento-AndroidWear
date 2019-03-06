@@ -366,7 +366,7 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
         }
 
         /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("EOD_EMA Results.csv", log.toString());
+        DataLogger dataLogger = new DataLogger("EOD_EMA_Results.csv", log.toString());
         dataLogger.LogData();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person

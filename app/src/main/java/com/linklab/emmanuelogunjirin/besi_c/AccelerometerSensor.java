@@ -66,7 +66,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener
         {
             public void run()
             {
-                DataLogger dataLogger = new DataLogger("Accelerometer Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger("Accel_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();

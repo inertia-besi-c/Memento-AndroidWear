@@ -17,8 +17,9 @@ public class HRPeriodicService extends Service
     public int delay = 0;
     public int period;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
     private Timer timer;
+    private int Duration;
 
-    private void PeriodicService(int Duration, boolean Stop)
+    private void PeriodicService(boolean Stop)
     {
         final int duration = Duration;
         final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);
@@ -45,7 +46,8 @@ public class HRPeriodicService extends Service
         Bundle extras = intent.getExtras();
         assert extras != null;
         period = (int) extras.get("MeasurementInterval");
-        PeriodicService((int)extras.get("SampleDuration"),false);
+        Duration = (int)extras.get("SampleDuration");
+        PeriodicService(false);
         return START_STICKY;    // Please do not remove. It is needed. (This allows it to restart if the service is killed)
     }
      @Override
@@ -54,7 +56,7 @@ public class HRPeriodicService extends Service
          timer.cancel();
          if (isRunning())
          {
-             PeriodicService(0,true);
+             PeriodicService(true);
          }
      }
 
