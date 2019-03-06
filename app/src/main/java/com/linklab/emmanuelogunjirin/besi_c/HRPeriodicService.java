@@ -43,6 +43,7 @@ public class HRPeriodicService extends Service
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Bundle extras = intent.getExtras();
+        assert extras != null;
         period = (int) extras.get("MeasurementInterval");
         PeriodicService((int)extras.get("SampleDuration"),false);
         return START_STICKY;    // Please do not remove. It is needed. (This allows it to restart if the service is killed)
@@ -51,16 +52,19 @@ public class HRPeriodicService extends Service
      public void onDestroy()
      {
          timer.cancel();
-         if (isRunning(HeartRateSensor.class))
+         if (isRunning())
          {
              PeriodicService(0,true);
          }
      }
 
-    private boolean isRunning(Class<?> serviceClass) {
+    private boolean isRunning()
+    {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+        {
+            if (HeartRateSensor.class.getName().equals(service.service.getClassName()))
+            {
                 return true;
             }
         }

@@ -17,5 +17,4 @@ public class Utils {
         Date current = new Date();
         return datetimeFormat.format(current);
     }
-
 }

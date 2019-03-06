@@ -24,8 +24,15 @@ import java.util.Locale;
 
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
-    private int HRSampleDuration = 30000; // How long should heart rate be measured each time?
-    private int HRMeasurementInterval = 5*60*1000; // This is the total time you want (INCLUDING THE SAMPLING DURATION?
+    private int HRSampleDuration;
+    {
+        HRSampleDuration = 30000;   // How long should heart rate be measured each time?
+    }
+
+    private int HRMeasurementInterval;
+    {
+        HRMeasurementInterval = 5 * 60 * 1000;  // This is the total time you want (INCLUDING THE SAMPLING DURATION)
+    }
 
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
 
@@ -130,17 +137,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
             public void onClick(View v)
             {
                 if (isRunning(HRPeriodicService.class))
-            {
+                {
                 stopService(HRService);
                 SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
-            }
-                else{
+                }
+                else
+                {
                     startService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
             }
         });
-
         // Enables Always-on
         setAmbientEnabled();
     }
@@ -156,15 +163,19 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {startService(PedomService);}
     }
 
-    private boolean isRunning(Class<?> serviceClass) {
+    private boolean isRunning(Class<?> serviceClass)
+    {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+        {
+            if (serviceClass.getName().equals(service.service.getClassName()))
+            {
                 return true;
             }
         }
         return false;
     }
+
     @Override
     protected void onStop()
     {

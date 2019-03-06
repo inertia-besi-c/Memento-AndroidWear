@@ -23,7 +23,6 @@ public class PedometerSensor extends Service implements SensorEventListener
          mPedometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
-
     }
 
 
@@ -54,15 +53,12 @@ public class PedometerSensor extends Service implements SensorEventListener
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
 
-        StringBuilder log = new StringBuilder(new Utils().getTime());// Creates a string out of the date format
-        log.append(",");
-        log.append(String.valueOf(event.timestamp));
-        log.append(",");
-        log.append(String.valueOf(event.values[0]));
-        log.append(",");
-        log.append(String.valueOf(event.accuracy));
-
-        final String logstring = log.toString();
+        final String logstring = new Utils().getTime() + "," +
+                String.valueOf(event.timestamp) +
+                "," +
+                String.valueOf(event.values[0]) +
+                "," +
+                String.valueOf(event.accuracy);
 
         new Thread(new Runnable()
         {

@@ -63,7 +63,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
 
         private final WeakReference<BESI_WatchFace.Engine> mWeakReference;
 
-        public EngineHandler(BESI_WatchFace.Engine reference)
+        EngineHandler(BESI_WatchFace.Engine reference)
         {
             mWeakReference = new WeakReference<>(reference);
         }

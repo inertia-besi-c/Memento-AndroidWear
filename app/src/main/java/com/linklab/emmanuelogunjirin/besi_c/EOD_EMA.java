@@ -232,8 +232,114 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
             public void onClick(View view)
             {
                 v.vibrate(20);
-                UserResponses[4] = res.getText().toString();
-                q4();   // Goes back to question 4
+                UserResponses[3] = res.getText().toString();
+                q4();   // Goes back to question 5
+            }
+        });
+        next.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q6();   // Goes on to question 6
+            }
+        });
+    }
+
+    // This is Question 6 (See question one for other comments, they follow similar structure)
+    private void q6()
+    {
+        resTaps = 0;
+        String question = "How did the patient's pain interfere with your life?";
+        responses.clear();
+
+        // Response Options
+        responses.add("None");
+        responses.add("A little");
+        responses.add("Medium");
+        responses.add("A lot");
+
+        req.setText(question);
+        Cycle_Responses();
+        back.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q5();   // Goes back to question 5
+            }
+        });
+        next.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q7();   // Goes on to question 7
+            }
+        });
+    }
+
+    // This is Question 7 (See question one for other comments, they follow similar structure)
+    private void q7()
+    {
+        resTaps = 0;
+        String question = "How would you rate your sleep quality?";
+        responses.clear();
+
+        // Response Options
+        responses.add("Poor");
+        responses.add("Fair");
+        responses.add("Good");
+        responses.add("Excellent");
+
+        req.setText(question);
+        Cycle_Responses();
+        back.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q6();   // Goes back to question 6
+            }
+        });
+        next.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q8();   // Goes on to question 8
+            }
+        });
+    }
+
+    // This is Question 8 (See question one for other comments, they follow similar structure)
+    private void q8()
+    {
+        resTaps = 0;
+        String question = "How distressed was the patient overall?";
+        responses.clear();
+
+        // Response Options
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
+        responses.add("Unsure");
+
+        req.setText(question);
+        Cycle_Responses();
+        back.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q7();   // Goes back to question 7
             }
         });
         next.setOnClickListener( new View.OnClickListener()

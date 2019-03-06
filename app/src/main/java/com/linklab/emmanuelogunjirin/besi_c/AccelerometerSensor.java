@@ -11,35 +11,18 @@ import android.hardware.SensorManager;
 
 public class AccelerometerSensor extends Service implements SensorEventListener
 {
-
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private Sensor AccelerometerSensor;     // Sensor object reference
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        AccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, AccelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        // Sensor object reference
+        Sensor accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
 
-    }
-
-    private int getTime()
-    {
-        return (int)System.currentTimeMillis();
-    }
-
-    public void onResume()  // A resume service switch
-    {
-        mSensorManager.registerListener(this, AccelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-
-    public void onPause()   // A pause service switch
-    {
-        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -71,17 +54,13 @@ public class AccelerometerSensor extends Service implements SensorEventListener
         lin_accel[2] = event.values[2] - gravity[2];
 
 
-
-        StringBuilder log = new StringBuilder(new Utils().getTime());// Creates a string out of the date format
-        log.append(",");
-        log.append(String.valueOf(event.timestamp));
-        log.append(String.valueOf(lin_accel[0])); // Accel on x-axis
-        log.append(",");
-        log.append(String.valueOf(lin_accel[1])); // Accel on y-axis
-        log.append(",");
-        log.append(String.valueOf(lin_accel[2])); // Accel on z-axis
-
-        final String logstring = log.toString();
+        final String logstring = new Utils().getTime() + "," +
+                String.valueOf(event.timestamp) +
+                String.valueOf(lin_accel[0]) + // Accel on x-axis
+                "," +
+                String.valueOf(lin_accel[1]) + // Accel on y-axis
+                "," +
+                String.valueOf(lin_accel[2]); // Accel on z-axis
 
         new Thread(new Runnable()
         {
