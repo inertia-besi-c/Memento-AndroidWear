@@ -2,6 +2,7 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,8 +24,8 @@ import java.util.Locale;
 
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
-    private int HRSampleDuration = 60000; // How long should heart rate be measured each time?
-    private int HRMeasurementInterval = 5*6*1000; // Every how often the system should take a measurement?
+    private int HRSampleDuration = 30000; // How long should heart rate be measured each time?
+    private int HRMeasurementInterval = 5*60*1000; // Every how often the system should take a measurement?
 
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
 
@@ -81,8 +82,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
 
-        Button EMA_Start = findViewById(R.id.EMA_Start);    // The Start button is made
-        Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
+        final Button EMA_Start = findViewById(R.id.EMA_Start);    // The Start button is made
+        final Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
 
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
         registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -116,12 +117,25 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
+        final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
+        HRService.putExtra("SampleDuration",HRSampleDuration);
+        HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
+        startService(HRService);
+
         // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
         SLEEP.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
-                // Future spot for a shutdown button for bedtime.
+                if (isRunning(HRPeriodicService.class))
+            {
+                stopService(HRService);
+                SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
+            }
+                else{
+                    startService(HRService);
+                    SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
             }
         });
 
@@ -131,15 +145,21 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void startSensors()     // Calls the sensors from their service branches
     {
-        final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
-        HRService.putExtra("SampleDuration",HRSampleDuration);
-        HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
-        startService(HRService);
-
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
-        startService(AccelService);
-
+        if (!isRunning(AccelerometerSensor.class))
+        {startService(AccelService);}
         final Intent PedometerService = new Intent(getBaseContext(), PedometerSensor.class);
-        startService(PedometerService);
+        if (!isRunning(PedometerSensor.class))
+        {startService(PedometerService);}
+    }
+
+    private boolean isRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
