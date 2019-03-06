@@ -71,7 +71,7 @@ public class PedometerSensor extends Service implements SensorEventListener
         new Thread(new Runnable()
         {
             public void run() {
-                DataLogger dataLogger = new DataLogger("PedometerData.csv", logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger("Pedometer_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();

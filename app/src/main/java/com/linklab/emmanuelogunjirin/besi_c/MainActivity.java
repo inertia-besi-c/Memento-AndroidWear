@@ -93,9 +93,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
 
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
-        try{
-        registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));}
-        catch(Exception ex){}
+        try
+        {
+            registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        }
+        catch(Exception ignored)
+        {
+            // Ignore this catch.
+        }
 
 
         date = findViewById(R.id.DATE);     // The date ID
@@ -122,14 +127,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             public void onClick(View v)
             {
-                Intent StartEMAActivity = new Intent(getBaseContext(), EMA.class);      // Links to the EMA File
+                Intent StartEMAActivity = new Intent(getBaseContext(), EMA1.class);      // Links to the EMA File
                 startActivity(StartEMAActivity);    // Starts the EMA file
             }
         });
 
+        // Calls the heart rate timer to start the heart rate sensor
         final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
         HRService.putExtra("SampleDuration",HRSampleDuration);
         HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
+        // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
         if (!isRunning(HRPeriodicService.class))
         {startService(HRService);}
 
@@ -140,8 +147,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
             {
                 if (isRunning(HRPeriodicService.class))
                 {
-                stopService(HRService);
-                SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
+                    stopService(HRService);
+                    SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
                 else
                 {
@@ -179,11 +186,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
     }
 
     @Override
+
     protected void onStop()
     {
-        try{
-            unregisterReceiver(mBatInfoReceiver);}
-            catch(Exception ex){}
+        try
+        {
+            unregisterReceiver(mBatInfoReceiver);
+        }
+        catch(Exception ignored)
+        {
+            // Ignored
+        }
         super.onStop();
     }
 }

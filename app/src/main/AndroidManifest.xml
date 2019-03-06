@@ -90,6 +90,8 @@
         </activity>
         <activity android:name=".EMA" />
         <activity android:name=".EOD_EMA" />
+        <activity android:name=".EMA1" />
+        <activity android:name=".EMA2" />
     </application>
 
 </manifest>

@@ -26,8 +26,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener
         wakeLock.acquire();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         // Sensor object reference
-        Sensor accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
 
     }
@@ -75,7 +75,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener
         {
             public void run()
             {
-                DataLogger dataLogger = new DataLogger("Accel_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger("Accelerometer_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();

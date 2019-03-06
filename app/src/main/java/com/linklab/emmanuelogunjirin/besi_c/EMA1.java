@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class EMA extends WearableActivity       // This is the main activity for the questions
+public class EMA1 extends WearableActivity       // This is the main activity for the questions
 {
     private int qcount = 5;     // This is the amount of questions to be shown.
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
@@ -261,7 +261,7 @@ public class EMA extends WearableActivity       // This is the main activity for
         }
 
         /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("EMA_Results.csv", log.toString());
+        DataLogger dataLogger = new DataLogger("EMA1_Results.csv", log.toString());
         dataLogger.LogData();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
