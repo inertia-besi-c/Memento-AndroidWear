@@ -20,4 +20,6 @@
     <string name="ema_text">EMA Text</string>
     <string name="title_activity_sensor_data">SensorData</string>
     <string name="title_activity_accelerometer_sensor_timer">AccelerometerSensorTimer</string>
+    <string name="message">Watch face tapped</string>
+    <string name="my_digital_name">My Digital</string>
 </resources>

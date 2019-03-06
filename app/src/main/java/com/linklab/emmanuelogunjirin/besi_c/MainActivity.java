@@ -23,8 +23,8 @@ import java.util.Locale;
 
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
-    private int HRSampleDuration = 60000; // How long should heart rate be measured each time?
-    private int HRMeasurementInterval = 5*6*1000; // Every how often the system should take a measurement?
+    private int HRSampleDuration = 30000; // How long should heart rate be measured each time?
+    private int HRMeasurementInterval = 5*60*1000; // This is the total time you want (INCLUDING THE SAMPLING DURATION?
 
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
 
@@ -139,7 +139,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
         startService(AccelService);
 
-        final Intent PedometerService = new Intent(getBaseContext(), PedometerSensor.class);
-        startService(PedometerService);
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);
+        startService(PedomService);
     }
 }
