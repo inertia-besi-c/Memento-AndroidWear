@@ -62,7 +62,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
 
     public void onResume()  // A resume activity switch
     {
-        mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
 
@@ -91,18 +91,20 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         Log.d("Test", "Heart Rate (bpm) : " + String.valueOf(event.values[0]));     // This is a log for the Logcat to be seen.
         String HeartRateMonitor = String.valueOf(event.values[0]);      // This changes the value of the sensor data to a string.
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);        // Accesses a date format so be appended to the file
-        Date date = new Date();     // Opens a new data variable
-        StringBuilder log = new StringBuilder(dateFormat.format(date));// Creates a string out of the date format
-        log.append(",");
-        int Time_now = getTime();
-        int dT =  Time_now - Time_zero ;
-        log.append(dT);
+        StringBuilder log = new StringBuilder(String.valueOf(event.timestamp));// Creates a string out of the date format
         log.append(",");
         log.append(HeartRateMonitor);       // Appends the Heart Rate value onto the string
+        log.append(",");
+        log.append(event.accuracy);
 
-        DataLogger dataLogger = new DataLogger("Heart Rate Sensor Data.csv", log.toString());       // Logs the data into a file that can be retrieved.
-        dataLogger.LogData();   // Logs the data to the computer.
+        final String logstring = log.toString();
+
+        new Thread(new Runnable() {
+        public void run() {
+            DataLogger dataLogger = new DataLogger("Heart Rate Sensor Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+            dataLogger.LogData();   // Logs the data to the computer.
+        }}).start();
+
     }
 
     @Override

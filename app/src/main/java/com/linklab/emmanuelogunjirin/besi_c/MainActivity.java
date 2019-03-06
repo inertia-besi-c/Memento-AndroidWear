@@ -127,7 +127,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void StartHRPeriodicService()
     {
-        final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
-        startService(HRService);
+        new Thread(new Runnable() {
+            public void run() {
+                final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
+                startService(HRService);
+            }}).start();
+        new Thread(new Runnable() {
+            public void run() {
+                final Intent AccelService = new Intent(getBaseContext(), AccelSensor.class);
+                startService(AccelService);
+            }}).start();
+
     }
 }
