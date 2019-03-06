@@ -88,6 +88,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
         registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
+
         date = findViewById(R.id.DATE);     // The date ID
         time = findViewById(R.id.TIME);     // The time ID
 
@@ -120,7 +121,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
         HRService.putExtra("SampleDuration",HRSampleDuration);
         HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
-        startService(HRService);
+        if (!isRunning(HRPeriodicService.class))
+        {startService(HRService);}
 
         // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
         SLEEP.setOnClickListener(new View.OnClickListener()
@@ -146,10 +148,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private void startSensors()     // Calls the sensors from their service branches
     {
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
-        startService(AccelService);
+        if(!isRunning(AccelerometerSensor.class))
+        {startService(AccelService);}
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);
-        startService(PedomService);
+        if(!isRunning(PedometerSensor.class))
+        {startService(PedomService);}
     }
 
     private boolean isRunning(Class<?> serviceClass) {
@@ -160,5 +164,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         }
         return false;
+    }
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(mBatInfoReceiver);
+        super.onStop();
     }
 }
