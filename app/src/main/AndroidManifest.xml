@@ -17,9 +17,13 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
         <service
-            android:name=".AccelSensor"
+            android:name=".PedometerSensor"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".AccelSensor"
+            android:enabled="true"
+            android:exported="true" />
         <service
             android:name=".HRPeriodicService"
             android:enabled="true"
