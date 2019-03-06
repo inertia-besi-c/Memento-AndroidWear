@@ -4,12 +4,12 @@ package com.linklab.emmanuelogunjirin.besi_c;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Vibrator;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class EMA extends WearableActivity       // This is the main activity for the questions
+public class EOD_EMA extends WearableActivity       // This is the main activity for the questions at the end of the day
 {
     private int qcount = 5;     // This is the amount of questions to be shown.
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
@@ -75,31 +75,25 @@ public class EMA extends WearableActivity       // This is the main activity for
     {
         back.setText("Cancel");
         resTaps = 0;
-        String question = "Is patient having pain now?";
+        String question = "How active were you";
         responses.clear();
-        responses.add("Yes");
-        responses.add("No");
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
 
         req.setText(question);
         Cycle_Responses();
         // If the next button is clicked
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View view)      // Haptic Feedback
+            public void onClick(View view)
             {
                 v.vibrate(20);
-                UserResponses[0] = res.getText().toString();
-                if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                {
-                    q2();
-                }
-                else
-                {
-                    Cancel();    // Else, it closes the question screen.
-                }
+                UserResponses[1] = res.getText().toString();
+                q2();   // Goes back to question 3
             }
         });
-
         // If the back button is clicked
         back.setOnClickListener( new View.OnClickListener()
         {
@@ -117,12 +111,15 @@ public class EMA extends WearableActivity       // This is the main activity for
     {
         back.setText("Back");
         resTaps = 0;
-        String question = "What is patient's pain level?";
+        String question = "How busy was your home?";
         responses.clear();
-        for (int i=1; i<=10; i++)
-        {
-            responses.add(""+i);
-        }
+
+        // Responses List
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
+
         req.setText(question);
         Cycle_Responses();
         back.setOnClickListener( new View.OnClickListener()
@@ -149,14 +146,14 @@ public class EMA extends WearableActivity       // This is the main activity for
     private void q3()
     {
         resTaps = 0;
-        String question = "How distressed are you?";
+        String question = "Time spent outside your home";
         responses.clear();
 
         // Response Options
-        responses.add("Not at all");
+        responses.add("None");
         responses.add("A little");
-        responses.add("Moderately");
-        responses.add("Very");
+        responses.add("Medium");
+        responses.add("A lot");
 
         req.setText(question);
         Cycle_Responses();
@@ -184,14 +181,14 @@ public class EMA extends WearableActivity       // This is the main activity for
     private void q4()
     {
         resTaps = 0;
-        String question = "How distressed is the patient?";
+        String question = "How much time did you spend with other people?";
         responses.clear();
 
-        //Response Options
-        responses.add("Not at all");
+        // Response Options
+        responses.add("None");
         responses.add("A little");
-        responses.add("Moderately");
-        responses.add("Very");
+        responses.add("Medium");
+        responses.add("A lot");
 
         req.setText(question);
         Cycle_Responses();
@@ -219,11 +216,119 @@ public class EMA extends WearableActivity       // This is the main activity for
     private void q5()
     {
         resTaps = 0;
-        String question = "Did patient take an opioid for the pain?";
+        String question = "How distressed were you overall?";
         responses.clear();
 
-        responses.add("Yes");
-        responses.add("No");
+        // Responses List
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
+
+        req.setText(question);
+        Cycle_Responses();
+        back.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q4();   // Goes back to question 5
+            }
+        });
+        next.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q6();   // Goes on to question 6
+            }
+        });
+    }
+
+    // This is Question 6 (See question one for other comments, they follow similar structure)
+    private void q6()
+    {
+        resTaps = 0;
+        String question = "How did the patient's pain interfere with your life?";
+        responses.clear();
+
+        // Response Options
+        responses.add("None");
+        responses.add("A little");
+        responses.add("Medium");
+        responses.add("A lot");
+
+        req.setText(question);
+        Cycle_Responses();
+        back.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q5();   // Goes back to question 5
+            }
+        });
+        next.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q7();   // Goes on to question 7
+            }
+        });
+    }
+
+    // This is Question 7 (See question one for other comments, they follow similar structure)
+    private void q7()
+    {
+        resTaps = 0;
+        String question = "How would you rate your sleep quality?";
+        responses.clear();
+
+        // Response Options
+        responses.add("Poor");
+        responses.add("Fair");
+        responses.add("Good");
+        responses.add("Excellent");
+
+        req.setText(question);
+        Cycle_Responses();
+        back.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q6();   // Goes back to question 6
+            }
+        });
+        next.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                UserResponses[3] = res.getText().toString();
+                q8();   // Goes on to question 8
+            }
+        });
+    }
+
+    // This is Question 8 (See question one for other comments, they follow similar structure)
+    private void q8()
+    {
+        resTaps = 0;
+        String question = "How distressed was the patient overall?";
+        responses.clear();
+
+        // Response Options
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
         responses.add("Unsure");
 
         req.setText(question);
@@ -233,8 +338,8 @@ public class EMA extends WearableActivity       // This is the main activity for
             public void onClick(View view)
             {
                 v.vibrate(20);
-                UserResponses[4] = res.getText().toString();
-                q4();   // Goes back to question 4
+                UserResponses[3] = res.getText().toString();
+                q7();   // Goes back to question 7
             }
         });
         next.setOnClickListener( new View.OnClickListener()
@@ -261,7 +366,7 @@ public class EMA extends WearableActivity       // This is the main activity for
         }
 
         /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("EMA_Results.csv", log.toString());
+        DataLogger dataLogger = new DataLogger("EOD_EMA Results.csv", log.toString());
         dataLogger.LogData();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person

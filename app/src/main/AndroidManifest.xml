@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.linklab.emmanuelogunjirin.besi_c">
 
+    <!-- Required to act as a custom watch face. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- Required for complications to receive complication data and open the provider chooser. -->
+    <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
 
     <uses-feature android:name="android.hardware.type.watch" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
         android:allowBackup="true"
@@ -15,22 +20,65 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
-        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
-
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
+        <service
+            android:name=".BESI_WatchFace"
+            android:label="@string/my_digital_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_digital" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_digital_circular" />
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <service
+            android:name=".PedometerSensor"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".AccelSensor"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".HRPeriodicService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true" />
+
+        <service
+            android:name=".HeartRateMonitor"
+            android:enabled="true"
+            android:exported="true" />
+        <service android:name=".HeartRateSensor" />
+        <service android:name=".AccelerometerSensor" />
+
+        <activity
+            android:name=".SensorData"
+            android:label="@string/title_activity_sensor_data" />
         <activity
             android:name=".ema"
-            android:label="@string/title_activity_ema">
-        </activity>
+            android:label="@string/title_activity_ema" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -41,6 +89,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EMA" />
+        <activity android:name=".EOD_EMA" />
     </application>
 
 </manifest>
