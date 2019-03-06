@@ -42,7 +42,7 @@ public class AccelSensor extends Service implements SensorEventListener
 
     public void onResume()  // A resume service switch
     {
-        mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
@@ -79,8 +79,11 @@ public class AccelSensor extends Service implements SensorEventListener
         lin_accel[1] = event.values[1] - gravity[1];
         lin_accel[2] = event.values[2] - gravity[2];
 
-        StringBuilder log = new StringBuilder(String.valueOf(event.timestamp));// Creates a string out of the date format
+
+
+        StringBuilder log = new StringBuilder(new Utils().getTime());// Creates a string out of the date format
         log.append(",");
+        log.append(String.valueOf(event.timestamp));
         log.append(String.valueOf(lin_accel[0])); // Accel on x-axis
         log.append(",");
         log.append(String.valueOf(lin_accel[1])); // Accel on y-axis
