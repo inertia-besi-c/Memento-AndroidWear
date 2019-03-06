@@ -75,31 +75,25 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
     {
         back.setText("Cancel");
         resTaps = 0;
-        String question = "Is patient still having cancer pain now?";
+        String question = "How active were you";
         responses.clear();
-        responses.add("Yes");
-        responses.add("No");
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
 
         req.setText(question);
         Cycle_Responses();
         // If the next button is clicked
         next.setOnClickListener( new View.OnClickListener()
         {
-            public void onClick(View view)      // Haptic Feedback
+            public void onClick(View view)
             {
                 v.vibrate(20);
-                UserResponses[0] = res.getText().toString();
-                if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                {
-                    q2();
-                }
-                else
-                {
-                    Cancel();    // Else, it closes the question screen.
-                }
+                UserResponses[1] = res.getText().toString();
+                q2();   // Goes back to question 3
             }
         });
-
         // If the back button is clicked
         back.setOnClickListener( new View.OnClickListener()
         {
@@ -117,12 +111,15 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
     {
         back.setText("Back");
         resTaps = 0;
-        String question = "What is patient's pain level?";
+        String question = "How busy was your home?";
         responses.clear();
-        for (int i=1; i<=10; i++)
-        {
-            responses.add(""+i);
-        }
+
+        // Responses List
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
+
         req.setText(question);
         Cycle_Responses();
         back.setOnClickListener( new View.OnClickListener()
@@ -149,14 +146,14 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
     private void q3()
     {
         resTaps = 0;
-        String question = "How distressed are you?";
+        String question = "Time spent outside your home";
         responses.clear();
 
         // Response Options
-        responses.add("Not at all");
+        responses.add("None");
         responses.add("A little");
-        responses.add("Moderately");
-        responses.add("Very");
+        responses.add("Medium");
+        responses.add("A lot");
 
         req.setText(question);
         Cycle_Responses();
@@ -184,14 +181,14 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
     private void q4()
     {
         resTaps = 0;
-        String question = "How distressed is patient?";
+        String question = "How much time did you spend with other people?";
         responses.clear();
 
-        //Response Options
-        responses.add("Not at all");
+        // Response Options
+        responses.add("None");
         responses.add("A little");
-        responses.add("Moderately");
-        responses.add("Very");
+        responses.add("Medium");
+        responses.add("A lot");
 
         req.setText(question);
         Cycle_Responses();
@@ -219,12 +216,14 @@ public class EOD_EMA extends WearableActivity       // This is the main activity
     private void q5()
     {
         resTaps = 0;
-        String question = "Did patient take another opioid for the pain?";
+        String question = "How distressed were you overall?";
         responses.clear();
 
-        responses.add("Yes");
-        responses.add("No");
-        responses.add("Unsure");
+        // Responses List
+        responses.add("Not at all");
+        responses.add("A little");
+        responses.add("Moderately");
+        responses.add("Very");
 
         req.setText(question);
         Cycle_Responses();
