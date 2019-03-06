@@ -62,6 +62,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EMA" />
+        <activity android:name=".EOD_EMA" />
     </application>
 
 </manifest>

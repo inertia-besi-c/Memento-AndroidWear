@@ -8,15 +8,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.util.Log;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class PedometerSensor extends Service implements SensorEventListener
 {
@@ -69,11 +60,13 @@ public class PedometerSensor extends Service implements SensorEventListener
 
         final String logstring = log.toString();
 
-        new Thread(new Runnable() {
+        new Thread(new Runnable()
+        {
             public void run() {
-                DataLogger dataLogger = new DataLogger("AccelData.csv", logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger("Pedometer.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
-            }}).start();
+            }
+        }).start();
     }
 
     @Override
