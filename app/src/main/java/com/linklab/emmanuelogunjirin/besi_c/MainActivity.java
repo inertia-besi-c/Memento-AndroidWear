@@ -138,5 +138,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
         startService(AccelService);
+
+        final Intent PedometerService = new Intent(getBaseContext(), PedometerSensor.class);
+        startService(PedometerService);
     }
 }

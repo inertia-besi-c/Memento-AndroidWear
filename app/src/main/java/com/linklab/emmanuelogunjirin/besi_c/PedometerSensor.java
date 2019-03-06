@@ -57,6 +57,10 @@ public class PedometerSensor extends Service implements SensorEventListener
         StringBuilder log = new StringBuilder(new Utils().getTime());// Creates a string out of the date format
         log.append(",");
         log.append(String.valueOf(event.timestamp));
+        log.append(",");
+        log.append(String.valueOf(event.values[0]));
+        log.append(",");
+        log.append(String.valueOf(event.accuracy));
 
         final String logstring = log.toString();
 
