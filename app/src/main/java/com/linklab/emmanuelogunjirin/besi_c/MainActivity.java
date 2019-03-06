@@ -186,11 +186,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
     }
 
     @Override
+
     protected void onStop()
     {
-        try{
-            unregisterReceiver(mBatInfoReceiver);}
-            catch(Exception ex){}
+        try
+        {
+            unregisterReceiver(mBatInfoReceiver);
+        }
+        catch(Exception ignored)
+        {
+            // Ignored
+        }
         super.onStop();
     }
 }
