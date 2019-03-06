@@ -13,15 +13,15 @@ public class AccelerometerSensor extends Service implements SensorEventListener
 {
 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private Sensor mAccelerometer;     // Sensor object reference
+    private Sensor AccelerometerSensor;     // Sensor object reference
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        AccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, AccelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
 
     }
@@ -33,7 +33,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener
 
     public void onResume()  // A resume service switch
     {
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, AccelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
@@ -70,13 +70,16 @@ public class AccelerometerSensor extends Service implements SensorEventListener
         lin_accel[1] = event.values[1] - gravity[1];
         lin_accel[2] = event.values[2] - gravity[2];
 
-        StringBuilder log = new StringBuilder(String.valueOf(event.timestamp));     // Creates a string out of the date format
+
+
+        StringBuilder log = new StringBuilder(new Utils().getTime());// Creates a string out of the date format
         log.append(",");
-        log.append(String.valueOf(lin_accel[0])); // Accelerometer on x-axis
+        log.append(String.valueOf(event.timestamp));
+        log.append(String.valueOf(lin_accel[0])); // Accel on x-axis
         log.append(",");
-        log.append(String.valueOf(lin_accel[1])); // Accelerometer on y-axis
+        log.append(String.valueOf(lin_accel[1])); // Accel on y-axis
         log.append(",");
-        log.append(String.valueOf(lin_accel[2])); // Accelerometer on z-axis
+        log.append(String.valueOf(lin_accel[2])); // Accel on z-axis
 
         final String logstring = log.toString();
 

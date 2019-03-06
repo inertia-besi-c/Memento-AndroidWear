@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+// Things that we need in the future and do not want to lose.
 public class Utils {
     public Utils()
     {

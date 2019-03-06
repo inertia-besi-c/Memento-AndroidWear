@@ -136,8 +136,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
         startService(HRService);
 
-        final Intent AccelService = new Intent(getBaseContext(), AccelSensor.class);
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
         startService(AccelService);
-
     }
 }
