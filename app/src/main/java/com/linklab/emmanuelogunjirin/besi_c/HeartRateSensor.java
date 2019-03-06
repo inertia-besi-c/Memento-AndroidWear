@@ -19,6 +19,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private Sensor mHeartRate;      // Picks out the Heart Rate sensor specifically.
     private int Time_zero;      // Time at start of measurement (milliseconds)
+    final Timer timer = new Timer();          // Makes a new timer.
 
     protected void onCreate(Bundle savedInstanceState)      // Runs when the function is created.
     {
@@ -40,7 +41,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);
         Time_zero = getTime();
-        Timer timer = new Timer();          // Makes a new timer.
+
         timer.schedule( new TimerTask()     // Initializes a timer.
                         {
                             public void run()       // Runs the imported file based on the timer specified.
@@ -73,6 +74,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     public void onDestroy()     // A destroy all activity switch (kill switch)
     {
         mSensorManager.unregisterListener(this);
+        timer.cancel();
+
     }
 
     @Override
