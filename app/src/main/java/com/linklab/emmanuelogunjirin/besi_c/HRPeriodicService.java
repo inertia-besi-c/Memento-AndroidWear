@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,31 +19,17 @@ public class HRPeriodicService extends Service
     public int period;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
     private Timer timer;
     private int Duration;
+    private PowerManager powerManager;
+    private PowerManager.WakeLock wakeLock;
 
-    private void PeriodicService(boolean Stop)
-    {
-        final int duration = Duration;
-        final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);
-        if (Stop)
-        {
-            stopService(HRService);
-        }
-        else{
-        timer = new Timer();          // Makes a new timer.
-        timer.schedule( new TimerTask()     // Initializes a timer.
-                        {
-                            public void run()       // Runs the imported file based on the timer specified.
-                            {
-                                HRService.putExtra("SampleDuration",duration);
-                                startService(HRService);    // Starts the Heart Rate Sensor
-                            }
-                        }, delay, period);
-    }}
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock.acquire();
         Bundle extras = intent.getExtras();
         assert extras != null;
         period = (int) extras.get("MeasurementInterval");
@@ -54,6 +41,7 @@ public class HRPeriodicService extends Service
      public void onDestroy()
      {
          timer.cancel();
+         wakeLock.release();
          if (isRunning())
          {
              PeriodicService(true);
@@ -72,6 +60,25 @@ public class HRPeriodicService extends Service
         }
         return false;
     }
+    private void PeriodicService(boolean Stop)
+    {
+        final int duration = Duration;
+        final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);
+        if (Stop)
+        {
+            stopService(HRService);
+        }
+        else{
+            timer = new Timer();          // Makes a new timer.
+            timer.schedule( new TimerTask()     // Initializes a timer.
+            {
+                public void run()       // Runs the imported file based on the timer specified.
+                {
+                    HRService.putExtra("SampleDuration",duration);
+                    startService(HRService);    // Starts the Heart Rate Sensor
+                }
+            }, delay, period);
+        }}
 
     @Override
     public IBinder onBind(Intent intent) {

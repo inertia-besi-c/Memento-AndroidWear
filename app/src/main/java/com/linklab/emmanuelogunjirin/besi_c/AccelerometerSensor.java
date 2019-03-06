@@ -8,15 +8,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.PowerManager;
 
 public class AccelerometerSensor extends Service implements SensorEventListener
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
+    private PowerManager powerManager;
+    private PowerManager.WakeLock wakeLock;
+
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock.acquire();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         // Sensor object reference
         Sensor accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -29,6 +36,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener
     public void onDestroy()     // A destroy service switch (kill switch)
     {
         mSensorManager.unregisterListener(this);
+        wakeLock.release();
     }
 
     @Override
@@ -56,6 +64,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener
 
         final String logstring = new Utils().getTime() + "," +
                 String.valueOf(event.timestamp) +
+                "," +
                 String.valueOf(lin_accel[0]) + // Accel on x-axis
                 "," +
                 String.valueOf(lin_accel[1]) + // Accel on y-axis

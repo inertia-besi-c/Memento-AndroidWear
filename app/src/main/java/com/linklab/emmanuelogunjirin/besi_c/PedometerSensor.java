@@ -8,17 +8,24 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.PowerManager;
 
 public class PedometerSensor extends Service implements SensorEventListener
 {
 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private Sensor mPedometer;     // Sensor object reference
+    private PowerManager powerManager;
+    private PowerManager.WakeLock wakeLock;
+
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock.acquire();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
          mPedometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
@@ -41,6 +48,7 @@ public class PedometerSensor extends Service implements SensorEventListener
     public void onDestroy()     // A destroy service switch (kill switch)
     {
         mSensorManager.unregisterListener(this);
+        wakeLock.release();
     }
 
     @Override
