@@ -29,7 +29,7 @@ public class HRTimerService extends Service
     {
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire();
+        wakeLock.acquire(10*60*1000L /*10 minutes*/);
         Bundle extras = intent.getExtras();
         assert extras != null;
         period = (int) extras.get("MeasurementInterval");
