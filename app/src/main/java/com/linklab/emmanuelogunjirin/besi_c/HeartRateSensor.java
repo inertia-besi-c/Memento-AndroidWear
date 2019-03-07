@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 public class HeartRateSensor extends Service implements SensorEventListener     // This is the file heading, it listens to the physical Heart Rate Senor
 {
-    public int Duration;        // This is the sampling rate in milliseconds
+    public int Duration = new Preferences().HRSampleDuration;        // This is the sampling rate in milliseconds
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private Sensor mHeartRate;      // Picks out the Heart Rate sensor specifically.
     private int Time_zero;      // Time at start of measurement (milliseconds)
@@ -35,8 +35,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Bundle extras = intent.getExtras();
-        Duration = (int) extras.get("SampleDuration");
+        Log.i("HRS","Starting HRS");
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);
