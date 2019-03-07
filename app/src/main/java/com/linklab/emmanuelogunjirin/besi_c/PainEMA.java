@@ -46,7 +46,10 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
-    private String[] CareGiverQuestions =       // These are the questions for the care giver
+    private String[] Questions;
+    private String[][] Answers;
+
+    private String[] CaregiverQuestions =       // These are the questions for the care giver
             {
                     "Is patient having pain now?",
                     "What is patient's pain level?",
@@ -54,7 +57,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "How distressed is the patient?",
                     "Did patient take an opioid for the pain?"
             };
-    private String[][] CareGiverAnswers =       // These are the answers for the care giver
+    private String[][] CaregiverAnswers =       // These are the answers for the care giver
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
@@ -88,6 +91,16 @@ public class PainEMA extends WearableActivity       // This is the main activity
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire(10*60*1000L /*10 minutes*/);
+        if ((new Preferences().Role).equals("PT"))
+        {
+            Questions = PatientQuestions;
+            Answers = PatientAnswers;
+        }
+        else
+        {
+            Questions = CaregiverQuestions;
+            Answers = CaregiverAnswers;
+        }
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         super.onCreate(savedInstanceState);
@@ -109,7 +122,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
             }
         });
 
-        UserResponses = new String[CareGiverQuestions.length];
+        UserResponses = new String[Questions.length];
         UserResponseIndex = new int[UserResponses.length];
 
         FollowUpEMATimer = new Timer();
@@ -129,7 +142,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 else
                 {
                     Log.i("EMAR","Stopping Timer");
-                    cancel();
+                    Submit();
                 }
             }
         },EMAReminderDelay,EMAReminderInterval);
@@ -165,14 +178,14 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion < CareGiverQuestions.length)
+        if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(CareGiverQuestions[CurrentQuestion]);
+            req.setText(Questions[CurrentQuestion]);
             responses.clear();
-            for (int i=0; i < CareGiverAnswers[CurrentQuestion].length; i++)
+            for (int i=0; i < Answers[CurrentQuestion].length; i++)
             {
-                responses.add(CareGiverAnswers[CurrentQuestion][i]);
+                responses.add(Answers[CurrentQuestion][i]);
             }
             Cycle_Responses();
 
