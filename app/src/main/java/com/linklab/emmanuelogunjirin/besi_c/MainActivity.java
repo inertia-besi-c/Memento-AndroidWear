@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -134,24 +135,28 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         // Calls the heart rate timer to start the heart rate sensor
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
-        HRService.putExtra("SampleDuration",HRSampleDuration);
-        HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
         // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
         if (!isRunning(HRTimerService.class))
-        {startService(HRService);}
+        {
+            Log.i("Main","Starting HRS");
+            startService(HRService);}
+        else {Log.i("Main","HRS is already running");}
 
         // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
         SLEEP.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
+                Log.i("Main","Sleep Clicked");
                 if (isRunning(HRTimerService.class))
                 {
+                    Log.i("Main","HRS is running. stopping it");
                     stopService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
                 else
                 {
+                    Log.i("Main","HRS is not running, starting it");
                     startService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
                 }

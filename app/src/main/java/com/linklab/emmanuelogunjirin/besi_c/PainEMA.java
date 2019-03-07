@@ -37,12 +37,12 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
 
     private Timer FollowUpEMATimer;
-    private int FollowUpEMADelay = 5*60*1000; //Time before followup EMA / EMA2 following submission
+    private int FollowUpEMADelay = new Preferences().FollowUpEMADelay; //Time before followup EMA / EMA2 following submission
 
     private Timer EMARemindertimer;
-    private int EMAReminderDelay = 0;
-    private int EMAReminderInterval = 30000; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = 2;
+    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
+    private int EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = new Preferences().PainEMAReminderNumber;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
@@ -90,7 +90,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire(10*60*1000L /*10 minutes*/);
+        wakeLock.acquire(ReminderNumber*EMAReminderInterval+500);
         if ((new Preferences().Role) == "PT")
         {
             Questions = PatientQuestions;
@@ -110,7 +110,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         next = findViewById(R.id.Next);
         req = findViewById(R.id.EMA_req);
         res = findViewById(R.id.EMA_res);
-        v.vibrate(300);
+        v.vibrate(400);
         /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         res.setOnClickListener( new View.OnClickListener()
         {
