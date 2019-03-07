@@ -30,7 +30,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private int CurrentQuestion = 0;
 
-    private String[] Questions =
+    private String[] CareGiverQuestions =
             {
                     "How active were you?",
                     "How busy was your home?",
@@ -38,18 +38,46 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How much time did you spend with other people?",
                     "How distressed were you overall?",
                     "How did the patient's pain interfere with your life?",
-                    "How would you rate your sleep quality?",
+                    "How was your mood overall?",
                     "How distressed was the patient overall?",
+                    "How would you rate your sleep quality?",
             };
-    private String[][] Answers =
+    private String[][] CareGiverAnswers =
             {
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Moderately", "Very", "Unsure"},
+                    {"Poor", "Fair", "Good", "Excellent"},
+            };
+
+    private String[] PatientQuestions =
+            {
+                    "How active were you?",
+                    "How busy was your home?",
+                    "Time spend outside your home?",
+                    "How much time did you spend with other people?",
+                    "How distressed were you overall?",
+                    "How much did pain interfere with your life?",
+                    "How was your mood overall?",
+                    "How distressed was your caregiver overall?",
+                    "How would you rate your sleep quality?",
+            };
+    private String[][] PatientAnswers =
+            {
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"None", "A little", "Moderately", "Very", "Unsure"},
+                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     @Override
@@ -80,7 +108,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             }
         });
 
-        UserResponses = new String[Questions.length];
+        UserResponses = new String[CareGiverQuestions.length];
         UserResponseIndex = new int[UserResponses.length];
         //q1();       // Moves on to question 1
 
@@ -106,14 +134,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion < Questions.length)
+        if (CurrentQuestion < CareGiverQuestions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(Questions[CurrentQuestion]);
+            req.setText(CareGiverQuestions[CurrentQuestion]);
             responses.clear();
-            for(int i=0; i < Answers[CurrentQuestion].length; i++)
+            for(int i=0; i < CareGiverAnswers[CurrentQuestion].length; i++)
             {
-                responses.add(Answers[CurrentQuestion][i]);
+                responses.add(CareGiverAnswers[CurrentQuestion][i]);
             }
             Cycle_Responses();
 

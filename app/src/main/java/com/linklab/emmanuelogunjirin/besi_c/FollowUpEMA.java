@@ -29,20 +29,37 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private int CurrentQuestion = 0;
 
-    private String[] Questions =
+    private String[] CareGiverQuestions =
             {
-                    "Is patient still having cancer pain now?",
-                    "What is patient's pain level?",
+                    "Is the patient still having cancer pain now?",
+                    "What is the patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
-                    "Did patient take an opioid for the pain?"
+                    "Did the patient take an additional opioid for the pain?"
             };
-    private String[][] Answers =
+    private String[][] CareGiverAnswers =
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Yes", "No"}
+            };
+
+    private String[] PatientQuestions =
+            {
+                    "Are you still having cancer pain now??",
+                    "What is your pain level?",
+                    "How distressed are you?",
+                    "How distressed is your caregiver?",
+                    "Did you take an additional opioid for the pain?"
+            };
+    private String[][] PatientAnswers =
+            {
+                    {"Yes", "No"},
+                    {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
                     {"Yes", "No"}
             };
 
@@ -74,7 +91,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             }
         });
 
-        UserResponses = new String[Questions.length];
+        UserResponses = new String[CareGiverQuestions.length];
         UserResponseIndex = new int[UserResponses.length];
         //q1();       // Moves on to question 1
 
@@ -102,14 +119,14 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion < Questions.length)
+        if (CurrentQuestion < CareGiverQuestions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(Questions[CurrentQuestion]);
+            req.setText(CareGiverQuestions[CurrentQuestion]);
             responses.clear();
-            for(int i=0; i < Answers[CurrentQuestion].length; i++)
+            for(int i=0; i < CareGiverAnswers[CurrentQuestion].length; i++)
             {
-                responses.add(Answers[CurrentQuestion][i]);
+                responses.add(CareGiverAnswers[CurrentQuestion][i]);
             }
             Cycle_Responses();
 

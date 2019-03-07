@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /* This runs the delay timer, and also calls the heart rate sensor itself, the heart rate sensor kills itself and returns here when complete */
-public class HRPeriodicService extends Service
+public class HRTimerService extends Service
 {
     public int delay = 0;
     public int period;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)

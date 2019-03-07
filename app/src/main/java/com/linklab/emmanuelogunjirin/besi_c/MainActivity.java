@@ -133,11 +133,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
         });
 
         // Calls the heart rate timer to start the heart rate sensor
-        final Intent HRService = new Intent(getBaseContext(), HRPeriodicService.class);
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
         HRService.putExtra("SampleDuration",HRSampleDuration);
         HRService.putExtra("MeasurementInterval",HRMeasurementInterval);
         // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
-        if (!isRunning(HRPeriodicService.class))
+        if (!isRunning(HRTimerService.class))
         {startService(HRService);}
 
         // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
@@ -145,7 +145,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             public void onClick(View v)
             {
-                if (isRunning(HRPeriodicService.class))
+                if (isRunning(HRTimerService.class))
                 {
                     stopService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
