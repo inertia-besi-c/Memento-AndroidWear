@@ -146,8 +146,8 @@ public class BESI_WatchFace extends CanvasWatchFaceService
 
         @Override
         public void onVisibilityChanged(boolean visible) {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+//            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+//            startActivity(StartWatchActivity);    // Starts the watch face
             super.onVisibilityChanged(visible);
 
             if (visible) {
