@@ -2,8 +2,11 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,19 +18,32 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class PainEMA extends WearableActivity       // This is the main activity for the questions
 {
+    private PowerManager powerManager;
+    private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private int resTaps = 0;
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;
     private int[] UserResponseIndex;
+
     public Vibrator v;      // The vibrator that provides haptic feedback.
 
-    private int FollowUpEMADelay = 5*60*1000; // Time before followup EMA  following submission
+
+    private Timer FollowUpEMATimer;
+    private int FollowUpEMADelay = 5*60*1000; //Time before followup EMA / EMA2 following submission
+
+    private Timer EMARemindertimer;
+    private int EMAReminderDelay =(int) 0;
+    private int EMAReminderInterval = 30000; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = 2;
+    private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
     private String[] Questions =
@@ -52,18 +68,19 @@ public class PainEMA extends WearableActivity       // This is the main activity
     // When the screen is created, this is run.
     protected void onCreate(Bundle savedInstanceState)
     {
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock.acquire();
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(300);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
-
         /* Buttons on the EMA screen that were added */
         back = findViewById(R.id.Back);
         next = findViewById(R.id.Next);
         req = findViewById(R.id.EMA_req);
         res = findViewById(R.id.EMA_res);
-
+        v.vibrate(300);
         /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         res.setOnClickListener( new View.OnClickListener()
         {
@@ -78,12 +95,41 @@ public class PainEMA extends WearableActivity       // This is the main activity
         UserResponses = new String[Questions.length];
         UserResponseIndex = new int[UserResponses.length];
 
+        FollowUpEMATimer = new Timer();
+
+        EMARemindertimer = new Timer();
+        EMARemindertimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("EMAR","Running EMAReminder");
+                Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
+                if (ReminderCount <= ReminderNumber)
+                {
+                    Log.i("EMAR","Vibrating...");
+                    v.vibrate(600);
+                    ReminderCount ++;
+                }
+                else
+                {
+                    Log.i("EMAR","Stopping Timer");
+                    cancel();
+                }
+            }
+        },EMAReminderDelay,EMAReminderInterval);
+
         QuestionSystem();
 
         // Enables Always-on
         setAmbientEnabled();
     }
 
+    @Override
+    public void onDestroy()
+    {
+        EMARemindertimer.cancel();
+        wakeLock.release();
+        super.onDestroy();
+    }
 
     private int Cycle_Responses()
     {
@@ -186,6 +232,16 @@ public class PainEMA extends WearableActivity       // This is the main activity
         /* Logs the data in a csv format */
         DataLogger dataLogger = new DataLogger("Pain_EMA_Results.csv", log.toString());
         dataLogger.LogData();
+
+        FollowUpEMATimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // Intent Start FollowUpEMA
+                Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the EMA File
+                startActivity(StartEMAActivity);    // Starts the EMA file
+            }
+        },FollowUpEMADelay);
+
         ThankYou();
 
     }

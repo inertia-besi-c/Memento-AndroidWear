@@ -31,7 +31,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private String[] Questions =
             {
-                    "Is patient having cancer pain now?",
+                    "Is patient still having cancer pain now?",
                     "What is patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
@@ -53,7 +53,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     {
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(300);
+        v.vibrate(1000);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
 
