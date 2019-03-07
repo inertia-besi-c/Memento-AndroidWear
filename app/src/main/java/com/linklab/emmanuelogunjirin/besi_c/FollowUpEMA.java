@@ -1,7 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
@@ -15,13 +14,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class EMA1 extends WearableActivity       // This is the main activity for the questions
+
+public class FollowUpEMA extends WearableActivity       // This is the main activity for the questions
 {
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
@@ -31,25 +27,24 @@ public class EMA1 extends WearableActivity       // This is the main activity fo
     private int[] UserResponseIndex;
     public Vibrator v;      // The vibrator that provides haptic feedback.
 
-    private int FollowUpEMADelay = 5*60*1000; //Time before followup EMA / EMA2 following submission
-
-
     private int CurrentQuestion = 0;
-    private Map<String,String[]> EMAPromts = new HashMap<>();
-    private String[] Questions =
-            {"Is patient having pain now?",
-            "What is patient's pain level?",
-            "How distressed are you?",
-            "How distressed is the patient?",
-            "Did patient take an opioid for the pain?"};
-    private String[][] Answers = {
-            {"Yes", "No"},
-            {"1","2","3","4","5","6","7","8","9","10"},
-            {"Not at all", "A little", "Moderately", "Very"},
-            {"Not at all", "A little", "Moderately", "Very"},
-            {"Yes", "No"}};
-    private int tapCounter = 0;
 
+    private String[] Questions =
+            {
+                    "Is patient having cancer pain now?",
+                    "What is patient's pain level?",
+                    "How distressed are you?",
+                    "How distressed is the patient?",
+                    "Did patient take an opioid for the pain?"
+            };
+    private String[][] Answers =
+            {
+                    {"Yes", "No"},
+                    {"1","2","3","4","5","6","7","8","9","10"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Yes", "No"}
+            };
 
     @Override
 
@@ -99,8 +94,8 @@ public class EMA1 extends WearableActivity       // This is the main activity fo
 
     private void LogActivity()
     {
-        String data =  (new Utils().getTime()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
-        DataLogger datalog = new DataLogger("EMA_Activity.csv",data);
+        String data =  (new Utils().getTime()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
+        DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);
         datalog.LogData();
     }
 
@@ -118,6 +113,7 @@ public class EMA1 extends WearableActivity       // This is the main activity fo
             }
             Cycle_Responses();
 
+            // Waits for the next button to be clicked.
             next.setOnClickListener( new View.OnClickListener()
             {
                 public void onClick(View view)      // Haptic Feedback
@@ -148,7 +144,9 @@ public class EMA1 extends WearableActivity       // This is the main activity fo
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();
                     LogActivity();
                     if (CurrentQuestion == 0)
-                    {Cancel();}
+                    {
+                        Cancel();
+                    }
                     else
                     {
                         CurrentQuestion --;
@@ -186,7 +184,7 @@ public class EMA1 extends WearableActivity       // This is the main activity fo
         }
 
         /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("EMA1_Results.csv", log.toString());
+        DataLogger dataLogger = new DataLogger("Followup_EMA_Results.csv", log.toString());
         dataLogger.LogData();
         ThankYou();
 
@@ -198,4 +196,3 @@ public class EMA1 extends WearableActivity       // This is the main activity fo
         finish();   // Closes the entire survey
     }
 }
-
