@@ -77,7 +77,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
         UserResponses = new String[Questions.length];
         UserResponseIndex = new int[UserResponses.length];
-        //q1();       // Moves on to question 1
 
         QuestionSystem();
 
