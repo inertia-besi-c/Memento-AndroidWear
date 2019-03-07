@@ -40,28 +40,45 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private int FollowUpEMADelay = 5*60*1000; //Time before followup EMA / EMA2 following submission
 
     private Timer EMARemindertimer;
-    private int EMAReminderDelay =(int) 0;
+    private int EMAReminderDelay = 0;
     private int EMAReminderInterval = 30000; //Time before pinging user after not finishing EMA
     private int ReminderNumber = 2;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
-    private String[] Questions =
-    {
-        "Is patient having pain now?",
-        "What is patient's pain level?",
-        "How distressed are you?",
-        "How distressed is the patient?",
-        "Did patient take an opioid for the pain?"
-    };
-    private String[][] Answers =
-    {
-      {"Yes", "No"},
-      {"1","2","3","4","5","6","7","8","9","10"},
-      {"Not at all", "A little", "Moderately", "Very"},
-      {"Not at all", "A little", "Moderately", "Very"},
-      {"Yes", "No"}
-    };
+    private String[] CareGiverQuestions =       // These are the questions for the care giver
+            {
+                    "Is patient having pain now?",
+                    "What is patient's pain level?",
+                    "How distressed are you?",
+                    "How distressed is the patient?",
+                    "Did patient take an opioid for the pain?"
+            };
+    private String[][] CareGiverAnswers =       // These are the answers for the care giver
+            {
+                    {"Yes", "No"},
+                    {"1","2","3","4","5","6","7","8","9","10"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Yes", "No"}
+            };
+
+    private String[] PatientQuestions =         // These are the patient questions
+            {
+                    "Are you in pain now?",
+                    "What is your pain level?",
+                    "How distressed are you?",
+                    "How distressed is your caregiver?",
+                    "Did you take opioid for the pain?"
+            };
+    private String[][] PatientAnswers =         // These are the patient answers
+            {
+                    {"Yes", "No"},
+                    {"1","2","3","4","5","6","7","8","9","10"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Yes", "No"}
+            };
 
     @Override
 
@@ -92,7 +109,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
             }
         });
 
-        UserResponses = new String[Questions.length];
+        UserResponses = new String[CareGiverQuestions.length];
         UserResponseIndex = new int[UserResponses.length];
 
         FollowUpEMATimer = new Timer();
@@ -148,14 +165,14 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion < Questions.length)
+        if (CurrentQuestion < CareGiverQuestions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(Questions[CurrentQuestion]);
+            req.setText(CareGiverQuestions[CurrentQuestion]);
             responses.clear();
-            for(int i=0; i < Answers[CurrentQuestion].length; i++)
+            for (int i=0; i < CareGiverAnswers[CurrentQuestion].length; i++)
             {
-                responses.add(Answers[CurrentQuestion][i]);
+                responses.add(CareGiverAnswers[CurrentQuestion][i]);
             }
             Cycle_Responses();
 
