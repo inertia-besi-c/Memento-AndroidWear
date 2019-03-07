@@ -92,6 +92,10 @@
         <activity android:name=".EOD_EMA" />
         <activity android:name=".EMA1" />
         <activity android:name=".EMA2" />
+        <activity android:name=".FollowUpEMA" />
+        <activity android:name=".EndOfDay_EMA" />
+        <activity android:name=".PainEMA" />
+        <activity android:name=".EndOfDayEMA" />
     </application>
 
 </manifest>
