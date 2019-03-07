@@ -91,7 +91,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire(10*60*1000L /*10 minutes*/);
-        if ((new Preferences().Role).equals("PT"))
+        if ((new Preferences().Role) == "PT")
         {
             Questions = PatientQuestions;
             Answers = PatientAnswers;
