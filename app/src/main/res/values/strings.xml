@@ -21,5 +21,8 @@
     <string name="title_activity_sensor_data">SensorData</string>
     <string name="title_activity_accelerometer_sensor_timer">AccelerometerSensorTimer</string>
     <string name="message">Watch face tapped</string>
-    <string name="my_digital_name">BESI C</string>
+    <string name="my_digital_name">My Digital</string>
+    <string name="title_activity_pain_screen">PainScreen</string>
+    <string name="pain">Pain</string>
+    <string name="cancel">Cancel</string>
 </resources>

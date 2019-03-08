@@ -116,7 +116,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             public void onClick(View v)
             {
-                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the EMA File
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the EMA File
                 startActivity(StartEMAActivity);    // Starts the EMA file
             }
         });
