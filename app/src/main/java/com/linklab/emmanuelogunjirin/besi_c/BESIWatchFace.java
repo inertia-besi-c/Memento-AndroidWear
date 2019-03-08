@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  * in the Google Watch Face Code Lab:
  * https://codelabs.developers.google.com/codelabs/watchface/index.html#0
  */
-public class BESI_WatchFace extends CanvasWatchFaceService
+public class BESIWatchFace extends CanvasWatchFaceService
 {
 
     private static final Typeface NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
@@ -61,9 +61,9 @@ public class BESI_WatchFace extends CanvasWatchFaceService
     private static class EngineHandler extends Handler
     {
 
-        private final WeakReference<BESI_WatchFace.Engine> mWeakReference;
+        private final WeakReference<BESIWatchFace.Engine> mWeakReference;
 
-        EngineHandler(BESI_WatchFace.Engine reference)
+        EngineHandler(BESIWatchFace.Engine reference)
         {
             mWeakReference = new WeakReference<>(reference);
         }
@@ -71,7 +71,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
         @Override
         public void handleMessage(Message msg)
         {
-            BESI_WatchFace.Engine engine = mWeakReference.get();
+            BESIWatchFace.Engine engine = mWeakReference.get();
             if (engine != null)
             {
                 switch (msg.what)
@@ -109,7 +109,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
          * disable anti-aliasing in ambient mode.
          */
         private boolean mLowBitAmbient;
-        private boolean mBurnInProtection;
+//        private boolean mBurnInProtection;
         private boolean mAmbient;
 
         @Override
@@ -120,11 +120,11 @@ public class BESI_WatchFace extends CanvasWatchFaceService
 
             super.onCreate(holder);
 
-            setWatchFaceStyle(new WatchFaceStyle.Builder(BESI_WatchFace.this).setAcceptsTapEvents(true).build());
+            setWatchFaceStyle(new WatchFaceStyle.Builder(BESIWatchFace.this).setAcceptsTapEvents(true).build());
 
             mCalendar = Calendar.getInstance();
 
-            Resources resources = BESI_WatchFace.this.getResources();
+            Resources resources = BESIWatchFace.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
             // Initializes background.
@@ -173,7 +173,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
             }
             mRegisteredTimeZoneReceiver = true;
             IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
-            BESI_WatchFace.this.registerReceiver(mTimeZoneReceiver, filter);
+            BESIWatchFace.this.registerReceiver(mTimeZoneReceiver, filter);
         }
 
         private void unregisterReceiver() {
@@ -183,7 +183,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
                 return;
             }
             mRegisteredTimeZoneReceiver = false;
-            BESI_WatchFace.this.unregisterReceiver(mTimeZoneReceiver);
+            BESIWatchFace.this.unregisterReceiver(mTimeZoneReceiver);
         }
 
         @Override
@@ -193,7 +193,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
             super.onApplyWindowInsets(insets);
 
             // Load resources that have alternate values for round watches.
-            Resources resources = BESI_WatchFace.this.getResources();
+            Resources resources = BESIWatchFace.this.getResources();
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
@@ -209,7 +209,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
             startActivity(StartWatchActivity);    // Starts the watch face
             super.onPropertiesChanged(properties);
             mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT, false);
-            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION, false);
+//            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION, false);
         }
 
         @Override
