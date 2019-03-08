@@ -57,9 +57,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
                         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
-                        float batteryPct = level / (float)scale;
+                        int batteryPct = (level*100/scale);
 
-                        batteryLevel.setText(String.valueOf(batteryPct));
+                        batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
                     }
                 });
                 }
