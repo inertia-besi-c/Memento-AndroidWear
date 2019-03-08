@@ -3,6 +3,8 @@ package com.linklab.emmanuelogunjirin.besi_c;
 // Imports
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -150,6 +153,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 }
             }
         });
+
+        ScheduleEndOfDayEMA();
+
         // Enables Always-on
         setAmbientEnabled();
     }
@@ -163,6 +169,21 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
         if(!isRunning(PedometerSensor.class))
         {startService(PedomService);}
+    }
+
+    private void ScheduleEndOfDayEMA()
+    {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, new Preferences().EoDEMA_Time_Hour);
+        calendar.set(Calendar.MINUTE, new Preferences().EoDEMA_Time_Minute);
+
+        Log.i("DMA","Should run at " + calendar.getTime());
+
+        Intent intent = new Intent(MainActivity.this, EndOfDayEMA.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        ((AlarmManager) getSystemService(ALARM_SERVICE)).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+
     }
 
     private boolean isRunning(Class<?> serviceClass)

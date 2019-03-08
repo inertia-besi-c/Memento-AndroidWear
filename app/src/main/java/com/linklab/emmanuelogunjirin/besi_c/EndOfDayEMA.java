@@ -3,8 +3,10 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class EndOfDayEMA extends WearableActivity       // This is the main activity for the questions
@@ -29,9 +33,17 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     private int[] UserResponseIndex;
     public Vibrator v;      // The vibrator that provides haptic feedback.
 
+    private Timer EMARemindertimer;
+    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
+    private int EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = new Preferences().PainEMAReminderNumber;
+    private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
-    private String[] CareGiverQuestions =
+    private String [] Questions;
+    private String[][] Answers;
+
+    private String[] CaregiverQuestions =
             {
                     "How active were you?",
                     "How busy was your home?",
@@ -43,7 +55,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How distressed was the patient overall?",
                     "How would you rate your sleep quality?",
             };
-    private String[][] CareGiverAnswers =
+    private String[][] CaregiverAnswers =
             {
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"Not at all", "A little", "Moderately", "Very"},
@@ -88,7 +100,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     {
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(300);
+        v.vibrate(1000);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
 
@@ -97,6 +109,39 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         next = findViewById(R.id.Next);
         req = findViewById(R.id.EMA_req);
         res = findViewById(R.id.EMA_res);
+
+        if (new Preferences().Role.equals("PT"))
+        {
+            Questions = PatientQuestions;
+            Answers = PatientAnswers;
+        }
+        else
+        {
+            Questions = CaregiverQuestions;
+            Answers = CaregiverAnswers;
+        }
+
+        EMARemindertimer = new Timer();
+        EMARemindertimer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("EMAR","Running EMAReminder");
+                Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
+                if (ReminderCount <= ReminderNumber)
+                {
+                    Log.i("EMAR","Vibrating...");
+                    v.vibrate(600);
+                    ReminderCount ++;
+                }
+                else
+                {
+                    Log.i("EMAR","Stopping Timer");
+                    Submit();
+                }
+            }
+        },EMAReminderDelay,EMAReminderInterval);
 
         /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         res.setOnClickListener( new View.OnClickListener()
@@ -109,7 +154,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             }
         });
 
-        UserResponses = new String[CareGiverQuestions.length];
+        UserResponses = new String[Questions.length];
         UserResponseIndex = new int[UserResponses.length];
         //q1();       // Moves on to question 1
 
@@ -135,12 +180,12 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion < CareGiverQuestions.length)
+        if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(CareGiverQuestions[CurrentQuestion]);
+            req.setText(Questions[CurrentQuestion]);
             responses.clear();
-            Collections.addAll(responses, CareGiverAnswers[CurrentQuestion]);
+            Collections.addAll(responses, Answers[CurrentQuestion]);
             Cycle_Responses();
 
             // Waits for the next button to be clicked.
@@ -152,15 +197,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     UserResponses[CurrentQuestion] = res.getText().toString();
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();
                     LogActivity();
-                    if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                    {
-                        CurrentQuestion++;
-                        QuestionSystem();
-                    }
-                    else
-                    {
-                        Cancel();    // Else, it closes the question screen.
-                    }
+
+                    CurrentQuestion++;
+                    QuestionSystem();
+
                 }
             });
 
@@ -216,6 +256,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         /* Logs the data in a csv format */
         DataLogger dataLogger = new DataLogger("EndOfDay_EMA_Results.csv", log.toString());
         dataLogger.LogData();
+
         ThankYou();
 
     }

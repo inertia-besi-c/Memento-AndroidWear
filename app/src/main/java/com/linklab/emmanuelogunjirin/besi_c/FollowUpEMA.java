@@ -4,6 +4,7 @@ package com.linklab.emmanuelogunjirin.besi_c;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class FollowUpEMA extends WearableActivity       // This is the main activity for the questions
@@ -28,9 +31,17 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     private int[] UserResponseIndex;
     public Vibrator v;      // The vibrator that provides haptic feedback.
 
+    private Timer EMARemindertimer;
+    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
+    private int EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = new Preferences().FollowUpEMAReminderNumber;
+    private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
-    private String[] CareGiverQuestions =
+    private String[] Questions;
+    private String[][] Answers;
+
+    private String[] CaregiverQuestions =
             {
                     "Is the patient still having cancer pain now?",
                     "What is the patient's pain level?",
@@ -38,7 +49,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
                     "How distressed is the patient?",
                     "Did the patient take an additional opioid for the pain?"
             };
-    private String[][] CareGiverAnswers =
+    private String[][] CaregiverAnswers =
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
@@ -81,6 +92,17 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         req = findViewById(R.id.EMA_req);
         res = findViewById(R.id.EMA_res);
 
+        if (new Preferences().Role.equals("PT"))
+        {
+            Questions = PatientQuestions;
+            Answers = PatientAnswers;
+        }
+        else
+        {
+            Questions = CaregiverQuestions;
+            Answers = CaregiverAnswers;
+        }
+
         /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         res.setOnClickListener( new View.OnClickListener()
         {
@@ -92,9 +114,32 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             }
         });
 
-        UserResponses = new String[CareGiverQuestions.length];
+        UserResponses = new String[Questions.length];
         UserResponseIndex = new int[UserResponses.length];
         //q1();       // Moves on to question 1
+
+
+        EMARemindertimer = new Timer();
+        EMARemindertimer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Log.i("EMAR","Running EMAReminder");
+                Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
+                if (ReminderCount <= ReminderNumber)
+                {
+                    Log.i("EMAR","Vibrating...");
+                    v.vibrate(600);
+                    ReminderCount ++;
+                }
+                else
+                {
+                    Log.i("EMAR","Stopping Timer");
+                    Submit();
+                }
+            }
+        },EMAReminderDelay,EMAReminderInterval);
 
         QuestionSystem();
 
@@ -120,12 +165,12 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion < CareGiverQuestions.length)
+        if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(CareGiverQuestions[CurrentQuestion]);
+            req.setText(Questions[CurrentQuestion]);
             responses.clear();
-            Collections.addAll(responses, CareGiverAnswers[CurrentQuestion]);
+            Collections.addAll(responses, Answers[CurrentQuestion]);
             Cycle_Responses();
 
             // Waits for the next button to be clicked.

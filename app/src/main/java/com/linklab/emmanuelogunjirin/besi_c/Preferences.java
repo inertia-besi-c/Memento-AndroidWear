@@ -9,16 +9,17 @@ public class Preferences
 
 
     // Settings for Pain EMA | Time is in ms |
-    int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
-    int PainEMAReminderInterval = 30000; // How long to wait between each ping reminding user to complete ema
-    int PainEMAReminderNumber = 2; // How many times to remind the wearer to complete EMA
+    public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
+    public int PainEMAReminderInterval = 30000; // How long to wait between each ping reminding user to complete ema
+    public int PainEMAReminderNumber = 2; // How many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
-    int FollowUpEMADelay = 5*60*1000; // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMADelay = 5*60*1000; // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMAReminderNumber = 3; // How many times to remind the wearer to complete the follow-up ema
 
     // Settings for Daily EMA
-    // ----------------------------- // At what time to prompt wearer to complete daily ema
-    //
+    public int EoDEMA_Time_Hour = 9; // Hour at which the daily ema should go off
+    public int EoDEMA_Time_Minute = 0; // Minute of hour at which daily ema should go off
 
     // Settings for Heart Rate Monitoring | Time is in ms |
     int HRSampleDuration = 30000;   // How long should heart rate be measured each time?
