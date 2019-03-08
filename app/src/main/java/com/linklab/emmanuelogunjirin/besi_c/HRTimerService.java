@@ -28,7 +28,7 @@ public class HRTimerService extends Service
         Log.i("Heart Rate Sensor","Starting Heart Rate Sensor");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire(10*60*1000L /*10 minutes*/);
+        wakeLock.acquire();
         PeriodicService(false);
         return START_STICKY;    // Please do not remove. It is needed. (This allows it to restart if the service is killed)
     }

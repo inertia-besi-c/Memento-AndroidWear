@@ -22,7 +22,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire(10*60*1000L /*10 minutes*/);
+        wakeLock.acquire();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         // Sensor object reference
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

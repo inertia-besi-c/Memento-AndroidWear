@@ -90,7 +90,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire(ReminderNumber*EMAReminderInterval+500);
+        wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
         if (new Preferences().Role.equals("PT"))
         {
             Questions = PatientQuestions;
@@ -135,7 +135,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
             {
                 Log.i("EMAR","Running EMAReminder");
                 Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
-                if (ReminderCount < ReminderNumber)
+                if (ReminderCount <= ReminderNumber)
                 {
                     Log.i("EMAR","Vibrating...");
                     v.vibrate(600);

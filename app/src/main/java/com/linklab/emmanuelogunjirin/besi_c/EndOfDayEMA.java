@@ -5,6 +5,7 @@ package com.linklab.emmanuelogunjirin.besi_c;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.TimerTask;
 
 public class EndOfDayEMA extends WearableActivity       // This is the main activity for the questions
 {
+    private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private int resTaps = 0;
@@ -98,6 +100,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     // When the screen is created, this is run.
     protected void onCreate(Bundle savedInstanceState)
     {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(1000);
