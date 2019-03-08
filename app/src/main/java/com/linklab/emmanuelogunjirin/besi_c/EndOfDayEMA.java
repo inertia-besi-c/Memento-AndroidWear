@@ -257,6 +257,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         DataLogger dataLogger = new DataLogger("EndOfDay_EMA_Results.csv", log.toString());
         dataLogger.LogData();
 
+        EMARemindertimer.cancel();
+
         ThankYou();
 
     }

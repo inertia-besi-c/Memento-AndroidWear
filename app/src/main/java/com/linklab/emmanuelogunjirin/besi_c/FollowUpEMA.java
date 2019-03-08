@@ -246,6 +246,9 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         /* Logs the data in a csv format */
         DataLogger dataLogger = new DataLogger("Followup_EMA_Results.csv", log.toString());
         dataLogger.LogData();
+
+        EMARemindertimer.cancel();
+
         ThankYou();
 
     }

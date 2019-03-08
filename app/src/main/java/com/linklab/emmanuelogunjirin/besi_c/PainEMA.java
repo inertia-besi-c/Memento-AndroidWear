@@ -273,6 +273,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
             }
         },FollowUpEMADelay);
 
+        EMARemindertimer.cancel();
+
         ThankYou();
 
     }
