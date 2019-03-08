@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  * in the Google Watch Face Code Lab:
  * https://codelabs.developers.google.com/codelabs/watchface/index.html#0
  */
-public class BESI_WatchFace extends CanvasWatchFaceService
+public class BESIWatchFace extends CanvasWatchFaceService
 {
 
     private static final Typeface NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
@@ -61,9 +61,9 @@ public class BESI_WatchFace extends CanvasWatchFaceService
     private static class EngineHandler extends Handler
     {
 
-        private final WeakReference<BESI_WatchFace.Engine> mWeakReference;
+        private final WeakReference<BESIWatchFace.Engine> mWeakReference;
 
-        EngineHandler(BESI_WatchFace.Engine reference)
+        EngineHandler(BESIWatchFace.Engine reference)
         {
             mWeakReference = new WeakReference<>(reference);
         }
@@ -71,7 +71,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
         @Override
         public void handleMessage(Message msg)
         {
-            BESI_WatchFace.Engine engine = mWeakReference.get();
+            BESIWatchFace.Engine engine = mWeakReference.get();
             if (engine != null)
             {
                 switch (msg.what)
@@ -109,7 +109,7 @@ public class BESI_WatchFace extends CanvasWatchFaceService
          * disable anti-aliasing in ambient mode.
          */
         private boolean mLowBitAmbient;
-        private boolean mBurnInProtection;
+//        private boolean mBurnInProtection;
         private boolean mAmbient;
 
         @Override
@@ -120,11 +120,11 @@ public class BESI_WatchFace extends CanvasWatchFaceService
 
             super.onCreate(holder);
 
-            setWatchFaceStyle(new WatchFaceStyle.Builder(BESI_WatchFace.this).setAcceptsTapEvents(true).build());
+            setWatchFaceStyle(new WatchFaceStyle.Builder(BESIWatchFace.this).setAcceptsTapEvents(true).build());
 
             mCalendar = Calendar.getInstance();
 
-            Resources resources = BESI_WatchFace.this.getResources();
+            Resources resources = BESIWatchFace.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
             // Initializes background.
@@ -139,24 +139,28 @@ public class BESI_WatchFace extends CanvasWatchFaceService
         }
 
         @Override
-        public void onDestroy() {
+        public void onDestroy()
+        {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
             super.onDestroy();
         }
 
         @Override
-        public void onVisibilityChanged(boolean visible) {
+        public void onVisibilityChanged(boolean visible)
+        {
 //            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
 //            startActivity(StartWatchActivity);    // Starts the watch face
             super.onVisibilityChanged(visible);
 
-            if (visible) {
+            if (visible)
+            {
                 registerReceiver();
-
                 // Update time zone in case it changed while we weren't visible.
                 mCalendar.setTimeZone(TimeZone.getDefault());
                 invalidate();
-            } else {
+            }
+            else
+            {
                 unregisterReceiver();
             }
 
@@ -165,65 +169,71 @@ public class BESI_WatchFace extends CanvasWatchFaceService
             updateTimer();
         }
 
-        private void registerReceiver() {
+        private void registerReceiver()
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
-            if (mRegisteredTimeZoneReceiver) {
+            if (mRegisteredTimeZoneReceiver)
+            {
                 return;
             }
             mRegisteredTimeZoneReceiver = true;
             IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
-            BESI_WatchFace.this.registerReceiver(mTimeZoneReceiver, filter);
+            BESIWatchFace.this.registerReceiver(mTimeZoneReceiver, filter);
         }
 
-        private void unregisterReceiver() {
+        private void unregisterReceiver()
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
-            if (!mRegisteredTimeZoneReceiver) {
+            if (!mRegisteredTimeZoneReceiver)
+            {
                 return;
             }
             mRegisteredTimeZoneReceiver = false;
-            BESI_WatchFace.this.unregisterReceiver(mTimeZoneReceiver);
+            BESIWatchFace.this.unregisterReceiver(mTimeZoneReceiver);
         }
 
         @Override
-        public void onApplyWindowInsets(WindowInsets insets) {
+        public void onApplyWindowInsets(WindowInsets insets)
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
             super.onApplyWindowInsets(insets);
 
             // Load resources that have alternate values for round watches.
-            Resources resources = BESI_WatchFace.this.getResources();
+            Resources resources = BESIWatchFace.this.getResources();
             boolean isRound = insets.isRound();
-            mXOffset = resources.getDimension(isRound
-                    ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
-            float textSize = resources.getDimension(isRound
-                    ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
-
+            mXOffset = resources.getDimension(isRound ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
+            float textSize = resources.getDimension(isRound ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
             mTextPaint.setTextSize(textSize);
         }
 
         @Override
-        public void onPropertiesChanged(Bundle properties) {
+        public void onPropertiesChanged(Bundle properties)
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
             super.onPropertiesChanged(properties);
             mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT, false);
-            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION, false);
+//            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION, false);
         }
 
         @Override
-        public void onTimeTick() {
+        public void onTimeTick()
+        {
             super.onTimeTick();
             invalidate();
         }
 
         @Override
-        public void onAmbientModeChanged(boolean inAmbientMode) {
+        public void onAmbientModeChanged(boolean inAmbientMode)
+        {
             super.onAmbientModeChanged(inAmbientMode);
 
             mAmbient = inAmbientMode;
-            if (mLowBitAmbient) {
+            if (mLowBitAmbient)
+            {
                 mTextPaint.setAntiAlias(!inAmbientMode);
             }
 
@@ -237,10 +247,13 @@ public class BESI_WatchFace extends CanvasWatchFaceService
          * a tap.
          */
         @Override
-        public void onTapCommand(int tapType, int x, int y, long eventTime) {
+
+        public void onTapCommand(int tapType, int x, int y, long eventTime)
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
-            switch (tapType) {
+            switch (tapType)
+            {
                 case TAP_TYPE_TOUCH:
                     // The user has started touching the screen.
                     break;
@@ -250,21 +263,24 @@ public class BESI_WatchFace extends CanvasWatchFaceService
                 case TAP_TYPE_TAP:
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
-                    Toast.makeText(getApplicationContext(), R.string.message, Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(getApplicationContext(), R.string.message, Toast.LENGTH_SHORT).show();
                     break;
             }
             invalidate();
         }
 
         @Override
-        public void onDraw(Canvas canvas, Rect bounds) {
+        public void onDraw(Canvas canvas, Rect bounds)
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
             // Draw the background.
-            if (isInAmbientMode()) {
+            if (isInAmbientMode())
+            {
                 canvas.drawColor(Color.BLACK);
-            } else {
+            }
+            else
+            {
                 canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
             }
 
@@ -284,11 +300,13 @@ public class BESI_WatchFace extends CanvasWatchFaceService
          * Starts the {@link #mUpdateTimeHandler} timer if it should be running and isn't currently
          * or stops it if it shouldn't be running but currently is.
          */
-        private void updateTimer() {
+        private void updateTimer()
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
-            if (shouldTimerBeRunning()) {
+            if (shouldTimerBeRunning())
+            {
                 mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
             }
         }
@@ -304,14 +322,15 @@ public class BESI_WatchFace extends CanvasWatchFaceService
         /**
          * Handle updating the time periodically in interactive mode.
          */
-        private void handleUpdateTimeMessage() {
+        private void handleUpdateTimeMessage()
+        {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
             invalidate();
-            if (shouldTimerBeRunning()) {
+            if (shouldTimerBeRunning())
+            {
                 long timeMs = System.currentTimeMillis();
-                long delayMs = INTERACTIVE_UPDATE_RATE_MS
-                        - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
+                long delayMs = INTERACTIVE_UPDATE_RATE_MS - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
                 mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs);
             }
         }

@@ -25,18 +25,7 @@ import java.util.Locale;
 
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
-    private int HRSampleDuration;
-    {
-        HRSampleDuration = 30000;   // How long should heart rate be measured each time?
-    }
-
-    private int HRMeasurementInterval;
-    {
-        HRMeasurementInterval = 5 * 60 * 1000;  // This is the total time you want (INCLUDING THE SAMPLING DURATION)
-    }
-
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-
 
     /* This Updates the Date and Time Every second when UI is in the foreground */
     Thread time_updater = new Thread()
@@ -103,7 +92,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // Ignore this catch.
         }
 
-
         date = findViewById(R.id.DATE);     // The date ID
         time = findViewById(R.id.TIME);     // The time ID
 
@@ -168,11 +156,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void startSensors()     // Calls the sensors from their service branches
     {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
         if(!isRunning(AccelerometerSensor.class))
         {startService(AccelService);}
 
-        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
         if(!isRunning(PedometerSensor.class))
         {startService(PedomService);}
     }

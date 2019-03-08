@@ -8,8 +8,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
 import android.util.Log;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,19 +17,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
 {
     public int Duration = new Preferences().HRSampleDuration;        // This is the sampling rate in milliseconds
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private Sensor mHeartRate;      // Picks out the Heart Rate sensor specifically.
-    private int Time_zero;      // Time at start of measurement (milliseconds)
+    int Time_zero;      // Time at start of measurement (milliseconds)
     final Timer timer = new Timer();          // Makes a new timer.
-
-    protected void onCreate(Bundle savedInstanceState)      // Runs when the function is created.
-    {
-        super.onCreate();
-        /* Establishes the sensor and ability to collect data */
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
-        mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_NORMAL);
-        Time_zero = getTime();
-    }
 
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
@@ -37,7 +26,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     {
         Log.i("HRS","Starting HRS");
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+        // Picks out the Heart Rate sensor specifically.
+        Sensor mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);
         Time_zero = getTime();
 
@@ -49,23 +39,11 @@ public class HeartRateSensor extends Service implements SensorEventListener     
                             }
                         }, Duration);
         return START_NOT_STICKY;
-
     }
 
     private int getTime()
     {
         return (int)System.currentTimeMillis();
-    }
-
-    public void onResume()  // A resume activity switch
-    {
-        mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);
-    }
-
-
-    public void onPause()   // A pause activity switch
-    {
-        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -74,7 +52,6 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     {
         mSensorManager.unregisterListener(this);
         timer.cancel();
-
     }
 
     @Override
@@ -90,15 +67,12 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         Log.d("Test", "Heart Rate (bpm) : " + String.valueOf(event.values[0]));     // This is a log for the Logcat to be seen.
         String HeartRateMonitor = String.valueOf(event.values[0]);      // This changes the value of the sensor data to a string.
 
-        StringBuilder log = new StringBuilder(new Utils().getTime());// Creates a string out of the date format
-        log.append(",");
-        log.append(String.valueOf(event.timestamp));
-        log.append(",");
-        log.append(HeartRateMonitor);       // Appends the Heart Rate value onto the string
-        log.append(",");
-        log.append(event.accuracy);
-
-        final String logstring = log.toString();
+        final String logstring = new Utils().getTime() + "," +
+                String.valueOf(event.timestamp) +
+                "," +
+                HeartRateMonitor +       // Appends the Heart Rate value onto the string
+                "," +
+                event.accuracy;
 
         new Thread(new Runnable()
         {

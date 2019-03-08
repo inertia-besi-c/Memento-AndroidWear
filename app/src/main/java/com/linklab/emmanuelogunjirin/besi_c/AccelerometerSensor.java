@@ -13,7 +13,6 @@ import android.os.PowerManager;
 public class AccelerometerSensor extends Service implements SensorEventListener
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
 
 
@@ -21,15 +20,14 @@ public class AccelerometerSensor extends Service implements SensorEventListener
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire();
+        wakeLock.acquire(10*60*1000L /*10 minutes*/);
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         // Sensor object reference
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
-
     }
 
     @Override
