@@ -12,13 +12,13 @@
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        android:name=".App">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
@@ -32,8 +32,11 @@
             android:value="true" />
 
         <activity
+            android:name=".EndOfDayPrompt"
+            android:label="@string/title_activity_end_of_day_prompt"></activity>
+        <activity
             android:name=".PainScreen"
-            android:label="@string/title_activity_pain_screen"></activity>
+            android:label="@string/title_activity_pain_screen" />
 
         <service
             android:name=".BESIWatchFace"

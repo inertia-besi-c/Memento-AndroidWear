@@ -1,8 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -50,7 +48,7 @@ public class App extends Application {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(thisContext, EndOfDayEMA.class);
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt.class);
                     startActivity(intent);
                 }
             }, delay, 24 * 60 * 60 * 1000);

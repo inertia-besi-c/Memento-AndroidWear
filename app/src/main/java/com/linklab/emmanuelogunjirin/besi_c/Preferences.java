@@ -7,7 +7,6 @@ public class Preferences
     // Role of user wearing the watch
     String Role = "PT"; // CG for Caregiver or PT for Patient
 
-
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
     public long PainEMAReminderInterval = 5*60*1000; // How long to wait between each ping reminding user to complete ema
@@ -18,9 +17,10 @@ public class Preferences
     public int FollowUpEMAReminderNumber = 3; // How many times to remind the wearer to complete the follow-up ema
 
     // Settings for Daily EMA
-    public int EoDEMA_Time_Hour = 13; // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 22; // Minute of hour at which daily ema should go off
+    public int EoDEMA_Time_Hour = 21; // Hour at which the daily ema should go off
+    public int EoDEMA_Time_Minute = 0; // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0; // Second of minute at which daily ema should go off
+    public long EoDEMA_Timer_Delay = 10 * 60 * 1000;
 
     // Settings for Heart Rate Monitoring | Time is in ms |
     long HRSampleDuration = 30000;   // How long should heart rate be measured each time?

@@ -25,4 +25,5 @@
     <string name="title_activity_pain_screen">PainScreen</string>
     <string name="pain">Pain</string>
     <string name="cancel">Cancel</string>
+    <string name="title_activity_end_of_day_prompt">EndOfDayPrompt</string>
 </resources>

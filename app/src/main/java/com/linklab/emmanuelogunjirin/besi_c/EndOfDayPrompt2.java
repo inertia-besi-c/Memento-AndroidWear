@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EndOfDayPrompt extends WearableActivity {
+public class EndOfDayPrompt2 extends WearableActivity {
 
     private Button Proceed, Snooze, Dismiss;
 
@@ -22,8 +21,6 @@ public class EndOfDayPrompt extends WearableActivity {
         Proceed = findViewById(R.id.Proceed);
         Snooze = findViewById(R.id.Snooze);
         Dismiss = findViewById(R.id.Dismiss);
-
-        Dismiss.setVisibility(View.INVISIBLE);
 
         Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,10 +49,16 @@ public class EndOfDayPrompt extends WearableActivity {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt.class);
+                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);
                         startActivity(StartEMAActivity);
                     }
                 },new Preferences().EoDEMA_Timer_Delay);
+            }
+        });
+        Dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
