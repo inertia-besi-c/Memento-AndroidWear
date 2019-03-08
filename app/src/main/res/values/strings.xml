@@ -10,10 +10,10 @@
     <string name="title_activity_ema">EMA</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment"> </string>
     <string name="battery">Battery: %</string>
-    <string name="mar_4_2019">Mar 4, 2019</string>
-    <string name="_8_58_am">8:58 am</string>
+    <string name="mar_4_2019"> </string>
+    <string name="_8_58_am"> </string>
     <string name="back">Back</string>
     <string name="next">Next</string>
     <string name="button">Button</string>
@@ -21,7 +21,7 @@
     <string name="title_activity_sensor_data">SensorData</string>
     <string name="title_activity_accelerometer_sensor_timer">AccelerometerSensorTimer</string>
     <string name="message">Watch face tapped</string>
-    <string name="my_digital_name">My Digital</string>
+    <string name="my_digital_name">BESI C</string>
     <string name="title_activity_pain_screen">PainScreen</string>
     <string name="pain">Pain</string>
     <string name="cancel">Cancel</string>
