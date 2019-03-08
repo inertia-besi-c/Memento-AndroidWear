@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * Important Note: Because watch face apps do not have a default Activity in
  * their project, you will need to set your Configurations to
- * "Do not launch Activity" for both the Wear and/or Application modules. If you
+ * "Do not launch Activity" for both the Wear and/or App modules. If you
  * are unsure how to do this, please review the "Run Starter project" section
  * in the Google Watch Face Code Lab:
  * https://codelabs.developers.google.com/codelabs/watchface/index.html#0

@@ -162,8 +162,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
-        ScheduleEndOfDayEMA();
-
         // Enables Always-on
         setAmbientEnabled();
     }
@@ -179,18 +177,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {startService(PedomService);}
     }
 
-    private void ScheduleEndOfDayEMA()
-    {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, new Preferences().EoDEMA_Time_Hour);
-        calendar.set(Calendar.MINUTE, new Preferences().EoDEMA_Time_Minute);
-
-        Intent intent = new Intent(MainActivity.this, EndOfDayEMA.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        ((AlarmManager) getSystemService(ALARM_SERVICE)).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
-
-    }
 
     private boolean isRunning(Class<?> serviceClass)
     {
