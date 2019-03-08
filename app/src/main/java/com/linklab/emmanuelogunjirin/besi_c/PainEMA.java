@@ -37,11 +37,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
 
     private Timer FollowUpEMATimer;
-    private int FollowUpEMADelay = new Preferences().FollowUpEMADelay; //Time before followup EMA / EMA2 following submission
+    private long FollowUpEMADelay = new Preferences().FollowUpEMADelay; //Time before followup EMA / EMA2 following submission
 
     private Timer EMARemindertimer;
     private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
-    private int EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().PainEMAReminderNumber;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;

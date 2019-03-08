@@ -35,7 +35,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private Timer EMARemindertimer;
     private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
-    private int EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().FollowUpEMAReminderNumber;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
