@@ -14,8 +14,6 @@ public class PedometerSensor extends Service implements SensorEventListener
 {
 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private Sensor mPedometer;     // Sensor object reference
-    private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
 
 
@@ -23,26 +21,27 @@ public class PedometerSensor extends Service implements SensorEventListener
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire();
+        wakeLock.acquire(10*60*1000L /*10 minutes*/);
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-         mPedometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        // Sensor object reference
+        Sensor mPedometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
     }
 
 
-    public void onResume()  // A resume service switch
-    {
-        mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-
-    public void onPause()   // A pause service switch
-    {
-        mSensorManager.unregisterListener(this);
-    }
+//    public void onResume()  // A resume service switch
+//    {
+//        mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
+//    }
+//
+//
+//    public void onPause()   // A pause service switch
+//    {
+//        mSensorManager.unregisterListener(this);
+//    }
 
     @Override
     public void onDestroy()     // A destroy service switch (kill switch)
@@ -70,7 +69,8 @@ public class PedometerSensor extends Service implements SensorEventListener
 
         new Thread(new Runnable()
         {
-            public void run() {
+            public void run()
+            {
                 DataLogger dataLogger = new DataLogger("Pedometer_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }

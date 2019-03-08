@@ -103,7 +103,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // Ignore this catch.
         }
 
-
         date = findViewById(R.id.DATE);     // The date ID
         time = findViewById(R.id.TIME);     // The time ID
 
@@ -168,11 +167,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void startSensors()     // Calls the sensors from their service branches
     {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
         if(!isRunning(AccelerometerSensor.class))
         {startService(AccelService);}
 
-        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
         if(!isRunning(PedometerSensor.class))
         {startService(PedomService);}
     }

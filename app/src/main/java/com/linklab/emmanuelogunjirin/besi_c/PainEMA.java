@@ -16,6 +16,7 @@ import android.os.Vibrator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
@@ -24,7 +25,6 @@ import java.util.TimerTask;
 
 public class PainEMA extends WearableActivity       // This is the main activity for the questions
 {
-    private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
@@ -88,10 +88,10 @@ public class PainEMA extends WearableActivity       // This is the main activity
     // When the screen is created, this is run.
     protected void onCreate(Bundle savedInstanceState)
     {
-        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire(ReminderNumber*EMAReminderInterval+500);
-        if ((new Preferences().Role) == "PT")
+        if (new Preferences().Role.equals("PT"))
         {
             Questions = PatientQuestions;
             Answers = PatientAnswers;
@@ -128,9 +128,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
         FollowUpEMATimer = new Timer();
 
         EMARemindertimer = new Timer();
-        EMARemindertimer.schedule(new TimerTask() {
+        EMARemindertimer.schedule(new TimerTask()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 Log.i("EMAR","Running EMAReminder");
                 Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
                 if (ReminderCount <= ReminderNumber)
@@ -183,10 +185,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
             resTaps = UserResponseIndex[CurrentQuestion];
             req.setText(Questions[CurrentQuestion]);
             responses.clear();
-            for (int i=0; i < Answers[CurrentQuestion].length; i++)
-            {
-                responses.add(Answers[CurrentQuestion][i]);
-            }
+            Collections.addAll(responses, Answers[CurrentQuestion]);
             Cycle_Responses();
 
             // Waits for the next button to be clicked.
@@ -263,9 +262,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
         DataLogger dataLogger = new DataLogger("Pain_EMA_Results.csv", log.toString());
         dataLogger.LogData();
 
-        FollowUpEMATimer.schedule(new TimerTask() {
+        FollowUpEMATimer.schedule(new TimerTask()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 // Intent Start FollowUpEMA
                 Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the EMA File
                 startActivity(StartEMAActivity);    // Starts the EMA file

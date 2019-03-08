@@ -13,6 +13,7 @@ import android.os.Vibrator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -124,10 +125,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             resTaps = UserResponseIndex[CurrentQuestion];
             req.setText(CareGiverQuestions[CurrentQuestion]);
             responses.clear();
-            for(int i=0; i < CareGiverAnswers[CurrentQuestion].length; i++)
-            {
-                responses.add(CareGiverAnswers[CurrentQuestion][i]);
-            }
+            Collections.addAll(responses, CareGiverAnswers[CurrentQuestion]);
             Cycle_Responses();
 
             // Waits for the next button to be clicked.
