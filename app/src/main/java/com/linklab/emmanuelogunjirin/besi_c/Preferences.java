@@ -1,6 +1,5 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
-
 public class Preferences
 {
     public Preferences(){}
