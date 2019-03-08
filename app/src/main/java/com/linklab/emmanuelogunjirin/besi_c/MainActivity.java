@@ -50,6 +50,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         Date current = new Date();
                         time.setText(timeFormat.format(current));
                         date.setText(dateFormat.format(current));
+
+                        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+                        Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
+
+                        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+                        float batteryPct = level / (float)scale;
+
+                        batteryLevel.setText(String.valueOf(batteryPct));
                     }
                 });
                 }
@@ -129,9 +139,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
         if (!isRunning(HRTimerService.class))
         {
-            Log.i("Main","Starting HRS");
             startService(HRService);}
-        else {Log.i("Main","HRS is already running");}
 
         // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
         SLEEP.setOnClickListener(new View.OnClickListener()
@@ -177,8 +185,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, new Preferences().EoDEMA_Time_Hour);
         calendar.set(Calendar.MINUTE, new Preferences().EoDEMA_Time_Minute);
-
-        Log.i("DMA","Should run at " + calendar.getTime());
 
         Intent intent = new Intent(MainActivity.this, EndOfDayEMA.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);

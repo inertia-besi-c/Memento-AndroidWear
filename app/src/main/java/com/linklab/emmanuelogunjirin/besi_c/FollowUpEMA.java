@@ -127,7 +127,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             {
                 Log.i("EMAR","Running EMAReminder");
                 Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
-                if (ReminderCount <= ReminderNumber)
+                if (ReminderCount < ReminderNumber)
                 {
                     Log.i("EMAR","Vibrating...");
                     v.vibrate(600);
