@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class App extends Application {
 
@@ -31,14 +33,45 @@ public class App extends Application {
 
     private void ScheduleEndOfDayEMA(Context context)
     {
+        final Context thisContext = context;
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, new Preferences().EoDEMA_Time_Hour);
         calendar.set(Calendar.MINUTE, new Preferences().EoDEMA_Time_Minute);
+        calendar.set(Calendar.SECOND, new Preferences().EoDEMA_Time_Second);
 
-        Intent intent = new Intent(context, EndOfDayEMA.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        ((AlarmManager) getSystemService(ALARM_SERVICE)).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+        Log.i("Schedule",String.valueOf(calendar.getTime()));
+
+        try {
+            long delay = calendar.getTimeInMillis() - System.currentTimeMillis();
+
+            Timer timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(thisContext, EndOfDayEMA.class);
+                    startActivity(intent);
+                }
+            }, delay, 24 * 60 * 60 * 1000);
+        }
+        catch(Exception ex){
+            long delay = calendar.getTimeInMillis() - System.currentTimeMillis() + 24*60*60*1000;
+
+            Timer timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(thisContext, EndOfDayEMA.class);
+                    startActivity(intent);
+                }
+            }, delay, 24 * 60 * 60 * 1000);
+        }
+//        Intent intent = new Intent(context, EndOfDayEMA.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        ((AlarmManager) getSystemService(ALARM_SERVICE)).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+
 
     }
 }

@@ -16,7 +16,7 @@ import java.util.TimerTask;
 public class HRTimerService extends Service
 {
     public int delay = 0;
-    public int period = new Preferences().HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
+    public long period = new Preferences().HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
     private Timer timer;
     private PowerManager.WakeLock wakeLock;
 

@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 public class HeartRateSensor extends Service implements SensorEventListener     // This is the file heading, it listens to the physical Heart Rate Senor
 {
-    public int Duration = new Preferences().HRSampleDuration;        // This is the sampling rate in milliseconds
+    public long Duration = new Preferences().HRSampleDuration;        // This is the sampling rate in milliseconds
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     int Time_zero;      // Time at start of measurement (milliseconds)
     final Timer timer = new Timer();          // Makes a new timer.
