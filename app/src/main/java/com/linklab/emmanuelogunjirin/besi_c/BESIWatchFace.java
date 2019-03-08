@@ -222,6 +222,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onTimeTick()
         {
+            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            startActivity(StartWatchActivity);    // Starts the watch face
             super.onTimeTick();
             invalidate();
         }
