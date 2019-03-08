@@ -25,18 +25,7 @@ import java.util.Locale;
 
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
-    private int HRSampleDuration;
-    {
-        HRSampleDuration = 30000;   // How long should heart rate be measured each time?
-    }
-
-    private int HRMeasurementInterval;
-    {
-        HRMeasurementInterval = 5 * 60 * 1000;  // This is the total time you want (INCLUDING THE SAMPLING DURATION)
-    }
-
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-
 
     /* This Updates the Date and Time Every second when UI is in the foreground */
     Thread time_updater = new Thread()
