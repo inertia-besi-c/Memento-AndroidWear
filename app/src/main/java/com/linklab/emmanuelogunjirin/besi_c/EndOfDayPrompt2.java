@@ -43,7 +43,9 @@ public class EndOfDayPrompt2 extends WearableActivity {
                         startActivity(StartEMAActivity);
                     }
                 },new Preferences().EoDEMA_Timer_Delay);
+                finish();
             }
+
         });
         Dismiss.setOnClickListener(new View.OnClickListener() {
             @Override

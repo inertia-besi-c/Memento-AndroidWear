@@ -185,6 +185,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
+        if (CurrentQuestion == 0){back.setVisibility(View.INVISIBLE);}
+        else {back.setVisibility(View.VISIBLE);}
+
         if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];

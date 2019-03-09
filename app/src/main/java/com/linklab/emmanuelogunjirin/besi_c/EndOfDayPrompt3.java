@@ -25,6 +25,7 @@ public class EndOfDayPrompt3 extends WearableActivity {
         Dismiss.setVisibility(View.INVISIBLE);
 
         Snooze.setText("Dismiss");
+        Snooze.setBackgroundColor(getResources().getColor(R.color.dark_red));
 
         Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
