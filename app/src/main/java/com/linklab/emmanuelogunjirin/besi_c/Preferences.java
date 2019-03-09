@@ -17,10 +17,10 @@ public class Preferences
     public int FollowUpEMAReminderNumber = 3; // How many times to remind the wearer to complete the follow-up ema
 
     // Settings for Daily EMA
-    public int EoDEMA_Time_Hour = 17; // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 38; // Minute of hour at which daily ema should go off
+    public int EoDEMA_Time_Hour = 21; // Hour at which the daily ema should go off
+    public int EoDEMA_Time_Minute = 0; // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0; // Second of minute at which daily ema should go off
-    public long EoDEMA_Timer_Delay = 30 * 1000; //
+    public long EoDEMA_Timer_Delay = 10 * 60 * 1000; //
     public long EoDEMA_Period = 24*60*60*1000; //
 
     // Settings for Heart Rate Monitoring | Time is in ms |

@@ -41,6 +41,7 @@ public class App extends Application {
         Log.i("Schedule",String.valueOf(calendar.getTime()));
 
         try {
+
             long delay = calendar.getTimeInMillis() - System.currentTimeMillis();
 
             Timer timer = new Timer();

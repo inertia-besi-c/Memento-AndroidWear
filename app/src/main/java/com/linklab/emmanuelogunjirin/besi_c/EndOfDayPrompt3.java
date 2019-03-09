@@ -1,8 +1,10 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ public class EndOfDayPrompt3 extends WearableActivity {
 
     private Button Proceed, Snooze, Dismiss;
     private PowerManager.WakeLock wakeLock;
+    private Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +24,11 @@ public class EndOfDayPrompt3 extends WearableActivity {
         setContentView(R.layout.activity_end_of_day_prompt);
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "HRService:wakeLock");
         wakeLock.acquire();
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(600);
 
         Proceed = findViewById(R.id.Proceed);
         Snooze = findViewById(R.id.Snooze);

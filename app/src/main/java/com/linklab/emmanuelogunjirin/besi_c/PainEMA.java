@@ -89,6 +89,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     protected void onCreate(Bundle savedInstanceState)
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
         if (new Preferences().Role.equals("PT"))

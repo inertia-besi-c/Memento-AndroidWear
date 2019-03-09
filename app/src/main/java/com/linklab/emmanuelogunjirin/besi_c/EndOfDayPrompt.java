@@ -1,8 +1,10 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,8 @@ public class EndOfDayPrompt extends WearableActivity {
 
     private Button Proceed, Snooze, Dismiss;
     private PowerManager.WakeLock wakeLock;
+    private Vibrator v;      // The vibrator that provides haptic feedback.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +26,12 @@ public class EndOfDayPrompt extends WearableActivity {
         setContentView(R.layout.activity_end_of_day_prompt);
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "HRService:wakeLock");
         wakeLock.acquire();
+
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(600);
 
         Proceed = findViewById(R.id.Proceed);
         Snooze = findViewById(R.id.Snooze);
@@ -33,7 +41,7 @@ public class EndOfDayPrompt extends WearableActivity {
 
         Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
                 startActivity(StartEMAActivity);
 
@@ -43,18 +51,22 @@ public class EndOfDayPrompt extends WearableActivity {
 
         Snooze.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Snooze.setBackgroundColor(getColor(R.color.grey));
+            public void onClick(View view) {
 
                 Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
+                timer.schedule(new TimerTask()
+                {
                     @Override
-                    public void run() {
+
+                    public void run()
+                    {
+
                         Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);
                         startActivity(StartEMAActivity);
                     }
-                },new Preferences().EoDEMA_Timer_Delay);
+                }, new Preferences().EoDEMA_Timer_Delay);
 
+                finish();
             }
         });
 

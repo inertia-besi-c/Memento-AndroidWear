@@ -35,6 +35,14 @@
             android:name=".EndOfDayPrompt"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
+        <activity
+            android:name=".EndOfDayPrompt2"
+            android:label="@string/title_activity_end_of_day_prompt">
+        </activity>
+        <activity
+            android:name=".EndOfDayPrompt3"
+            android:label="@string/title_activity_end_of_day_prompt">
+        </activity>
 
         <activity
             android:name=".PainScreen"
