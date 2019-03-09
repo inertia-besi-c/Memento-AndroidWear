@@ -39,8 +39,6 @@ public class EndOfDayPrompt3 extends WearableActivity {
         Snooze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
-                startActivity(StartEMAActivity);
 
                 finish();
             }

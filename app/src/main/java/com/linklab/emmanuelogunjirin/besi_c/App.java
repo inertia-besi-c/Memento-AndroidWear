@@ -51,7 +51,7 @@ public class App extends Application {
                     Intent intent = new Intent(thisContext, EndOfDayPrompt.class);
                     startActivity(intent);
                 }
-            }, delay, 24 * 60 * 60 * 1000);
+            }, delay, new Preferences().EoDEMA_Period);
         }
         catch(Exception ex){
             long delay = calendar.getTimeInMillis() - System.currentTimeMillis() + 24*60*60*1000;
@@ -61,15 +61,14 @@ public class App extends Application {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(thisContext, EndOfDayEMA.class);
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt.class);
                     startActivity(intent);
                 }
-            }, delay, 24 * 60 * 60 * 1000);
+            }, delay, new Preferences().EoDEMA_Period);
         }
 //        Intent intent = new Intent(context, EndOfDayEMA.class);
 //        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 //        ((AlarmManager) getSystemService(ALARM_SERVICE)).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
-
 
     }
 }

@@ -220,7 +220,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     LogActivity();
                     if (CurrentQuestion == 0)
                     {
-                        Cancel();
+                        //Cancel();
                     }
                     else
                     {
@@ -238,6 +238,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void ThankYou()
     {
+        EMARemindertimer.cancel();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;
@@ -261,8 +262,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         /* Logs the data in a csv format */
         DataLogger dataLogger = new DataLogger("EndOfDay_EMA_Results.csv", log.toString());
         dataLogger.LogData();
-
-        EMARemindertimer.cancel();
 
         ThankYou();
 

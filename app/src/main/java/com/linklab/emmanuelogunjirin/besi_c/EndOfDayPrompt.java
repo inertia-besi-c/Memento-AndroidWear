@@ -35,16 +35,6 @@ public class EndOfDayPrompt extends WearableActivity {
             }
         });
 
-        Proceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
-                startActivity(StartEMAActivity);
-
-                finish();
-            }
-        });
-
         Snooze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +42,7 @@ public class EndOfDayPrompt extends WearableActivity {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt.class);
+                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);
                         startActivity(StartEMAActivity);
                     }
                 },new Preferences().EoDEMA_Timer_Delay);
