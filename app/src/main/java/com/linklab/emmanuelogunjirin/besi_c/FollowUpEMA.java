@@ -228,6 +228,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private void ThankYou()
     {
+        EMARemindertimer.cancel();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;
@@ -252,7 +253,6 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         DataLogger dataLogger = new DataLogger("Followup_EMA_Results.csv", log.toString());
         dataLogger.LogData();
 
-        EMARemindertimer.cancel();
 
         ThankYou();
 

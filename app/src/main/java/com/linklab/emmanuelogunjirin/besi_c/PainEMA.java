@@ -238,6 +238,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void ThankYou()
     {
+
+        EMARemindertimer.cancel();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;
@@ -272,8 +274,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 startActivity(StartEMAActivity);    // Starts the EMA file
             }
         },FollowUpEMADelay);
-
-        EMARemindertimer.cancel();
 
         ThankYou();
 
