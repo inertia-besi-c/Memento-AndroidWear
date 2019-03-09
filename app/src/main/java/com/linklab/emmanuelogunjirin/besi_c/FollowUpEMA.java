@@ -258,6 +258,14 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     }
 
+    @Override
+    public void onDestroy()
+    {
+        wakeLock.release();
+        EMARemindertimer.cancel();
+        super.onDestroy();
+    }
+
     private void Cancel()
     {
         ThankYou();

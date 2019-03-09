@@ -185,8 +185,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
-        if (CurrentQuestion == 0){back.setVisibility(View.INVISIBLE);}
-        else {back.setVisibility(View.VISIBLE);}
+        if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
+        else {back.setBackgroundColor(getColor(R.color.dark_red));;}
 
         if (CurrentQuestion < Questions.length)
         {
@@ -241,7 +241,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void ThankYou()
     {
-        EMARemindertimer.cancel();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;
@@ -268,6 +267,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
         ThankYou();
 
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        wakeLock.release();
+        EMARemindertimer.cancel();
+        super.onDestroy();
     }
 
     private void Cancel()
