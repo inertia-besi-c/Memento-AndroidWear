@@ -7,6 +7,8 @@ public class Preferences
     // Role of user wearing the watch
     String Role = "PT"; // CG for Caregiver or PT for Patient
 
+    // For testing, we used one band holder as the patient, and two band holder as the caregiver
+
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
     public long PainEMAReminderInterval = 5*60*1000; // How long to wait between each ping reminding user to complete ema
