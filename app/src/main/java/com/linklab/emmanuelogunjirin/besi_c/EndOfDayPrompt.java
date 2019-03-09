@@ -44,6 +44,8 @@ public class EndOfDayPrompt extends WearableActivity {
         Snooze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Snooze.setBackgroundColor(getColor(R.color.grey));
+
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -53,7 +55,6 @@ public class EndOfDayPrompt extends WearableActivity {
                     }
                 },new Preferences().EoDEMA_Timer_Delay);
 
-                finish();
             }
         });
 

@@ -18,9 +18,9 @@ public class Preferences
 
     // Settings for Daily EMA
     public int EoDEMA_Time_Hour = 17; // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 19; // Minute of hour at which daily ema should go off
+    public int EoDEMA_Time_Minute = 38; // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0; // Second of minute at which daily ema should go off
-    public long EoDEMA_Timer_Delay = 1 * 60 * 1000; //
+    public long EoDEMA_Timer_Delay = 30 * 1000; //
     public long EoDEMA_Period = 24*60*60*1000; //
 
     // Settings for Heart Rate Monitoring | Time is in ms |
