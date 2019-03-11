@@ -62,7 +62,7 @@
             android:text="@string/ema_text"
             android:textAlignment="center"
             android:textColor="#E0E0E0"
-            android:textSize="14sp"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent"
