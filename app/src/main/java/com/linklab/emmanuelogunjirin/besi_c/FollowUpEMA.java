@@ -170,6 +170,8 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private void QuestionSystem()
     {
+        if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
+        else {back.setBackgroundColor(getColor(R.color.dark_red));}
         if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
@@ -210,7 +212,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
                     LogActivity();
                     if (CurrentQuestion == 0)
                     {
-                        Cancel();
+                        //Cancel();
                     }
                     else
                     {

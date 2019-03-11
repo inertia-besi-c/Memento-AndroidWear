@@ -186,7 +186,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     private void QuestionSystem()
     {
         if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
-        else {back.setBackgroundColor(getColor(R.color.dark_red));;}
+        else {back.setBackgroundColor(getColor(R.color.dark_red));}
 
         if (CurrentQuestion < Questions.length)
         {

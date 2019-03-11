@@ -181,6 +181,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void QuestionSystem()
     {
+        if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
+        else {back.setBackgroundColor(getColor(R.color.dark_red));}
         if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
@@ -221,7 +223,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     LogActivity();
                     if (CurrentQuestion == 0)
                     {
-                        Cancel();
+                        //Cancel();
                     }
                     else
                     {
