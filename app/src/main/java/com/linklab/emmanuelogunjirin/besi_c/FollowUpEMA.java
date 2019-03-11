@@ -22,6 +22,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+// FollowUp EMA
+
 public class FollowUpEMA extends WearableActivity       // This is the main activity for the questions
 {
     private PowerManager.WakeLock wakeLock;
