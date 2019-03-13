@@ -19,9 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -166,7 +163,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         SLEEP.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Crashlytics.getInstance().crash(); // Force a crash
                 return false;
             }
         });
