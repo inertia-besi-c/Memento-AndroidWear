@@ -183,6 +183,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
         else {back.setBackgroundColor(getColor(R.color.dark_red));}
+        if (CurrentQuestion == Questions.length-1){next.setText("Submit");}
+        else {next.setText("Next");}
         if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];
