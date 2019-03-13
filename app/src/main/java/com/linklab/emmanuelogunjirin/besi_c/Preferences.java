@@ -5,7 +5,7 @@ public class Preferences
     Preferences(){}
 
     // Role of user wearing the watch
-    String Role = "PT"; // CG for Caregiver or PT for Patient
+    String Role = "CG"; // CG for Caregiver or PT for Patient
 
     // For testing, we used one band holder as the patient, and two band holder as the caregiver
 
