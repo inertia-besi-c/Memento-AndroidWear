@@ -1,6 +1,7 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -85,7 +86,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     protected void onCreate(Bundle savedInstanceState)
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -170,12 +171,15 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void QuestionSystem()
     {
         if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
         else {back.setBackgroundColor(getColor(R.color.dark_red));}
+
         if (CurrentQuestion == Questions.length-1){next.setText("Submit");}
         else {next.setText("Next");}
+
         if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];

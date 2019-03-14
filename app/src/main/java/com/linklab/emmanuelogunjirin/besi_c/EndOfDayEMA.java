@@ -2,6 +2,7 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -183,12 +184,15 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         datalog.LogData();
     }
 
+    @SuppressLint("SetTextI18n")
     private void QuestionSystem()
     {
         if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
         else {back.setBackgroundColor(getColor(R.color.dark_red));}
+
         if (CurrentQuestion == Questions.length-1){next.setText("Submit");}
         else {next.setText("Next");}
+
         if (CurrentQuestion < Questions.length)
         {
             resTaps = UserResponseIndex[CurrentQuestion];

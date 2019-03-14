@@ -1,5 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,6 @@ import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +20,7 @@ public class EndOfDayPrompt extends WearableActivity {
     private Vibrator v;      // The vibrator that provides haptic feedback.
 
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +37,10 @@ public class EndOfDayPrompt extends WearableActivity {
         Proceed = findViewById(R.id.Proceed);
         Snooze = findViewById(R.id.Snooze);
         Dismiss = findViewById(R.id.Dismiss);
-
         Dismiss.setVisibility(View.INVISIBLE);
 
-        Proceed.setOnClickListener(new View.OnClickListener() {
+        Proceed.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
@@ -49,9 +50,11 @@ public class EndOfDayPrompt extends WearableActivity {
             }
         });
 
-        Snooze.setOnClickListener(new View.OnClickListener() {
+        Snooze.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
 
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask()
@@ -60,7 +63,6 @@ public class EndOfDayPrompt extends WearableActivity {
 
                     public void run()
                     {
-
                         Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);
                         startActivity(StartEMAActivity);
                     }

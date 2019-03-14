@@ -22,10 +22,11 @@
             android:layout_marginBottom="8dp"
             android:background="@color/dark_red"
             android:text="@string/back"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.463" />
 
         <Button
             android:id="@+id/Next"
@@ -35,7 +36,7 @@
             android:layout_marginBottom="8dp"
             android:background="@color/green"
             android:text="@string/next"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,6 +51,7 @@
             android:text="@string/button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/Next"
+            app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView

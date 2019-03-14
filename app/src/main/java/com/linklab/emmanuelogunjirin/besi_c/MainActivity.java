@@ -2,6 +2,7 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -89,8 +90,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);      // Creates the main screen.
-        setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
 
+        time_updater.start();       // The time updater
+        startSensors();   // This starts the sensors in the service file.
+
+        setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         final Button EMA_Start = findViewById(R.id.EMA_Start);    // The Start button is made
         final Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
 
@@ -106,9 +110,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         date = findViewById(R.id.DATE);     // The date ID
         time = findViewById(R.id.TIME);     // The time ID
-
-        time_updater.start();       // The time updater
-        startSensors();   // This starts the sensors in the service file.
 
         // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -136,13 +137,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
         // Calls the heart rate timer to start the heart rate sensor
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
         // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
-        if (!isRunning(HRTimerService.class))
-        {
-            startService(HRService);}
+        if (!isRunning(HRTimerService.class)){startService(HRService); }
 
         // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
         SLEEP.setOnClickListener(new View.OnClickListener()
         {
+            @SuppressLint("SetTextI18n")
             public void onClick(View v)
             {
                 Log.i("Main","Sleep Clicked");
@@ -151,18 +151,22 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     Log.i("Main","HRS is running. stopping it");
                     stopService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
+                    SLEEP.setText("Wake ");
                 }
                 else
                 {
                     Log.i("Main","HRS is not running, starting it");
                     startService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
+                    SLEEP.setText("Sleep");
                 }
             }
         });
-        SLEEP.setOnLongClickListener(new View.OnLongClickListener() {
+        SLEEP.setOnLongClickListener(new View.OnLongClickListener()
+        {
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onLongClick(View v)
+            {
                 return false;
             }
         });
