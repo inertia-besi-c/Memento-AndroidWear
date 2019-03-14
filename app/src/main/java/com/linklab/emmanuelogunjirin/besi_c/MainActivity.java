@@ -37,8 +37,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
             {
                 while (!time_updater.isInterrupted())
                 {
-                    Thread.sleep(1000);runOnUiThread(new Runnable()
+                    Thread.sleep(1000);
+                    runOnUiThread(new Runnable()
                 {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void run()
                     {
@@ -48,15 +50,29 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         time.setText(timeFormat.format(current));
                         date.setText(dateFormat.format(current));
 
-                        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                        Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
+                        IntentFilter battery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+                        Intent batteryStatus = getApplicationContext().registerReceiver(null, battery);
 
+                        assert batteryStatus != null;
                         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
                         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-
                         int batteryPct = (level*100/scale);
 
+                        // Are we charging / charged?
+                        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+                        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+
+                        // How are we charging?
+                        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+                        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+                        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+
                         batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
+
+                        if (isCharging)
+                        {
+                            stopSensors();
+                        }
                     }
                 });
                 }
@@ -183,7 +199,21 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {startService(PedomService);}
     }
 
+    private void stopSensors()     // Calls the sensors from their service branches
+    {
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
+        if(isRunning(AccelerometerSensor.class))
+        {stopService(AccelService);}
 
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
+        if(isRunning(PedometerSensor.class))
+        {stopService(PedomService);}
+
+        // Calls the heart rate timer to start the heart rate sensor
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
+        // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
+        if (isRunning(HRTimerService.class)){stopService(HRService); }
+    }
     private boolean isRunning(Class<?> serviceClass)
     {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

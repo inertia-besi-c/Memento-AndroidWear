@@ -2,8 +2,6 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 public class Preferences
 {
-    Preferences(){}
-
     // Role of user wearing the watch
     String Role = "CG"; // CG for Caregiver or PT for Patient
 
@@ -28,6 +26,9 @@ public class Preferences
     // Settings for Heart Rate Monitoring | Time is in ms |
     long HRSampleDuration = 30000;   // How long should heart rate be measured each time?
     long HRMeasurementInterval = 5 * 60 * 1000;  // Every how often should a measurement be taken?
+
+    // Setting for how many steps beofr automatically starting walking.
+    int autoSteps = 10;
 
     // Settings for Log Files -- NOT YET IMPLEMENTED
     public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
