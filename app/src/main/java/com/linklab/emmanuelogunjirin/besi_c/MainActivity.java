@@ -72,6 +72,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         if (isCharging)
                         {
                             stopSensors();
+                            LogActivityCharge();
                         }
                     }
                 });
@@ -214,6 +215,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
         // Checks if it is running, if it is running, and the sleep button is picked, it can be stopped.
         if (isRunning(HRTimerService.class)){stopService(HRService); }
     }
+
+    private void LogActivityCharge()
+    {
+        String data =  ("Charging at " + new Utils().getTime());
+        DataLogger datalog = new DataLogger("Charging_Time.csv",data);
+        datalog.LogData();
+    }
+
     private boolean isRunning(Class<?> serviceClass)
     {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
