@@ -1,6 +1,7 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
@@ -21,6 +22,7 @@ public class HRTimerService extends Service
     private PowerManager.WakeLock wakeLock;
 
 
+    @SuppressLint("WakelockTimeout")
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)

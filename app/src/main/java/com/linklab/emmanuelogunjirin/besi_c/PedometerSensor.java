@@ -1,6 +1,7 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -17,6 +18,7 @@ public class PedometerSensor extends Service implements SensorEventListener
     private PowerManager.WakeLock wakeLock;
 
 
+    @SuppressLint("WakelockTimeout")
     @Override
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
     public int onStartCommand(Intent intent, int flags, int startId)
@@ -30,18 +32,6 @@ public class PedometerSensor extends Service implements SensorEventListener
         mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
     }
-
-
-//    public void onResume()  // A resume service switch
-//    {
-//        mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
-//    }
-//
-//
-//    public void onPause()   // A pause service switch
-//    {
-//        mSensorManager.unregisterListener(this);
-//    }
 
     @Override
     public void onDestroy()     // A destroy service switch (kill switch)

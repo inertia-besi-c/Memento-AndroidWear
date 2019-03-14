@@ -10,42 +10,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PainScreen extends WearableActivity {
-
-    private Button Pain,Cancel;
+public class PainScreen extends WearableActivity
+{
     public Vibrator v;      // The vibrator that provides haptic feedback.
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pain_screen);
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(300);
 
-        Pain = findViewById(R.id.Pain);
+        Button pain = findViewById(R.id.Pain);
+        Button cancel = findViewById(R.id.Cancel);
 
-        Pain.setOnClickListener(new View.OnClickListener() {
+        pain.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Log.i("PAIN","Starting EMA");
-                Intent StartEMA = new Intent(getBaseContext(), PainEMA.class);      // Links to the EMA File
-                startActivity(StartEMA);    // Starts the EMA file
+            public void onClick(View v)
+            {
+                Log.i("PAIN","Starting Pain EMA");
+                Intent StartPainEMA = new Intent(getBaseContext(), PainEMA.class);      // Links to the EMA File
+                startActivity(StartPainEMA);    // Starts the Pain EMA file
                 finish();
             }
         });
 
-        Cancel = findViewById(R.id.Cancel);
-
-        Cancel.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Log.i("PAIN","Stopping Pain");
+            public void onClick(View v)
+            {
+                Log.i("PAIN","Stopping Pain EMA");
                 finish();
             }
         });
-
-
 
         // Enables Always-on
         setAmbientEnabled();
