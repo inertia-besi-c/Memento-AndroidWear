@@ -16,9 +16,6 @@ public class PedometerSensor extends Service implements SensorEventListener
 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;
-    public int stepCount;
-    public int autoCount = new Preferences().autoSteps;
-
 
     @SuppressLint("WakelockTimeout")
     @Override
@@ -65,13 +62,6 @@ public class PedometerSensor extends Service implements SensorEventListener
             {
                 DataLogger dataLogger = new DataLogger("Pedometer_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
-
-                stepCount++;
-
-                if (stepCount >= autoCount)
-                {
-                    stepCount = 0;
-                }
             }
         }).start();
     }
