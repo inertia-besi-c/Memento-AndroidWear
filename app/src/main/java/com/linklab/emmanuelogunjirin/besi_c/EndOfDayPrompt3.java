@@ -1,5 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class EndOfDayPrompt3 extends WearableActivity {
     private PowerManager.WakeLock wakeLock;
     private Vibrator v;
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
