@@ -188,10 +188,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
             @SuppressLint("SetTextI18n")
             public void onClick(View v)
             {
-                Log.i("Main","Sleep Clicked");
+                //Log.i("Main","Sleep Clicked");
                 if (isRunning(HRTimerService.class))
                 {
-                    Log.i("Main","HRS is running. stopping it");
+                    //Log.i("Main","HRS is running. stopping it");
                     stopService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
                     SLEEP.setText("Wake ");
@@ -199,7 +199,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 }
                 else
                 {
-                    Log.i("Main","HRS is not running, starting it");
+                    //Log.i("Main","HRS is not running, starting it");
                     startService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
                     SLEEP.setText("Sleep");
@@ -207,6 +207,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 }
             }
         });
+
         SLEEP.setOnLongClickListener(new View.OnLongClickListener()
         {
             @Override
