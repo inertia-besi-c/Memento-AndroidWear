@@ -18,11 +18,13 @@
             android:layout_width="179dp"
             android:layout_height="52dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:background="@color/green"
             android:text="Proceed"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Info" />
 
@@ -31,12 +33,12 @@
             android:layout_width="159dp"
             android:layout_height="52dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="1dp"
             android:layout_marginEnd="8dp"
             android:background="#C8B400"
             android:text="Snooze"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Proceed" />
 

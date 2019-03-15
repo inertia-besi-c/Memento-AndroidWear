@@ -4,7 +4,6 @@ package com.linklab.emmanuelogunjirin.besi_c;
 // Imports
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.wearable.activity.WearableActivity;
@@ -102,7 +101,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     protected void onCreate(Bundle savedInstanceState)
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "HRService:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

@@ -1,5 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +19,14 @@ public class EndOfDayPrompt2 extends WearableActivity {
     private PowerManager.WakeLock wakeLock;
     private Vibrator v;
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_day_prompt);
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "HRService:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 2:wakeLock");
         wakeLock.acquire();
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

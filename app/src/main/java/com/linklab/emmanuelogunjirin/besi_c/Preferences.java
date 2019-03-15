@@ -2,8 +2,6 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 public class Preferences
 {
-    Preferences(){}
-
     // Role of user wearing the watch
     String Role = "CG"; // CG for Caregiver or PT for Patient
 
@@ -20,14 +18,17 @@ public class Preferences
 
     // Settings for Daily EMA
     public int EoDEMA_Time_Hour = 21; // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 0; // Minute of hour at which daily ema should go off
-    public int EoDEMA_Time_Second = 0; // Second of minute at which daily ema should go off
+    public int EoDEMA_Time_Minute = 00; // Minute of hour at which daily ema should go off
+    public int EoDEMA_Time_Second = 00; // Second of minute at which daily ema should go off
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000; //
     public long EoDEMA_Period = 24*60*60*1000; //
 
     // Settings for Heart Rate Monitoring | Time is in ms |
     long HRSampleDuration = 30000;   // How long should heart rate be measured each time?
     long HRMeasurementInterval = 5 * 60 * 1000;  // Every how often should a measurement be taken?
+
+    // Setting for how many steps beofr automatically starting walking.
+    int autoSteps = 10;
 
     // Settings for Log Files -- NOT YET IMPLEMENTED
     public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
