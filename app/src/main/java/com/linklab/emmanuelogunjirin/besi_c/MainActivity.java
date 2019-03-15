@@ -73,7 +73,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
 
 
-                        //Log.i("Charge","isCharging:" + isCharging +" SleepMode: " + SleepMode + " BatteryCharge: " + BatteryCharge);
+                        ////Log.i("Charge","isCharging:" + isCharging +" SleepMode: " + SleepMode + " BatteryCharge: " + BatteryCharge);
                         if (isCharging)
                         {
                             if (!BatteryCharge || !SleepMode)
@@ -85,9 +85,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 BatteryCharge = true;
                             }
 
-//                            Log.i("Charge","True isCharging && !SleepMode && BatteryCharge");
+//                            //Log.i("Charge","True isCharging && !SleepMode && BatteryCharge");
 //                            SLEEP.performClick();
-//                            Log.i("Charge","Click Performed");
+//                            //Log.i("Charge","Click Performed");
 //                            BatteryCharge = false;
 //                            //stopSensors();
 //                            LogActivityCharge();
@@ -97,10 +97,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             startSensors();
                             BatteryCharge = false;
                         }
-                        //Log.i("Charge","It was false");
+                        ////Log.i("Charge","It was false");
 
                         DataLogger stepActivity = new DataLogger("StepActivity","no");
-                        Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) +" What does StepActivity Say? " + stepActivity.ReadData());
+                        //Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) +" What does StepActivity Say? " + stepActivity.ReadData());
                         if (SleepMode)
                         {
                             if(stepActivity.ReadData().contains("yes")) {
@@ -197,10 +197,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
             @SuppressLint("SetTextI18n")
             public void onClick(View v)
             {
-                Log.i("Main","Sleep Clicked");
+                //Log.i("Main","Sleep Clicked");
                 if (isRunning(HRTimerService.class))
                 {
-                    Log.i("Main","HRS is running. stopping it");
+                    //Log.i("Main","HRS is running. stopping it");
                     stopService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
                     SLEEP.setText("Wake ");
@@ -208,7 +208,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 }
                 else
                 {
-                    Log.i("Main","HRS is not running, starting it");
+                    //Log.i("Main","HRS is not running, starting it");
                     startService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
                     SLEEP.setText("Sleep");
