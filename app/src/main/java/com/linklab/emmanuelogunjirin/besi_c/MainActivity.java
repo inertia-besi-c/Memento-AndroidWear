@@ -26,6 +26,9 @@ import java.util.Locale;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
+    private boolean SleepMode = false;
+    private Button SLEEP,EMA_Start;
+    private boolean BatteryCharge = false;
 
     /* This Updates the Date and Time Every second when UI is in the foreground */
     Thread time_updater = new Thread()
@@ -69,10 +72,39 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
 
+
+                        //Log.i("Charge","isCharging:" + isCharging +" SleepMode: " + SleepMode + " BatteryCharge: " + BatteryCharge);
                         if (isCharging)
                         {
-                            stopSensors();
-                            LogActivityCharge();
+                            if (!BatteryCharge || !SleepMode)
+                            {
+                                if (!SleepMode)
+                                {
+                                    SLEEP.performClick();
+                                }
+                                BatteryCharge = true;
+                            }
+
+//                            Log.i("Charge","True isCharging && !SleepMode && BatteryCharge");
+//                            SLEEP.performClick();
+//                            Log.i("Charge","Click Performed");
+//                            BatteryCharge = false;
+//                            //stopSensors();
+//                            LogActivityCharge();
+                        }
+                        else
+                        {
+                            startSensors();
+                            BatteryCharge = false;
+                        }
+                        //Log.i("Charge","It was false");
+
+                        DataLogger stepActivity = new DataLogger("StepActivity","no");
+                        Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) +" What does StepActivity Say? " + stepActivity.ReadData());
+                        if (stepActivity.ReadData().contains("yes") && SleepMode)
+                        {
+                            SLEEP.performClick();
+                            stepActivity.WriteData();
                         }
                     }
                 });
@@ -109,8 +141,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         startSensors();   // This starts the sensors in the service file.
 
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
-        final Button EMA_Start = findViewById(R.id.EMA_Start);    // The Start button is made
-        final Button SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
+        EMA_Start = findViewById(R.id.EMA_Start);    // The Start button is made
+        SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
 
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
         try
@@ -121,6 +153,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             // Ignore this catch.
         }
+
+        new DataLogger("StepActivity","no").WriteData();
 
         date = findViewById(R.id.DATE);     // The date ID
         time = findViewById(R.id.TIME);     // The time ID
@@ -166,6 +200,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     stopService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
                     SLEEP.setText("Wake ");
+                    SleepMode = true;
                 }
                 else
                 {
@@ -173,6 +208,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     startService(HRService);
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
                     SLEEP.setText("Sleep");
+                    SleepMode = false;
                 }
             }
         });

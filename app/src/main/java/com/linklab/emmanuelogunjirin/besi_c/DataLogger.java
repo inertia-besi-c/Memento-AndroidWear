@@ -4,8 +4,10 @@ package com.linklab.emmanuelogunjirin.besi_c;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -70,6 +72,62 @@ public class DataLogger     // A function that runs the data logging data
         {
             Log.i("Error","Failed to write to directory");      // If it could not make the directory, tell us it failed.
         }
+    }
+
+    public void WriteData()
+    {
+        if (isExternalStorageWritable())
+        {
+
+            try
+            {
+                @SuppressLint("SdCardPath") File BESI_dir = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+                if (BESI_dir.isDirectory()){} else {BESI_dir.mkdirs();}
+                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                myFile.createNewFile();
+                FileOutputStream fOut = new FileOutputStream(myFile,false);
+                OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
+                myOutWriter.write(Content);
+                myOutWriter.close();
+                fOut.close();
+            }
+
+            catch (IOException e)       // If it does not write the file, imform us it failed.
+            {
+                Log.i("Error",e.toString());
+                Log.i("Error","Failed to write file");
+            }
+
+            catch (Exception ex)
+            {
+                Log.i("Error",ex.toString());
+            }
+
+        }
+
+        else
+        {
+            Log.i("Error","Failed to write to directory");      // If it could not make the directory, tell us it failed.
+        }
+    }
+
+    public String ReadData()
+    {
+        StringBuilder text = new StringBuilder();
+        try {
+            File file = new File("/sdcard/BESI_C/",FileName);
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close() ;
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text.toString();
     }
 }
 

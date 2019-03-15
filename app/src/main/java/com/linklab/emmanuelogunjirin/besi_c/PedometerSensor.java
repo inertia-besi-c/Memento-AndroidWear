@@ -16,6 +16,7 @@ public class PedometerSensor extends Service implements SensorEventListener
 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;
+    private boolean Started = false;
 
     @SuppressLint("WakelockTimeout")
     @Override
@@ -48,6 +49,14 @@ public class PedometerSensor extends Service implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
+        if (!Started)
+        {
+            Started = true;
+        }
+        else
+        {
+            new DataLogger("StepActivity","yes").WriteData();
+        }
 
         final String logstring = new Utils().getTime() + "," +
                 String.valueOf(event.timestamp) +
