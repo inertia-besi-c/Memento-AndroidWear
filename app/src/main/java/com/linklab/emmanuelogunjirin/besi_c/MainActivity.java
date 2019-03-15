@@ -61,19 +61,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
                         int batteryPct = (level*100/scale);
 
-                        // Are we charging / charged?
                         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
                         boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
 
-                        // How are we charging?
-                        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-                        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-                        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-
                         batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
 
-
-                        //Log.i("Charge","isCharging:" + isCharging +" SleepMode: " + SleepMode + " BatteryCharge: " + BatteryCharge);
                         if (isCharging)
                         {
                             if (!BatteryCharge || !SleepMode)
@@ -81,35 +73,34 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 if (!SleepMode)
                                 {
                                     SLEEP.performClick();
+                                    stopSensors();
+                                    LogActivityCharge();
                                 }
                                 BatteryCharge = true;
                             }
-
-//                            Log.i("Charge","True isCharging && !SleepMode && BatteryCharge");
-//                            SLEEP.performClick();
-//                            Log.i("Charge","Click Performed");
-//                            BatteryCharge = false;
-//                            //stopSensors();
-//                            LogActivityCharge();
                         }
                         else
                         {
                             startSensors();
                             BatteryCharge = false;
                         }
-                        //Log.i("Charge","It was false");
 
                         DataLogger stepActivity = new DataLogger("StepActivity","no");
-                        Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) +" What does StepActivity Say? " + stepActivity.ReadData());
+                        Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) + " What does StepActivity Say? " + stepActivity.ReadData());
+
                         if (SleepMode)
                         {
-                            if(stepActivity.ReadData().contains("yes")) {
+                            if(stepActivity.ReadData().contains("yes"))
+                            {
                                 SLEEP.performClick();
                                 stepActivity.WriteData();
                             }
                             stepActivity.WriteData();
                         }
-                        else{stepActivity.WriteData();}
+                        else
+                        {
+                            stepActivity.WriteData();
+                        }
                     }
                 });
                 }

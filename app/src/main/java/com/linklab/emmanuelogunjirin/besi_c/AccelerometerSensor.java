@@ -10,17 +10,17 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.PowerManager;
 
-public class AccelerometerSensor extends Service implements SensorEventListener
+public class AccelerometerSensor extends Service implements SensorEventListener     // This initializes the accelerometer sensor.
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private PowerManager.WakeLock wakeLock;
-
+    private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
 
     @Override
+
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public int onStartCommand(Intent intent, int flags, int startId)        // Starts when initialized.
     {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);    // Controls the power of the system.
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
