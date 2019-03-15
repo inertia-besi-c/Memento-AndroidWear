@@ -101,11 +101,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         DataLogger stepActivity = new DataLogger("StepActivity","no");
                         Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) +" What does StepActivity Say? " + stepActivity.ReadData());
-                        if (stepActivity.ReadData().contains("yes") && SleepMode)
+                        if (SleepMode)
                         {
-                            SLEEP.performClick();
+                            if(stepActivity.ReadData().contains("yes")) {
+                                SLEEP.performClick();
+                                stepActivity.WriteData();
+                            }
                             stepActivity.WriteData();
                         }
+                        else{stepActivity.WriteData();}
                     }
                 });
                 }
