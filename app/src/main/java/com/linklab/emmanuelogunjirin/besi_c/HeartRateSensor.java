@@ -21,24 +21,40 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     final Timer timer = new Timer();          // Makes a new timer.
 
     @Override
-    /* Establishes the sensor and the ability to collect data at the start of the data collection */
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
         Log.i("HRS","Starting HRS");
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        // Picks out the Heart Rate sensor specifically.
         Sensor mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);
         Time_zero = getTime();
 
         timer.schedule( new TimerTask()     // Initializes a timer.
-                        {
-                            public void run()       // Runs the imported file based on the timer specified.
-                            {
-                                stopSelf();    // Stops the Heart Rate Sensor
-                            }
-                        }, Duration);
+        {
+            public void run()       // Runs the imported file based on the timer specified.
+            {
+                stopSelf();    // Stops the Heart Rate Sensor
+            }
+        }, Duration);
+
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
+    {
+        Log.d("Test", "Heart Rate (bpm) : " + String.valueOf(event.values[0]));     // This is a log for the Logcat to be seen.
+        String HeartRateMonitor = String.valueOf(event.values[0]);      // This changes the value of the sensor data to a string.
+        final String logstring = new SystemTime().getTime() + "," + String.valueOf(event.timestamp) + "," + HeartRateMonitor + "," + event.accuracy;     // Appends the Heart Rate value onto the string
+
+        new Thread(new Runnable()
+        {
+            public void run()
+            {
+                DataLogger dataLogger = new DataLogger("Heart_Rate_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                dataLogger.LogData();   // Logs the data to the computer.
+            }
+        }).start();
     }
 
     private int getTime()
@@ -47,7 +63,6 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     }
 
     @Override
-
     public void onDestroy()     // A destroy all activity switch (kill switch)
     {
         mSensorManager.unregisterListener(this);
@@ -61,33 +76,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     }
 
     @Override
-
-    public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
-    {
-        Log.d("Test", "Heart Rate (bpm) : " + String.valueOf(event.values[0]));     // This is a log for the Logcat to be seen.
-        String HeartRateMonitor = String.valueOf(event.values[0]);      // This changes the value of the sensor data to a string.
-
-        final String logstring = new Utils().getTime() + "," +
-                String.valueOf(event.timestamp) +
-                "," +
-                HeartRateMonitor +       // Appends the Heart Rate value onto the string
-                "," +
-                event.accuracy;
-
-        new Thread(new Runnable()
-        {
-            public void run()
-            {
-                DataLogger dataLogger = new DataLogger("Heart_Rate_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
-                dataLogger.LogData();   // Logs the data to the computer.
-            }
-        }).start();
-    }
-
-    @Override
-
-    /* Unknown but necessary function */
-    public IBinder onBind(Intent intent)
+    public IBinder onBind(Intent intent)    /* Unknown but necessary function */
     {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");

@@ -13,15 +13,14 @@ import android.widget.Button;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EndOfDayPrompt2 extends WearableActivity {
-
-    private Button Proceed, Snooze, Dismiss;
+public class EndOfDayPrompt2 extends WearableActivity
+{
     private PowerManager.WakeLock wakeLock;
-    private Vibrator v;
-
     @SuppressLint("WakelockTimeout")
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_day_prompt);
 
@@ -29,46 +28,51 @@ public class EndOfDayPrompt2 extends WearableActivity {
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 2:wakeLock");
         wakeLock.acquire();
 
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(600);
 
-        Proceed = findViewById(R.id.Proceed);
-        Snooze = findViewById(R.id.Snooze);
-        Dismiss = findViewById(R.id.Dismiss);
+        Button proceed = findViewById(R.id.Proceed);
+        Button snooze = findViewById(R.id.Snooze);
+        Button dismiss = findViewById(R.id.Dismiss);
 
-        Proceed.setOnClickListener(new View.OnClickListener() {
+        proceed.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
                 startActivity(StartEMAActivity);
-
                 finish();
             }
         });
 
-        Snooze.setOnClickListener(new View.OnClickListener() {
+        snooze.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
+                timer.schedule(new TimerTask()
+                {
                     @Override
-                    public void run() {
+                    public void run()
+                    {
                         Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt3.class);
                         startActivity(StartEMAActivity);
                     }
                 },new Preferences().EoDEMA_Timer_Delay);
                 finish();
             }
-
         });
-        Dismiss.setOnClickListener(new View.OnClickListener() {
+
+        dismiss.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 finish();
             }
         });
-
-        // Enables Always-on
         setAmbientEnabled();
     }
 

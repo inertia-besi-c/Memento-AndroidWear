@@ -30,8 +30,7 @@ public class DataLogger     // A function that runs the data logging data
         return android.os.Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable()
+    public boolean isExternalStorageReadable()    /* Checks if external storage is available to at least read */
     {
         String state = android.os.Environment.getExternalStorageState();
         return android.os.Environment.MEDIA_MOUNTED.equals(state) || android.os.Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
@@ -41,31 +40,37 @@ public class DataLogger     // A function that runs the data logging data
     {
         if (isExternalStorageWritable())
         {
-
             try
             {
-                @SuppressLint("SdCardPath") File BESI_dir = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
-                if (BESI_dir.isDirectory()){} else {BESI_dir.mkdirs();}
+                @SuppressLint("SdCardPath")
+                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+
+                if (BESI_directory.isDirectory())
+                {
+                    // Do nothing
+                }
+                else
+                {
+                    BESI_directory.mkdirs();
+                }
+
                 File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();
-                FileOutputStream fOut = new FileOutputStream(myFile,true);
-                OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
+                FileOutputStream fileOut = new FileOutputStream(myFile,true);
+                OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);
                 myOutWriter.append(Content+"\n");
                 myOutWriter.close();
-                fOut.close();
+                fileOut.close();
             }
-
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
                 Log.i("Error",e.toString());
                 Log.i("Error","Failed to write file");
             }
-
             catch (Exception ex)
             {
                 Log.i("Error",ex.toString());
             }
-
         }
 
         else
@@ -78,33 +83,38 @@ public class DataLogger     // A function that runs the data logging data
     {
         if (isExternalStorageWritable())
         {
-
             try
             {
-                @SuppressLint("SdCardPath") File BESI_dir = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
-                if (BESI_dir.isDirectory()){} else {BESI_dir.mkdirs();}
+                @SuppressLint("SdCardPath")
+                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+
+                if (BESI_directory.isDirectory())
+                {
+                    // Do nothing
+                }
+                else
+                {
+                    BESI_directory.mkdirs();
+                }
+
                 File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();
-                FileOutputStream fOut = new FileOutputStream(myFile,false);
-                OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
+                FileOutputStream fileOut = new FileOutputStream(myFile,false);
+                OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);
                 myOutWriter.write(Content);
                 myOutWriter.close();
-                fOut.close();
+                fileOut.close();
             }
-
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
                 Log.i("Error",e.toString());
                 Log.i("Error","Failed to write file");
             }
-
             catch (Exception ex)
             {
                 Log.i("Error",ex.toString());
             }
-
         }
-
         else
         {
             Log.i("Error","Failed to write to directory");      // If it could not make the directory, tell us it failed.
@@ -114,17 +124,21 @@ public class DataLogger     // A function that runs the data logging data
     public String ReadData()
     {
         StringBuilder text = new StringBuilder();
-        try {
+        try
+        {
             File file = new File("/sdcard/BESI_C/",FileName);
-
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));
             String line;
-            while ((line = br.readLine()) != null) {
+
+            while ((line = bufferedReaderr.readLine()) != null)
+            {
                 text.append(line);
                 text.append('\n');
             }
-            br.close() ;
-        }catch (IOException e) {
+            bufferedReaderr.close() ;
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         return text.toString();

@@ -8,7 +8,6 @@ import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class PainScreen extends WearableActivity
 {
@@ -48,7 +47,6 @@ public class PainScreen extends WearableActivity
             }
         });
 
-        // Enables Always-on
         setAmbientEnabled();
     }
 }

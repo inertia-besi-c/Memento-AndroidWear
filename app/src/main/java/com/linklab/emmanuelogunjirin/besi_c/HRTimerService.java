@@ -20,12 +20,10 @@ public class HRTimerService extends Service
     public long period = new Preferences().HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
     private Timer timer;
     private PowerManager.WakeLock wakeLock;
-
-
     @SuppressLint("WakelockTimeout")
+
     @Override
-    /* Establishes the sensor and the ability to collect data at the start of the data collection */
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
         Log.i("Heart Rate Sensor","Starting Heart Rate Sensor");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -35,34 +33,10 @@ public class HRTimerService extends Service
         return START_STICKY;    // Please do not remove. It is needed. (This allows it to restart if the service is killed)
     }
 
-     @Override
-
-     public void onDestroy()
-     {
-         timer.cancel();
-         wakeLock.release();
-         if (isRunning())
-         {
-             PeriodicService(true);
-         }
-     }
-
-    private boolean isRunning()
-    {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
-        {
-            if (HeartRateSensor.class.getName().equals(service.service.getClassName()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void PeriodicService(boolean Stop)
     {
         final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);
+
         if (Stop)
         {
             stopService(HRService);     // Stops the Heart Rate Sensor
@@ -77,10 +51,35 @@ public class HRTimerService extends Service
                     startService(HRService);    // Starts the Heart Rate Sensor
                 }
             }, delay, period);
-        }}
+        }
+    }
+
+    private boolean isRunning()
+    {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+        {
+            if (HeartRateSensor.class.getName().equals(service.service.getClassName()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
+    public void onDestroy()
+    {
+        timer.cancel();
+        wakeLock.release();
 
+        if (isRunning())
+        {
+            PeriodicService(true);
+        }
+    }
+
+    @Override
     public IBinder onBind(Intent intent)
     {
         // TODO: Return the communication channel to the service.

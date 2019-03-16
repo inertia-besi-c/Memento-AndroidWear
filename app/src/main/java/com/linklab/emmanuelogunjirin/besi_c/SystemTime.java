@@ -5,8 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-// Things that we need in the future and do not want to lose.
-class Utils
+class SystemTime     // Things that we need in the future and do not want to lose.
 {
     String getTime()
     {

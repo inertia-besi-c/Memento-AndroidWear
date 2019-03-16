@@ -1,6 +1,7 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -15,6 +16,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
 
+    @SuppressLint("WakelockTimeout")
     @Override
 
     /* Establishes the sensor and the ability to collect data at the start of the data collection */
@@ -24,23 +26,11 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
         wakeLock.acquire();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
         // Sensor object reference
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy()     // A destroy service switch (kill switch)
-    {
-        mSensorManager.unregisterListener(this);
-        wakeLock.release();
-    }
-
-    @Override
-    public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy)
-    {
-        // Please do not remove this, the code needs this to function properly. Thank you :-)
     }
 
     @Override
@@ -59,10 +49,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         lin_accel[1] = event.values[1] - gravity[1];
         lin_accel[2] = event.values[2] - gravity[2];
 
-
-        final String logstring = new Utils().getTime() + "," +
-                String.valueOf(event.timestamp) +
-                "," +
+        final String logstring = new SystemTime().getTime() + "," + String.valueOf(event.timestamp) + "," +
                 String.valueOf(lin_accel[0]) + // Accel on x-axis
                 "," +
                 String.valueOf(lin_accel[1]) + // Accel on y-axis
@@ -77,6 +64,19 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();
+    }
+
+    @Override
+    public void onDestroy()     // A destroy service switch (kill switch)
+    {
+        mSensorManager.unregisterListener(this);
+        wakeLock.release();
+    }
+
+    @Override
+    public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy)
+    {
+        // Please do not remove this, the code needs this to function properly. Thank you :-)
     }
 
     @Override

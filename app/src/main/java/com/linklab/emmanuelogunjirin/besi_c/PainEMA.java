@@ -2,26 +2,25 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
 import android.annotation.SuppressLint;
+import android.support.wearable.activity.WearableActivity;
 import android.content.Context;
+import android.os.Vibrator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Vibrator;
-
 import java.text.DateFormat;
+import java.util.TimerTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class PainEMA extends WearableActivity       // This is the main activity for the questions
@@ -29,26 +28,21 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
-    private int resTaps = 0;
+    private Timer FollowUpEMATimer;
+    private Timer EMARemindertimer;
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;
+    private String[] Questions;
+    private String[][] Answers;
     private int[] UserResponseIndex;
-
-    public Vibrator v;      // The vibrator that provides haptic feedback.
-
-
-    private Timer FollowUpEMATimer;
     private long FollowUpEMADelay = new Preferences().FollowUpEMADelay; //Time before followup EMA / EMA2 following submission
-
-    private Timer EMARemindertimer;
     private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
     private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().PainEMAReminderNumber;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
-
-    private String[] Questions;
-    private String[][] Answers;
+    private int resTaps = 0;
+    public Vibrator v;      // The vibrator that provides haptic feedback.
 
     private String[] CaregiverQuestions =       // These are the questions for the care giver
             {
@@ -85,13 +79,12 @@ public class PainEMA extends WearableActivity       // This is the main activity
             };
 
     @Override
-
-    // When the screen is created, this is run.
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Pain EMA:wakeLock");
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
+
         if (new Preferences().Role.equals("PT"))
         {
             Questions = PatientQuestions;
@@ -102,18 +95,19 @@ public class PainEMA extends WearableActivity       // This is the main activity
             Questions = CaregiverQuestions;
             Answers = CaregiverAnswers;
         }
-        /* Vibrator values and their corresponding requirements */
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
-        /* Buttons on the EMA screen that were added */
-        back = findViewById(R.id.Back);
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);        /* Vibrator values and their corresponding requirements */
+        v.vibrate(400);
+
+        back = findViewById(R.id.Back);        /* Buttons on the EMA screen that were added */
         next = findViewById(R.id.Next);
         req = findViewById(R.id.EMA_req);
         res = findViewById(R.id.EMA_res);
-        v.vibrate(400);
-        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
-        res.setOnClickListener( new View.OnClickListener()
+
+        res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         {
             public void onClick(View view)
             {
@@ -127,8 +121,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
         UserResponseIndex = new int[UserResponses.length];
 
         FollowUpEMATimer = new Timer();
-
         EMARemindertimer = new Timer();
+
         EMARemindertimer.schedule(new TimerTask()
         {
             @Override
@@ -136,6 +130,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
             {
                 Log.i("EMAR","Running EMAReminder");
                 Log.i("EMAR",String.valueOf(ReminderCount<=ReminderNumber));
+
                 if (ReminderCount <= ReminderNumber)
                 {
                     Log.i("EMAR","Vibrating...");
@@ -151,9 +146,122 @@ public class PainEMA extends WearableActivity       // This is the main activity
         },EMAReminderDelay,EMAReminderInterval);
 
         QuestionSystem();
-
-        // Enables Always-on
         setAmbientEnabled();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void QuestionSystem()
+    {
+        if (CurrentQuestion == 0)
+        {
+            back.setBackgroundColor(getColor(R.color.grey));
+        }
+        else
+        {
+            back.setBackgroundColor(getColor(R.color.dark_red));
+        }
+
+        if (CurrentQuestion == Questions.length-1)
+        {
+            next.setText("Submit");
+        }
+        else
+        {
+            next.setText("Next");
+        }
+
+        if (CurrentQuestion < Questions.length)
+        {
+            resTaps = UserResponseIndex[CurrentQuestion];
+            req.setText(Questions[CurrentQuestion]);
+            responses.clear();
+            Collections.addAll(responses, Answers[CurrentQuestion]);
+            Cycle_Responses();
+
+            next.setOnClickListener( new View.OnClickListener()            // Waits for the next button to be clicked.
+            {
+                public void onClick(View view)      // Haptic Feedback
+                {
+                    v.vibrate(20);
+                    UserResponses[CurrentQuestion] = res.getText().toString();
+                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();
+                    LogActivity();
+
+                    if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
+                    {
+                        CurrentQuestion++;
+                        QuestionSystem();
+                    }
+                    else
+                    {
+                        Cancel();    // Else, it closes the question screen.
+                    }
+                }
+            });
+
+            back.setOnClickListener( new View.OnClickListener()            // If the back button is clicked
+            {
+                public void onClick(View view)
+                {
+                    v.vibrate(20); // Haptic Feedback
+                    UserResponses[CurrentQuestion] = res.getText().toString();
+                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();
+                    LogActivity();
+
+                    if (CurrentQuestion == 0)
+                    {
+                        //Cancel();
+                    }
+                    else
+                    {
+                        CurrentQuestion --;
+                        QuestionSystem();
+                    }
+                }
+            });
+        }
+        else
+        {
+            Submit();
+        }
+    }
+
+    private void Submit()    /* This is the end of survey part. It submits the data. */
+    {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
+        Date date = new Date();
+        StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
+
+        for (String UserResponse : UserResponses)
+        {
+            log.append(",").append(UserResponse);       // Any string that has data, get it.
+        }
+
+        DataLogger dataLogger = new DataLogger("Pain_EMA_Results.csv", log.toString());        /* Logs the data in a csv format */
+        dataLogger.LogData();
+
+        FollowUpEMATimer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the EMA File
+                startActivity(StartEMAActivity);    // Starts the EMA file
+            }
+        },FollowUpEMADelay);
+
+        ThankYou();
+    }
+
+    private void ThankYou()
+    {
+        EMARemindertimer.cancel();
+        Context context = getApplicationContext();
+        CharSequence text = "Thank You!";       // Pop up information to the person
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        toast.show();
+        finish();
     }
 
     @Override
@@ -173,118 +281,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void LogActivity()
     {
-        String data =  (new Utils().getTime()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
+        String data =  (new SystemTime().getTime()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
         DataLogger datalog = new DataLogger("Pain_EMA_Activity.csv",data);
         datalog.LogData();
-    }
-
-
-    @SuppressLint("SetTextI18n")
-    private void QuestionSystem()
-    {
-        if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
-        else {back.setBackgroundColor(getColor(R.color.dark_red));}
-
-        if (CurrentQuestion == Questions.length-1){next.setText("Submit");}
-        else {next.setText("Next");}
-
-        if (CurrentQuestion < Questions.length)
-        {
-            resTaps = UserResponseIndex[CurrentQuestion];
-            req.setText(Questions[CurrentQuestion]);
-            responses.clear();
-            Collections.addAll(responses, Answers[CurrentQuestion]);
-            Cycle_Responses();
-
-            // Waits for the next button to be clicked.
-            next.setOnClickListener( new View.OnClickListener()
-            {
-                public void onClick(View view)      // Haptic Feedback
-                {
-                    v.vibrate(20);
-                    UserResponses[CurrentQuestion] = res.getText().toString();
-                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();
-                    LogActivity();
-                    if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                    {
-                        CurrentQuestion++;
-                        QuestionSystem();
-                    }
-                    else
-                    {
-                        Cancel();    // Else, it closes the question screen.
-                    }
-                }
-            });
-
-            // If the back button is clicked
-            back.setOnClickListener( new View.OnClickListener()
-            {
-                public void onClick(View view)
-                {
-                    v.vibrate(20); // Haptic Feedback
-                    UserResponses[CurrentQuestion] = res.getText().toString();
-                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();
-                    LogActivity();
-                    if (CurrentQuestion == 0)
-                    {
-                        //Cancel();
-                    }
-                    else
-                    {
-                        CurrentQuestion --;
-                        QuestionSystem();
-                    }
-                }
-            });
-        }
-        else
-        {
-            Submit();
-        }
-    }
-
-    private void ThankYou()
-    {
-
-        EMARemindertimer.cancel();
-        Context context = getApplicationContext();
-        CharSequence text = "Thank You!";       // Pop up information to the person
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
-        toast.show();
-        finish();
-    }
-
-    /* This is the end of survey part. It submits the data. */
-    private void Submit()
-    {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
-        Date date = new Date();
-        StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
-
-        for (String UserResponse : UserResponses)
-        {
-            log.append(",").append(UserResponse);       // Any string that has data, get it.
-        }
-
-        /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("Pain_EMA_Results.csv", log.toString());
-        dataLogger.LogData();
-
-        FollowUpEMATimer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                // Intent Start FollowUpEMA
-                Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the EMA File
-                startActivity(StartEMAActivity);    // Starts the EMA file
-            }
-        },FollowUpEMADelay);
-
-        ThankYou();
-
     }
 
     private void Cancel()

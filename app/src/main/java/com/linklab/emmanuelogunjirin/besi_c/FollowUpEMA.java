@@ -30,21 +30,19 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
-    private int resTaps = 0;
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;
-    private int[] UserResponseIndex;
-    public Vibrator v;      // The vibrator that provides haptic feedback.
-
+    private String [] Questions;
+    private String[][] Answers;
     private Timer EMARemindertimer;
-    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
-    private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int[] UserResponseIndex;
+    private int resTaps = 0;
+    private int EMAReminderDelay = new Preferences().FollowUpEMADelay;
+    private long EMAReminderInterval = new Preferences().FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().FollowUpEMAReminderNumber;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
-
-    private String[] Questions;
-    private String[][] Answers;
+    public Vibrator v;      // The vibrator that provides haptic feedback.
 
     private String[] CaregiverQuestions =
             {
@@ -81,21 +79,19 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             };
 
     @Override
-
-    // When the screen is created, this is run.
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Follow Up EMA:wakeLock");
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
-        /* Vibrator values and their corresponding requirements */
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);        /* Vibrator values and their corresponding requirements */
         v.vibrate(1000);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ema);
 
-        /* Buttons on the EMA screen that were added */
-        back = findViewById(R.id.Back);
+        back = findViewById(R.id.Back);        /* Buttons on the EMA screen that were added */
         next = findViewById(R.id.Next);
         req = findViewById(R.id.EMA_req);
         res = findViewById(R.id.EMA_res);
@@ -111,8 +107,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             Answers = CaregiverAnswers;
         }
 
-        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
-        res.setOnClickListener( new View.OnClickListener()
+        res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         {
             public void onClick(View view)
             {
@@ -124,8 +119,6 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
         UserResponses = new String[Questions.length];
         UserResponseIndex = new int[UserResponses.length];
-        //q1();       // Moves on to question 1
-
 
         EMARemindertimer = new Timer();
         EMARemindertimer.schedule(new TimerTask()
@@ -150,35 +143,29 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         },EMAReminderDelay,EMAReminderInterval);
 
         QuestionSystem();
-
-        // Enables Always-on
         setAmbientEnabled();
     }
-
-
-    private int Cycle_Responses()
-    {
-        int index = resTaps%responses.size();
-        res.setText(responses.get(index));
-        return index;
-    }
-
-    private void LogActivity()
-    {
-        String data =  (new Utils().getTime()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
-        DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);
-        datalog.LogData();
-    }
-
 
     @SuppressLint("SetTextI18n")
     private void QuestionSystem()
     {
-        if (CurrentQuestion == 0){back.setBackgroundColor(getColor(R.color.grey));}
-        else {back.setBackgroundColor(getColor(R.color.dark_red));}
+        if (CurrentQuestion == 0)
+        {
+            back.setBackgroundColor(getColor(R.color.grey));
+        }
+        else
+        {
+            back.setBackgroundColor(getColor(R.color.dark_red));
+        }
 
-        if (CurrentQuestion == Questions.length-1){next.setText("Submit");}
-        else {next.setText("Next");}
+        if (CurrentQuestion == Questions.length-1)
+        {
+            next.setText("Submit");
+        }
+        else
+        {
+            next.setText("Next");
+        }
 
         if (CurrentQuestion < Questions.length)
         {
@@ -188,8 +175,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             Collections.addAll(responses, Answers[CurrentQuestion]);
             Cycle_Responses();
 
-            // Waits for the next button to be clicked.
-            next.setOnClickListener( new View.OnClickListener()
+            next.setOnClickListener( new View.OnClickListener()            // Waits for the next button to be clicked.
             {
                 public void onClick(View view)      // Haptic Feedback
                 {
@@ -209,8 +195,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
                 }
             });
 
-            // If the back button is clicked
-            back.setOnClickListener( new View.OnClickListener()
+            back.setOnClickListener( new View.OnClickListener()            // If the back button is clicked
             {
                 public void onClick(View view)
                 {
@@ -236,19 +221,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         }
     }
 
-    private void ThankYou()
-    {
-        EMARemindertimer.cancel();
-        Context context = getApplicationContext();
-        CharSequence text = "Thank You!";       // Pop up information to the person
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
-        toast.show();
-        finish();
-    }
-
-    /* This is the end of survey part. It submits the data. */
-    private void Submit()
+    private void Submit()    /* This is the end of survey part. It submits the data. */
     {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         Date date = new Date();
@@ -263,9 +236,33 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         DataLogger dataLogger = new DataLogger("Followup_EMA_Results.csv", log.toString());
         dataLogger.LogData();
 
-
         ThankYou();
 
+    }
+
+    private void ThankYou()
+    {
+        EMARemindertimer.cancel();
+        Context context = getApplicationContext();
+        CharSequence text = "Thank You!";       // Pop up information to the person
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        toast.show();
+        finish();
+    }
+
+    private int Cycle_Responses()
+    {
+        int index = resTaps%responses.size();
+        res.setText(responses.get(index));
+        return index;
+    }
+
+    private void LogActivity()
+    {
+        String data =  (new SystemTime().getTime()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
+        DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);
+        datalog.LogData();
     }
 
     @Override

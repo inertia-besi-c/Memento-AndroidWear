@@ -13,16 +13,14 @@ import android.widget.Button;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EndOfDayPrompt extends WearableActivity {
-
-    private Button Proceed, Snooze, Dismiss;
+public class EndOfDayPrompt extends WearableActivity
+{
     private PowerManager.WakeLock wakeLock;
-    private Vibrator v;      // The vibrator that provides haptic feedback.
-
-
     @SuppressLint("WakelockTimeout")
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_day_prompt);
 
@@ -30,49 +28,43 @@ public class EndOfDayPrompt extends WearableActivity {
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 1:wakeLock");
         wakeLock.acquire();
 
-
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);        // The vibrator that provides haptic feedback.
         v.vibrate(600);
 
-        Proceed = findViewById(R.id.Proceed);
-        Snooze = findViewById(R.id.Snooze);
-        Dismiss = findViewById(R.id.Dismiss);
-        Dismiss.setVisibility(View.INVISIBLE);
+        Button proceed = findViewById(R.id.Proceed);
+        Button snooze = findViewById(R.id.Snooze);
+        Button dismiss = findViewById(R.id.Dismiss);
+        dismiss.setVisibility(View.INVISIBLE);
 
-        Proceed.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
-                startActivity(StartEMAActivity);
-
-                finish();
-            }
-        });
-
-        Snooze.setOnClickListener(new View.OnClickListener()
+        proceed.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
+                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
+                startActivity(StartEMAActivity);
+                finish();
+            }
+        });
 
+        snooze.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask()
                 {
                     @Override
-
                     public void run()
                     {
                         Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);
                         startActivity(StartEMAActivity);
                     }
                 }, new Preferences().EoDEMA_Timer_Delay);
-
                 finish();
             }
         });
-
-        // Enables Always-on
         setAmbientEnabled();
     }
 
