@@ -1,52 +1,50 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
+// Imports
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class PainScreen extends WearableActivity
+public class PainScreen extends WearableActivity        // This is the screen in-between the start screen and the Pain EMA.
 {
-    public Vibrator v;      // The vibrator that provides haptic feedback.
+    public Vibrator v;      // The vibrator service from the system.
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)      // When service is called, this is created first.
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pain_screen);
+        super.onCreate(savedInstanceState);     // It calls the saved instance from the res files.
+        setContentView(R.layout.activity_pain_screen);      // It starts the pain screen that was made.
 
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(300);
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);      // It calls the vibrator service
+        v.vibrate(300);     // It vibrates for 300 milliseconds.
 
-        Button pain = findViewById(R.id.Pain);
-        Button cancel = findViewById(R.id.Cancel);
+        Button pain = findViewById(R.id.Pain);      // Assigns a variable to the Pain button
+        Button cancel = findViewById(R.id.Cancel);      // Assigns a variable to the Cancel button.
 
-        pain.setOnClickListener(new View.OnClickListener()
+        pain.setOnClickListener(new View.OnClickListener()      // Waits until the pain button is clicked.
         {
             @Override
-            public void onClick(View v)
+            public void onClick(View v)     // When it is clicked, it runs these codes.
             {
-                Log.i("PAIN","Starting Pain EMA");
-                Intent StartPainEMA = new Intent(getBaseContext(), PainEMA.class);      // Links to the EMA File
-                startActivity(StartPainEMA);    // Starts the Pain EMA file
-                finish();
+                Intent StartPainEMA = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain-EMA Service.
+                startActivity(StartPainEMA);    // Starts the Pain-EMA service.
+                finish();       // Finishes the screen and moves on to the Pain-EMA Service.
             }
         });
 
-        cancel.setOnClickListener(new View.OnClickListener()
+        cancel.setOnClickListener(new View.OnClickListener()        // Waits until the cancel button is clicked.
         {
             @Override
-            public void onClick(View v)
+            public void onClick(View v)     // When it is clicked, it runs these codes.
             {
-                Log.i("PAIN","Stopping Pain EMA");
-                finish();
+                finish();       // Finishes the screen and moves back to the Main-Activity.
             }
         });
 
-        setAmbientEnabled();
+        setAmbientEnabled();        // Allows the screen to come on.
     }
 }
