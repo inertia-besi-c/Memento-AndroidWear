@@ -107,7 +107,7 @@
         </activity>
 
         <activity
-            android:name=".EndOfDayPrompt"
+            android:name=".EndOfDayPrompt1"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
 
