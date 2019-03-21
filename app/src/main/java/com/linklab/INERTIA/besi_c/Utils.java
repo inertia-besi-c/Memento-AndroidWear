@@ -1,4 +1,4 @@
-package com.linklab.emmanuelogunjirin.besi_c;
+package com.linklab.INERTIA.besi_c;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

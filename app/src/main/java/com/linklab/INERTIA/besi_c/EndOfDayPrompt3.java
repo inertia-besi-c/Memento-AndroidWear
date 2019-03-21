@@ -1,4 +1,4 @@
-package com.linklab.emmanuelogunjirin.besi_c;
+package com.linklab.INERTIA.besi_c;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,15 +10,11 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class EndOfDayPrompt extends WearableActivity {
+public class EndOfDayPrompt3 extends WearableActivity {
 
     private Button Proceed, Snooze, Dismiss;
     private PowerManager.WakeLock wakeLock;
-    private Vibrator v;      // The vibrator that provides haptic feedback.
-
+    private Vibrator v;
 
     @SuppressLint("WakelockTimeout")
     @Override
@@ -27,9 +23,8 @@ public class EndOfDayPrompt extends WearableActivity {
         setContentView(R.layout.activity_end_of_day_prompt);
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 1:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 3:wakeLock");
         wakeLock.acquire();
-
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(600);
@@ -37,12 +32,15 @@ public class EndOfDayPrompt extends WearableActivity {
         Proceed = findViewById(R.id.Proceed);
         Snooze = findViewById(R.id.Snooze);
         Dismiss = findViewById(R.id.Dismiss);
+
         Dismiss.setVisibility(View.INVISIBLE);
 
-        Proceed.setOnClickListener(new View.OnClickListener()
-        {
+        Snooze.setText("Dismiss");
+        Snooze.setBackgroundColor(getResources().getColor(R.color.dark_red));
+
+        Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EMA File
                 startActivity(StartEMAActivity);
 
@@ -50,23 +48,9 @@ public class EndOfDayPrompt extends WearableActivity {
             }
         });
 
-        Snooze.setOnClickListener(new View.OnClickListener()
-        {
+        Snooze.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask()
-                {
-                    @Override
-
-                    public void run()
-                    {
-                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);
-                        startActivity(StartEMAActivity);
-                    }
-                }, new Preferences().EoDEMA_Timer_Delay);
+            public void onClick(View v) {
 
                 finish();
             }

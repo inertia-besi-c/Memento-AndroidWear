@@ -1,4 +1,5 @@
-package com.linklab.emmanuelogunjirin.besi_c;
+
+package com.linklab.INERTIA.besi_c;
 
 // Imports
 import android.annotation.SuppressLint;
@@ -23,9 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-// FollowUp EMA
-
-public class FollowUpEMA extends WearableActivity       // This is the main activity for the questions
+public class EndOfDayEMA extends WearableActivity       // This is the main activity for the questions
 {
     private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
@@ -39,45 +38,61 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     private Timer EMARemindertimer;
     private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;
     private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = new Preferences().FollowUpEMAReminderNumber;
+    private int ReminderNumber = new Preferences().PainEMAReminderNumber;
     private int ReminderCount = 0;
     private int CurrentQuestion = 0;
 
-    private String[] Questions;
+    private String [] Questions;
     private String[][] Answers;
 
     private String[] CaregiverQuestions =
             {
-                    "Is the patient still having cancer pain now?",
-                    "What is the patient's pain level?",
-                    "How distressed are you?",
-                    "How distressed is the patient?",
-                    "Did the patient take an additional opioid for the pain?"
+                    "How active were you?",
+                    "How busy was your home?",
+                    "Time spend outside your home?",
+                    "How much time did you spend with other people?",
+                    "How distressed were you overall?",
+                    "How did the patient's pain interfere with your life?",
+                    "How was your mood overall?",
+                    "How distressed was the patient overall?",
+                    "How would you rate your sleep quality?",
             };
     private String[][] CaregiverAnswers =
             {
-                    {"Yes", "No"},
-                    {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
-                    {"Yes", "No"}
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"None", "A little", "Moderately", "Very", "Unsure"},
+                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     private String[] PatientQuestions =
             {
-                    "Are you still having cancer pain now??",
-                    "What is your pain level?",
-                    "How distressed are you?",
-                    "How distressed is your caregiver?",
-                    "Did you take an additional opioid for the pain?"
+                    "How active were you?",
+                    "How busy was your home?",
+                    "Time spend outside your home?",
+                    "How much time did you spend with other people?",
+                    "How distressed were you overall?",
+                    "How much did pain interfere with your life?",
+                    "How was your mood overall?",
+                    "How distressed was your caregiver overall?",
+                    "How would you rate your sleep quality?",
             };
     private String[][] PatientAnswers =
             {
-                    {"Yes", "No"},
-                    {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
-                    {"Yes", "No"}
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"None", "A little", "Moderately", "Very", "Unsure"},
+                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     @Override
@@ -86,7 +101,7 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
     protected void onCreate(Bundle savedInstanceState)
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Follow Up EMA:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);
         /* Vibrator values and their corresponding requirements */
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -111,22 +126,6 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             Answers = CaregiverAnswers;
         }
 
-        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
-        res.setOnClickListener( new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                v.vibrate(20);
-                resTaps+=1;
-                Cycle_Responses();
-            }
-        });
-
-        UserResponses = new String[Questions.length];
-        UserResponseIndex = new int[UserResponses.length];
-        //q1();       // Moves on to question 1
-
-
         EMARemindertimer = new Timer();
         EMARemindertimer.schedule(new TimerTask()
         {
@@ -149,12 +148,26 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
             }
         },EMAReminderDelay,EMAReminderInterval);
 
+        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
+        res.setOnClickListener( new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                v.vibrate(20);
+                resTaps+=1;
+                Cycle_Responses();
+            }
+        });
+
+        UserResponses = new String[Questions.length];
+        UserResponseIndex = new int[UserResponses.length];
+        //q1();       // Moves on to question 1
+
         QuestionSystem();
 
         // Enables Always-on
         setAmbientEnabled();
     }
-
 
     private int Cycle_Responses()
     {
@@ -165,11 +178,10 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private void LogActivity()
     {
-        String data =  (new Utils().getTime()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
-        DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);
+        String data =  (new Utils().getTime()) + ",EMA_EndOfDay," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];
+        DataLogger datalog = new DataLogger("EndOfDay_EMA_Activity.csv",data);
         datalog.LogData();
     }
-
 
     @SuppressLint("SetTextI18n")
     private void QuestionSystem()
@@ -197,15 +209,10 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
                     UserResponses[CurrentQuestion] = res.getText().toString();
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();
                     LogActivity();
-                    if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                    {
-                        CurrentQuestion++;
-                        QuestionSystem();
-                    }
-                    else
-                    {
-                        Cancel();    // Else, it closes the question screen.
-                    }
+
+                    CurrentQuestion++;
+                    QuestionSystem();
+
                 }
             });
 
@@ -238,7 +245,6 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
 
     private void ThankYou()
     {
-        EMARemindertimer.cancel();
         Context context = getApplicationContext();
         CharSequence text = "Thank You!";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;
@@ -260,9 +266,8 @@ public class FollowUpEMA extends WearableActivity       // This is the main acti
         }
 
         /* Logs the data in a csv format */
-        DataLogger dataLogger = new DataLogger("Followup_EMA_Results.csv", log.toString());
+        DataLogger dataLogger = new DataLogger("EndOfDay_EMA_Results.csv", log.toString());
         dataLogger.LogData();
-
 
         ThankYou();
 

@@ -1,4 +1,4 @@
-package com.linklab.emmanuelogunjirin.besi_c;
+package com.linklab.INERTIA.besi_c;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;

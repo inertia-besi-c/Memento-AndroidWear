@@ -1,4 +1,4 @@
-package com.linklab.emmanuelogunjirin.besi_c;
+package com.linklab.INERTIA.besi_c;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.Button;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EndOfDayPrompt3 extends WearableActivity {
+public class EndOfDayPrompt2 extends WearableActivity {
 
     private Button Proceed, Snooze, Dismiss;
     private PowerManager.WakeLock wakeLock;
@@ -26,7 +26,7 @@ public class EndOfDayPrompt3 extends WearableActivity {
         setContentView(R.layout.activity_end_of_day_prompt);
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 3:wakeLock");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 2:wakeLock");
         wakeLock.acquire();
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -35,11 +35,6 @@ public class EndOfDayPrompt3 extends WearableActivity {
         Proceed = findViewById(R.id.Proceed);
         Snooze = findViewById(R.id.Snooze);
         Dismiss = findViewById(R.id.Dismiss);
-
-        Dismiss.setVisibility(View.INVISIBLE);
-
-        Snooze.setText("Dismiss");
-        Snooze.setBackgroundColor(getResources().getColor(R.color.dark_red));
 
         Proceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +49,21 @@ public class EndOfDayPrompt3 extends WearableActivity {
         Snooze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt3.class);
+                        startActivity(StartEMAActivity);
+                    }
+                },new Preferences().EoDEMA_Timer_Delay);
+                finish();
+            }
 
+        });
+        Dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });

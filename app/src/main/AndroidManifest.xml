@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.linklab.emmanuelogunjirin.besi_c">
+    package="com.linklab.INERTIA.besi_c">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
-        android:name=".App"
+        android:name="com.linklab.INERTIA.besi_c.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -32,24 +32,24 @@
             android:value="true" />
 
         <activity
-            android:name=".EndOfDayPrompt"
+            android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
         <activity
-            android:name=".EndOfDayPrompt2"
+            android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt2"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
         <activity
-            android:name=".EndOfDayPrompt3"
+            android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt3"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
 
         <activity
-            android:name=".PainScreen"
+            android:name="com.linklab.INERTIA.besi_c.PainScreen"
             android:label="@string/title_activity_pain_screen" />
 
         <service
-            android:name=".BESIWatchFace"
+            android:name="com.linklab.INERTIA.besi_c.BESIWatchFace"
             android:label="BESI-Cancer"
             android:permission="android.permission.BIND_WALLPAPER">
             <meta-data
@@ -69,7 +69,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".PedometerSensor"
+            android:name="com.linklab.INERTIA.besi_c.PedometerSensor"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" />
@@ -79,7 +79,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.linklab.INERTIA.besi_c.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,13 +87,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FollowUpEMA" />
-        <activity android:name=".PainEMA" />
-        <activity android:name=".EndOfDayEMA" />
+        <activity android:name="com.linklab.INERTIA.besi_c.FollowUpEMA" />
+        <activity android:name="com.linklab.INERTIA.besi_c.PainEMA" />
+        <activity android:name="com.linklab.INERTIA.besi_c.EndOfDayEMA" />
 
-        <service android:name=".HeartRateSensor" />
-        <service android:name=".AccelerometerSensor" />
-        <service android:name=".HRTimerService" />
+        <service android:name="com.linklab.INERTIA.besi_c.HeartRateSensor" />
+        <service android:name="com.linklab.INERTIA.besi_c.AccelerometerSensor" />
+        <service android:name="com.linklab.INERTIA.besi_c.HRTimerService" />
     </application>
 
 </manifest>
