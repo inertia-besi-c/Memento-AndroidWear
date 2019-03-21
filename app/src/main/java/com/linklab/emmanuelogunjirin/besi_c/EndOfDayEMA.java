@@ -125,7 +125,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         EMARemindertimer.schedule(new TimerTask()       // Assigns the timer a new task when it starts.
         {
             @Override
-            public void run()
+            public void run()       // Starts this logic when it is run.
             {
                 if (ReminderCount <= ReminderNumber)        // If there are still questions to be answered, move to the question.
                 {
