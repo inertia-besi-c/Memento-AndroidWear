@@ -139,8 +139,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
             }
         },EMAReminderDelay,EMAReminderInterval);        // Sets the time and the delay that they should follow.
 
-        QuestionSystem();
-        setAmbientEnabled();
+        QuestionSystem();       // Calls the question system method
+        setAmbientEnabled();        // Keeps the screen awake when working.
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
@@ -202,7 +202,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     v.vibrate(20);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
-                    LogActivity();
+                    LogActivity();      // Logs the activity.
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
