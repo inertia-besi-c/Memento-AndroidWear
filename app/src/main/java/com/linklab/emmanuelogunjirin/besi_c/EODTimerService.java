@@ -40,7 +40,7 @@ public class EODTimerService extends Application
                 @Override
                 public void run()
                 {
-                    Intent intent = new Intent(thisContext, EndOfDayPrompt.class);
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);
                     startActivity(intent);
                 }
             }, delay, new Preferences().EoDEMA_Period);
@@ -53,7 +53,7 @@ public class EODTimerService extends Application
                 @Override
                 public void run()
                 {
-                    Intent intent = new Intent(thisContext, EndOfDayPrompt.class);
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);
                     startActivity(intent);
                 }
             }, delay, new Preferences().EoDEMA_Period);
