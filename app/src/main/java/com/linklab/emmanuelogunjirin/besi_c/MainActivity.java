@@ -283,6 +283,3 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onStop();
     }
 }
-
-
-// This is a test for Jamie

@@ -279,10 +279,4 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         EMARemindertimer.cancel();
         super.onDestroy();
     }
-
-//    private void Cancel()
-//    {
-//        ThankYou();
-//        finish();   // Closes the entire survey
-//    }
 }
