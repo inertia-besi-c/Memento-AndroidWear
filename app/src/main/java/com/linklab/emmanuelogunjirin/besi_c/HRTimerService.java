@@ -8,78 +8,79 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-/* This runs the delay timer, and also calls the heart rate sensor itself, the heart rate sensor kills itself and returns here when complete */
-public class HRTimerService extends Service
+public class HRTimerService extends Service         /* This runs the delay timer, and also calls the heart rate sensor itself, the heart rate sensor kills itself and returns here when complete */
 {
-    public int delay = 0;
+    public int delay = 0;       // Starts a delay of 0
     public long period = new Preferences().HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
-    private Timer timer;
-    private PowerManager.WakeLock wakeLock;
-    @SuppressLint("WakelockTimeout")
+    private Timer HRTimerService;         // Starts the variable timer.
+    private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
+    @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
-        Log.i("Heart Rate Sensor","Starting Heart Rate Sensor");
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");
-        wakeLock.acquire();
-        PeriodicService(false);
-        return START_STICKY;    // Please do not remove. It is needed. (This allows it to restart if the service is killed)
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Starts the power manager service from the system
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
+        wakeLock.acquire();     // Starts the wakelock without any timeout.
+        PeriodicService(false);     // Makes the periodic service false initially.
+
+        return START_STICKY;    // This allows it to restart if the service is killed
     }
 
-    private void PeriodicService(boolean Stop)
+    private void PeriodicService(boolean Stop)      // Starts the periodic data sampling.
     {
-        final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);
+        final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);       // Starts a HR service intent from the sensor class.
 
-        if (Stop)
+        if (Stop)       // If it says stop, it kills the HRService.
         {
             stopService(HRService);     // Stops the Heart Rate Sensor
         }
-        else
+        else    // Else it just keeps going.
         {
-            timer = new Timer();          // Makes a new timer.
-            timer.schedule( new TimerTask()     // Initializes a timer.
+            HRTimerService = new Timer();          // Makes a new timer.
+            HRTimerService.schedule( new TimerTask()     // Initializes a timer.
             {
                 public void run()       // Runs the imported file based on the timer specified.
                 {
                     startService(HRService);    // Starts the Heart Rate Sensor
                 }
-            }, delay, period);
+            }, delay, period);      // Waits for this amount of delay and runs every stated period.
         }
     }
 
-    private boolean isRunning()
+    private boolean isRunning()         // IF the system is running.
     {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+        ActivityManager HRManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Get the activity manager for heartrate.
+
+        for (ActivityManager.RunningServiceInfo service : HRManager.getRunningServices(Integer.MAX_VALUE))      // For every running service.
         {
-            if (HeartRateSensor.class.getName().equals(service.service.getClassName()))
+            if (HeartRateSensor.class.getName().equals(service.service.getClassName()))     // If HRService is equal to the class name
             {
-                return true;
+                return true;        // Return true.
             }
         }
-        return false;
+
+        return false;       // If not, return false.
     }
 
     @Override
-    public void onDestroy()
+    public void onDestroy()     // When the system is destroyed.
     {
-        timer.cancel();
-        wakeLock.release();
+        HRTimerService.cancel();        //  Cancels the HR Timer Service.
+        wakeLock.release();     // Releases the wakelock
 
-        if (isRunning())
+        if (isRunning())        // If the periodic service is running
         {
-            PeriodicService(true);
+            PeriodicService(true);      // Stops the periodic service.
         }
     }
 
     @Override
+    /* Unknown but necessary function */
     public IBinder onBind(Intent intent)
     {
         // TODO: Return the communication channel to the service.
