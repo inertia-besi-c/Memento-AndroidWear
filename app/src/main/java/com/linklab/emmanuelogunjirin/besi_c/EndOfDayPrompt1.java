@@ -74,6 +74,6 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
     public void onDestroy()     // When the activity is killed, it calls the onDestroy function.
     {
         wakeLock.release();     // Releases the wakelock.
-        super.onDestroy();      // Kills all methods. 
+        super.onDestroy();      // Kills all methods.
     }
 }
