@@ -2,7 +2,6 @@ package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,17 +62,17 @@ public class DataLogger     // A function that runs the data logging data
             }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                Log.i("Data Logger", e.toString());        // Tell us in a message
+                // Do nothing.
             }
             catch (Exception ex)
             {
-                Log.i("Data Logger", ex.toString());       // Tell us in a message.
+                // Do nothing.
             }
         }
 
         else        // If we canot make the directory
         {
-            Log.i("Data Logger","Failed to write to directory");      // If it could not make the directory, tell us it failed.
+            // Do nothing.
         }
     }
 
@@ -105,24 +104,24 @@ public class DataLogger     // A function that runs the data logging data
             }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                Log.i("Data Logger", e.toString());        // Tell us in a message
+                // Do nothing.
             }
             catch (Exception ex)
             {
-                Log.i("Data Logger", ex.toString());       // Tell us in a message.
+                // Do nothing.
             }
         }
 
         else        // If we canot make the directory
         {
-            Log.i("Data Logger","Failed to write to directory");      // If it could not make the directory, tell us it failed.
+          // Do nothing.
         }
     }
 
     public String ReadData()    // This reads the data from the sdcard
     {
         StringBuilder text = new StringBuilder();       // This is the new string that is built
-        try
+        try     // Tires to run the following.
         {
             File file = new File("/sdcard/BESI_C/",FileName);       // Creates a filename with the new filename
             BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
@@ -135,7 +134,7 @@ public class DataLogger     // A function that runs the data logging data
             }
             bufferedReaderr.close() ;       // Close the buffer reader.
         }
-        catch (IOException e)
+        catch (IOException e)   // Catch statement
         {
             e.printStackTrace();        // Ignore this.
         }
