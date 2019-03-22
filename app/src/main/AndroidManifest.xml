@@ -2,14 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.linklab.INERTIA.besi_c">
-
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-feature android:name="android.hardware.type.watch" /> <!-- Required for complications to receive complication data and open the provider chooser. -->
     <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".EODTimerService"
@@ -77,7 +75,7 @@
 
         <service
             android:name=".BESIWatchFace"
-            android:label="BESI-Cancer"
+            android:label="BESI Cancer"
             android:permission="android.permission.BIND_WALLPAPER" >
         </service>
 
@@ -107,6 +105,11 @@
         </activity>
 
         <activity
+            android:name=".PainScreen"
+            android:label="@string/title_activity_pain_screen" >
+        </activity>
+
+        <activity
             android:name=".EndOfDayPrompt1"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
@@ -120,12 +123,6 @@
             android:name=".EndOfDayPrompt3"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
-
-        <activity
-            android:name=".PainScreen"
-            android:label="@string/title_activity_pain_screen" >
-        </activity>
-
     </application>
 
 </manifest>
