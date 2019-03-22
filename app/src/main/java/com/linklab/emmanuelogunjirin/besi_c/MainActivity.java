@@ -17,17 +17,18 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main UI
+public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP;
-    private boolean SleepMode = false;
-    private boolean BatteryCharge = false;
+    private Button SLEEP;       // This is the sleep button on the screen.
+    private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
+    private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,70 +36,67 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
-        new DataLogger("StepActivity","no").WriteData();
+        new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
-        Button EMA_Start = findViewById(R.id.EMA_Start);
+        Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
         SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
-        batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level ID
-        date = findViewById(R.id.DATE);     // The date ID
-        time = findViewById(R.id.TIME);     // The time ID
+        batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
+        date = findViewById(R.id.DATE);     // The date view ID
+        time = findViewById(R.id.TIME);     // The time view ID
 
-        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
-        if (!isRunning(HRTimerService.class))
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+        if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
         {
-            startService(HRService);
+            startService(HRService);        // That starts the heartrate sensor if it is not already running.
         }
 
-        /* Listens for the EMA button "START" to be clicked. */
-        EMA_Start.setOnClickListener(new View.OnClickListener()
+        EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
-            public void onClick(View v)
+            public void onClick(View v)     // When the button is clicked the is run
             {
-                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the EMA File
-                startActivity(StartEMAActivity);    // Starts the EMA file
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
+                startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
         });
 
         SLEEP.setOnClickListener(new View.OnClickListener()        // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
         {
-            @SuppressLint("SetTextI18n")
-            public void onClick(View v)
+            @SuppressLint("SetTextI18n")        // Suppresses some error messages.
+            public void onClick(View v)     // When the sleep button is clicked
             {
-                //Log.i("Main","Sleep Clicked");
-                if (isRunning(HRTimerService.class))
+                if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                 {
-                    //Log.i("Main","HRS is running. stopping it");
-                    stopService(HRService);
-                    SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));
-                    SLEEP.setText("Wake ");
-                    SleepMode = true;
+                    stopService(HRService);     // It stops the service
+                    SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                    SLEEP.setText("Wake");      // It sets the text of the button to wake
+                    SleepMode = true;       // And it sets the boolean value to true.
                 }
-                else
+                else        // If the heart rate timer is not running
                 {
-                    //Log.i("Main","HRS is not running, starting it");
-                    startService(HRService);
-                    SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));
-                    SLEEP.setText("Sleep");
-                    SleepMode = false;
+                    startService(HRService);        // It starts the heart rate timer service
+                    SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
+                    SLEEP.setText("Sleep");     // It sets the text of the button to sleep
+                    SleepMode = false;      // It sets the boolean value to false.
                 }
             }
         });
 
-        SLEEP.setOnLongClickListener(new View.OnLongClickListener()
+        SLEEP.setOnLongClickListener(new View.OnLongClickListener()     // Listens for the sleep button to be clicked
         {
             @Override
-            public boolean onLongClick(View v)
+            public boolean onLongClick(View v)      // If the sleep button is clicked
             {
-                return false;
+                return false;       // It just returns false.
             }
         });
-        setAmbientEnabled();
 
-        try
+        setAmbientEnabled();        // Keeps the screen awake.
+
+        try     // Try doing this to keep up
         {
-            registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            registerReceiver(mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));        // Register the battery level broadcaster
         }
-        catch(Exception ignored)
+        catch(Exception ignored)        // Catch exception
         {
             // Do nothing
         }
@@ -120,195 +118,197 @@ public class MainActivity extends WearableActivity  // This is the activity that
     Thread time_updater = new Thread()    /* This Updates the Date and Time Every second when UI is in the foreground */
     {
         @Override
-        public void run()
+        public void run()       // When the timer updater is run, it starts the following.
         {
-            try
+            try     // it tired to run the following
             {
-                while (!time_updater.isInterrupted())
+                while (!time_updater.isInterrupted())       // While the timer updater is not interrupted by some other system.
                 {
-                    Thread.sleep(1000);
-                    runOnUiThread(new Runnable()
+                    Thread.sleep(1000);     // Wait 1 second.
+                    runOnUiThread(new Runnable()        // Run this while the user interface is on.
                     {
-                        @SuppressLint("SetTextI18n")
+                        @SuppressLint("SetTextI18n")        // Suppresses some more errors.
+
                         @Override
-                        public void run()
+                        public void run()       // This is run.
                         {
-                            DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.US);
-                            DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
-                            Date current = new Date();
-                            time.setText(timeFormat.format(current));
-                            date.setText(dateFormat.format(current));
+                            DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.US);      // The time format is called in US format.
+                            DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);     // The date is called in US format.
+                            Date current = new Date();      // The current date and timer is set.
+                            time.setText(timeFormat.format(current));       // The current time is set to show on the time text view.
+                            date.setText(dateFormat.format(current));       // The current date is set to show on the date text view.
 
-                            IntentFilter battery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                            Intent batteryStatus = getApplicationContext().registerReceiver(null, battery);
+                            IntentFilter battery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);     // Starts an intent that calls the battery level service.
+                            Intent batteryStatus = getApplicationContext().registerReceiver(null, battery);     // This gets the battery status from that service.
 
-                            assert batteryStatus != null;
-                            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-                            int batteryPct = (level*100/scale);
+                            assert batteryStatus != null;       // Asserts that the battery level is not null.
+                            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);      // Initializes an integer value for the battery level
+                            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);      // Scales the battery level to 100 from whatever default value it is.
+                            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);        //  Gets extra data from the battery level service.
+                            int batteryPct = (level*100/scale);     // Sets the battery level as a percentage.
 
-                            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-                            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+                            // GChecks if the battery is currently charging.
+                            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
 
-                            batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
-                            DataLogger stepActivity = new DataLogger("StepActivity","no");
+                            batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
+                            DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
 
-                            if (isCharging)
+                            if (isCharging)     // If the battery is charging
                             {
-                                if (!BatteryCharge || !SleepMode)
+                                if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
-                                    if (!SleepMode)
+                                    if (!SleepMode)     // If it is not in sleep mode
                                     {
-                                        SLEEP.performClick();
-                                        stopSensors();
-                                        LogActivityCharge();
+                                        SLEEP.performClick();       // Perform a coded click on the sleep button
+                                        stopSensors();      // Call the stop sensors method.
+                                        LogActivityCharge();        // Call the charging method to start logging.
                                     }
 
-                                    BatteryCharge = true;
+                                    BatteryCharge = true;       // Ser the battery charge status to true.
                                 }
                             }
-                            else
+                            else        // If the watch is not charging.
                             {
-                                startSensors();
-                                BatteryCharge = false;
+                                startSensors();     // Start all the sensors.
+                                BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
-                            if (SleepMode)
+                            if (SleepMode)      // If it is in sleep mode
                             {
-                                if(stepActivity.ReadData().contains("yes"))
+                                if(stepActivity.ReadData().contains("yes"))     // And there are steps going on.
                                 {
-                                    SLEEP.performClick();
-                                    stepActivity.WriteData();
+                                    SLEEP.performClick();       // Perform a coded click on the sleep button
+                                    stepActivity.WriteData();   // Write the step activity data to the file.
                                 }
-                                stepActivity.WriteData();
+                                stepActivity.WriteData();       // Else just keep writing tho the file.
                             }
-                            else
+                            else        // If it is not in sleep mode.
                             {
-                                stepActivity.WriteData();
+                                stepActivity.WriteData();       // Keep writing the data.
                             }
                         }
                     });
                 }
             }
-            catch (InterruptedException e)
+            catch (InterruptedException e)      // A catch for if it fails.
             {
                 // Do nothing.
             }
         }
     };
 
-    private void startSensors()     // Calls the sensors from their service branches
+    private void startSensors()     // Starts the sensors from their service branches
     {
-        startAccelerometerSensor();
-        startHeartRateSensor();
-        startPedometerSensor();
+        startAccelerometerSensor();     // Calls the accelerometer method to start it's intent
+        startHeartRateSensor();     // Calls the heart rate method to start it's intent
+        startPedometerSensor();     // Calls the pedometer method to start it's intent
     }
 
-    private void stopSensors()     // Calls the sensors from their service branches
+    private void stopSensors()     // Stops the sensors from their service branches
     {
-        stopAccelerometerSensor();
-        stopHeartRateSensor();
-        stopPedometerSensor();
+        stopAccelerometerSensor();     // Calls the accelerometer method to stop it's intent
+        stopHeartRateSensor();     // Calls the heart rate method to stop it's intent
+        stopPedometerSensor();     // Calls the pedometer method to stop it's intent
     }
 
-    private void startHeartRateSensor()
+    private void startHeartRateSensor()     // Starts the heart rate sensor
     {
-        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
-        if (!isRunning(HRTimerService.class))
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
+        if (!isRunning(HRTimerService.class))       // If the heart rate timer service is not running
         {
-            startService(HRService);
+            startService(HRService);        // Starts the service.
         }
     }
 
-    private void stopHeartRateSensor()
+    private void stopHeartRateSensor()     // Stops the heart rate sensor
     {
-        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
-        if (isRunning(HRTimerService.class))
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
+        if (isRunning(HRTimerService.class))       // If the heart rate timer service is running
         {
-            stopService(HRService);
+            stopService(HRService);        // Stops the service.
         }
     }
 
-    private void startPedometerSensor()
+    private void startPedometerSensor()     // Starts the pedometer sensor
     {
-        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
-        if(!isRunning(PedometerSensor.class))
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
+        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
-            startService(PedomService);
+            startService(PedomService);        // Starts the service.
         }
     }
 
-    private void stopPedometerSensor()
+    private void stopPedometerSensor()     // Stops the pedometer sensor
     {
-        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
-        if(isRunning(PedometerSensor.class))
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);       // Creates an intent for calling the pedometer service.
+        if(isRunning(PedometerSensor.class))       // If the pedometer service is running
         {
-            stopService(PedomService);
+            stopService(PedomService);        // Stops the service.
         }
     }
 
-    private void startAccelerometerSensor()
+    private void startAccelerometerSensor()     // Starts the accelerometer sensor
     {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
-        if(!isRunning(AccelerometerSensor.class))
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
+        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
         {
-            startService(AccelService);
+            startService(AccelService);        // Starts the service.
         }
     }
 
-    private void stopAccelerometerSensor()
+    private void stopAccelerometerSensor()     // Stops the accelerometer sensor
     {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
-        if(isRunning(AccelerometerSensor.class))
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);       // Creates an intent for calling the accelerometer service.
+        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
         {
-            stopService(AccelService);
+            stopService(AccelService);        // Stops the service.
         }
     }
 
-    private void LogActivityCharge()
+    private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
-        String data =  ("Charging at " + new SystemTime().getTime());
-        DataLogger datalog = new DataLogger("Charging_Time.csv",data);
-        datalog.LogData();
+        String data =  ("Charging at " + new SystemTime().getTime());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger("Charging_Time.csv",data);      // Logs it into a file called Charging time.
+        datalog.LogData();      // Saves the data into the directory.
     }
 
     private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver()    /* Gets the current battery level, date, and time and sets the text field data */
     {
         @Override
-        public void onReceive(final Context context, Intent intent)
+        public void onReceive(final Context context, Intent intent)     // Receives the broadcast.
         {
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);      // Gets the current battery level.
+            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);        // Scales the level to 100/
             int percent = (level*100)/scale;    // Shows the battery level in percentage value
             final String batLevel = "Battery: " + String.valueOf(percent) + "%";        // Appends the battery level
             batteryLevel.setText(batLevel);     // Sets the battery level text view to show the battery level in percentage.
         }
     };
 
-    private boolean isRunning(Class<?> serviceClass)
+    private boolean isRunning(Class<?> serviceClass)        // A general file that checks if a system is running.
     {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Starts the activity manager to check the service called.
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))        // For each service called by the running service.
         {
-            if (serviceClass.getName().equals(service.service.getClassName()))
+            if (serviceClass.getName().equals(service.service.getClassName()))      // It checks if it is running.
             {
-                return true;
+                return true;        // Returns true
             }
         }
-        return false;
+        return false;       // If not, it returns false.
     }
 
     @Override
-    protected void onStop()
+    protected void onStop()     // To stop the activity.
     {
-        try
+        try     // It tries to.
         {
-            unregisterReceiver(mBatInfoReceiver);
+            unregisterReceiver(mBatInfoReceiver);       // It unregisters the battery level listener.
         }
-        catch(Exception ignored)
+        catch(Exception ignored)        // A catch exception.
         {
-            // Ignored
+            // Do nothing.
         }
-        super.onStop();
+        super.onStop();     // It stops the activity.
     }
 }
