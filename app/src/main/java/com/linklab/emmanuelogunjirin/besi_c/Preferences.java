@@ -1,7 +1,6 @@
 package com.linklab.emmanuelogunjirin.besi_c;
 
 // Imports
-//import android.util.Log;
 
 public class Preferences
 {
