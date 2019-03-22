@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
-        android:name="com.linklab.INERTIA.besi_c.App"
+        android:name=".EODTimerService"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,22 +31,15 @@
             android:value="true" >
         </meta-data>
 
-        <activity
-            android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt"
-            android:label="@string/title_activity_end_of_day_prompt">
-        </activity>
-        <activity
-            android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt2"
-            android:label="@string/title_activity_end_of_day_prompt">
-        </activity>
-        <activity
-            android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt3"
-            android:label="@string/title_activity_end_of_day_prompt">
-        </activity>
+        <meta-data
+            android:name="android.service.wallpaper"
+            android:resource="@xml/watch_face" >
+        </meta-data>
 
-        <activity
-            android:name="com.linklab.INERTIA.besi_c.PainScreen"
-            android:label="@string/title_activity_pain_screen" />
+        <meta-data
+            android:name="com.google.android.wearable.watchface.preview"
+            android:resource="@drawable/preview_digital" >
+        </meta-data>
 
         <meta-data
             android:name="com.google.android.wearable.watchface.preview_circular"
@@ -71,18 +64,8 @@
 
 
         <service
-            android:name="com.linklab.INERTIA.besi_c.BESIWatchFace"
-            android:label="BESI-Cancer"
-            android:permission="android.permission.BIND_WALLPAPER">
-            <meta-data
-                android:name="android.service.wallpaper"
-                android:resource="@xml/watch_face" />
-            <meta-data
-                android:name="com.google.android.wearable.watchface.preview"
-                android:resource="@drawable/preview_digital" />
-            <meta-data
-                android:name="com.google.android.wearable.watchface.preview_circular"
-                android:resource="@drawable/preview_digital_circular" />
+            android:name=".HeartRateSensor" >
+        </service>
 
         <service
             android:name=".AccelerometerSensor" >
@@ -93,7 +76,13 @@
         </service>
 
         <service
-            android:name="com.linklab.INERTIA.besi_c.PedometerSensor"
+            android:name=".BESIWatchFace"
+            android:label="BESI-Cancer"
+            android:permission="android.permission.BIND_WALLPAPER" >
+        </service>
+
+        <service
+            android:name=".PedometerSensor"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" >
@@ -101,7 +90,19 @@
 
 
         <activity
-            android:name="com.linklab.INERTIA.besi_c.MainActivity"
+            android:name=".FollowUpEMA" >
+        </activity>
+
+        <activity
+            android:name=".PainEMA" >
+        </activity>
+
+        <activity
+            android:name=".EndOfDayEMA" >
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name">
         </activity>
 
@@ -109,13 +110,22 @@
             android:name=".EndOfDayPrompt1"
             android:label="@string/title_activity_end_of_day_prompt">
         </activity>
-        <activity android:name="com.linklab.INERTIA.besi_c.FollowUpEMA" />
-        <activity android:name="com.linklab.INERTIA.besi_c.PainEMA" />
-        <activity android:name="com.linklab.INERTIA.besi_c.EndOfDayEMA" />
 
-        <service android:name="com.linklab.INERTIA.besi_c.HeartRateSensor" />
-        <service android:name="com.linklab.INERTIA.besi_c.AccelerometerSensor" />
-        <service android:name="com.linklab.INERTIA.besi_c.HRTimerService" />
+        <activity
+            android:name=".EndOfDayPrompt2"
+            android:label="@string/title_activity_end_of_day_prompt">
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt3"
+            android:label="@string/title_activity_end_of_day_prompt">
+        </activity>
+
+        <activity
+            android:name=".PainScreen"
+            android:label="@string/title_activity_pain_screen" >
+        </activity>
+
     </application>
 
 </manifest>
