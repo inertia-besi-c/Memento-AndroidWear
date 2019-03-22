@@ -54,7 +54,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"Not at all", "A little", "Moderately", "Very", "Unsure"},
-                    {"Yes", "No"}
+                    {"Yes", "No", "Unsure"}
             };
 
     private String[] PatientQuestions =         // These are the patient questions in order.
