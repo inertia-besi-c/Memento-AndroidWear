@@ -2,7 +2,6 @@ package com.linklab.INERTIA.besi_c;
 
 // Imports
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,124 +10,134 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-@SuppressWarnings("ALL")
+// src: https://developer.android.com/training/data-storage/files.html#WriteExternalStorage
+@SuppressWarnings("ALL")    // Service wide suppression for the data logger names.
 public class DataLogger     // A function that runs the data logging data
 {
     private String FileName, Content;        // Variable names for the file characters and contents.
 
     public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
-        FileName = filename;
-        Content = content;
+        FileName = filename;        // Initiates a variable for the filename
+        Content = content;      // Initiates a variable for the content of the file name
     }
 
-    // src: https://developer.android.com/training/data-storage/files.html#WriteExternalStorage
-    /* Checks if external storage is available for read and write */
-    private boolean isExternalStorageWritable()
+    private boolean isExternalStorageWritable()     /* Checks if external storage is available for read and write */
     {
-        String state = android.os.Environment.getExternalStorageState();
-        return android.os.Environment.MEDIA_MOUNTED.equals(state);
+        String state = android.os.Environment.getExternalStorageState();        // Checks if the sdcard can be written to.
+        return android.os.Environment.MEDIA_MOUNTED.equals(state);      // Returns the state of the sdcard.
     }
 
-    /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable()
+    public boolean isExternalStorageReadable()    /* Checks if external storage is available to at least read */
     {
-        String state = android.os.Environment.getExternalStorageState();
-        return android.os.Environment.MEDIA_MOUNTED.equals(state) || android.os.Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+        String state = android.os.Environment.getExternalStorageState();        // Checks if the sdcard can be read from
+        return android.os.Environment.MEDIA_MOUNTED.equals(state) || android.os.Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);      // Returns the state of the sdcard.
     }
 
-    public void LogData()
+    public void LogData()       // This is what is run when logdata is called.
     {
-        if (isExternalStorageWritable())
+        if (isExternalStorageWritable())        // Checks if the storage is writable
         {
-
             try
             {
-                @SuppressLint("SdCardPath") File BESI_dir = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
-                if (BESI_dir.isDirectory()){} else {BESI_dir.mkdirs();}
-                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
-                myFile.createNewFile();
-                FileOutputStream fOut = new FileOutputStream(myFile,true);
-                OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
-                myOutWriter.append(Content+"\n");
-                myOutWriter.close();
-                fOut.close();
-            }
+                @SuppressLint("SdCardPath")     // Suppresses the path name.
+                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
 
+                if (BESI_directory.isDirectory())       // If there is a directory with that name
+                {
+                    // Do nothing
+                }
+                else    // If there is no directory with that name
+                {
+                    BESI_directory.mkdirs();        // Make a directory with the name.
+                }
+
+                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                myFile.createNewFile();     // Cretates the new file
+                FileOutputStream fileOut = new FileOutputStream(myFile,true);       // This is what the file outputs.
+                OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
+                myOutWriter.append(Content+"\n");       // Appends the content to the file
+                myOutWriter.close();        // Closes the file
+                fileOut.close();        // Closes the directory.
+            }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                Log.i("Error",e.toString());
-                Log.i("Error","Failed to write file");
+                // Do nothing.
             }
-
             catch (Exception ex)
             {
-                Log.i("Error",ex.toString());
+                // Do nothing.
             }
-
         }
 
-        else
+        else        // If we canot make the directory
         {
-            Log.i("Error","Failed to write to directory");      // If it could not make the directory, tell us it failed.
+            // Do nothing.
         }
     }
 
-    public void WriteData()
+    public void WriteData()     // This writes the data to the sdcard.
     {
-        if (isExternalStorageWritable())
+        if (isExternalStorageWritable())        // Checks if we can write data to the card.
         {
-
             try
             {
-                @SuppressLint("SdCardPath") File BESI_dir = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
-                if (BESI_dir.isDirectory()){} else {BESI_dir.mkdirs();}
-                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
-                myFile.createNewFile();
-                FileOutputStream fOut = new FileOutputStream(myFile,false);
-                OutputStreamWriter myOutWriter =new OutputStreamWriter(fOut);
-                myOutWriter.write(Content);
-                myOutWriter.close();
-                fOut.close();
-            }
+                @SuppressLint("SdCardPath")     // Suppresses the sdcard image name.
+                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
 
+                if (BESI_directory.isDirectory())       // If there is a directory with the name
+                {
+                    // Do nothing
+                }
+                else        // If there is no directory with the name
+                {
+                    BESI_directory.mkdirs();        // Do nothing.
+                }
+
+                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                myFile.createNewFile();     // Cretates the new file
+                FileOutputStream fileOut = new FileOutputStream(myFile,false);       // This is what the file outputs.
+                OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
+                myOutWriter.write(Content);       // Appends the content to the file
+                myOutWriter.close();        // Closes the file
+                fileOut.close();        // Closes the directory.
+            }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                Log.i("Error",e.toString());
-                Log.i("Error","Failed to write file");
+                // Do nothing.
             }
-
             catch (Exception ex)
             {
-                Log.i("Error",ex.toString());
+                // Do nothing.
             }
-
         }
 
-        else
+        else        // If we canot make the directory
         {
-            Log.i("Error","Failed to write to directory");      // If it could not make the directory, tell us it failed.
+          // Do nothing.
         }
     }
 
-    public String ReadData()
+    public String ReadData()    // This reads the data from the sdcard
     {
-        StringBuilder text = new StringBuilder();
-        try {
-            File file = new File("/sdcard/BESI_C/",FileName);
+        StringBuilder text = new StringBuilder();       // This is the new string that is built
+        try     // Tires to run the following.
+        {
+            File file = new File("/sdcard/BESI_C/",FileName);       // Creates a filename with the new filename
+            BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
+            String line;        // Creates a new line.
 
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
+            while ((line = bufferedReaderr.readLine()) != null)     // While the line is not blank
+            {
+                text.append(line);      // Append the text to the line
+                text.append('\n');      // Start a new line.
             }
-            br.close() ;
-        }catch (IOException e) {
-            e.printStackTrace();
+            bufferedReaderr.close() ;       // Close the buffer reader.
         }
-        return text.toString();
+        catch (IOException e)   // Catch statement
+        {
+            e.printStackTrace();        // Ignore this.
+        }
+        return text.toString();     // Return the text to the string.
     }
 }
-
-

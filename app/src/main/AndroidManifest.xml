@@ -19,17 +19,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
         <uses-library
             android:name="com.google.android.wearable"
-            android:required="true" />
+            android:required="true" >
+        </uses-library>
 
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
+
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true" />
+            android:value="true" >
+        </meta-data>
 
         <activity
             android:name="com.linklab.INERTIA.besi_c.EndOfDayPrompt"
@@ -48,6 +48,28 @@
             android:name="com.linklab.INERTIA.besi_c.PainScreen"
             android:label="@string/title_activity_pain_screen" />
 
+        <meta-data
+            android:name="com.google.android.wearable.watchface.preview_circular"
+            android:resource="@drawable/preview_digital_circular" >
+        </meta-data>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" >
+        </meta-data>
+
+
+        <intent-filter>
+            <action android:name="android.service.wallpaper.WallpaperService" />
+            <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+        </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+
         <service
             android:name="com.linklab.INERTIA.besi_c.BESIWatchFace"
             android:label="BESI-Cancer"
@@ -62,30 +84,30 @@
                 android:name="com.google.android.wearable.watchface.preview_circular"
                 android:resource="@drawable/preview_digital_circular" />
 
-            <intent-filter>
-                <action android:name="android.service.wallpaper.WallpaperService" />
-
-                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
-            </intent-filter>
+        <service
+            android:name=".AccelerometerSensor" >
         </service>
+
+        <service
+            android:name=".HRTimerService" >
+        </service>
+
         <service
             android:name="com.linklab.INERTIA.besi_c.PedometerSensor"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="ExportedService" />
+            tools:ignore="ExportedService" >
+        </service>
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.linklab.INERTIA.besi_c.MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity
+            android:name=".EndOfDayPrompt1"
+            android:label="@string/title_activity_end_of_day_prompt">
         </activity>
         <activity android:name="com.linklab.INERTIA.besi_c.FollowUpEMA" />
         <activity android:name="com.linklab.INERTIA.besi_c.PainEMA" />
