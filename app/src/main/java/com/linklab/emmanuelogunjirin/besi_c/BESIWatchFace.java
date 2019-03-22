@@ -27,6 +27,9 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
+/***
+ This system was automatically made by the android studio watch face service. The only thing added was that when a screen is created or some sort of update is called, the system is redirected to start the intent calling main activity. This automatically starts the app and makes sure that the app is automatically launched without need from the user finding the app. This also allows us to safely leave the app and perform functions of the watch without having to fight for dominance and time with the app. Edit at your own risk...
+ ***/
 public class BESIWatchFace extends CanvasWatchFaceService
 {
     private static final Typeface NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -101,7 +100,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
         catch(Exception ignored)
         {
-            // Ignore this catch.
+            // Do nothing
         }
 
         // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
@@ -152,6 +151,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
 
                             batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");
+                            DataLogger stepActivity = new DataLogger("StepActivity","no");
 
                             if (isCharging)
                             {
@@ -173,9 +173,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 BatteryCharge = false;
                             }
 
-                            DataLogger stepActivity = new DataLogger("StepActivity","no");
-                            Log.i("Step","Is Ped Running:" + isRunning(PedometerSensor.class) + " What does StepActivity Say? " + stepActivity.ReadData());
-
                             if (SleepMode)
                             {
                                 if(stepActivity.ReadData().contains("yes"))
@@ -195,19 +192,45 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
             catch (InterruptedException e)
             {
-                System.out.print("Catch was run");       // Placeholder until the catch is needed to observe some response from the system
+                // Do nothing.
             }
         }
     };
 
     private void startSensors()     // Calls the sensors from their service branches
     {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
-        if(!isRunning(AccelerometerSensor.class))
-        {
-            startService(AccelService);
-        }
+        startAccelerometerSensor();
+        startHeartRateSensor();
+        startPedometerSensor();
+    }
 
+    private void stopSensors()     // Calls the sensors from their service branches
+    {
+        stopAccelerometerSensor();
+        stopHeartRateSensor();
+        stopPedometerSensor();
+    }
+
+    private void startHeartRateSensor()
+    {
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
+        if (!isRunning(HRTimerService.class))
+        {
+            startService(HRService);
+        }
+    }
+
+    private void stopHeartRateSensor()
+    {
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
+        if (isRunning(HRTimerService.class))
+        {
+            stopService(HRService);
+        }
+    }
+
+    private void startPedometerSensor()
+    {
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
         if(!isRunning(PedometerSensor.class))
         {
@@ -215,24 +238,30 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
     }
 
-    private void stopSensors()     // Calls the sensors from their service branches
+    private void stopPedometerSensor()
     {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
-        if(isRunning(AccelerometerSensor.class))
-        {
-            stopService(AccelService);
-        }
-
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);    // Calls Pedometer
         if(isRunning(PedometerSensor.class))
         {
             stopService(PedomService);
         }
+    }
 
-        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);
-        if (isRunning(HRTimerService.class))
+    private void startAccelerometerSensor()
+    {
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
+        if(!isRunning(AccelerometerSensor.class))
         {
-            stopService(HRService);
+            startService(AccelService);
+        }
+    }
+
+    private void stopAccelerometerSensor()
+    {
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);    // Calls Accelerometer
+        if(isRunning(AccelerometerSensor.class))
+        {
+            stopService(AccelService);
         }
     }
 
