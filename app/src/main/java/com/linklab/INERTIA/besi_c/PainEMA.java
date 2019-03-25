@@ -237,8 +237,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
         DataLogger dataLogger = new DataLogger("Pain_EMA_Results.csv", log.toString());        /* Logs the pain data in a csv format */
         dataLogger.LogData();       // Saves the data to the directory.
 
-        if(UserResponses[Questions.length -1] != null && UserResponses[Questions.length -1] == "yes"){
-            FollowUpEMATimer.schedule(new TimerTask()       // Starts a timer for the follow up EMA.
+        if(UserResponses[Questions.length -1] != null && UserResponses[Questions.length - 1].equals("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
+        {
+            FollowUpEMATimer.schedule(new TimerTask()       // If they did, it starts a timer for the follow up EMA.
             {
                 @Override
                 public void run()       // When the timer is called, this is run.
@@ -248,7 +249,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 }
             },FollowUpEMADelay);        // Waits the specified time as specified in the preference section.
         }
-
 
         ThankYou();     // Calls the thank you method.
     }
