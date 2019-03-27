@@ -51,11 +51,6 @@
         </meta-data>
 
 
-        <intent-filter>
-            <action android:name="android.service.wallpaper.WallpaperService" />
-            <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
-        </intent-filter>
-
         <service
             android:name=".HeartRateSensor" >
         </service>
@@ -72,6 +67,10 @@
             android:name=".BESIWatchFace"
             android:label="BESI Cancer"
             android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
         </service>
 
         <service
