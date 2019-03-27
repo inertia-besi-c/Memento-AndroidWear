@@ -24,32 +24,10 @@
             android:required="true" >
         </uses-library>
 
-
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" >
         </meta-data>
-
-        <meta-data
-            android:name="android.service.wallpaper"
-            android:resource="@xml/watch_face" >
-        </meta-data>
-
-        <meta-data
-            android:name="com.google.android.wearable.watchface.preview"
-            android:resource="@drawable/preview_digital" >
-        </meta-data>
-
-        <meta-data
-            android:name="com.google.android.wearable.watchface.preview_circular"
-            android:resource="@drawable/preview_digital_circular" >
-        </meta-data>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" >
-        </meta-data>
-
 
         <service
             android:name=".HeartRateSensor" >
@@ -67,6 +45,25 @@
             android:name=".BESIWatchFace"
             android:label="BESI Cancer"
             android:permission="android.permission.BIND_WALLPAPER" >
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" >
+            </meta-data>
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_digital" >
+            </meta-data>
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_digital_circular" >
+            </meta-data>
+
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" >
+            </meta-data>
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
