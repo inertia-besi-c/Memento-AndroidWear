@@ -90,9 +90,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
 
-        UserResponses = new String[Questions.length];       // Shows the user response to a new string.
-        UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
-
         FollowUpEMATimer = new Timer();     // Creates a timer for the follow up EMA
         EMARemindertimer = new Timer();     // Creates the EMA reminder timer.
 
@@ -111,6 +108,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
             Questions = CaregiverQuestions;     // If it is, it sets the set of questions to be asked to the caregiver questions.
             Answers = CaregiverAnswers;       // And it sets the available answers to be asked to the caregiver answers.
         }
+
+        UserResponses = new String[Questions.length];       // Shows the user response to a new string.
+        UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
 
         res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         {

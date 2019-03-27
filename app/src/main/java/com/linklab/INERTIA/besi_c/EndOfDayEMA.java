@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Vibrator;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -121,6 +120,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             Answers = CaregiverAnswers;       // And it sets the available answers to be asked to the caregiver answers.
         }
 
+        UserResponses = new String[Questions.length];       // Shows the user response to a new string.
+        UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
+
         EMARemindertimer = new Timer();     // Starts a new timer for the reminder EMA.
         EMARemindertimer.schedule(new TimerTask()       // Assigns the timer a new task when it starts.
         {
@@ -148,9 +150,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
             }
         });
-
-        UserResponses = new String[Questions.length];       // Shows the user response to a new string.
-        UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Allows the screen to be on.

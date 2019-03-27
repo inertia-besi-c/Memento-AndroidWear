@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Vibrator;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,8 +86,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
 
-        UserResponses = new String[Questions.length];       // Shows the user response to a new string.
-        UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
 
         EMARemindertimer = new Timer();     // Creates the EMA reminder timer.
 
@@ -107,6 +104,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             Questions = CaregiverQuestions;     // If it is, it sets the set of questions to be asked to the caregiver questions.
             Answers = CaregiverAnswers;       // And it sets the available answers to be asked to the caregiver answers.
         }
+
+        UserResponses = new String[Questions.length];       // Shows the user response to a new string.
+        UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
 
         res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         {

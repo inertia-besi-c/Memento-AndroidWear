@@ -199,14 +199,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void startSensors()     // Starts the sensors from their service branches
     {
-        startAccelerometerSensor();     // Calls the accelerometer method to start it's intent
-//        startHeartRateSensor();     // Calls the heart rate method to start it's intent
+//        startAccelerometerSensor();     // Calls the accelerometer method to start it's intent (Stopped for now..Running a test)
+//        startHeartRateSensor();     // Calls the heart rate method to start it's intent       (Needs to be called independently in onCreate)
         startPedometerSensor();     // Calls the pedometer method to start it's intent
     }
 
     private void stopSensors()     // Stops the sensors from their service branches
     {
-        stopAccelerometerSensor();     // Calls the accelerometer method to stop it's intent
+//        stopAccelerometerSensor();     // Calls the accelerometer method to stop it's intent
 //        stopHeartRateSensor();     // Calls the heart rate method to stop it's intent
         stopPedometerSensor();     // Calls the pedometer method to stop it's intent
     }
@@ -247,23 +247,23 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
     }
 
-    private void startAccelerometerSensor()     // Starts the accelerometer sensor
-    {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
-        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
-        {
-            startService(AccelService);        // Starts the service.
-        }
-    }
+//    private void startAccelerometerSensor()     // Starts the accelerometer sensor
+//    {
+//        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
+//        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+//        {
+//            startService(AccelService);        // Starts the service.
+//        }
+//    }
 
-    private void stopAccelerometerSensor()     // Stops the accelerometer sensor
-    {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);       // Creates an intent for calling the accelerometer service.
-        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
-        {
-            stopService(AccelService);        // Stops the service.
-        }
-    }
+//    private void stopAccelerometerSensor()     // Stops the accelerometer sensor
+//    {
+//        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);       // Creates an intent for calling the accelerometer service.
+//        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+//        {
+//            stopService(AccelService);        // Stops the service.
+//        }
+//    }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {

@@ -30,18 +30,6 @@
         </meta-data>
 
         <service
-            android:name=".HeartRateSensor" >
-        </service>
-
-        <service
-            android:name=".AccelerometerSensor" >
-        </service>
-
-        <service
-            android:name=".HRTimerService" >
-        </service>
-
-        <service
             android:name=".BESIWatchFace"
             android:label="BESI Cancer"
             android:permission="android.permission.BIND_WALLPAPER" >
@@ -60,16 +48,16 @@
                 android:resource="@drawable/preview_digital_circular" >
             </meta-data>
 
-            <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version" >
-            </meta-data>
-
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" >
+        </meta-data>
 
         <service
             android:name=".PedometerSensor"
@@ -78,18 +66,17 @@
             tools:ignore="ExportedService" >
         </service>
 
+        <service
+            android:name=".HeartRateSensor" >
+        </service>
 
-        <activity
-            android:name=".FollowUpEMA" >
-        </activity>
+        <service
+            android:name=".AccelerometerSensor" >
+        </service>
 
-        <activity
-            android:name=".PainEMA" >
-        </activity>
-
-        <activity
-            android:name=".EndOfDayEMA" >
-        </activity>
+        <service
+            android:name=".HRTimerService" >
+        </service>
 
         <activity
             android:name=".MainActivity"
@@ -101,24 +88,33 @@
         </activity>
 
         <activity
-            android:name=".PainScreen"
-            android:label="@string/title_activity_pain_screen" >
+            android:name=".FollowUpEMA" >
         </activity>
 
         <activity
-            android:name=".EndOfDayPrompt1"
-            android:label="@string/title_activity_end_of_day_prompt">
+            android:name=".PainEMA" >
         </activity>
 
         <activity
-            android:name=".EndOfDayPrompt2"
-            android:label="@string/title_activity_end_of_day_prompt">
+            android:name=".PainScreen" >
         </activity>
 
         <activity
-            android:name=".EndOfDayPrompt3"
-            android:label="@string/title_activity_end_of_day_prompt">
+            android:name=".EndOfDayEMA" >
         </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt1">
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt2">
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt3">
+        </activity>
+
     </application>
 
 </manifest>

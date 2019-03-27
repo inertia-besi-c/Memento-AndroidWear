@@ -24,8 +24,8 @@ public class Preferences
     public int EoDEMA_Period = 24*60*60*1000; // This is how often the timer waits before firing again
 
     // Settings for Heart Rate Monitoring | Time is in ms |
-    long HRSampleDuration = 30000;   // How long should heart rate be measured each time?
-    long HRMeasurementInterval = 5 * 60 * 1000;  // Every how often should a measurement be taken?
+    public long HRSampleDuration = 30000;   // How long should heart rate be measured each time?
+    public long HRMeasurementInterval = 5 * 60 * 1000;  // Every how often should a measurement be taken?
 
 /* Settings for Log Files -- NOT YET IMPLEMENTED */
 //    public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
