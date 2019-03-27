@@ -69,7 +69,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 {
                     stopService(HRService);     // It stops the service
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                    SLEEP.setText("Wake");      // It sets the text of the button to wake
+                    SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                     SleepMode = true;       // And it sets the boolean value to true.
                 }
                 else        // If the heart rate timer is not running
