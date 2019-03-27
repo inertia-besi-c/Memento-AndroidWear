@@ -262,7 +262,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void LogActivity()      // Logs the activity of the person.
     {
-        String data =  (new SystemTime().getTime()) + ",EMA_EndOfDay," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
+        String data =  (new SystemInformation().getTime()) + ",EMA_EndOfDay," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger("EndOfDay_EMA_Activity.csv",data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
     }

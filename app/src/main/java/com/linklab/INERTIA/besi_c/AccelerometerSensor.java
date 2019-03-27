@@ -46,7 +46,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[2] = event.values[2] - gravity[2];     // Accelerometer value without gravity on the z-axis
 
         final String accelerometerValues = // Shows the values in a string.
-                new SystemTime().getTime() + "," + String.valueOf(event.timestamp) + "," +     // Starts a new string line.
+                new SystemInformation().getTime() + "," + String.valueOf(event.timestamp) + "," +     // Starts a new string line.
                 String.valueOf(linear_accel[0]) + "," + // Acceleration value on x-axis
                 String.valueOf(linear_accel[1]) + "," + // Acceleration value on y-axis
                 String.valueOf(linear_accel[2]); // Acceleration value on z-axis

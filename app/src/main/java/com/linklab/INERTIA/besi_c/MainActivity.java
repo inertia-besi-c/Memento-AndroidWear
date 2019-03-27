@@ -36,6 +36,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
+        startSensors();
         new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
@@ -147,7 +148,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);        //  Gets extra data from the battery level service.
                             int batteryPct = (level*100/scale);     // Sets the battery level as a percentage.
 
-                            // GChecks if the battery is currently charging.
+                            // Checks if the battery is currently charging.
                             boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
 
                             batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
@@ -267,7 +268,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
-        String data =  ("Charging at " + new SystemTime().getTime());       // This is the format it is logged at.
+        String data =  ("Charging at " + new SystemInformation().getTime());       // This is the format it is logged at.
         DataLogger datalog = new DataLogger("Charging_Time.csv",data);      // Logs it into a file called Charging time.
         datalog.LogData();      // Saves the data into the directory.
     }
@@ -277,11 +278,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         @Override
         public void onReceive(final Context context, Intent intent)     // Receives the broadcast.
         {
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);      // Gets the current battery level.
-            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);        // Scales the level to 100/
-            int percent = (level*100)/scale;    // Shows the battery level in percentage value
-            final String batLevel = "Battery: " + String.valueOf(percent) + "%";        // Appends the battery level
-            batteryLevel.setText(batLevel);     // Sets the battery level text view to show the battery level in percentage.
+            // This is just a receiver.
         }
     };
 
