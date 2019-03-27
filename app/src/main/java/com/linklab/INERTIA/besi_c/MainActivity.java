@@ -200,34 +200,34 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private void startSensors()     // Starts the sensors from their service branches
     {
         startAccelerometerSensor();     // Calls the accelerometer method to start it's intent
-        startHeartRateSensor();     // Calls the heart rate method to start it's intent
+//        startHeartRateSensor();     // Calls the heart rate method to start it's intent
         startPedometerSensor();     // Calls the pedometer method to start it's intent
     }
 
     private void stopSensors()     // Stops the sensors from their service branches
     {
         stopAccelerometerSensor();     // Calls the accelerometer method to stop it's intent
-        stopHeartRateSensor();     // Calls the heart rate method to stop it's intent
+//        stopHeartRateSensor();     // Calls the heart rate method to stop it's intent
         stopPedometerSensor();     // Calls the pedometer method to stop it's intent
     }
 
-    private void startHeartRateSensor()     // Starts the heart rate sensor
-    {
-        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
-        if (!isRunning(HRTimerService.class))       // If the heart rate timer service is not running
-        {
-            startService(HRService);        // Starts the service.
-        }
-    }
+//    private void startHeartRateSensor()     // Starts the heart rate sensor
+//    {
+//        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
+//        if (!isRunning(HRTimerService.class))       // If the heart rate timer service is not running
+//        {
+//            startService(HRService);        // Starts the service.
+//        }
+//    }
 
-    private void stopHeartRateSensor()     // Stops the heart rate sensor
-    {
-        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
-        if (isRunning(HRTimerService.class))       // If the heart rate timer service is running
-        {
-            stopService(HRService);        // Stops the service.
-        }
-    }
+//    private void stopHeartRateSensor()     // Stops the heart rate sensor
+//    {
+//        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
+//        if (isRunning(HRTimerService.class))       // If the heart rate timer service is running
+//        {
+//            stopService(HRService);        // Stops the service.
+//        }
+//    }
 
     private void startPedometerSensor()     // Starts the pedometer sensor
     {
