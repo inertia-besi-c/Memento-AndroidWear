@@ -94,7 +94,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     {
                         stopService(AccelService);        // Stop the service.
                     }
-
                 }
 
                 else        // If the heart rate timer is not running
@@ -111,7 +110,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 }
             }
         });
-        
+
         setAutoResumeEnabled(true);     // Keeps the screen awake.
 
         try     // Try doing this to keep up
@@ -249,7 +248,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     public void onEnterAmbient (Bundle ambientDetails)
     {
-
         super.onEnterAmbient(ambientDetails);
     }
 
