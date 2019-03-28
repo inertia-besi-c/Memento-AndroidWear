@@ -1,7 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
@@ -47,18 +46,5 @@ public class PainScreen extends WearableActivity        // This is the screen in
         });
 
         setAmbientEnabled();        // Allows the screen to come on.
-    }
-
-    private boolean isRunning()        // A general file that checks if a system is running.
-    {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Starts the activity manager to check the service called.
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))        // For each service called by the running service.
-        {
-            if (PainScreen.class.getName().equals(service.service.getClassName()))      // It checks if it is running.
-            {
-                return true;        // Returns true
-            }
-        }
-        return false;       // If not, it returns false.
     }
 }
