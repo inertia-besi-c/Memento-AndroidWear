@@ -27,7 +27,7 @@ import java.util.Locale;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP, SLEEP2;       // This is the sleep button on the screen.
+    private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics. 
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
 
@@ -42,7 +42,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
-        startSensors();
+        startSensors();     // This starts all the sensors that are in the method.
         new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
