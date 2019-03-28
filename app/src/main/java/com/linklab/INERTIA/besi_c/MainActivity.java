@@ -42,7 +42,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
-        startSensors();     // This starts all the sensors that are in the method.
+        startPedometerSensor();
         new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
@@ -57,7 +57,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             startService(HRService);        // That starts the heartrate sensor if it is not already running.
         }
-
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
+        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+        {
+            startService(AccelService);        // Starts the service.
+        }
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
@@ -79,7 +83,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                     SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                     SleepMode = true;       // And it sets the boolean value to true.
+                    if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                    {
+                        stopService(AccelService);        // Starts the service.
+                    }
+
                 }
+
                 else        // If the heart rate timer is not running
                 {
                     startService(HRService);        // It starts the heart rate timer service
@@ -87,6 +97,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
                     SLEEP.setText("Sleep");     // It sets the text of the button to sleep
                     SleepMode = false;      // It sets the boolean value to false.
+                    if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                    {
+                        startService(AccelService);        // Starts the service.
+                    }
                 }
             }
         });
@@ -179,7 +193,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             }
                             else        // If the watch is not charging.
                             {
-                                startSensors();     // Start all the sensors.
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
@@ -207,13 +220,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
     };
 
-    private void startSensors()     // Starts the sensors from their service branches
-    {
-        startAccelerometerSensor();     // Calls the accelerometer method to start it's intent (Stopped for now..Running a test)
-//        startHeartRateSensor();     // Calls the heart rate method to start it's intent       (Needs to be called independently in onCreate)
-        startPedometerSensor();     // Calls the pedometer method to start it's intent
-    }
-
     private void startPedometerSensor()     // Starts the pedometer sensor
     {
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
@@ -222,16 +228,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(PedomService);        // Starts the service.
         }
     }
-
-    private void startAccelerometerSensor()     // Starts the accelerometer sensor
-    {
-        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
-        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
-        {
-            startService(AccelService);        // Starts the service.
-        }
-    }
-
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
         String data =  ("Charging at " + new SystemInformation().getTime());       // This is the format it is logged at.
