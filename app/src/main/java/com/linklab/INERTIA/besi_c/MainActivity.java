@@ -98,7 +98,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         });
 
         //setAmbientEnabled();        // Keeps the screen awake.
-        //setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);
 
         try     // Try doing this to keep up
         {
