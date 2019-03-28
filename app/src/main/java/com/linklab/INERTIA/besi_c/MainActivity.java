@@ -27,16 +27,16 @@ import java.util.Locale;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP;       // This is the sleep button on the screen.
+    private Button SLEEP, SLEEP2;       // This is the sleep button on the screen.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
-    private PowerManager.WakeLock wakeLock;
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");        // It initiates a full wakelock to turn on the screen.
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
@@ -47,6 +47,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
         SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
+        SLEEP2 = findViewById(R.id.SLEEP2);
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
@@ -75,6 +76,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 {
                     stopService(HRService);     // It stops the service
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                    SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                     SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                     SleepMode = true;       // And it sets the boolean value to true.
                 }
@@ -82,6 +84,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 {
                     startService(HRService);        // It starts the heart rate timer service
                     SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
+                    SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
                     SLEEP.setText("Sleep");     // It sets the text of the button to sleep
                     SleepMode = false;      // It sets the boolean value to false.
                 }
