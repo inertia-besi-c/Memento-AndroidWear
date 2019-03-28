@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
@@ -29,10 +30,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private Button SLEEP;       // This is the sleep button on the screen.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
+    private PowerManager.WakeLock wakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");        // It initiates a full wakelock to turn on the screen.
+        wakeLock.acquire();      // The screen turns off after the timeout is passed.
+
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
@@ -91,7 +97,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
-        setAmbientEnabled();        // Keeps the screen awake.
+        //setAmbientEnabled();        // Keeps the screen awake.
+        //setAutoResumeEnabled(true);
 
         try     // Try doing this to keep up
         {
@@ -200,7 +207,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void startSensors()     // Starts the sensors from their service branches
     {
-//        startAccelerometerSensor();     // Calls the accelerometer method to start it's intent (Stopped for now..Running a test)
+        startAccelerometerSensor();     // Calls the accelerometer method to start it's intent (Stopped for now..Running a test)
 //        startHeartRateSensor();     // Calls the heart rate method to start it's intent       (Needs to be called independently in onCreate)
         startPedometerSensor();     // Calls the pedometer method to start it's intent
     }
@@ -248,14 +255,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
     }
 
-//    private void startAccelerometerSensor()     // Starts the accelerometer sensor
-//    {
-//        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
-//        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
-//        {
-//            startService(AccelService);        // Starts the service.
-//        }
-//    }
+    private void startAccelerometerSensor()     // Starts the accelerometer sensor
+    {
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
+        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+        {
+            startService(AccelService);        // Starts the service.
+        }
+    }
 
 //    private void stopAccelerometerSensor()     // Stops the accelerometer sensor
 //    {
@@ -293,6 +300,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         }
         return false;       // If not, it returns false.
+    }
+
+    @Override
+    public void onEnterAmbient (Bundle ambientDetails)
+    {
+
+        super.onEnterAmbient(ambientDetails);
     }
 
     @Override

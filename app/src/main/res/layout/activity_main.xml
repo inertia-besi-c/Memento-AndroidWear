@@ -34,13 +34,13 @@
 
                 <Button
                     android:id="@+id/EMA_Start"
-                    android:layout_width="138dp"
-                    android:layout_height="70dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_width="120dp"
+                    android:layout_height="64dp"
+                    android:layout_marginEnd="4dp"
                     android:layout_marginBottom="48dp"
                     android:background="@color/green"
                     android:text="@string/start"
-                    android:textSize="35sp"
+                    android:textSize="33sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/SLEEP"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -48,8 +48,9 @@
 
                 <Button
                     android:id="@+id/SLEEP"
-                    android:layout_width="89dp"
-                    android:layout_height="70dp"
+                    android:layout_width="77dp"
+                    android:layout_height="64dp"
+                    android:layout_marginEnd="24dp"
                     android:layout_marginBottom="48dp"
                     android:background="@color/blue"
                     android:text="@string/sleep"

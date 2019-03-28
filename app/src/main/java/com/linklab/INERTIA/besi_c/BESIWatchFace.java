@@ -84,8 +84,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(StartWatchActivity);    // Starts the watch face
+                //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+                //startActivity(StartWatchActivity);    // Starts the watch face
                 mCalendar.setTimeZone(TimeZone.getDefault());
                 invalidate();
             }
@@ -94,8 +94,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onCreate(SurfaceHolder holder)
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
 
             super.onCreate(holder);
             setWatchFaceStyle(new WatchFaceStyle.Builder(BESIWatchFace.this).setAcceptsTapEvents(true).build());
@@ -124,8 +124,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onVisibilityChanged(boolean visible)
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
             super.onVisibilityChanged(visible);
 
             if (visible)
@@ -143,8 +143,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
 
         private void registerReceiver()
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
 
             if (mRegisteredTimeZoneReceiver)
             {
@@ -158,8 +158,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
 
         private void unregisterReceiver()
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
 
             if (!mRegisteredTimeZoneReceiver)
             {
@@ -173,8 +173,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onApplyWindowInsets(WindowInsets insets)
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
 
             super.onApplyWindowInsets(insets);
             Resources resources = BESIWatchFace.this.getResources();            // Load resources that have alternate values for round watches.
@@ -187,8 +187,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onPropertiesChanged(Bundle properties)
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
 
             super.onPropertiesChanged(properties);
             mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT, false);
@@ -197,8 +197,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onTimeTick()
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+            //startActivity(StartWatchActivity);    // Starts the watch face
 
             super.onTimeTick();
             invalidate();
@@ -221,8 +221,6 @@ public class BESIWatchFace extends CanvasWatchFaceService
         public void onTapCommand(int tapType, int x, int y, long eventTime)
         {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
-
             switch (tapType)
             {
                 case TAP_TYPE_TOUCH:                    // The user has started touching the screen.
@@ -240,8 +238,6 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onDraw(Canvas canvas, Rect bounds)
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
 
             if (isInAmbientMode())
             {
@@ -249,6 +245,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
             }
             else
             {
+                Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(StartWatchActivity);    // Starts the watch face
                 canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
             }
 
@@ -264,8 +262,12 @@ public class BESIWatchFace extends CanvasWatchFaceService
 
         private void updateTimer()
         {
+
+            if (!isInAmbientMode())
+            {
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(StartWatchActivity);    // Starts the watch face
+            }
 
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
 
@@ -282,8 +284,11 @@ public class BESIWatchFace extends CanvasWatchFaceService
 
         private void handleUpdateTimeMessage()
         {
-            Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(StartWatchActivity);    // Starts the watch face
+            if (!isInAmbientMode())
+            {
+                Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(StartWatchActivity);    // Starts the watch face
+            }
 
             if (shouldTimerBeRunning())
             {

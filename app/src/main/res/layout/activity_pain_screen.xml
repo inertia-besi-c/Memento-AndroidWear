@@ -18,26 +18,40 @@
             android:layout_width="138dp"
             android:layout_height="70dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="48dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/dark_red"
             android:text="@string/pain"
             android:textSize="35sp"
+            app:layout_constraintBottom_toTopOf="@+id/space"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/Cancel"
             android:layout_width="104dp"
             android:layout_height="53dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="8dp"
             android:background="@color/light_grey"
             android:text="@string/cancel"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/Pain"
-            app:layout_constraintStart_toStartOf="@+id/Pain" />
+            app:layout_constraintStart_toStartOf="@+id/Pain"
+            app:layout_constraintTop_toBottomOf="@+id/space" />
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.581" />
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>

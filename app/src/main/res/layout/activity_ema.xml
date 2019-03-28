@@ -19,11 +19,13 @@
             android:layout_width="60dp"
             android:layout_height="225dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@color/dark_red"
             android:text="@string/back"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/EMA_req"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.463" />
@@ -32,27 +34,28 @@
             android:id="@+id/Next"
             android:layout_width="60dp"
             android:layout_height="225dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@color/green"
             android:text="@string/next"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/EMA_req"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/EMA_res"
-            android:layout_width="95dp"
-            android:layout_height="107dp"
+            android:layout_width="0dp"
+            android:layout_height="94dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@color/blue"
             android:text="@string/button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/Next"
-            app:layout_constraintHorizontal_bias="0.505"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/Next"
+            app:layout_constraintStart_toEndOf="@+id/Back" />
 
         <TextView
             android:id="@+id/EMA_req"
