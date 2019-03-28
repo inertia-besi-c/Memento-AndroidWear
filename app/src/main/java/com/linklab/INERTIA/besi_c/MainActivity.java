@@ -171,7 +171,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     if (!SleepMode)     // If it is not in sleep mode
                                     {
                                         SLEEP.performClick();       // Perform a coded click on the sleep button
-                                        stopSensors();      // Call the stop sensors method.
                                         LogActivityCharge();        // Call the charging method to start logging.
                                     }
 
@@ -215,46 +214,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
         startPedometerSensor();     // Calls the pedometer method to start it's intent
     }
 
-    private void stopSensors()     // Stops the sensors from their service branches
-    {
-//        stopAccelerometerSensor();     // Calls the accelerometer method to stop it's intent
-//        stopHeartRateSensor();     // Calls the heart rate method to stop it's intent
-        stopPedometerSensor();     // Calls the pedometer method to stop it's intent
-    }
-
-//    private void startHeartRateSensor()     // Starts the heart rate sensor
-//    {
-//        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
-//        if (!isRunning(HRTimerService.class))       // If the heart rate timer service is not running
-//        {
-//            startService(HRService);        // Starts the service.
-//        }
-//    }
-
-//    private void stopHeartRateSensor()     // Stops the heart rate sensor
-//    {
-//        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Creates an intent for calling the heart rate timer service.
-//        if (isRunning(HRTimerService.class))       // If the heart rate timer service is running
-//        {
-//            stopService(HRService);        // Stops the service.
-//        }
-//    }
-
     private void startPedometerSensor()     // Starts the pedometer sensor
     {
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
             startService(PedomService);        // Starts the service.
-        }
-    }
-
-    private void stopPedometerSensor()     // Stops the pedometer sensor
-    {
-        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);       // Creates an intent for calling the pedometer service.
-        if(isRunning(PedometerSensor.class))       // If the pedometer service is running
-        {
-            stopService(PedomService);        // Stops the service.
         }
     }
 
@@ -266,15 +231,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(AccelService);        // Starts the service.
         }
     }
-
-//    private void stopAccelerometerSensor()     // Stops the accelerometer sensor
-//    {
-//        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);       // Creates an intent for calling the accelerometer service.
-//        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
-//        {
-//            stopService(AccelService);        // Stops the service.
-//        }
-//    }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
