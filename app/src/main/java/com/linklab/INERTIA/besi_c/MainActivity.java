@@ -27,7 +27,7 @@ import java.util.Locale;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics. 
+    private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
 
