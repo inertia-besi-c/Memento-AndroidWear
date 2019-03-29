@@ -1,7 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
@@ -31,6 +30,10 @@ public class PainScreen extends WearableActivity        // This is the screen in
             @Override
             public void onClick(View v)     // When it is clicked, it runs these codes.
             {
+                String data =  ("Pain Screen 'Pain' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Intent StartPainEMA = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain-EMA Service.
                 startActivity(StartPainEMA);    // Starts the Pain-EMA service.
                 finish();       // Finishes the screen and moves on to the Pain-EMA Service.
@@ -42,23 +45,14 @@ public class PainScreen extends WearableActivity        // This is the screen in
             @Override
             public void onClick(View v)     // When it is clicked, it runs these codes.
             {
+                String data =  ("Pain Screen 'Cancel' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 finish();       // Finishes the screen and moves back to the Main-Activity.
             }
         });
 
         setAmbientEnabled();        // Allows the screen to come on.
-    }
-
-    private boolean isRunning()        // A general file that checks if a system is running.
-    {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Starts the activity manager to check the service called.
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))        // For each service called by the running service.
-        {
-            if (PainScreen.class.getName().equals(service.service.getClassName()))      // It checks if it is running.
-            {
-                return true;        // Returns true
-            }
-        }
-        return false;       // If not, it returns false.
     }
 }

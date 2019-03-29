@@ -73,6 +73,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
+                String data =  ("Main Activity 'Start' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
                 startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
@@ -83,6 +87,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
             public void onClick(View v)     // When the sleep button is clicked
             {
+                String data =  ("Main Activity 'Sleep' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                 {
                     stopService(HRService);     // It stops the service

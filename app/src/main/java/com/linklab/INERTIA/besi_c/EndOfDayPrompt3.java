@@ -37,23 +37,31 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
         snooze.setText("Dismiss");      // Changes the text on the snooze button to dismiss
         snooze.setBackgroundColor(getResources().getColor(R.color.dark_red));       // Changes the color of the snooze button to dismiss.
 
-        snooze.setOnClickListener(new View.OnClickListener()        // Constantly listens until the snooze button is clicked.
-        {
-            @Override
-            public void onClick(View v)     // If the button is clicked
-            {
-                finish();       // Finish and end the service.
-            }
-        });
-
         proceed.setOnClickListener(new View.OnClickListener()       // Constantly listens to the proceed button, If proceed is clicked
         {
             @Override
             public void onClick(View v)     // When it is clicked.
             {
+                String data =  ("Third End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Starts the EOD EMA file
                 startActivity(StartEMAActivity);    // Moves to the new activity.
                 finish();       // Finishes the EOD EMA prompt 3.
+            }
+        });
+
+        snooze.setOnClickListener(new View.OnClickListener()        // Constantly listens until the snooze button is clicked.
+        {
+            @Override
+            public void onClick(View v)     // If the button is clicked
+            {
+                String data =  ("Third End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                finish();       // Finish and end the service.
             }
         });
 
