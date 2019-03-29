@@ -143,7 +143,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
                         {
-                            startService(AccelService);        // Starts the service.
+                            //startService(AccelService);        // Starts the service.
                         }
                     }
                 }
@@ -258,7 +258,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private void Charging()     // This is a little thank you toast.
     {
         Context context = getApplicationContext();      // Gets a context from the system.
-        CharSequence text = "Watch is Charging";       // Pop up information to the person
+        CharSequence text = "Disabled while charging";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
         Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
         toast.show();       // Shows the toast.
