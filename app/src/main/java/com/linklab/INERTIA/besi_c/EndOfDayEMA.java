@@ -145,6 +145,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         {
             public void onClick(View view)      // When the res button is clicked, this is run.
             {
+                String data =  ("End Of Day EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 v.vibrate(20);      // A slight vibration for haptic feedback.
                 resTaps+=1;     // Increments the amount of taps by 1
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
@@ -189,6 +193,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 public void onClick(View view)      // When the next/submit button is clicked.
                 {
+                    String data =  ("End of Day EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     v.vibrate(20);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
@@ -203,6 +211,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 public void onClick(View view)      // When the back button is clicked.
                 {
+                    String data =  ("End of Day EMA 'Back' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     v.vibrate(20);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented

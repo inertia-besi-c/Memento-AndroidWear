@@ -41,6 +41,10 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             @Override
             public void onClick(View v)     // When it is clicked, this is run
             {
+                String data =  ("Second End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
                 startActivity(StartEMAActivity);        // Starts the EOD EMA file.
                 finish();       // Finished the EOD EMA screen.
@@ -52,6 +56,10 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             @Override
             public void onClick(View v)     // When it is clicked, this is run
             {
+                String data =  ("Second End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Timer timer = new Timer();      // Starts a timer that runs for the specified time.
                 timer.schedule(new TimerTask()      // When the timer is finished, the run void is run.
                 {
@@ -71,6 +79,10 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             @Override
             public void onClick(View v)     // WHen it is clicked this is run.
             {
+                String data =  ("Second End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 finish();       // Finishes the EOD EMA.
             }
         });

@@ -42,6 +42,10 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
             @Override
             public void onClick(View view)      // When it is clicked.
             {
+                String data =  ("First End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD-EMA service.
                 startActivity(StartEMAActivity);        // Starts the EOD-EMA file.
                 finish();       // Finishes the screen.
@@ -53,6 +57,10 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
             @Override
             public void onClick(View view)      // When it is clicked
             {
+                String data =  ("First End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 Timer snooze = new Timer();      // A timer is started.
                 snooze.schedule(new TimerTask()     // The snooze timer is scheduled to run,
                 {
