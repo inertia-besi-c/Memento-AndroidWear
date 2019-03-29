@@ -68,6 +68,7 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
         });
 
         setAmbientEnabled();    // Turns on the screen.
+        setAutoResumeEnabled(true);
     }
 
     @Override

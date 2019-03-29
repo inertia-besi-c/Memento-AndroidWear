@@ -58,6 +58,7 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
         });
 
         setAmbientEnabled();        // Makes the system ambient.
+        setAutoResumeEnabled(true);
     }
 
     @Override

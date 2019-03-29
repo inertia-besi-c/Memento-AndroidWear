@@ -60,7 +60,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
         {
-            startService(AccelService);        // Starts the service.
+            //startService(AccelService);        // Starts the service.
         }
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
@@ -99,7 +99,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     SleepMode = false;      // It sets the boolean value to false.
                     if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
                     {
-                        startService(AccelService);        // Starts the service.
+                        //startService(AccelService);        // Starts the service.
                     }
                 }
             }

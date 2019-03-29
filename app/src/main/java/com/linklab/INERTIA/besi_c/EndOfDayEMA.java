@@ -153,6 +153,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Allows the screen to be on.
+        setAutoResumeEnabled(true);
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
