@@ -47,11 +47,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How busy was your home?",
                     "Time spend outside your home?",
                     "How much time did you spend with other people?",
+                    "How would you rate your sleep quality?",
                     "How distressed were you overall?",
                     "How did the patient's pain interfere with your life?",
                     "How was your mood overall?",
                     "How distressed was the patient overall?",
-                    "How would you rate your sleep quality?",
             };
     private String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
@@ -59,11 +59,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Moderately", "Very", "Unsure"},
-                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     private String[] PatientQuestions =      // These are strictly the patient questions.
@@ -72,11 +72,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How busy was your home?",
                     "Time spend outside your home?",
                     "How much time did you spend with other people?",
+                    "How would you rate your sleep quality?",
                     "How distressed were you overall?",
                     "How much did pain interfere with your life?",
                     "How was your mood overall?",
                     "How distressed was your caregiver overall?",
-                    "How would you rate your sleep quality?",
             };
     private String[][] PatientAnswers =      // These are strictly the patient answers.
             {
@@ -84,11 +84,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Moderately", "Very", "Unsure"},
-                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     @Override
