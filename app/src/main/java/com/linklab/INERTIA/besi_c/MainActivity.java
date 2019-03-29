@@ -18,6 +18,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,13 +31,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
+    boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
 
-    @SuppressLint("WakelockTimeout")
+    @SuppressLint("WakelockTimeout")        // Suppresses errors.
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
@@ -77,8 +79,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
-                startActivity(StartEMAActivity);    // Starts the Pain EMA file
+                if (isCharging)        // This is where the role is set, it checks if the role is PT
+                {
+                    Charging();         // Calls the toast to show the system is charging.
+                }
+                else        // If the system is not charging.
+                {
+                    Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
+                    startActivity(StartEMAActivity);    // Starts the Pain EMA file
+                }
             }
         });
 
@@ -98,6 +107,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                     SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                     SleepMode = true;       // And it sets the boolean value to true.
+
                     if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
                     {
                         stopService(AccelService);        // Stop the service.
@@ -111,6 +121,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
                     SLEEP.setText("Sleep");     // It sets the text of the button to sleep
                     SleepMode = false;      // It sets the boolean value to false.
+
                     if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
                     {
                         startService(AccelService);        // Starts the service.
@@ -177,7 +188,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             int batteryPct = (level*100/scale);     // Sets the battery level as a percentage.
 
                             // Checks if the battery is currently charging.
-                            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
+                            isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
 
                             batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
@@ -223,6 +234,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         }
     };
+
+    private void Charging()     // This is a little thank you toast.
+    {
+        Context context = getApplicationContext();      // Gets a context from the system.
+        CharSequence text = "Watch is Charging";       // Pop up information to the person
+        int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
+        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        toast.show();       // Shows the toast.
+    }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
