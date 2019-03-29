@@ -100,31 +100,38 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
+                if (isCharging)     // Checks if the watch is charging
                 {
-                    stopService(HRService);     // It stops the service
-                    SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                    SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                    SLEEP.setText("Sleep");      // It sets the text of the button to sleep
-                    SleepMode = true;       // And it sets the boolean value to true.
-
-                    if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
-                    {
-                        stopService(AccelService);        // Stop the service.
-                    }
+                    Charging();     // Calls the charging method to inform the person
                 }
-
-                else        // If the heart rate timer is not running
+                else        // If the watch is not charging
                 {
-                    startService(HRService);        // It starts the heart rate timer service
-                    SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
-                    SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
-                    SLEEP.setText("Sleep");     // It sets the text of the button to sleep
-                    SleepMode = false;      // It sets the boolean value to false.
-
-                    if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
-                        startService(AccelService);        // Starts the service.
+                        stopService(HRService);     // It stops the service
+                        SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                        SLEEP.setText("Sleep");      // It sets the text of the button to sleep
+                        SleepMode = true;       // And it sets the boolean value to true.
+
+                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+                        {
+                            stopService(AccelService);        // Stop the service.
+                        }
+                    }
+
+                    else        // If the heart rate timer is not running
+                    {
+                        startService(HRService);        // It starts the heart rate timer service
+                        SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
+                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
+                        SLEEP.setText("Sleep");     // It sets the text of the button to sleep
+                        SleepMode = false;      // It sets the boolean value to false.
+
+                        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                        {
+                            startService(AccelService);        // Starts the service.
+                        }
                     }
                 }
             }
