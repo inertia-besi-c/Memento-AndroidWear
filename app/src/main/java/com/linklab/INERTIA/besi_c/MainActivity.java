@@ -18,6 +18,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,24 +31,24 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
+    boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
 
-    @SuppressLint("WakelockTimeout")
+    @SuppressLint("WakelockTimeout")        // Suppresses errors.
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
-        startPedometerSensor();
         new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
         SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
-        SLEEP2 = findViewById(R.id.SLEEP2);
+        SLEEP2 = findViewById(R.id.SLEEP2);     // A fake button that compensates for the extra spaces in some watches.
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
@@ -57,17 +58,36 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             startService(HRService);        // That starts the heartrate sensor if it is not already running.
         }
+
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
         {
             //startService(AccelService);        // Starts the service.
         }
+
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
+        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
+        {
+            startService(PedomService);        // Starts the service.
+        }
+
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
-                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
-                startActivity(StartEMAActivity);    // Starts the Pain EMA file
+                String data =  ("Main Activity 'Start' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                if (isCharging)        // This is where the role is set, it checks if the role is PT
+                {
+                    Charging();         // Calls the toast to show the system is charging.
+                }
+                else        // If the system is not charging.
+                {
+                    Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
+                    startActivity(StartEMAActivity);    // Starts the Pain EMA file
+                }
             }
         });
 
@@ -76,46 +96,61 @@ public class MainActivity extends WearableActivity  // This is the activity that
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
             public void onClick(View v)     // When the sleep button is clicked
             {
-                if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
+                String data =  ("Main Activity 'Sleep' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                if (isCharging)     // Checks if the watch is charging
                 {
-                    stopService(HRService);     // It stops the service
-                    SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                    SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                    SLEEP.setText("Sleep");      // It sets the text of the button to sleep
-                    SleepMode = true;       // And it sets the boolean value to true.
-                    if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                    Charging();     // Calls the charging method to inform the person
+                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
-                        stopService(AccelService);        // Starts the service.
+                        stopService(HRService);     // It stops the service
+                        SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                        SLEEP.setText("Sleep");      // It sets the text of the button to sleep
+                        SleepMode = true;       // And it sets the boolean value to true.
+
+                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+                        {
+                            stopService(AccelService);        // Stop the service.
+                        }
+                    }
+                }
+                else        // If the watch is not charging
+                {
+                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
+                    {
+                        stopService(HRService);     // It stops the service
+                        SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
+                        SLEEP.setText("Sleep");      // It sets the text of the button to sleep
+                        SleepMode = true;       // And it sets the boolean value to true.
+
+                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+                        {
+                            stopService(AccelService);        // Stop the service.
+                        }
                     }
 
-                }
-
-                else        // If the heart rate timer is not running
-                {
-                    startService(HRService);        // It starts the heart rate timer service
-                    SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
-                    SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
-                    SLEEP.setText("Sleep");     // It sets the text of the button to sleep
-                    SleepMode = false;      // It sets the boolean value to false.
-                    if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                    else        // If the heart rate timer is not running
                     {
-                        //startService(AccelService);        // Starts the service.
+                        startService(HRService);        // It starts the heart rate timer service
+                        SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
+                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
+                        SLEEP.setText("Sleep");     // It sets the text of the button to sleep
+                        SleepMode = false;      // It sets the boolean value to false.
+
+                        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                        {
+                            startService(AccelService);        // Starts the service.
+                        }
                     }
                 }
             }
         });
 
-        SLEEP.setOnLongClickListener(new View.OnLongClickListener()     // Listens for the sleep button to be clicked
-        {
-            @Override
-            public boolean onLongClick(View v)      // If the sleep button is clicked
-            {
-                return false;       // It just returns false.
-            }
-        });
-
-        //setAmbientEnabled();        // Keeps the screen awake.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);     // Keeps the screen awake.
 
         try     // Try doing this to keep up
         {
@@ -173,7 +208,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             int batteryPct = (level*100/scale);     // Sets the battery level as a percentage.
 
                             // Checks if the battery is currently charging.
-                            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
+                            isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
 
                             batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
@@ -220,14 +255,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
     };
 
-    private void startPedometerSensor()     // Starts the pedometer sensor
+    private void Charging()     // This is a little thank you toast.
     {
-        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
-        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
-        {
-            startService(PedomService);        // Starts the service.
-        }
+        Context context = getApplicationContext();      // Gets a context from the system.
+        CharSequence text = "Watch is Charging";       // Pop up information to the person
+        int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
+        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        toast.show();       // Shows the toast.
     }
+
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
         String data =  ("Charging at " + new SystemInformation().getTime());       // This is the format it is logged at.
@@ -260,7 +296,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     public void onEnterAmbient (Bundle ambientDetails)
     {
-
         super.onEnterAmbient(ambientDetails);
     }
 

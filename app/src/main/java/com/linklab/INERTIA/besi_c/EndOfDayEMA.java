@@ -47,11 +47,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How busy was your home?",
                     "Time spend outside your home?",
                     "How much time did you spend with other people?",
+                    "How would you rate your sleep quality?",
                     "How distressed were you overall?",
                     "How did the patient's pain interfere with your life?",
                     "How was your mood overall?",
                     "How distressed was the patient overall?",
-                    "How would you rate your sleep quality?",
             };
     private String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
@@ -59,11 +59,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Moderately", "Very", "Unsure"},
-                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     private String[] PatientQuestions =      // These are strictly the patient questions.
@@ -72,11 +72,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How busy was your home?",
                     "Time spend outside your home?",
                     "How much time did you spend with other people?",
+                    "How would you rate your sleep quality?",
                     "How distressed were you overall?",
                     "How much did pain interfere with your life?",
                     "How was your mood overall?",
                     "How distressed was your caregiver overall?",
-                    "How would you rate your sleep quality?",
             };
     private String[][] PatientAnswers =      // These are strictly the patient answers.
             {
@@ -84,11 +84,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Moderately", "Very", "Unsure"},
-                    {"Poor", "Fair", "Good", "Excellent"},
             };
 
     @Override
@@ -145,6 +145,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         {
             public void onClick(View view)      // When the res button is clicked, this is run.
             {
+                String data =  ("End Of Day EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 v.vibrate(20);      // A slight vibration for haptic feedback.
                 resTaps+=1;     // Increments the amount of taps by 1
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
@@ -190,6 +194,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 public void onClick(View view)      // When the next/submit button is clicked.
                 {
+                    String data =  ("End of Day EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     v.vibrate(20);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
@@ -204,6 +212,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 public void onClick(View view)      // When the back button is clicked.
                 {
+                    String data =  ("End of Day EMA 'Back' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     v.vibrate(20);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
