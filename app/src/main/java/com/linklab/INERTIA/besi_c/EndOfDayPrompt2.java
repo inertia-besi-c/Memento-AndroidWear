@@ -17,6 +17,8 @@ import java.util.TimerTask;
 public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EMA prompt after the first one was snoozed.
 {
     private PowerManager.WakeLock wakeLock;     // Starts the power manager in the system.
+    private Timer promptTimeOut = new Timer();
+    private Vibrator v;
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock timer.
 
     @Override
@@ -33,13 +35,13 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
         v.vibrate(600);     // Vibrates for the specified amount of milliseconds.
 
         Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
-        Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.
+        final Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.
         Button dismiss = findViewById(R.id.Dismiss);        // Sets the button dismiss to the variable dismiss.
 
         proceed.setOnClickListener(new View.OnClickListener()       // Constantly listens to the proceed button and waits until it is clicked.
         {
             @Override
-            public void onClick(View v)     // When it is clicked, this is run
+            public void onClick(View view)     // When it is clicked, this is run
             {
                 String data =  ("Second End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
@@ -54,7 +56,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
         snooze.setOnClickListener(new View.OnClickListener()       // Constantly listens to the snooze button and waits until it is clicked.
         {
             @Override
-            public void onClick(View v)     // When it is clicked, this is run
+            public void onClick(View view)     // When it is clicked, this is run
             {
                 String data =  ("Second End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
@@ -77,7 +79,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
         dismiss.setOnClickListener(new View.OnClickListener()       // Constantly listens to the dismiss button and waits until it is clicked.
         {
             @Override
-            public void onClick(View v)     // WHen it is clicked this is run.
+            public void onClick(View view)     // WHen it is clicked this is run.
             {
                 String data =  ("Second End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
@@ -87,6 +89,13 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             }
         });
 
+        promptTimeOut.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                snooze.performClick();
+            }
+        },new Preferences().EoDPrompt_TimeOut);
+
         setAmbientEnabled();        // Enables the ambient mode on the system.
         setAutoResumeEnabled(true);
     }
@@ -95,6 +104,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
     public void onDestroy()     // When the system is destroyed this is run
     {
         wakeLock.release();     // Kills the wakelock.
+        promptTimeOut.cancel(); // Cancels snooze timer
         super.onDestroy();      // Kills the service.
     }
 }
