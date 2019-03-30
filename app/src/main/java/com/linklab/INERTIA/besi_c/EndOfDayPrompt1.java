@@ -17,6 +17,8 @@ import java.util.Timer;
 public class EndOfDayPrompt1 extends WearableActivity        // This is the class that starts the first EOD-EMA prompt.
 {
     private PowerManager.WakeLock wakeLock;     // This is the power regulator of the system.
+    private Timer promptTimeOut = new Timer();
+    private Vibrator v;
     @SuppressLint("WakelockTimeout")        // Suppresses the error from the wakelock.
 
     @Override
@@ -29,11 +31,11 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD-EMA Prompt 1: WakeLock");        // The wakelock that turns on the screen.
         wakeLock.acquire();     // Gets the system to turn on the screen.
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);        // The vibrator that provides haptic feedback.
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);        // The vibrator that provides haptic feedback.
         v.vibrate(600);     // Vibrates for 600 milliseconds.
 
         Button proceed = findViewById(R.id.Proceed);    // Sets a variable equal to the Proceed button
-        Button snooze = findViewById(R.id.Snooze);      // Sets a variable equal to the Snooze button
+        final Button snooze = findViewById(R.id.Snooze);      // Sets a variable equal to the Snooze button
         Button dismiss = findViewById(R.id.Dismiss);    // Sets a variable equal to the Dismiss button
         dismiss.setVisibility(View.INVISIBLE);      // Set the Dismiss button to tbe invisible because it is not needed in this activity.
 
@@ -75,13 +77,22 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
             }
         });
 
+        promptTimeOut.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                snooze.performClick();
+            }
+        },new Preferences().EoDPrompt_TimeOut);
+
         setAmbientEnabled();    // Turns on the screen.
+        setAutoResumeEnabled(true);
     }
 
     @Override
     public void onDestroy()     // When the activity is killed, it calls the onDestroy function.
     {
         wakeLock.release();     // Releases the wakelock.
+        promptTimeOut.cancel(); // Cancels snooze timer
         super.onDestroy();      // Kills all methods.
     }
 }

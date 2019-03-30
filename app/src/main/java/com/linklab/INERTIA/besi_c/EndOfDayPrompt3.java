@@ -11,9 +11,14 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD EMA that is run for the third and last time.
 {
     private PowerManager.WakeLock wakeLock;     // Starts the power manager and the wakelock from the system.
+    private Timer promptTimeOut = new Timer();
+    private Vibrator v;
     @SuppressLint({"WakelockTimeout", "SetTextI18n"})       // Suppresses the timeouts.
 
     @Override
@@ -26,11 +31,11 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 3:wakeLock");     // The system is started with a full wakelock.
         wakeLock.acquire();     // Keeps the wakelock from a timeout.
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Starts the vibrator service from the system
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Starts the vibrator service from the system
         v.vibrate(600);     // Vibrates for the specified amount of time in milliseconds.
 
         Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
-        Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.
+        final Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.
         Button dismiss = findViewById(R.id.Dismiss);        // Sets the button dismiss to the variable dismiss.
 
         dismiss.setVisibility(View.INVISIBLE);      // Hides the dismiss button from view and disables the button.
@@ -40,7 +45,7 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
         proceed.setOnClickListener(new View.OnClickListener()       // Constantly listens to the proceed button, If proceed is clicked
         {
             @Override
-            public void onClick(View v)     // When it is clicked.
+            public void onClick(View view)     // When it is clicked.
             {
                 String data =  ("Third End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
@@ -55,7 +60,7 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
         snooze.setOnClickListener(new View.OnClickListener()        // Constantly listens until the snooze button is clicked.
         {
             @Override
-            public void onClick(View v)     // If the button is clicked
+            public void onClick(View view)     // If the button is clicked
             {
                 String data =  ("Third End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
@@ -65,13 +70,22 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
             }
         });
 
+        promptTimeOut.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                snooze.performClick();
+            }
+        },new Preferences().EoDPrompt_TimeOut);
+
         setAmbientEnabled();        // Makes the system ambient.
+        setAutoResumeEnabled(true);
     }
 
     @Override
     public void onDestroy()     // When the system is destroyed.
     {
         wakeLock.release();     // The wakelock is released.
+        promptTimeOut.cancel(); // Cancels dismiss timer
         super.onDestroy();      // The service is killed.
     }
 }

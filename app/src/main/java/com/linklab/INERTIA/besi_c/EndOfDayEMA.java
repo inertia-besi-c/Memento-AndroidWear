@@ -157,6 +157,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Allows the screen to be on.
+        setAutoResumeEnabled(true);
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
@@ -259,7 +260,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     {
         Context context = getApplicationContext();      // Gets a context from the system.
         CharSequence text = "Thank You!";       // Pop up information to the person
-        int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
+        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
         Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.
