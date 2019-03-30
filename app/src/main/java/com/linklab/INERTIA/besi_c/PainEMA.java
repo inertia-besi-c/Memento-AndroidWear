@@ -66,7 +66,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
-                    "Did you take opioid for the pain?"
+                    "Did you take an opioid for the pain?"
             };
     private String[][] PatientAnswers =         // These are the patient answers in order.
             {
