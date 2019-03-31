@@ -141,7 +141,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Keeps the screen awake when working.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);          // Resumes the main activity.
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.

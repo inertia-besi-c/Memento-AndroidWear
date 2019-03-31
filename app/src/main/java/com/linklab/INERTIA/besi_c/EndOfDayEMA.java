@@ -46,6 +46,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How active were you?",
                     "How busy was your home?",
                     "Time spent outside your home?",
+                    "Time spent with the patient?",
                     "How much time did you spend with other people?",
                     "How would you rate your sleep quality?",
                     "How did the patient's pain interfere with your life?",
@@ -57,6 +58,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
@@ -71,6 +73,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     "How active were you?",
                     "How busy was your home?",
                     "Time spent outside your home?",
+                    "Time spent with the caregiver?",
                     "How much time did you spend with other people?",
                     "How would you rate your sleep quality?",
                     "How much did pain interfere with your life?",
@@ -82,6 +85,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"Not at all", "A little", "Moderately", "Very"},
+                    {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
@@ -157,7 +161,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Allows the screen to be on.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);     // Resumes the main activity.
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.

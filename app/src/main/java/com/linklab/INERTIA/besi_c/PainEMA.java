@@ -145,7 +145,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Keeps the screen awake when working.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);     // Resumes the main activity.
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.

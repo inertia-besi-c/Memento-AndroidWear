@@ -12,11 +12,9 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,16 +34,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
     boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
 
     @SuppressLint("WakelockTimeout")        // Suppresses errors.
+
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
-        //PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        //PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
-        //wakeLock.acquire();      // The screen turns off after the timeout is passed.
+//        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
+//        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
+//        wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
+
         new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
@@ -64,7 +64,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
         {
-            //startService(AccelService);        // Starts the service.
+            startService(AccelService);        // Starts the service.
         }
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
@@ -93,7 +93,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
-        SLEEP.setOnClickListener(new View.OnClickListener()        // Listens for the SLEEP button "SLEEP" to be clicked. (Coming Soon)
+        SLEEP.setOnClickListener(new View.OnClickListener()        // Listens for the SLEEP button "SLEEP" to be clicked.
         {
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
             public void onClick(View v)     // When the sleep button is clicked
@@ -105,6 +105,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 if (isCharging)     // Checks if the watch is charging
                 {
                     Charging();     // Calls the charging method to inform the person
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         stopService(HRService);     // It stops the service
@@ -145,7 +146,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
                         {
-                            //startService(AccelService);        // Starts the service.
+                            startService(AccelService);        // Starts the service.
                         }
                     }
                 }
@@ -163,40 +164,30 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // Do nothing
         }
 
-        String[] Required_Permissions = {
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.BODY_SENSORS,
-                Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.CHANGE_WIFI_STATE,
-                Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.CHANGE_NETWORK_STATE
-        };
-        boolean needPermissions = false;
-        for (String permission : Required_Permissions )
+        String[] Required_Permissions =     // Checks if Device has permission to work on device.
         {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,     // This is to access the storage
+                Manifest.permission.BODY_SENSORS,       // This is to access the sensors of the device
+                Manifest.permission.ACCESS_WIFI_STATE,      // This is to access the wifi of the device.
+                Manifest.permission.CHANGE_WIFI_STATE,      // This is to change the wifi state of the device.
+                Manifest.permission.ACCESS_NETWORK_STATE,       // This is to access the network
+                Manifest.permission.CHANGE_NETWORK_STATE        // This is to change the network setting of the device.
+        };
+
+        boolean needPermissions = false;        // To begin the permission is set to false.
+
+        for (String permission : Required_Permissions )     // For each of the permission listed above.
+        {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)       // Check if they have permission to work on the device.
             {
-                needPermissions = true;
+                needPermissions = true;     // if they do, grant them permission
             }
         }
 
-        if (needPermissions)
+        if (needPermissions)        // When they have permission
         {
-            ActivityCompat.requestPermissions(this,Required_Permissions,0);
+            ActivityCompat.requestPermissions(this, Required_Permissions,0);     // Allow them to work on device.
         }
-
-//        // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-//        {
-//            // Permission is not granted, Request permissions
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-//        }
-//        // Checks if device has permission to read Body Sensor Data
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) != PackageManager.PERMISSION_GRANTED)
-//        {
-//            // Permission is not granted, Request permissions
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BODY_SENSORS}, 0);
-//        }
     }
 
     Thread time_updater = new Thread()    /* This Updates the Date and Time Every second when UI is in the foreground */
@@ -237,18 +228,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
 
-                            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-
-                            Log.i("Wif","isWifiEnabled: " + wifi.isWifiEnabled());
+                            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
 
                             if (isCharging)     // If the battery is charging
                             {
-                                if (!wifi.isWifiEnabled())
+                                if (!wifi.isWifiEnabled())      // If the wifi is not enabled
                                 {
-                                    Log.i("Wifi","Is Not Enabled");
-                                    wifi.setWifiEnabled(true);
-                                    Log.i("Wifi","Wifi should've been turned on");
+                                    wifi.setWifiEnabled(true);      // Enable the wifi.
                                 }
+
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
                                     if (!SleepMode)     // If it is not in sleep mode
@@ -257,17 +245,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                         LogActivityCharge();        // Call the charging method to start logging.
                                     }
 
-                                    BatteryCharge = true;       // Ser the battery charge status to true.
+                                    BatteryCharge = true;       // Sets the battery charge status to true.
                                 }
                             }
+
                             else        // If the watch is not charging.
                             {
-                                if (wifi.isWifiEnabled())
+                                if (wifi.isWifiEnabled())       // If the wifi system is enabled.
                                 {
-                                    Log.i("Wifi","Wifi is enabled");
-                                    wifi.setWifiEnabled(false);
-                                    Log.i("Wifi","Wifi should've been disabled");
+                                    wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
+
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
@@ -280,6 +268,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 }
                                 stepActivity.WriteData();       // Else just keep writing tho the file.
                             }
+
                             else        // If it is not in sleep mode.
                             {
                                 stepActivity.WriteData();       // Keep writing the data.
@@ -295,7 +284,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
     };
 
-    private void Charging()     // This is a little thank you toast.
+    private void Charging()     // This is a little charging toast notification.
     {
         Context context = getApplicationContext();      // Gets a context from the system.
         CharSequence text = "Disabled while charging";       // Pop up information to the person
@@ -334,9 +323,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
     }
 
     @Override
-    public void onEnterAmbient (Bundle ambientDetails)
+    public void onEnterAmbient (Bundle ambientDetails)      // When you enter ambient mode
     {
-        super.onEnterAmbient(ambientDetails);
+        super.onEnterAmbient(ambientDetails);       // Set it to the ambient details set.
     }
 
     @Override
@@ -347,7 +336,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             startService(PedomService);        // Starts the service.
         }
-        super.onResume();
+        super.onResume();       // Restarts the thread left.
     }
 
 
