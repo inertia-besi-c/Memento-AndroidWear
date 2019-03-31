@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
