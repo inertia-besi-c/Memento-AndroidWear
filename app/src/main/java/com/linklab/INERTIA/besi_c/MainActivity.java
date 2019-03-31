@@ -9,12 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,9 +39,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
-        wakeLock.acquire();      // The screen turns off after the timeout is passed.
+        //PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
+        //PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
+        //wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
@@ -161,18 +163,40 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // Do nothing
         }
 
-        // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        String[] Required_Permissions = {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.BODY_SENSORS,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.CHANGE_NETWORK_STATE
+        };
+        boolean needPermissions = false;
+        for (String permission : Required_Permissions )
         {
-            // Permission is not granted, Request permissions
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+            {
+                needPermissions = true;
+            }
         }
-        // Checks if device has permission to read Body Sensor Data
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) != PackageManager.PERMISSION_GRANTED)
+
+        if (needPermissions)
         {
-            // Permission is not granted, Request permissions
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BODY_SENSORS}, 0);
+            ActivityCompat.requestPermissions(this,Required_Permissions,0);
         }
+
+//        // Checks if Device has permission to write to external data (sdcard), if it does not it requests the permission from device
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+//        {
+//            // Permission is not granted, Request permissions
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+//        }
+//        // Checks if device has permission to read Body Sensor Data
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS) != PackageManager.PERMISSION_GRANTED)
+//        {
+//            // Permission is not granted, Request permissions
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BODY_SENSORS}, 0);
+//        }
     }
 
     Thread time_updater = new Thread()    /* This Updates the Date and Time Every second when UI is in the foreground */
@@ -213,8 +237,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
 
+                            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+                            Log.i("Wif","isWifiEnabled: " + wifi.isWifiEnabled());
+
                             if (isCharging)     // If the battery is charging
                             {
+                                if (!wifi.isWifiEnabled())
+                                {
+                                    Log.i("Wifi","Is Not Enabled");
+                                    wifi.setWifiEnabled(true);
+                                    Log.i("Wifi","Wifi should've been turned on");
+                                }
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
                                     if (!SleepMode)     // If it is not in sleep mode
@@ -228,6 +262,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             }
                             else        // If the watch is not charging.
                             {
+                                if (wifi.isWifiEnabled())
+                                {
+                                    Log.i("Wifi","Wifi is enabled");
+                                    wifi.setWifiEnabled(false);
+                                    Log.i("Wifi","Wifi should've been disabled");
+                                }
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
@@ -298,6 +338,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
     {
         super.onEnterAmbient(ambientDetails);
     }
+
+    @Override
+    public void onResume()
+    {
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
+        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
+        {
+            startService(PedomService);        // Starts the service.
+        }
+        super.onResume();
+    }
+
 
     @Override
     protected void onStop()     // To stop the activity.
