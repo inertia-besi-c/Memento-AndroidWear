@@ -45,12 +45,13 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                     "How active were you?",
                     "How busy was your home?",
-                    "Time spend outside your home?",
-                    "How much time did you spend with other people?",
+                    "Time spent outside your home?",
+                    "Time spent with the patient?",
+                    "Time spent with other people?",
                     "How would you rate your sleep quality?",
-                    "How distressed were you overall?",
                     "How did the patient's pain interfere with your life?",
                     "How was your mood overall?",
+                    "How distressed were you overall?",
                     "How distressed was the patient overall?",
             };
     private String[][] CaregiverAnswers =      // These are strictly the care giver answers.
@@ -59,23 +60,25 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
-                    {"Poor", "Fair", "Good", "Excellent"},
-                    {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
-                    {"None", "A little", "Moderately", "Very", "Unsure"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
             };
 
     private String[] PatientQuestions =      // These are strictly the patient questions.
             {
                     "How active were you?",
                     "How busy was your home?",
-                    "Time spend outside your home?",
-                    "How much time did you spend with other people?",
+                    "Time spent outside your home?",
+                    "Time spent with the caregiver?",
+                    "Time spent with other people?",
                     "How would you rate your sleep quality?",
-                    "How distressed were you overall?",
                     "How much did pain interfere with your life?",
                     "How was your mood overall?",
+                    "How distressed were you overall?",
                     "How distressed was your caregiver overall?",
             };
     private String[][] PatientAnswers =      // These are strictly the patient answers.
@@ -84,11 +87,12 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
-                    {"Poor", "Fair", "Good", "Excellent"},
-                    {"Not at all", "A little", "Moderately", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
-                    {"None", "A little", "Moderately", "Very", "Unsure"},
+                    {"None", "A little", "Medium", "A lot"},
+                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
             };
 
     @Override
@@ -157,7 +161,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Allows the screen to be on.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);     // Resumes the main activity.
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.

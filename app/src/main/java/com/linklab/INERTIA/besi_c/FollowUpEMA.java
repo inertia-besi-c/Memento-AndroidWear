@@ -58,7 +58,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private String[] PatientQuestions =         // These are the patient questions in order.
             {
-                    "Are you still having cancer pain now??",
+                    "Are you still having cancer pain now?",
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
@@ -140,7 +140,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Keeps the screen awake when working.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);          // Resumes the main activity.
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.

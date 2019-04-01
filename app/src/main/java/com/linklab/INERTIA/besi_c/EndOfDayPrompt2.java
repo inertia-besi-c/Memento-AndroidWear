@@ -97,7 +97,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
         },new Preferences().EoDPrompt_TimeOut);
 
         setAmbientEnabled();        // Enables the ambient mode on the system.
-        setAutoResumeEnabled(true);
+        setAutoResumeEnabled(true);     // Resumes the main activity.
     }
 
     @Override
