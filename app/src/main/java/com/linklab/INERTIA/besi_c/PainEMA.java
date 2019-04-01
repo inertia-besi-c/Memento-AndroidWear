@@ -271,7 +271,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
         EMARemindertimer.cancel();      // Cancels the EMA reminder timer.
         Context context = getApplicationContext();      // Gets a context from the system.
         CharSequence text = "Thank You!";       // Pop up information to the person
-        //CharSequence text = UserResponses[Questions.length - 1].toLowerCase();
         int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
         Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
         toast.show();       // Shows the toast.
