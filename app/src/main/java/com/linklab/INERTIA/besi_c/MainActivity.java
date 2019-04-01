@@ -239,15 +239,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
-                            Log.i("Wif","isWifiEnabled: " + wifi.isWifiEnabled());
+                            //Log.i("Wif","isWifiEnabled: " + wifi.isWifiEnabled());
+                            //Log.i("BatteryLevel",new SystemInformation().getBatteryLevel(getApplicationContext()));
 
                             if (isCharging)     // If the battery is charging
                             {
                                 if (!wifi.isWifiEnabled())
                                 {
-                                    Log.i("Wifi","Is Not Enabled");
+                                    //Log.i("Wifi","Is Not Enabled");
                                     wifi.setWifiEnabled(true);
-                                    Log.i("Wifi","Wifi should've been turned on");
+                                    //Log.i("Wifi","Wifi should've been turned on");
                                 }
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
@@ -264,9 +265,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             {
                                 if (wifi.isWifiEnabled())
                                 {
-                                    Log.i("Wifi","Wifi is enabled");
+                                    //Log.i("Wifi","Wifi is enabled");
                                     wifi.setWifiEnabled(false);
-                                    Log.i("Wifi","Wifi should've been disabled");
+                                    //Log.i("Wifi","Wifi should've been disabled");
+                                }
+                                if (BatteryCharge)
+                                {
+                                    LogActivityCharge();        // Call the charging method to start logging.
                                 }
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
@@ -306,8 +311,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
-        String data =  ("Charging at " + new SystemInformation().getTime());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger("Charging_Time.csv",data);      // Logs it into a file called Charging time.
+        String timeStamp = new SystemInformation().getTime();
+        String data = "";
+        if (isCharging)
+        {
+            data =  (timeStamp + ",Charging");
+        }
+        else
+        {
+            data =  (timeStamp + ",Unplugged");
+        }
+        DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.
         datalog.LogData();      // Saves the data into the directory.
     }
 

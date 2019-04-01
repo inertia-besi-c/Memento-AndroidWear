@@ -77,7 +77,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Followup:wakeLock");        // It initiates a full wakelock to turn on the screen.
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "FollowUpEMA: WakeLock");        // The wakelock that turns on the screen.
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
@@ -85,7 +85,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
-
 
         EMARemindertimer = new Timer();     // Creates the EMA reminder timer.
 
