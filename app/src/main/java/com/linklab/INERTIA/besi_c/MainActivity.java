@@ -82,7 +82,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
                 startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
         });
