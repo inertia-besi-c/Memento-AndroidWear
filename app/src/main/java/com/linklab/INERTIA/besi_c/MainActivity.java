@@ -82,15 +82,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                if (isCharging)        // This is where the role is set, it checks if the role is PT
-                {
-                    Charging();         // Calls the toast to show the system is charging.
-                }
-                else        // If the system is not charging.
-                {
-                    Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
-                    startActivity(StartEMAActivity);    // Starts the Pain EMA file
-                }
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainScreen.class);      // Links to the Pain EMA File
+                startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
         });
 
