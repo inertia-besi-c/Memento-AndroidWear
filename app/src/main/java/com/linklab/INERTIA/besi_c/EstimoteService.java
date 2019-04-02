@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static com.linklab.INERTIA.besi_c.DataLogger.writeToFile;
 
+/* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
 public class EstimoteService extends Service
 {
     private BeaconManager beaconManager;
@@ -52,7 +53,7 @@ public class EstimoteService extends Service
         {
             public void run()       // Runs the imported file based on the timer specified.
             {
-                stopSelf();    // Stops the Heart Rate Sensor
+                onDestroy();        // Destroys the service
             }
         }, Duration);       // Waits for this amount of duration.
 

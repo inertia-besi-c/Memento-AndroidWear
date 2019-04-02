@@ -1,7 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -28,8 +27,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
     boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
-    int sensecount = 0;
-
     @SuppressLint("WakelockTimeout")        // Suppresses errors.
 
     @Override
@@ -163,10 +160,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 Manifest.permission.CHANGE_WIFI_STATE,      // This is to change the wifi state of the device.
                 Manifest.permission.ACCESS_NETWORK_STATE,       // This is to access the network
                 Manifest.permission.CHANGE_NETWORK_STATE,        // This is to change the network setting of the device.
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN
+                Manifest.permission.ACCESS_COARSE_LOCATION,     // This is to access the location in a general sense
+                Manifest.permission.ACCESS_FINE_LOCATION,       // This is to access the location in a more specific manner
+                Manifest.permission.BLUETOOTH,      // This is to access th bluetooth
+                Manifest.permission.BLUETOOTH_ADMIN     // This is access the bluetooth and allow changes
         };
 
         boolean needPermissions = false;        // To begin the permission is set to false.
@@ -202,7 +199,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         @Override
                         public void run()       // This is run.
                         {
-                            SystemInformation systemInformation = new SystemInformation();
+                            SystemInformation systemInformation = new SystemInformation();      // Gets the methods from the system information class.
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
 
                             time.setText(systemInformation.getTime());       // The current time is set to show on the time text view.
@@ -212,11 +209,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             batteryLevel.setText("Battery: " + String.valueOf(systemInformation.getBatteryLevel(getApplicationContext())) + "%");       // Sets the text view for the battery to show the battery level.
 
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
-                            BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
+                            BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
 
-                            if (!bluetooth.isEnabled())
+                            if (!bluetooth.isEnabled())     // If the bluetooth is not enabled on the watch
                             {
-                                bluetooth.enable();
+                                bluetooth.enable();     // Enable it.
                             }
 
                             if (isCharging)     // If the battery is charging
@@ -284,16 +281,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
-        String data;
-        String timeStamp = new SystemInformation().getTimeStamp();
+        String data;        // This is the data to be logged
+        String timeStamp = new SystemInformation().getTimeStamp();      // This is the time stamp from the system
 
-        if (isCharging)
+        if (isCharging)     // If the system is charging
         {
-            data =  (timeStamp + ",Charging");
+            data =  (timeStamp + ",Plugged");      // Data is the time that we are charging
         }
-        else
+        else      // If we are not charging
         {
-            data =  (timeStamp + ",Unplugged");
+            data =  (timeStamp + ",Unplugged");     // Data is the time that we are not charging
         }
 
         DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.

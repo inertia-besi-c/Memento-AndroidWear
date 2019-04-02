@@ -4,6 +4,7 @@ package com.linklab.INERTIA.besi_c;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
 public class Beacon implements Parcelable
 {
     private int id;

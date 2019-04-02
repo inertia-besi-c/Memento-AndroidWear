@@ -144,7 +144,7 @@ public class DataLogger     // A function that runs the data logging data
         return text.toString();     // Return the text to the string.
     }
 
-    public static boolean writeToFile(Date time1, String data)
+    public static boolean writeToFile(Date time1, String data)      /* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
     {
         boolean flag = true;
         String path = Environment.getExternalStorageDirectory() + "/BESI_C";
