@@ -69,7 +69,6 @@ public class EstimoteService extends Service
             public void onServiceReady()
             {
                 beaconManager.startRanging(region);
-                Log.i("beacon connection ", "");
             }
         });
 
