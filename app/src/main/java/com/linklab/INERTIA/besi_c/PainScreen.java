@@ -30,7 +30,7 @@ public class PainScreen extends WearableActivity        // This is the screen in
             @Override
             public void onClick(View v)     // When it is clicked, it runs these codes.
             {
-                String data =  ("Pain Screen 'Pain' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Pain Screen 'Pain' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -45,7 +45,7 @@ public class PainScreen extends WearableActivity        // This is the screen in
             @Override
             public void onClick(View v)     // When it is clicked, it runs these codes.
             {
-                String data =  ("Pain Screen 'Cancel' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Pain Screen 'Cancel' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
