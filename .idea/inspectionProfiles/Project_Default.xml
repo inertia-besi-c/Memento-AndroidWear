@@ -6,5 +6,16 @@
     <inspection_tool class="EmptyStatementBody" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_reportEmptyBlocks" value="true" />
     </inspection_tool>
+    <inspection_tool class="MismatchedCollectionQueryUpdate" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="queryNames">
+        <value />
+      </option>
+      <option name="updateNames">
+        <value />
+      </option>
+      <option name="ignoredClasses">
+        <value />
+      </option>
+    </inspection_tool>
   </profile>
 </component>

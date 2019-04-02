@@ -111,7 +111,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         {
             public void onClick(View view)      // When the res button is clicked, this is run.
             {
-                String data =  ("Followup EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Followup EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -179,7 +179,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 public void onClick(View view)      // When the next/submit button is clicked.
                 {
-                    String data =  ("Followup EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                    String data =  ("Followup EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -204,7 +204,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 public void onClick(View view)      // When the back button is clicked.
                 {
-                    String data =  ("Pain EMA 'Back' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                    String data =  ("Pain EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -269,7 +269,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private void LogActivity()      // Logs the activity of the person.
     {
-        String data =  (new SystemInformation().getTime()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
+        String data =  (new SystemInformation().getTimeStamp()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
     }

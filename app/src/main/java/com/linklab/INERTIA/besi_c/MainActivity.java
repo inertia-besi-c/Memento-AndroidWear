@@ -1,17 +1,16 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,11 +20,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
@@ -33,21 +27,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
     boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
-
     @SuppressLint("WakelockTimeout")        // Suppresses errors.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
-//        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-//        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
-//        wakeLock.acquire();      // The screen turns off after the timeout is passed.
-
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
-
-        new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
         SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
@@ -74,11 +61,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(PedomService);        // Starts the service.
         }
 
+        final Intent EstimService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote Timer service.
+        if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
+        {
+            startService(EstimService);        // Starts the service.
+        }
+
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
-                String data =  ("Main Activity 'Start' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Main Activity 'Start' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -92,7 +85,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
             public void onClick(View v)     // When the sleep button is clicked
             {
-                String data =  ("Main Activity 'Sleep' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Main Activity 'Sleep' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -114,6 +107,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         }
                     }
                 }
+
                 else        // If the watch is not charging
                 {
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
@@ -165,12 +159,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 Manifest.permission.ACCESS_WIFI_STATE,      // This is to access the wifi of the device.
                 Manifest.permission.CHANGE_WIFI_STATE,      // This is to change the wifi state of the device.
                 Manifest.permission.ACCESS_NETWORK_STATE,       // This is to access the network
-                Manifest.permission.CHANGE_NETWORK_STATE        // This is to change the network setting of the device.
+                Manifest.permission.CHANGE_NETWORK_STATE,        // This is to change the network setting of the device.
+                Manifest.permission.ACCESS_COARSE_LOCATION,     // This is to access the location in a general sense
+                Manifest.permission.ACCESS_FINE_LOCATION,       // This is to access the location in a more specific manner
+                Manifest.permission.BLUETOOTH,      // This is to access th bluetooth
+                Manifest.permission.BLUETOOTH_ADMIN     // This is access the bluetooth and allow changes
         };
 
         boolean needPermissions = false;        // To begin the permission is set to false.
 
-        for (String permission : Required_Permissions )     // For each of the permission listed above.
+        for (String permission : Required_Permissions)     // For each of the permission listed above.
         {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)       // Check if they have permission to work on the device.
             {
@@ -201,28 +199,22 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         @Override
                         public void run()       // This is run.
                         {
-                            DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.US);      // The time format is called in US format.
-                            DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);     // The date is called in US format.
-                            Date current = new Date();      // The current date and timer is set.
-                            time.setText(timeFormat.format(current));       // The current time is set to show on the time text view.
-                            date.setText(dateFormat.format(current));       // The current date is set to show on the date text view.
-
-                            IntentFilter battery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);     // Starts an intent that calls the battery level service.
-                            Intent batteryStatus = getApplicationContext().registerReceiver(null, battery);     // This gets the battery status from that service.
-
-                            assert batteryStatus != null;       // Asserts that the battery level is not null.
-                            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);      // Initializes an integer value for the battery level
-                            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);      // Scales the battery level to 100 from whatever default value it is.
-                            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);        //  Gets extra data from the battery level service.
-                            int batteryPct = (level*100/scale);     // Sets the battery level as a percentage.
-
-                            // Checks if the battery is currently charging.
-                            isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || status == BatteryManager.BATTERY_PLUGGED_AC;
-
-                            batteryLevel.setText("Battery: " + String.valueOf(batteryPct) + "%");       // Sets the text view for the battery to show the battery level.
+                            SystemInformation systemInformation = new SystemInformation();      // Gets the methods from the system information class.
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
 
+                            time.setText(systemInformation.getTime());       // The current time is set to show on the time text view.
+                            date.setText(systemInformation.getDate());       // The current date is set to show on the date text view.
+                            isCharging = systemInformation.isSystemCharging(getApplicationContext());     // Checks if the battery is currently charging.
+
+                            batteryLevel.setText("Battery: " + String.valueOf(systemInformation.getBatteryLevel(getApplicationContext())) + "%");       // Sets the text view for the battery to show the battery level.
+
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
+                            BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
+
+                            if (!bluetooth.isEnabled())     // If the bluetooth is not enabled on the watch
+                            {
+                                bluetooth.enable();     // Enable it.
+                            }
 
                             if (isCharging)     // If the battery is charging
                             {
@@ -289,16 +281,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
-        String timeStamp = new SystemInformation().getTime();
-        String data = "";
-        if (isCharging)
+        String data;        // This is the data to be logged
+        String timeStamp = new SystemInformation().getTimeStamp();      // This is the time stamp from the system
+
+        if (isCharging)     // If the system is charging
         {
-            data =  (timeStamp + ",Charging");
+            data =  (timeStamp + ",Plugged");      // Data is the time that we are charging
         }
-        else
+        else      // If we are not charging
         {
-            data =  (timeStamp + ",Unplugged");
+            data =  (timeStamp + ",Unplugged");     // Data is the time that we are not charging
         }
+
         DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.
         datalog.LogData();      // Saves the data into the directory.
     }
