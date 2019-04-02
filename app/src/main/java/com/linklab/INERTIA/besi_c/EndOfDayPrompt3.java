@@ -18,7 +18,7 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
 {
     private PowerManager.WakeLock wakeLock;     // Starts the power manager and the wakelock from the system.
     private Timer promptTimeOut = new Timer();
-    private Vibrator v;
+
     @SuppressLint({"WakelockTimeout", "SetTextI18n"})       // Suppresses the timeouts.
 
     @Override
@@ -31,7 +31,7 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 3:wakeLock");     // The system is started with a full wakelock.
         wakeLock.acquire();     // Keeps the wakelock from a timeout.
 
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Starts the vibrator service from the system
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(600);     // Vibrates for the specified amount of time in milliseconds.
 
         Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
@@ -51,6 +51,10 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
+                String data1 =  ("End of Day prompt 3 started End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger("Sensor_Activity.csv",data1);      // Logs it into a file called System Activity.
+                datalog1.LogData();      // Saves the data into the directory.
+
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Starts the EOD EMA file
                 startActivity(StartEMAActivity);    // Moves to the new activity.
                 finish();       // Finishes the EOD EMA prompt 3.
@@ -66,13 +70,23 @@ public class EndOfDayPrompt3 extends WearableActivity       // This is the EOD E
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
+                String data1 =  ("End of Day prompt 3 Dismissed End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger("Sensor_Activity.csv",data1);      // Logs it into a file called System Activity.
+                datalog1.LogData();      // Saves the data into the directory.
+
                 finish();       // Finish and end the service.
             }
         });
 
-        promptTimeOut.schedule(new TimerTask() {
+        promptTimeOut.schedule(new TimerTask()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
+                String data =  ("End of Day prompt 3 dismissed End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 snooze.performClick();
             }
         },new Preferences().EoDPrompt_TimeOut);

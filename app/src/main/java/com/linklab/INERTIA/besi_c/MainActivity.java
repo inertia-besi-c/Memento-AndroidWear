@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -46,24 +47,40 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
         {
+            String data =  ("Main Activity Started Heart Rate Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             startService(HRService);        // That starts the heartrate sensor if it is not already running.
         }
 
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
         {
+            String data =  ("Main Activity Started Accelerometer Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             startService(AccelService);        // Starts the service.
         }
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
+            String data =  ("Main Activity Started Pedometer Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             startService(PedomService);        // Starts the service.
         }
 
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
+            String data =  ("Main Activity Started Estimote Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             startService(EstimService);        // Starts the service.
         }
 
@@ -95,6 +112,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
+                        String dataHR =  ("Sleep Button Stopped Heart Rate Sensor while charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger("Sensor_Activity.csv",dataHR);      // Logs it into a file called System Activity.
+                        datalogHR.LogData();      // Saves the data into the directory.
+
                         stopService(HRService);     // It stops the service
                         SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                         SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
@@ -103,6 +124,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
                         {
+                            String dataA =  ("Sleep Button Stopped Accelerometer Sensor while charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
+                            datalogA.LogData();      // Saves the data into the directory.
+
                             stopService(AccelService);        // Stop the service.
                         }
                     }
@@ -112,6 +137,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 {
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
+                        String dataHR =  ("Sleep Button Stopped Heart Rate Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger("Sensor_Activity.csv",dataHR);      // Logs it into a file called System Activity.
+                        datalogHR.LogData();      // Saves the data into the directory.
+
                         stopService(HRService);     // It stops the service
                         SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                         SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
@@ -120,12 +149,20 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
                         {
+                            String dataA =  ("Sleep Button Stopped Accelerometer Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
+                            datalogA.LogData();      // Saves the data into the directory.
+
                             stopService(AccelService);        // Stop the service.
                         }
                     }
 
                     else        // If the heart rate timer is not running
                     {
+                        String dataHR =  ("Sleep Button Started Heart Rate Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger("Sensor_Activity.csv",dataHR);      // Logs it into a file called System Activity.
+                        datalogHR.LogData();      // Saves the data into the directory.
+
                         startService(HRService);        // It starts the heart rate timer service
                         SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
                         SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
@@ -134,6 +171,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
                         {
+                            String dataA =  ("Sleep Button Started Accelerometer Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
+                            datalogA.LogData();      // Saves the data into the directory.
+
                             startService(AccelService);        // Starts the service.
                         }
                     }
@@ -213,6 +254,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (!bluetooth.isEnabled())     // If the bluetooth is not enabled on the watch
                             {
+                                String data =  ("Bluetooth enabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                datalog.LogData();      // Saves the data into the directory.
+
                                 bluetooth.enable();     // Enable it.
                             }
 
@@ -220,6 +265,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             {
                                 if (!wifi.isWifiEnabled())      // If the wifi is not enabled
                                 {
+                                    String data =  ("Wifi enabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                    datalog.LogData();      // Saves the data into the directory.
+
                                     wifi.setWifiEnabled(true);      // Enable the wifi.
                                 }
 
@@ -239,6 +288,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             {
                                 if (wifi.isWifiEnabled())       // If the wifi system is enabled.
                                 {
+                                    String data =  ("Wifi is disabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                    datalog.LogData();      // Saves the data into the directory.
+
                                     wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
 
@@ -331,8 +384,23 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
+            String data =  ("Main Activity Resuming Started Pedometer Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             startService(PedomService);        // Starts the service.
         }
+
+        final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
+        if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
+        {
+            String data =  ("Main Activity Resuming Started Estimote Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(EstimService);        // Starts the service.
+        }
+
         super.onResume();       // Restarts the thread left.
     }
 

@@ -31,6 +31,10 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         {
             public void run()       // Runs the imported file based on the timer specified.
             {
+                String data =  ("Heart Rate Sensor killed Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
                 stopSelf();    // Stops the Heart Rate Sensor
             }
         }, Duration);       // Waits for this amount of duration.

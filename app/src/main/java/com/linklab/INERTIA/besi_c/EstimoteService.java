@@ -109,7 +109,7 @@ public class EstimoteService extends Service
         });
 
         super.onStartCommand(intent, flags, startId);
-        return Service.START_STICKY;
+        return START_NOT_STICKY;
     }
 
     public class writethread extends Thread
@@ -149,10 +149,17 @@ public class EstimoteService extends Service
     @Override
     public void onDestroy()
     {
+        String data =  ("Estimote Service killed Estimote Service at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+        datalog.LogData();      // Saves the data into the directory.
+
         super.onDestroy();
         beaconManager.stopRanging(region);
         stopForeground(true);
         stopSelf();
+
+        final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a ES service intent from the sensor class.
+        startService(ESService);    // Starts the Estimote service
     }
 
     @Override

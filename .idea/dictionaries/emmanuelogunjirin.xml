@@ -15,7 +15,10 @@
       <w>pedom</w>
       <w>qcount</w>
       <w>remindertimer</w>
+      <w>sametime</w>
+      <w>starttime</w>
       <w>watchface</w>
+      <w>writethread</w>
     </words>
   </dictionary>
 </component>
