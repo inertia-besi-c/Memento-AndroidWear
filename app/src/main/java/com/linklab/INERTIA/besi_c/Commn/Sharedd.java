@@ -21,7 +21,7 @@ public class Sharedd {
         //String path = Environment.getExternalStorageDirectory() + "/estim00/data";
         String path = Environment.getExternalStorageDirectory() + "/BESI_C";
         //String fileName=  "Data_" + time1;
-        String fileName=  "Estimote.csv";
+        String fileName=  "Estimote_Data.csv";
         File file = new File(path);
 
         Log.i("Thread ", "for saving sensor samples" + Environment.getExternalStorageDirectory());

@@ -47,7 +47,7 @@ public class EstimoteService extends Service
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId )
+    public int onStartCommand(Intent intent, int flags, int startId)
     {
         ESSensorTimer.schedule( new TimerTask()     // Initializes a timer.
         {

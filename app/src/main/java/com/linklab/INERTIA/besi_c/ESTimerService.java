@@ -33,11 +33,11 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
     private void PeriodicService(boolean Stop)      // Starts the periodic data sampling.
     {
-        final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a HR service intent from the sensor class.
+        final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a ES service intent from the sensor class.
 
-        if (Stop)       // If it says stop, it kills the HRService.
+        if (Stop)       // If it says stop, it kills the ESService.
         {
-            stopService(ESService);     // Stops the Heart Rate Sensor
+            stopService(ESService);     // Stops the Estimote service
         }
         else    // Else it just keeps going.
         {
@@ -46,7 +46,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
             {
                 public void run()       // Runs the imported file based on the timer specified.
                 {
-                    startService(ESService);    // Starts the Heart Rate Sensor
+                    startService(ESService);    // Starts the Estimote service
                 }
             }, delay, period);      // Waits for this amount of delay and runs every stated period.
         }
@@ -54,11 +54,11 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
     private boolean isRunning()         // IF the system is running.
     {
-        ActivityManager ESManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Get the activity manager for heartrate.
+        ActivityManager ESManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Get the activity manager for Estimote.
 
         for (ActivityManager.RunningServiceInfo service : ESManager.getRunningServices(Integer.MAX_VALUE))      // For every running service.
         {
-            if (EstimoteService.class.getName().equals(service.service.getClassName()))     // If HRService is equal to the class name
+            if (EstimoteService.class.getName().equals(service.service.getClassName()))     // If ESService is equal to the class name
             {
                 return true;        // Return true.
             }
@@ -70,7 +70,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
     @Override
     public void onDestroy()     // When the service is destroyed.
     {
-        ESTimerService.cancel();        //  Cancels the HR Timer Service.
+        ESTimerService.cancel();        //  Cancels the ES Timer Service.
         wakeLock.release();     // Releases the wakelock
 
         if (isRunning())        // If the periodic service is running
