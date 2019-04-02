@@ -93,11 +93,16 @@
         </service>
 
         <service
-            android:name=".proximityService"
+            android:name=".EstimoteService"
             android:launchMode="singleInstance"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService">
+        </service>
+
+        <service
+            android:name=".ESTimerService"
+            android:launchMode="singleInstance" >
         </service>
 
         <activity

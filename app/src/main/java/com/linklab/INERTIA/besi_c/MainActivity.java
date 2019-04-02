@@ -13,11 +13,9 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,15 +35,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
-//        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-//        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MainActivity:wakeLock");     // This is the wakelock for the main activity.
-//        wakeLock.acquire();      // The screen turns off after the timeout is passed.
-        startEstimote();
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
         time_updater.start();       // The time updater
-
-        new DataLogger("StepActivity","no").WriteData();        // This is a data logger that logs data to a step activity file.
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
         SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
@@ -72,44 +64,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(PedomService);        // Starts the service.
         }
 
-        // Create the Handler object (on the main thread by default)
-        final Handler handler = new Handler();
-// Define the code block to be executed
-        Runnable runnableCode = new Runnable() {
-            @Override
-            public void run() {
-                // Do something here on the main thread
-                if(sensecount==0){
-                    //startHR();
-                    String data =  ("Main Activity Started Estimote" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
-                    datalog.LogData();      // Saves the data into the directory.
-                    startEstimote();
-                    sensecount++;
-                }
-
-                else{
-                    String data =  ("Main Activity Stopped Estimote" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
-                    datalog.LogData();      // Saves the data into the directory.
-                    stopEstimote();
-                    sensecount = 0;
-                }
-
-
-                Log.d("Handlers", "Called on main thread");
-                // Repeat this the same runnable code block again another 2 seconds
-                // 'this' is referencing the Runnable object
-
-                //handler.postDelayed(this, 45000); //OG code
-                handler.postDelayed(this, 30000);
-            }
-
-        };
-// Start the initial runnable task by posting through the handler
-        handler.post(runnableCode);
-
-
+        final Intent EstimService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote Timer service.
+        if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
+        {
+            startService(EstimService);        // Starts the service.
+        }
 
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
@@ -151,6 +110,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         }
                     }
                 }
+
                 else        // If the watch is not charging
                 {
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
@@ -211,7 +171,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         boolean needPermissions = false;        // To begin the permission is set to false.
 
-        for (String permission : Required_Permissions )     // For each of the permission listed above.
+        for (String permission : Required_Permissions)     // For each of the permission listed above.
         {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)       // Check if they have permission to work on the device.
             {
@@ -242,21 +202,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         @Override
                         public void run()       // This is run.
                         {
-                            SystemInformation sysinfo = new SystemInformation();
-
-
-                            time.setText(sysinfo.getTime());       // The current time is set to show on the time text view.
-                            date.setText(sysinfo.getDate());       // The current date is set to show on the date text view.
-
-                            // Checks if the battery is currently charging.
-                            isCharging = sysinfo.isSystemCharging(getApplicationContext());
-
-                            batteryLevel.setText("Battery: " + String.valueOf(sysinfo.getBatteryLevel(getApplicationContext())) + "%");       // Sets the text view for the battery to show the battery level.
+                            SystemInformation systemInformation = new SystemInformation();
                             DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
 
-                            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
+                            time.setText(systemInformation.getTime());       // The current time is set to show on the time text view.
+                            date.setText(systemInformation.getDate());       // The current date is set to show on the date text view.
+                            isCharging = systemInformation.isSystemCharging(getApplicationContext());     // Checks if the battery is currently charging.
 
+                            batteryLevel.setText("Battery: " + String.valueOf(systemInformation.getBatteryLevel(getApplicationContext())) + "%");       // Sets the text view for the battery to show the battery level.
+
+                            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
                             BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
+
                             if (!bluetooth.isEnabled())
                             {
                                 bluetooth.enable();
@@ -327,8 +284,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
+        String data;
         String timeStamp = new SystemInformation().getTimeStamp();
-        String data = "";
+
         if (isCharging)
         {
             data =  (timeStamp + ",Charging");
@@ -337,6 +295,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             data =  (timeStamp + ",Unplugged");
         }
+
         DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.
         datalog.LogData();      // Saves the data into the directory.
     }
@@ -349,22 +308,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // This is just a receiver.
         }
     };
-
-    public void startEstimote ()
-    {
-        Intent Intent1 = new Intent(this, proximityService.class); //ENABLE THIS!!!
-        Intent1.setAction("ACTION_START_SERVICE"); //ENABLE THIS!!!
-        //startForegroundService(Intent1);
-        //Toast.makeText(this,"Test",Toast.LENGTH_SHORT).show();
-        startService(Intent1); //ENABLE THIS!!!
-        //Toast.makeText(this,"Test",Toast.LENGTH_SHORT).show();
-    }
-
-    public void stopEstimote (){
-        Intent Intent1 = new Intent(this, proximityService.class);
-        Intent1.setAction("ACTION_STOP_SERVICE");
-        startService(Intent1);
-    }
 
     private boolean isRunning(Class<?> serviceClass)        // A general file that checks if a system is running.
     {
