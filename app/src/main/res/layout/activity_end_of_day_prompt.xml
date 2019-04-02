@@ -9,73 +9,86 @@
     tools:context=".EndOfDayPrompt"
     tools:deviceIds="wear">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="13dp" />
-
-        <TextView
-            android:id="@+id/Info"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Please answer the following questions. Over the past day..."
-            android:textAlignment="center"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.49"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/Proceed"
-            android:layout_width="179dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/green"
-            android:text="Proceed"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="88dp" />
-
-        <Button
-            android:id="@+id/Snooze"
-            android:layout_width="178dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="#C8B400"
-            android:text="Snooze"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/Dismiss"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Proceed" />
-
-        <Button
-            android:id="@+id/Dismiss"
-            android:layout_width="177dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/dark_red"
-            android:text="Dismiss"
-            android:textSize="18sp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="13dp" />
+
+            <TextView
+                android:id="@+id/Info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Please answer the following questions. Over the past day..."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.49"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/Proceed"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/green"
+                android:text="Proceed"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="88dp" />
+
+            <Button
+                android:id="@+id/Snooze"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#C8B400"
+                android:text="Snooze"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/Dismiss"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Proceed" />
+
+            <Button
+                android:id="@+id/Dismiss"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/dark_red"
+                android:text="Dismiss"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.wear.widget.BoxInsetLayout>

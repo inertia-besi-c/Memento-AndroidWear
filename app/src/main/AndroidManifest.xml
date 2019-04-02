@@ -17,7 +17,7 @@
     <application
         android:name=".EODTimerService"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/besi_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -46,12 +46,12 @@
 
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview"
-                android:resource="@drawable/preview_digital" >
+                android:resource="@mipmap/besi_logo" >
             </meta-data>
 
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
-                android:resource="@drawable/preview_digital_circular" >
+                android:resource="@mipmap/besi_logo" >
             </meta-data>
 
             <intent-filter>
