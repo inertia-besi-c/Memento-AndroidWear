@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.estimote.coresdk.observation.region.RegionUtils;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
-import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
 import java.text.SimpleDateFormat;
@@ -22,14 +21,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-import static com.linklab.INERTIA.besi_c.Commn.Sharedd.writeToFile;
+import static com.linklab.INERTIA.besi_c.DataLogger.writeToFile;
 
 public class EstimoteService extends Service
 {
     private BeaconManager beaconManager;
     private BeaconRegion region;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    private ArrayList<Beac> eas;
+    private ArrayList<Beacon> eas;
     Date starttime=Calendar.getInstance().getTime();
     StringBuilder strBuilder;
     public long Duration = new Preferences().ESSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
@@ -76,17 +75,17 @@ public class EstimoteService extends Service
         beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener()
         {
             @Override
-            public void onBeaconsDiscovered(BeaconRegion region, List<Beacon> list)
+            public void onBeaconsDiscovered(BeaconRegion region, List<com.estimote.coresdk.recognition.packets.Beacon> list)
             {
                 if (!list.isEmpty())
                 {
                     int t = 0;
-                    for (Beacon beacon : list)
+                    for (com.estimote.coresdk.recognition.packets.Beacon beacon : list)
                     {
                         Date dt = Calendar.getInstance().getTime();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
                         String time1 = sdf.format(dt);
-                        eas.add(new Beac(t++, list.size(), beacon.getRssi(), RegionUtils.computeAccuracy(beacon), time1));
+                        eas.add(new Beacon(t++, list.size(), beacon.getRssi(), RegionUtils.computeAccuracy(beacon), time1));
                         strBuilder.append(String.valueOf(beacon.getMajor()));
                         strBuilder.append(",");
                         strBuilder.append(String.valueOf(beacon.getRssi()));

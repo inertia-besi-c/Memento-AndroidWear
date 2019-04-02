@@ -1,7 +1,9 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
+import android.os.Environment;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 
 // src: https://developer.android.com/training/data-storage/files.html#WriteExternalStorage
 @SuppressWarnings("ALL")    // Service wide suppression for the data logger names.
@@ -139,5 +142,32 @@ public class DataLogger     // A function that runs the data logging data
             e.printStackTrace();        // Ignore this.
         }
         return text.toString();     // Return the text to the string.
+    }
+
+    public static boolean writeToFile(Date time1, String data)
+    {
+        boolean flag = true;
+        String path = Environment.getExternalStorageDirectory() + "/BESI_C";
+        String fileName = "Estimote_Data.csv";
+        File file = new File(path);
+
+        if (file.exists() == false)
+        {
+            file.mkdirs();
+        }
+
+        String filepath = path + "/" + fileName;
+
+        try
+        {
+            FileOutputStream fStream = new FileOutputStream(filepath, true);
+            fStream.write(data.getBytes());
+        }
+        catch (Exception ex)
+        {
+            flag = false;
+        }
+
+        return flag;
     }
 }
