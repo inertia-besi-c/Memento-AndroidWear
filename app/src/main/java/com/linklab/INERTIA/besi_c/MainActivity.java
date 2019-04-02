@@ -61,7 +61,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(PedomService);        // Starts the service.
         }
 
-        final Intent EstimService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote Timer service.
+        final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
             startService(EstimService);        // Starts the service.

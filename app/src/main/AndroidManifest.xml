@@ -111,8 +111,8 @@
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.HOME" />        <!-- Comment this out to be able to return to the regular home settings for the watch -->
+                <category android:name="android.intent.category.DEFAULT" />     <!-- Comment this out to be able to have the default watch activity be the default for the watch -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

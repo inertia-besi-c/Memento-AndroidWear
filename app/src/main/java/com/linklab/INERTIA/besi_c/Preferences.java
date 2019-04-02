@@ -17,7 +17,7 @@ public class Preferences
     public int FollowUpEMAReminderInterval = 5*60*1000; // How long to wait between each ping reminding user to complete ema
 
     // Settings for Daily EMA
-    public long EoDPrompt_TimeOut = 15 * 60 * 1000; // Delay before snoozing and eventually dismissing daily ema
+    public long EoDPrompt_TimeOut = 15*60*1000; // Delay before snoozing and eventually dismissing daily ema
     public int EoDEMA_Time_Hour = 21; // Hour at which the daily ema should go off
     public int EoDEMA_Time_Minute = 0; // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0; // Second of minute at which daily ema should go off
@@ -26,11 +26,11 @@ public class Preferences
 
     // Settings for Heart Rate Monitoring | Time is in ms |
     public long HRSampleDuration = 30000;   // How long should heart rate be measured each time?
-    public long HRMeasurementInterval = 5 * 60 * 1000;  // Every how often should a measurement be taken?
+    public long HRMeasurementInterval = 5*60*1000;  // Every how often should a measurement be taken?
 
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 30000;   // How long should estimote be measured each time?
-    public long ESMeasurementInterval = 30000;  // Every how often should a measurement be taken?
+    public long ESMeasurementInterval = 60000;  // Every how often should a measurement be taken?
 
 /* Settings for Log Files -- NOT YET IMPLEMENTED */
 //    public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
