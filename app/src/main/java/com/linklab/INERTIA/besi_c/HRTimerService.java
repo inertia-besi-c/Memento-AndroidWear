@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,7 +47,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
                 public void run()       // Runs the imported file based on the timer specified.
                 {
                     SystemInformation info = new SystemInformation();
-                    String data = info.getTime() + ",Discharging," + info.getBatteryLevel(getApplicationContext());
+                    String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());
                     DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.
                     datalog.LogData();      // Saves the data into the directory.
                     startService(HRService);    // Starts the Heart Rate Sensor

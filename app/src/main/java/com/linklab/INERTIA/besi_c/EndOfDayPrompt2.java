@@ -43,7 +43,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             @Override
             public void onClick(View view)     // When it is clicked, this is run
             {
-                String data =  ("Second End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Second End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -58,7 +58,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             @Override
             public void onClick(View view)     // When it is clicked, this is run
             {
-                String data =  ("Second End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Second End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -81,7 +81,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // Starts the EOD-EM
             @Override
             public void onClick(View view)     // WHen it is clicked this is run.
             {
-                String data =  ("Second End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTime());       // This is the format it is logged at.
+                String data =  ("Second End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
