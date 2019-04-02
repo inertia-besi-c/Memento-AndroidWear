@@ -30,7 +30,7 @@ public class Preferences
 
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 30000;   // How long should estimote be measured each time?
-    public long ESMeasurementInterval = 30 * 1000;  // Every how often should a measurement be taken?
+    public long ESMeasurementInterval = 30000;  // Every how often should a measurement be taken?
 
 /* Settings for Log Files -- NOT YET IMPLEMENTED */
 //    public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
