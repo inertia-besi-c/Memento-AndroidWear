@@ -4,6 +4,11 @@ package com.linklab.INERTIA.besi_c;
 
 public class Preferences
 {
+
+
+    // Settings for Deployment
+    String DeviceID = "Fossil_41mm";
+    String DeploymentID = "Test1";
     String Role = "PT";  // Role of user wearing the watch; CG for Caregiver or PT for Patient
 
     // Settings for Pain EMA | Time is in ms |

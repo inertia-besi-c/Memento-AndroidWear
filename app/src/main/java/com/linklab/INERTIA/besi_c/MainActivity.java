@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,13 +28,55 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
     boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
+    boolean runAccelService = false;
+
     @SuppressLint("WakelockTimeout")        // Suppresses errors.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
+
+        /*
+
+        **PERMISSIONS NEED TO BE CHECKED AND REQUESTED BEFORE STARTING ANY SERVICES OR DRAWING UI**
+
+         */
+        String[] Required_Permissions =     // Checks if Device has permission to work on device.
+                {
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,     // This is to access the storage
+                        Manifest.permission.BODY_SENSORS,       // This is to access the sensors of the device
+                        Manifest.permission.ACCESS_WIFI_STATE,      // This is to access the wifi of the device.
+                        Manifest.permission.CHANGE_WIFI_STATE,      // This is to change the wifi state of the device.
+                        Manifest.permission.ACCESS_NETWORK_STATE,       // This is to access the network
+                        Manifest.permission.CHANGE_NETWORK_STATE,        // This is to change the network setting of the device.
+                        Manifest.permission.ACCESS_COARSE_LOCATION,     // This is to access the location in a general sense
+                        Manifest.permission.ACCESS_FINE_LOCATION,       // This is to access the location in a more specific manner
+                        Manifest.permission.BLUETOOTH,      // This is to access th bluetooth
+                        Manifest.permission.BLUETOOTH_ADMIN     // This is access the bluetooth and allow changes
+                };
+
+        boolean needPermissions = false;        // To begin the permission is set to false.
+
+        for (String permission : Required_Permissions)     // For each of the permission listed above.
+        {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)       // Check if they have permission to work on the device.
+            {
+                needPermissions = true;     // if they do, grant them permission
+            }
+        }
+
+        if (needPermissions)        // When they have permission
+        {
+            ActivityCompat.requestPermissions(this, Required_Permissions,0);     // Allow them to work on device.
+        }
+
+
+        // -----------------------------------------------------------------------------------------
+
+
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
+
         time_updater.start();       // The time updater
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
@@ -50,9 +93,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
-        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+        if(!isRunning(AccelerometerSensor.class) && runAccelService)       // If the accelerometer service is not running
         {
-            startService(AccelService);        // Starts the service.
+            //startService(AccelService);        // Starts the service.
         }
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
@@ -132,7 +175,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         SLEEP.setText("Sleep");     // It sets the text of the button to sleep
                         SleepMode = false;      // It sets the boolean value to false.
 
-                        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+                        if(!isRunning(AccelerometerSensor.class) && runAccelService)       // If the accelerometer service is not running
                         {
                             startService(AccelService);        // Starts the service.
                         }
@@ -152,34 +195,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // Do nothing
         }
 
-        String[] Required_Permissions =     // Checks if Device has permission to work on device.
-        {
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,     // This is to access the storage
-                Manifest.permission.BODY_SENSORS,       // This is to access the sensors of the device
-                Manifest.permission.ACCESS_WIFI_STATE,      // This is to access the wifi of the device.
-                Manifest.permission.CHANGE_WIFI_STATE,      // This is to change the wifi state of the device.
-                Manifest.permission.ACCESS_NETWORK_STATE,       // This is to access the network
-                Manifest.permission.CHANGE_NETWORK_STATE,        // This is to change the network setting of the device.
-                Manifest.permission.ACCESS_COARSE_LOCATION,     // This is to access the location in a general sense
-                Manifest.permission.ACCESS_FINE_LOCATION,       // This is to access the location in a more specific manner
-                Manifest.permission.BLUETOOTH,      // This is to access th bluetooth
-                Manifest.permission.BLUETOOTH_ADMIN     // This is access the bluetooth and allow changes
-        };
-
-        boolean needPermissions = false;        // To begin the permission is set to false.
-
-        for (String permission : Required_Permissions)     // For each of the permission listed above.
-        {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)       // Check if they have permission to work on the device.
-            {
-                needPermissions = true;     // if they do, grant them permission
-            }
-        }
-
-        if (needPermissions)        // When they have permission
-        {
-            ActivityCompat.requestPermissions(this, Required_Permissions,0);     // Allow them to work on device.
-        }
     }
 
     Thread time_updater = new Thread()    /* This Updates the Date and Time Every second when UI is in the foreground */
@@ -223,8 +238,19 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     wifi.setWifiEnabled(true);      // Enable the wifi.
                                 }
 
+
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
+
+                                    if (!BatteryCharge)
+                                    {
+                                        Intent upload = new Intent(getApplicationContext(),FireBaseDataUpload.class);
+                                        if(!isRunning(FireBaseDataUpload.class))
+                                        {
+                                            startActivity(upload);
+                                        }
+                                    }
+
                                     if (!SleepMode)     // If it is not in sleep mode
                                     {
                                         SLEEP.performClick();       // Perform a coded click on the sleep button

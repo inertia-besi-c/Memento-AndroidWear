@@ -37,7 +37,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 @Override
                 public void run()       // Runs when it is called.
                 {
-                    Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                    Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt2.class);     // Starts the first EOD EMA prompt.
                     startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
                 }
             }, delay, new Preferences().EoDEMA_Period);     // Gets the preferences setting from the preference system.
@@ -51,7 +51,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 @Override
                 public void run()       // Runs when it is called.
                 {
-                    Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt2.class);     // Starts the first EOD EMA prompt.
                     startActivity(intent);      // Starts the intent.
                 }
             }, delay, new Preferences().EoDEMA_Period);     // Gets the preferences setting from the preference system.

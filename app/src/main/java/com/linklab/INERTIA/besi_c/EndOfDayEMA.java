@@ -205,10 +205,18 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                     v.vibrate(20);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
-                    CurrentQuestion++;      // The number of questions answered is incremented.
 
                     LogActivity();      // The log activity method is called.
-                    QuestionSystem();       // The question system method is called again for the next question.
+
+                    if (CurrentQuestion == Questions.length-1)
+                    {
+                        Submit();
+                    }
+                    else
+                    {
+                        CurrentQuestion++;      // The number of questions answered is incremented.
+                        QuestionSystem();       // The question system method is called again for the next question.
+                    }
                 }
             });
 

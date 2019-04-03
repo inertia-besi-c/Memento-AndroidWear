@@ -152,22 +152,19 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void QuestionSystem()       // This is the logic behind the question system.
     {
-        if (CurrentQuestion == 0)       // If the current question is the first question.
+        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
         {
-            back.setBackgroundColor(getColor(R.color.grey));        // Make the back button greyed out and unresponsive.
+            //back.setBackgroundColor(getColor(R.color.grey));        // Make the back button greyed out and unresponsive.
+            next.setText("Yes");       // Leave the text of the button as next.
+            back.setText("No");
+            res.setVisibility(View.INVISIBLE);
         }
         else        // If we are in any other question.
         {
-            back.setBackgroundColor(getColor(R.color.dark_red));        // make the back button dark red and activate it.
-        }
-
-        if (CurrentQuestion == Questions.length-1)      // If we are on the last question available
-        {
-            next.setText("Submit");     // Change the text of the next button to be submit.
-        }
-        else        // if we are on any other question
-        {
+            //back.setBackgroundColor(getColor(R.color.dark_red));        // make the back button dark red and activate it.
             next.setText("Next");       // Leave the text of the button as next.
+            back.setText("Back");
+            res.setVisibility(View.VISIBLE);
         }
 
         if (CurrentQuestion < Questions.length)     // If there are still question left to answer.
@@ -192,7 +189,12 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // The log activity method is called.
 
-                    if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
+                    if (CurrentQuestion == Questions.length-1)
+                    {
+                        UserResponses[Questions.length -1] = "Yes";
+                        Submit();
+                    }
+                    else if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
                     {
                         CurrentQuestion++;      // Increments the current question.
                         QuestionSystem();       // The question system method is called again for the next question.
@@ -219,7 +221,12 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        // Do nothing.
+                        ThankYou();
+                    }
+                    else if (CurrentQuestion == Questions.length-1)
+                    {
+                        UserResponses[Questions.length -1] = "No";
+                        Submit();
                     }
                     else        // If we are not on the first question
                     {

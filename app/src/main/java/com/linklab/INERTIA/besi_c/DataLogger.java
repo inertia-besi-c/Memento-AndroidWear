@@ -21,7 +21,7 @@ public class DataLogger     // A function that runs the data logging data
 
     public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
-        FileName = filename;        // Initiates a variable for the filename
+        FileName = new Preferences().DeviceID +"_"+filename;        // Initiates a variable for the filename
         Content = content;      // Initiates a variable for the content of the file name
     }
 

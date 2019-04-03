@@ -26,4 +26,5 @@
     <string name="pain">Pain</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_end_of_day_prompt">EndOfDayPrompt</string>
+    <string name="title_activity_fire_base__upload">FireBase_Upload</string>
 </resources>
