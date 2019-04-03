@@ -4,7 +4,7 @@ package com.linklab.INERTIA.besi_c;
 
 public class Preferences
 {
-    String Role = "PT";  // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    String Role = "CG";  // Role of user wearing the watch; CG for Caregiver or PT for Patient
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
