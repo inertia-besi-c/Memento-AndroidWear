@@ -21,7 +21,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     public int onStartCommand(Intent intent, int flags, int startId)        // Establishes the sensor and the ability to collect data at the start of the data collection
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);    // Controls the power distribution of the system.
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");      // Gets partial power to run the sensor.
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AccelService:wakeLock");      // Gets partial power to run the sensor.
         wakeLock.acquire();     // Turns on the wakelock and acquires what is needed.
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Initializes the ability to get a sensor from the system.

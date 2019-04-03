@@ -38,6 +38,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
         if (Stop)       // If it says stop, it kills the ESService.
         {
+            String data =  ("Estimote Timer started Waiting at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             stopService(ESService);     // Stops the Estimote service
         }
         else    // Else it just keeps going.
@@ -47,6 +51,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
             {
                 public void run()       // Runs the imported file based on the timer specified.
                 {
+                    String data =  ("Estimote Timer started Estimote Service at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     startService(ESService);    // Starts the Estimote service
                 }
             }, delay, period);      // Waits for this amount of delay and runs every stated period.
@@ -71,6 +79,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
     @Override
     public void onDestroy()     // When the service is destroyed.
     {
+        String data =  ("Estimote Timer stopped Estimote Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+        datalog.LogData();      // Saves the data into the directory.
+
         ESTimerService.cancel();        //  Cancels the ES Timer Service.
         wakeLock.release();     // Releases the wakelock
 

@@ -37,6 +37,10 @@ public class HRTimerService extends Service         /* This runs the delay timer
 
         if (Stop)       // If it says stop, it kills the HRService.
         {
+            String data =  ("Heart Rate Timer Service stopped Heart Rate Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             stopService(HRService);     // Stops the Heart Rate Sensor
         }
         else    // Else it just keeps going.
@@ -50,6 +54,11 @@ public class HRTimerService extends Service         /* This runs the delay timer
                     String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());
                     DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.
                     datalog.LogData();      // Saves the data into the directory.
+
+                    String dataHRT =  ("Heart Rate Timer Service started Heart Rate Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalogHRT = new DataLogger("Sensor_Activity.csv",dataHRT);      // Logs it into a file called System Activity.
+                    datalogHRT.LogData();      // Saves the data into the directory.
+
                     startService(HRService);    // Starts the Heart Rate Sensor
                 }
             }, delay, period);      // Waits for this amount of delay and runs every stated period.
