@@ -53,10 +53,6 @@
         </activity>
 
         <service
-            android:name=".FireBaseDataUpload"
-            android:enabled="true"
-            android:exported="true" />
-        <service
             android:name=".BESIWatchFace"
             android:label="BESI Cancer"
             android:launchMode="singleInstance"

@@ -292,8 +292,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                                     if (!BatteryCharge)
                                     {
-                                        Intent upload = new Intent(getApplicationContext(),FireBaseDataUpload.class);
-                                        if(!isRunning(FireBaseDataUpload.class))
+                                        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);
+                                        if(!isRunning(FireBase_Upload.class))
                                         {
                                             startActivity(upload);
                                         }
