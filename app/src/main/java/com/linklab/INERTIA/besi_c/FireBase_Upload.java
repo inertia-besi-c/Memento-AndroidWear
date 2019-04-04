@@ -1,6 +1,5 @@
 package com.linklab.INERTIA.besi_c;
 
-import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -63,7 +61,7 @@ public class FireBase_Upload extends WearableActivity {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast("UploadClicked");
+                Toast("Upload Clicked");
                 if (wifi.isConnected())
                 {
                     Toast("Wifi Connected");

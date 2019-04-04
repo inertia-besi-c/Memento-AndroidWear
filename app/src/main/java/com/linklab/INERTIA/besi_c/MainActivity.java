@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -292,8 +292,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                                     if (!BatteryCharge)
                                     {
-                                        Intent upload = new Intent(getApplicationContext(),FireBaseDataUpload.class);
-                                        if(!isRunning(FireBaseDataUpload.class))
+                                        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);
+                                        if(!isRunning(FireBase_Upload.class))
                                         {
                                             startActivity(upload);
                                         }
@@ -319,7 +319,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                                     wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
-
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 

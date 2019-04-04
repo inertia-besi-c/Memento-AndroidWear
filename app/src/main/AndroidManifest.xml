@@ -12,8 +12,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -30,32 +30,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
         <uses-library
             android:name="com.google.android.wearable"
-            android:required="true" />
+            android:required="true" >
+        </uses-library>
 
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true" />
+            android:value="true" >
+        </meta-data>
 
-        <activity
-            android:name=".FireBase_Upload"
-            android:label="@string/title_activity_fire_base__upload">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" >
+        </meta-data>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name=".FireBaseDataUpload"
-            android:enabled="true"
-            android:exported="true" />
         <service
             android:name=".BESIWatchFace"
             android:label="BESI Cancer"
@@ -77,10 +67,6 @@
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <service
             android:name=".PedometerSensor"
@@ -108,42 +94,62 @@
             android:launchMode="singleInstance" />
 
         <activity
+            android:name=".FireBase_Upload"
+            android:label="Upload Files">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!-- <category android:name="android.intent.category.HOME" /> -->
                 <!-- Comment this out to be able to return to the regular home settings for the watch -->
-                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+                <!-- <category android:name="android.intent.category.HOME" /> -->
                 <!-- Comment this out to be able to have the default watch activity be the default for the watch -->
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".FollowUpEMA"
             android:launchMode="singleInstance">
         </activity>
+
         <activity
             android:name=".PainEMA"
             android:launchMode="singleInstance">
         </activity>
+
         <activity
             android:name=".PainScreen"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance" >
+        </activity>
+
         <activity
             android:name=".EndOfDayEMA"
             android:launchMode="singleInstance">
         </activity>
+
         <activity
             android:name=".EndOfDayPrompt1"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance" >
+        </activity>
+
         <activity
             android:name=".EndOfDayPrompt2"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance" >
+        </activity>
+
         <activity
             android:name=".EndOfDayPrompt3"
-            android:launchMode="singleInstance" />
-    </application>
+            android:launchMode="singleInstance" >
+        </activity>
 
+    </application>
 </manifest>
