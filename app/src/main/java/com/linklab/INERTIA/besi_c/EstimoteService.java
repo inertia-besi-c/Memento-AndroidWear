@@ -39,6 +39,8 @@ public class EstimoteService extends Service
     @Override
     public void onCreate()
     {
+        Log.i("Estimote", "Starting Estimote Service");     // Logs on Console.
+
         super.onCreate();
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLockTag:");
@@ -53,6 +55,8 @@ public class EstimoteService extends Service
         {
             public void run()       // Runs the imported file based on the timer specified.
             {
+                Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
+
                 onDestroy();        // Destroys the service
             }
         }, Duration);       // Waits for this amount of duration.
@@ -136,7 +140,9 @@ public class EstimoteService extends Service
                 boolean check = writeToFile(st, str);
 
                 if (check)
-                    Log.i("Saving file", "Hi" + "_" + str.length());
+                {
+                    // Do nothing
+                }
             }
 
             catch (Exception ex)
@@ -149,6 +155,8 @@ public class EstimoteService extends Service
     @Override
     public void onDestroy()
     {
+        Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
+
         String data =  ("Estimote Service killed Estimote Service at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
         DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
@@ -157,6 +165,8 @@ public class EstimoteService extends Service
         beaconManager.stopRanging(region);
         stopForeground(true);
         stopSelf();
+
+        Log.i("Estimote", "Starting Estimote Timer Service from Estimote Service");     // Logs on Console.
 
         final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a ES service intent from the sensor class.
         startService(ESService);    // Starts the Estimote service
