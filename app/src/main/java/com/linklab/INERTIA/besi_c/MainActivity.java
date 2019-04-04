@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -150,8 +152,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 if (isCharging)     // Checks if the watch is charging
                 {
-                    Charging();     // Calls the charging method to inform the person
-
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button Stopped Heart Rate Sensor while charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
@@ -173,6 +173,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             stopService(AccelService);        // Stop the service.
                         }
                     }
+
+                    Charging();     // Calls the charging method to inform the person
                 }
 
                 else        // If the watch is not charging
@@ -286,17 +288,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     wifi.setWifiEnabled(true);      // Enable the wifi.
                                 }
 
+                                while (!isDeviceOnline())
+                                {
+                                    wifi.setWifiEnabled(true);
+                                }
 
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
-
-                                    if (!BatteryCharge)
+                                    if (!BatteryCharge && isDeviceOnline())
                                     {
-                                        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);
-                                        if(!isRunning(FireBase_Upload.class))
-                                        {
-                                            startActivity(upload);
-                                        }
+                                        uploadData();
                                     }
 
                                     if (!SleepMode)     // If it is not in sleep mode
@@ -354,6 +355,22 @@ public class MainActivity extends WearableActivity  // This is the activity that
         int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
         Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
         toast.show();       // Shows the toast.
+    }
+
+    private void uploadData()
+    {
+        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);
+        if(!isRunning(FireBase_Upload.class))
+        {
+            startActivity(upload);
+        }
+    }
+
+    public boolean isDeviceOnline()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkinfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkinfo != null && activeNetworkinfo.isConnected();
     }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.

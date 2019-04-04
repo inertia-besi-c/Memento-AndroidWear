@@ -44,11 +44,7 @@ public class EstimoteService extends Service
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLockTag:");
         wakeLock.acquire();
-    }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
         ESSensorTimer.schedule( new TimerTask()     // Initializes a timer.
         {
             public void run()       // Runs the imported file based on the timer specified.
@@ -56,7 +52,11 @@ public class EstimoteService extends Service
                 onDestroy();        // Destroys the service
             }
         }, Duration);       // Waits for this amount of duration.
+    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
         eas = new ArrayList<>();
         strBuilder = new StringBuilder();
         beaconManager = new BeaconManager(this);

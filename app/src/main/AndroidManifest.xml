@@ -95,7 +95,8 @@
 
         <activity
             android:name=".FireBase_Upload"
-            android:label="Upload Files">
+            android:label="Upload Files"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
