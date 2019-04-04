@@ -35,39 +35,45 @@ public class FireBase_Upload extends WearableActivity
     String localDirPath = new Preferences().Directory;     // The directory path on the watch
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        String data =  ("Firebase Started at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+        datalog.LogData();      // Saves the data into the directory.
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fire_base__upload);
+        super.onCreate(savedInstanceState);     // Creates an instance of the activity
+        setContentView(R.layout.activity_fire_base__upload);        // Gets a layout of the firebase upload.
 
-        upload = findViewById(R.id.upload);
-        uploading = findViewById(R.id.progressBar);
+        upload = findViewById(R.id.upload);     // This is the upload button
+        uploading = findViewById(R.id.progressBar);     // This is the upload progress bar
 
-        upload.setVisibility(View.INVISIBLE);
-        uploading.setVisibility(View.INVISIBLE);
+        upload.setVisibility(View.INVISIBLE);       // Sets the upload button to be invisible
+        uploading.setVisibility(View.INVISIBLE);        // Sets the progress bar to be invisible
 
-        Log.i("Upload","onStartCommand upLoadData");
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        Log.i("Firebase","Started to UpLoadData");      // Logs to Console
 
-        Preferences pref = new Preferences();
-        final String timeStamp = new SystemInformation().getFolderTimeStamp();
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);     // Get a connection status from the system
+        final NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);     // Gets the connection status with respect to wifi
 
-        final String DeviceID = pref.DeviceID + "_";
-        final String path = pref.DeploymentID + "/" + pref.Role + "/";
+        Preferences pref = new Preferences();       // Creates a new preference folder
+        final String timeStamp = new SystemInformation().getFolderTimeStamp();      // Gets a time stamp from System information
+        final String DeviceID = pref.DeviceID + "_";        // Sets the device ID to what it is in preferences
+        final String path = pref.DeploymentID + "/" + pref.Role + "/";      // Gets the deployment ID and the role of the watch.
 
-        upload.setOnClickListener(new View.OnClickListener() {
+        upload.setOnClickListener(new View.OnClickListener()        // Waits for the upload button to be clicked
+        {
             @Override
-            public void onClick(View v)
+            public void onClick(View v)     // When the upload button is clicked
             {
-                if (wifi.isConnected())
+                if (wifi.isConnected())     // It checks if wifi is connected
                 {
-                    uploading.setVisibility(View.VISIBLE);
+                    uploading.setVisibility(View.VISIBLE);      // It then sets the upload button to be visible
 
-                    String [] fileName =
+                    String [] fileName =        // These are all the files that we want to upload to firebase
                     {
                             "System_Activity.csv",
                             "Battery_Activity.csv",
@@ -81,7 +87,7 @@ public class FireBase_Upload extends WearableActivity
                             "Heart_Rate_Data.csv"
                     };
 
-                    String [] type_ =
+                    String [] type_ =       // These are the directory we want them to uplaod to <------------------------------  NOTE: THE ORDER CORRESPONDS TO THE FILE ORDER ABOVE
                     {
                             "SystemLog",
                             "SystemLog",
@@ -95,79 +101,103 @@ public class FireBase_Upload extends WearableActivity
                             "HeartRateData"
                     };
 
-                    for(int i = 0; i < fileName.length; i++)
+                    for(int i = 0; i < fileName.length; i++)        // For every file and directory listed above
                     {
-                        storage = FirebaseStorage.getInstance("gs://besi-c-watchapp.appspot.com/");
-                        storageRef = storage.getReference();
+                        storage = FirebaseStorage.getInstance("gs://besi-c-watchapp.appspot.com/");     // Get the storage from the site
+                        storageRef = storage.getReference();       // Get a reference to the storage spot.
+                        done = false;       // Set done to false to begin
+                        final String file = DeviceID + fileName[i];     // The file is a combination of the DeviceID and the filename in the directory you are in now above.
+                        final String remotePath = path+type_[i]+"/"+timeStamp+"/";      // Gets a path separated by the "/"
 
-                        done = false;
-                        final String file = DeviceID + fileName[i];
-                        final String remotePath = path+type_[i]+"/"+timeStamp+"/";
+                        Log.i("Firebase","Uploading: "+file+" to: " + remotePath);      // Logs to Console
 
-                        Log.i("Upload","Uploading: "+file+" to: " + remotePath);
-
-                        final Thread uploaderThread = new Thread(){
+                        final Thread uploaderThread = new Thread()      // Starts a thread to upload the files
+                        {
                             @Override
-                            public void run() {
-                                try{
-                                UploadFile(remotePath,file);}
-                                catch (Exception ex){Log.i("Upload","File does not exist");}
+                            public void run()       // This is run when called
+                            {
+                                try     // This is tried
+                                {
+                                    String data =  ("Uploading Files at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                    datalog.LogData();      // Saves the data into the directory.
 
+                                    UploadFile(remotePath,file);        // Tries to upload the files and their directories
+                                }
+                                catch (Exception ex)        // If it fails
+                                {
+                                    String data =  ("Uploading Files failed at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                    datalog.LogData();      // Saves the data into the directory.
+
+                                    Log.i("Firebase","File does not exist in watch");      // Log shows that the file does not exist
+                                }
                             }
                         };
 
-                        uploaderThread.run();
-
-                        uploading.setVisibility(View.INVISIBLE);
-
+                        uploaderThread.run();       // The thread is called to run
+                        uploading.setVisibility(View.INVISIBLE);        // The upload button is set to invisible
                     }
-                    finish();
+
+                    finish();       // The Upload is finished.
                 }
-                else
+
+                else        // If there is no internet
                 {
-                    uploading.setVisibility(View.INVISIBLE);
-                    Toast("No Wifi");
-                    Log.i("Upload","Wif Not Connected");
-                    finish();
+                    String data =  ("Tried to Upload Files without Internet at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
+                    uploading.setVisibility(View.INVISIBLE);        // Set the uploading to invisible
+                    Toast("No Internet Connection");        // Tell us that there is no internet
+                    Log.i("Firebase","Internet is Not Connected");      // Log that wifi is not connected.
+                    finish();       // Finish the service.
                 }
             }
         });
 
-        setAmbientEnabled();
-        upload.performClick();
+        setAmbientEnabled();        // Starts ambient mode
+        upload.performClick();      // Upload button is clicked when created.
     }
 
 
 
-    void UploadFile(String remotePath , String fileName)
+    void UploadFile(String remotePath , String fileName)        // This is the method that uploads the file
     {
-        Uri file = Uri.fromFile(new File(localDirPath+fileName));
-        StorageReference riversRef = storageRef.child(remotePath+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
+        Uri file = Uri.fromFile(new File(localDirPath+fileName));       // It gets the file from the system
+        StorageReference riversRef = storageRef.child(remotePath+file.getLastPathSegment());        // Creates a folder inside the directory
+        UploadTask uploadTask = riversRef.putFile(file);        // Puts the file in that folder
 
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        uploadTask.addOnFailureListener(new OnFailureListener()         // Register observers to listen for when the download is done or if it fails
+        {
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.i("Upload","Failed");
-                uploading.setVisibility(View.INVISIBLE);
-                Toast("Failed");
-                done = true;
-                succeed = true;
+            public void onFailure(@NonNull Exception exception)         // If it fails
+            {
+                String data =  ("Uploading Files failed at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
 
-                // Handle unsuccessful uploads
+                Log.i("Firebase","Upload Failed");      // Logs to Console
+                uploading.setVisibility(View.INVISIBLE);        // Set the visibility to invisible
+                Toast("Upload Failed");        // Toast that the upload failed
+                done = true;        // Set done to true
+                succeed = true;     // Set succeed to true
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()        // Checks if the upload was successful
+        {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.i("Upload","Successful");
-                Log.i("Upload","Bytes Delivered: "+String.valueOf(taskSnapshot.getBytesTransferred()));
-                uploading.setVisibility(View.INVISIBLE);
-                Toast("Uploaded");
-                done = true;
-                succeed = false;
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)         // If it succeded
+            {
+                String data =  ("Uploading Files Succeded at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                Log.i("Firebase","Uploaded Successfully");      // Logs to Console
+                Log.i("Firebase","Bytes Delivered: "+String.valueOf(taskSnapshot.getBytesTransferred()));     // Log the file size
+                uploading.setVisibility(View.INVISIBLE);    // Set the uplaod to invisible
+                Toast("Upload Successful");     // Tell us it was successful
+                done = true;        // Set done to true
+                succeed = false;        // Set success to false.
             }
         });
     }
@@ -175,15 +205,22 @@ public class FireBase_Upload extends WearableActivity
     private void Toast(CharSequence text)     // This is a little charging toast notification.
     {
         Context context = getApplicationContext();      // Gets a context from the system.
-        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
+        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a Long amount of time.
         Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
         toast.show();       // Shows the toast.
     }
 
     @Override
-    public void onDestroy(){
-        wakeLock.release();
-        super.onDestroy();
+    public void onDestroy()     // When the activity is ended
+    {
+        String data =  ("Firebase is killed at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+        datalog.LogData();      // Saves the data into the directory.
+
+        Log.i("Firebase","Activity Destroyed");      // Logs to Console
+
+        wakeLock.release();     // Release the wakelock
+        super.onDestroy();      // Destroy the activity.
     }
 
 }
