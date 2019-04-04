@@ -60,17 +60,14 @@ public class FireBase_Upload extends WearableActivity {
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast("Upload Clicked");
+            public void onClick(View v)
+            {
                 if (wifi.isConnected())
                 {
-                    Toast("Wifi Connected");
-                    //String file = "";
-                    //String type = "";
                     uploading.setVisibility(View.VISIBLE);
-                    Log.i("Upload","WifiConnected");
 
-                    String [] fileName = {
+                    String [] fileName =
+                    {
                             "System_Activity.csv",
                             "Battery_Activity.csv",
                             "Estimote_Data.csv",
@@ -83,7 +80,8 @@ public class FireBase_Upload extends WearableActivity {
                             "Heart_Rate_Data.csv"
                     };
 
-                    String [] type_ = {
+                    String [] type_ =
+                    {
                             "SystemLog",
                             "SystemLog",
                             "EstimoteData",
@@ -135,12 +133,7 @@ public class FireBase_Upload extends WearableActivity {
         });
 
         setAmbientEnabled();
-
-
         upload.performClick();
-
-        // Enables Always-on
-
     }
 
 

@@ -37,12 +37,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
-
-        /*
-
-        **PERMISSIONS NEED TO BE CHECKED AND REQUESTED BEFORE STARTING ANY SERVICES OR DRAWING UI**
-
-         */
+        /*       **PERMISSIONS NEED TO BE CHECKED AND REQUESTED BEFORE STARTING ANY SERVICES OR DRAWING UI**         */
         String[] Required_Permissions =     // Checks if Device has permission to work on device.
                 {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,     // This is to access the storage
@@ -73,7 +68,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
 
-        // -----------------------------------------------------------------------------------------
+        //  -----------------------------------------------------------------------------------------  //
 
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
@@ -105,7 +100,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
-            //startService(AccelService);        // Starts the service.
+            startService(AccelService);        // Starts the service.
         }
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
@@ -311,7 +306,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             else        // If the watch is not charging.
                             {
-                                if (wifi.isWifiEnabled())       // If the wifi system is enabled.
+                                if (isDeviceOnline())       // If the wifi system is enabled.
                                 {
                                     String data =  ("Wifi is disabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.

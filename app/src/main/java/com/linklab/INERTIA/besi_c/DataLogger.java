@@ -148,7 +148,7 @@ public class DataLogger     // A function that runs the data logging data
     {
         boolean flag = true;
         String path = Environment.getExternalStorageDirectory() + "/BESI_C";
-        String fileName = "Estimote_Data.csv";
+        String fileName = new Preferences().DeviceID + "_Estimote_Data.csv";
         File file = new File(path);
 
         if (file.exists() == false)
