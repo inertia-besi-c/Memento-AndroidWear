@@ -147,10 +147,5 @@
             android:launchMode="singleInstance" >
         </activity>
 
-        <activity
-            android:name=".EndOfDayPrompt3"
-            android:launchMode="singleInstance" >
-        </activity>
-
     </application>
 </manifest>

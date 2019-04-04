@@ -41,12 +41,13 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                     DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt2.class);     // Starts the first EOD EMA prompt.
+                    Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                     startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
                 }
             }, delay, new Preferences().EoDEMA_Period);     // Gets the preferences setting from the preference system.
         }
-        catch(Exception ex){
+        catch(Exception ex)
+        {
             long delay = calendar.getTimeInMillis() - System.currentTimeMillis() + 24*60*60*1000;       // If it failed, start it manually.
 
             Timer EODTimerService = new Timer();      // When called the timer is started.
@@ -59,7 +60,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                     DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    Intent intent = new Intent(thisContext, EndOfDayPrompt2.class);     // Starts the first EOD EMA prompt.
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                     startActivity(intent);      // Starts the intent.
                 }
             }, delay, new Preferences().EoDEMA_Period);     // Gets the preferences setting from the preference system.

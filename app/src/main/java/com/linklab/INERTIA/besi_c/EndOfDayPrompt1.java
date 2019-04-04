@@ -1,87 +1,102 @@
 package com.linklab.INERTIA.besi_c;
 
-// Imports.
+// Imports
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Vibrator;
-import android.support.wearable.activity.WearableActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
+import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.TimerTask;
 import java.util.Timer;
+import java.util.TimerTask;
 
-public class EndOfDayPrompt1 extends WearableActivity        // This is the class that starts the first EOD-EMA prompt.
+public class EndOfDayPrompt1 extends WearableActivity       // Starts the EOD-EMA prompt after the first one was snoozed.
 {
-    private PowerManager.WakeLock wakeLock;     // This is the power regulator of the system.
+    private PowerManager.WakeLock wakeLock;     // Starts the power manager in the system.
     private Timer promptTimeOut = new Timer();
-
-    @SuppressLint("WakelockTimeout")        // Suppresses the error from the wakelock.
+    @SuppressLint("WakelockTimeout")        // Suppresses the wakelock timer.
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)      // This is run when the activity is first created.
+    protected void onCreate(Bundle savedInstanceState)      // When it is created this is initially run.
     {
-        super.onCreate(savedInstanceState);     // It creates an instance that was saved in the system.
-        setContentView(R.layout.activity_end_of_day_prompt);        // Sets the view to the layout that was made in the End of Day layout in the res files.
+        super.onCreate(savedInstanceState);     // Creates a saved instance.
+        setContentView(R.layout.activity_end_of_day_prompt);        // Gets the layout from the activity EOD-EMA
 
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Get the power service from the system.
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD-EMA Prompt 1: WakeLock");        // The wakelock that turns on the screen.
-        wakeLock.acquire();     // Gets the system to turn on the screen.
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Gets the power manager from the system and controls the power distribution
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 2:wakeLock");     // Gets a full wakelock ability from the system
+        wakeLock.acquire();     // Acquires the wakelock without any timeout.
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(600);     // Vibrates for 600 milliseconds.
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from system
+        v.vibrate(600);     // Vibrates for the specified amount of milliseconds.
 
-        Button proceed = findViewById(R.id.Proceed);    // Sets a variable equal to the Proceed button
-        final Button snooze = findViewById(R.id.Snooze);      // Sets a variable equal to the Snooze button
-        Button dismiss = findViewById(R.id.Dismiss);    // Sets a variable equal to the Dismiss button
-        dismiss.setVisibility(View.INVISIBLE);      // Set the Dismiss button to tbe invisible because it is not needed in this activity.
+        Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
+        final Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.
+        Button dismiss = findViewById(R.id.Dismiss);        // Sets the button dismiss to the variable dismiss.
 
-        proceed.setOnClickListener(new View.OnClickListener()       // Waits for the proceed button to be clicked.
+        proceed.setOnClickListener(new View.OnClickListener()       // Constantly listens to the proceed button and waits until it is clicked.
         {
             @Override
-            public void onClick(View view)      // When it is clicked.
+            public void onClick(View view)     // When it is clicked, this is run
             {
-                String data =  ("First End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                String data =  ("Second End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                String data1 =  ("End of Day prompt 1 started End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                String data1 =  ("End of Day prompt 2 started End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog1 = new DataLogger("Sensor_Activity.csv",data1);      // Logs it into a file called System Activity.
                 datalog1.LogData();      // Saves the data into the directory.
 
-                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD-EMA service.
-                startActivity(StartEMAActivity);        // Starts the EOD-EMA file.
-                finish();       // Finishes the screen.
+                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
+                startActivity(StartEMAActivity);        // Starts the EOD EMA file.
+                finish();       // Finished the EOD EMA screen.
             }
         });
 
-        snooze.setOnClickListener(new View.OnClickListener()          // Waits for the Snooze button to be clicked.
+        snooze.setOnClickListener(new View.OnClickListener()       // Constantly listens to the snooze button and waits until it is clicked.
         {
             @Override
-            public void onClick(View view)      // When it is clicked
+            public void onClick(View view)     // When it is clicked, this is run
             {
-                String data =  ("First End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                String data =  ("Second End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                Timer snooze = new Timer();      // A timer is started.
-                snooze.schedule(new TimerTask()     // The snooze timer is scheduled to run,
+                Timer timer = new Timer();      // Starts a timer that runs for the specified time.
+                timer.schedule(new TimerTask()      // When the timer is finished, the run void is run.
                 {
                     @Override
-                    public void run()       // When it runs
+                    public void run()       // Runs when the timer is finished on a loop.
                     {
-                        String data =  ("End of Day prompt 1 started prompt 2 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        String data =  ("End of Day prompt 2 started prompt 3 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                         DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                         datalog.LogData();      // Saves the data into the directory.
 
-                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);      // Start the EOD-EMA prompt 2.
-                        startActivity(StartEMAActivity);        // Starts the activity.
+                        Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);      // Starts the EOD EMA third activity.
+                        startActivity(StartEMAActivity);    // Starts the activity.
                     }
-                }, new Preferences().EoDEMA_Timer_Delay);       // Calls the delay from the preferences files.
-                finish();       // Finishes the screen
+                },new Preferences().EoDEMA_Timer_Delay);        // Runs based on the timer that is set in preferences.
+                finish();       // Finishes the snooze button.
+            }
+        });
+
+        dismiss.setOnClickListener(new View.OnClickListener()       // Constantly listens to the dismiss button and waits until it is clicked.
+        {
+            @Override
+            public void onClick(View view)     // WHen it is clicked this is run.
+            {
+                String data =  ("Second End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                String data1 =  ("End of Day prompt 2 Dismissed End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger("Sensor_Activity.csv",data1);      // Logs it into a file called System Activity.
+                datalog1.LogData();      // Saves the data into the directory.
+
+                finish();       // Finishes the EOD EMA.
             }
         });
 
@@ -90,7 +105,7 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
             @Override
             public void run()
             {
-                String data =  ("End of Day prompt 1 snoozed prompt 1 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                String data =  ("End of Day prompt 2 snoozed prompt 2 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
@@ -98,15 +113,15 @@ public class EndOfDayPrompt1 extends WearableActivity        // This is the clas
             }
         },new Preferences().EoDPrompt_TimeOut);
 
-        setAmbientEnabled();    // Turns on the screen.
+        setAmbientEnabled();        // Enables the ambient mode on the system.
         setAutoResumeEnabled(true);     // Resumes the main activity.
     }
 
     @Override
-    public void onDestroy()     // When the activity is killed, it calls the onDestroy function.
+    public void onDestroy()     // When the system is destroyed this is run
     {
-        wakeLock.release();     // Releases the wakelock.
+        wakeLock.release();     // Kills the wakelock.
         promptTimeOut.cancel(); // Cancels snooze timer
-        super.onDestroy();      // Kills all methods.
+        super.onDestroy();      // Kills the service.
     }
 }
