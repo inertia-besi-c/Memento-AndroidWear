@@ -1,5 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
+// Imports
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -23,7 +24,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 
 @SuppressWarnings("ALL")
-public class FireBase_Upload extends WearableActivity
+public class FireBase_Upload extends WearableActivity       // This is the firebase activity that is run when we need to uplaod.
 {
     private Button upload;      // Button clicked that uploads the files.
     private ProgressBar uploading;      // This is the progress of the upload

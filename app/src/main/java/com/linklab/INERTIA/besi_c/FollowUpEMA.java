@@ -1,16 +1,19 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Vibrator;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +79,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        Log.i("Followup EMA", "Starting Followup Service");     // Logs on Console.
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "FollowUpEMA: WakeLock");        // The wakelock that turns on the screen.
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);      // The screen turns off after the timeout is passed.
@@ -95,11 +100,15 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
         if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
+            Log.i("Followup EMA", "This is Patient");     // Logs on Console.
+
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
         }
         else if (new Preferences().Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
+            Log.i("Followup EMA", "This is Care Giver");     // Logs on Console.
+
             Questions = CaregiverQuestions;     // If it is, it sets the set of questions to be asked to the caregiver questions.
             Answers = CaregiverAnswers;       // And it sets the available answers to be asked to the caregiver answers.
         }
@@ -111,6 +120,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         {
             public void onClick(View view)      // When the res button is clicked, this is run.
             {
+                Log.i("Followup EMA", "Answer Button Tapped");     // Logs on Console.
+
                 String data =  ("Followup EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
@@ -128,11 +139,15 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 if (ReminderCount <= ReminderNumber)        // If there are still questions to be answered, move to the question.
                 {
+                    Log.i("Followup EMA", "Reminding User to Continue Survey");     // Logs on Console.
+
                     v.vibrate(600);     // Vibrate for the assigned time.
                     ReminderCount ++;       // Increment the reminder count by 1.
                 }
                 else        // If their are no more questions left to ask
                 {
+                    Log.i("Followup EMA", "Automatically Ending Survey");     // Logs on Console.
+
                     Submit();       // Submit the response to the questions.
                 }
             }
@@ -144,8 +159,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
-
-
     private void QuestionSystem()       // This is the logic behind the question system.
     {
         if (CurrentQuestion == 0)       // If the current question is the first question.
@@ -179,6 +192,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 public void onClick(View view)      // When the next/submit button is clicked.
                 {
+                    Log.i("Followup EMA", "Next/Submit Button Tapped");     // Logs on Console.
+
                     String data =  ("Followup EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
@@ -204,7 +219,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 public void onClick(View view)      // When the back button is clicked.
                 {
-                    String data =  ("Pain EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    Log.i("Followup EMA", "Back Button Tapped");     // Logs on Console.
+
+                    String data =  ("Followup EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -234,6 +251,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
+        Log.i("Followup EMA", "Submitting Results");     // Logs on Console.
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         Date date = new Date();     // Makes a new date call from the system
         StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
@@ -269,6 +288,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private void LogActivity()      // Logs the activity of the person.
     {
+        Log.i("Followup EMA", "Logging Activity");     // Logs on Console.
+
         String data =  (new SystemInformation().getTimeStamp()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
@@ -277,6 +298,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
+        Log.i("Followup EMA", "Destroying Followup EMA");     // Logs on Console.
+
         wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
