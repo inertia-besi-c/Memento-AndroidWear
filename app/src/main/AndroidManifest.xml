@@ -128,11 +128,6 @@
         </activity>
 
         <activity
-            android:name=".PainScreen"
-            android:launchMode="singleInstance" >
-        </activity>
-
-        <activity
             android:name=".EndOfDayEMA"
             android:launchMode="singleInstance">
         </activity>
