@@ -279,17 +279,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (isCharging)     // If the battery is charging
                             {
-                                if (!wifi.isWifiEnabled())      // If the wifi is not enabled
+                                while (!isDeviceOnline())
                                 {
-                                    String data =  ("Wifi enabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                    String data =  ("Trying to enable an Internet connection at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
 
-                                    wifi.setWifiEnabled(true);      // Enable the wifi.
-                                }
-
-                                while (!isDeviceOnline())
-                                {
                                     wifi.setWifiEnabled(true);
                                 }
 
@@ -297,6 +292,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 {
                                     if (!BatteryCharge && isDeviceOnline())
                                     {
+                                        String data =  ("Uploading Data to Firebase" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                        datalog.LogData();      // Saves the data into the directory.
+
                                         uploadData();
                                     }
 
