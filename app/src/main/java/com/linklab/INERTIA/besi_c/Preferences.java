@@ -6,14 +6,14 @@ public class Preferences        // System wide one stop place to set all setting
 {
     // Settings for Device and Deployment
     String DeviceID = "Fossil_43mm";        // This is the current device type that you are using with screen size
-    String DeploymentID = "Test1";      // This is the deployment you are currently on
+    String DeploymentID = "Personal Test";      // This is the deployment you are currently on
     String Role = "CG";     // Role of user wearing the watch; CG for Caregiver or PT for Patient
     String Directory = "sdcard/BESI_C";     // Directory on the watch where all files are saved
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
     public int PainEMAReminderInterval = 5*60*1000; // How long to wait between each ping reminding user to complete ema
-    public int PainEMAReminderNumber = 2; // How many times to remind the wearer to complete ema
+    public int PainEMAReminderNumber = 2; // Ho1w many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
     public int FollowUpEMADelay = 30*60*1000; // How long to wait after PainEMA submitted to prompt follow-up ema
