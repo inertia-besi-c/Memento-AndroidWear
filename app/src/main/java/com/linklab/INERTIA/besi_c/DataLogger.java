@@ -2,7 +2,6 @@ package com.linklab.INERTIA.besi_c;
 
 // Imports
 
-import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.util.Log;
 
@@ -19,10 +18,11 @@ import java.util.Date;
 public class DataLogger     // A function that runs the data logging data
 {
     private String FileName, Content;        // Variable names for the file characters and contents.
+    private String Directory = new Preferences().Directory;     // Gets the directory from the preferences class.
 
     public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
-        FileName = new Preferences().DeviceID +"_"+filename;        // Initiates a variable for the filename from preferences
+        FileName = new Preferences().DeviceID+"_"+filename;        // Initiates a variable for the filename from preferences
         Content = content;      // Initiates a variable for the content of the file name
     }
 
@@ -44,8 +44,7 @@ public class DataLogger     // A function that runs the data logging data
         {
             try
             {
-                @SuppressLint("SdCardPath")     // Suppresses the path name.
-                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+                File BESI_directory = new File(Directory);    // Path to file in the storage of the device
 
                 if (!BESI_directory.isDirectory())    // If there is no directory with that name
                 {
@@ -53,7 +52,7 @@ public class DataLogger     // A function that runs the data logging data
                     BESI_directory.mkdirs();        // Make a directory with the name.
                 }
 
-                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,true);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -83,8 +82,7 @@ public class DataLogger     // A function that runs the data logging data
         {
             try
             {
-                @SuppressLint("SdCardPath")     // Suppresses the sdcard image name.
-                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+                File BESI_directory = new File(Directory);    // Path to file in the storage of the device
 
                 if (!BESI_directory.isDirectory())        // If there is no directory with the name
                 {
@@ -92,7 +90,7 @@ public class DataLogger     // A function that runs the data logging data
                     BESI_directory.mkdirs();        // Do nothing.
                 }
 
-                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,false);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -121,7 +119,7 @@ public class DataLogger     // A function that runs the data logging data
         StringBuilder text = new StringBuilder();       // This is the new string that is built
         try     // Tries to run the following.
         {
-            File file = new File("/sdcard/BESI_C/",FileName);       // Creates a filename with the new filename
+            File file = new File(Directory,FileName);       // Creates a filename with the new filename
             BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
             String line;        // Creates a new line.
 

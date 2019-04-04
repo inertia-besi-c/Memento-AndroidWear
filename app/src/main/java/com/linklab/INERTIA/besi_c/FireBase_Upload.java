@@ -22,16 +22,17 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 
-public class FireBase_Upload extends WearableActivity {
-
-    private Button upload;
-    private ProgressBar uploading;
-    private boolean done;
-    private boolean succeed;
-    FirebaseStorage storage;
-    StorageReference storageRef;
-    PowerManager.WakeLock wakeLock;
-    String localDirPath = "sdcard/BESI_C/";
+@SuppressWarnings("ALL")
+public class FireBase_Upload extends WearableActivity
+{
+    private Button upload;      // Button clicked that uploads the files.
+    private ProgressBar uploading;      // This is the progress of the upload
+    private boolean done;       // If the upload is done
+    private boolean succeed;        // If the upload suceeded
+    FirebaseStorage storage;        // The storage on firebase
+    StorageReference storageRef;        // The storage reference on firbase
+    PowerManager.WakeLock wakeLock;     // Wakelock
+    String localDirPath = new Preferences().Directory;     // The directory path on the watch
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
