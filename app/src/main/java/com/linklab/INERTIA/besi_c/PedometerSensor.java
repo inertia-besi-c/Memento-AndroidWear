@@ -4,12 +4,13 @@ package com.linklab.INERTIA.besi_c;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
 
 public class PedometerSensor extends Service implements SensorEventListener     // Starts a service for the pedometer.
 {
@@ -22,7 +23,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Regulates the power to the service.
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService:wakeLock");      // Calls a partial wakelock for the service.
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Pedometer Service:wakeLock");      // Calls a partial wakelock for the service.
         wakeLock.acquire();     // Calls the wakelock.
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Starts a sensor data collection service
@@ -43,7 +44,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
             new DataLogger("StepActivity","yes").WriteData();       // Start logging yes to the file.
         }
 
-        final String logstring = new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," + String.valueOf(event.values[0]) + "," + String.valueOf(event.accuracy);     // Format the data is in.
+        final String logstring = new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," + String.valueOf(event.values[0]) + "," + String.valueOf(event.accuracy);     // Format the data
 
         new Thread(new Runnable()       // Starts a new thread for the service.
         {
@@ -58,6 +59,8 @@ public class PedometerSensor extends Service implements SensorEventListener     
     @Override
     public void onDestroy()     // A destroy service switch (kill switch)
     {
+        Log.i("Pedometer Sensor", "Stopping Sensor");     // Logs on Console.
+
         mSensorManager.unregisterListener(this);        // Kills the listener for the service.
         wakeLock.release();     // Releases the wakelock power.
     }
