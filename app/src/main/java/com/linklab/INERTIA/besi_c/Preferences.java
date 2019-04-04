@@ -1,13 +1,13 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
-public class Preferences
+@SuppressWarnings("ALL")    // Service wide suppression for the Errors.
+public class Preferences        // System wide one stop place to set all settings for a particular individual
 {
-    // Settings for Deployment
-    String DeviceID = "Fossil_43mm";
-    String DeploymentID = "Test1";
-    String Role = "CG";  // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    // Settings for Device and Deployment
+    String DeviceID = "Fossil_43mm";        // This is the current device type that you are using with screen size
+    String DeploymentID = "Test1";      // This is the deployment you are currently on
+    String Role = "CG";     // Role of user wearing the watch; CG for Caregiver or PT for Patient
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
@@ -19,13 +19,16 @@ public class Preferences
     public int FollowUpEMAReminderNumber = 3; // How many times to remind the wearer to complete the follow-up ema
     public int FollowUpEMAReminderInterval = 5*60*1000; // How long to wait between each ping reminding user to complete ema
 
-    // Settings for Daily EMA
+    // Settings for Daily EMA | Time is in ms |
     public long EoDPrompt_TimeOut = 15*60*1000; // Delay before snoozing and eventually dismissing daily ema
     public int EoDEMA_Time_Hour = 21; // Hour at which the daily ema should go off
     public int EoDEMA_Time_Minute = 0; // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0; // Second of minute at which daily ema should go off
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000; // This is how often the timer waits before firing again
     public long EoDEMA_Period = 24*60*60*1000; // This is how often the timer waits before firing again
+    public int EoDEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
+    public int EoDEMAReminderInterval = 5*60*1000; // How long to wait between each ping reminding user to complete ema
+    public int EoDEMAReminderNumber = 2; // How many times to remind the wearer to complete ema
 
     // Settings for Heart Rate Monitoring | Time is in ms |
     public long HRSampleDuration = 30000;   // How long should heart rate be measured each time?
@@ -36,7 +39,7 @@ public class Preferences
     public long ESSampleDuration = 30000;   // How long should estimote be measured each time?
     public long ESMeasurementInterval = 60000;  // Every how often should a measurement be taken?
 
-/* Settings for Log Files -- NOT YET IMPLEMENTED */
+/* Settings for Log Files -- NOT YET IMPLEMENTED <------------------- COMING SOON!! */
 //    public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
 //    public String EndOfDay_EMA_Results_Headers = ""; // Column Headers for EndOfDay_EMA_Results
 //    public String Pain_EMA_Activity_Headers = ""; // Column Headers for Pain_EMA_Activity

@@ -141,28 +141,28 @@ public class DataLogger     // A function that runs the data logging data
 
     public static boolean writeToFile(Date time1, String data)      /* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
     {
-        boolean flag = true;
-        String path = Environment.getExternalStorageDirectory() + "/BESI_C";
-        String fileName = new Preferences().DeviceID + "_Estimote_Data.csv";
-        File file = new File(path);
+        boolean flag = true;        // Sets a flag
+        String path = Environment.getExternalStorageDirectory() + "/BESI_C";        // Gets the path to the storage in the sdcard
+        String fileName = new Preferences().DeviceID + "_Estimote_Data.csv";        // Names the file.
+        File file = new File(path);     // Makes a path to the file.
 
-        if (file.exists() == false)
+        if (file.exists() == false)     // If there is no directory with this name
         {
-            file.mkdirs();
+            file.mkdirs();      // Make the directory
         }
 
-        String filepath = path + "/" + fileName;
+        String filepath = path + "/" + fileName;        // Go into the directory, and make a file with the given filename
 
-        try
+        try     // Try the following
         {
-            FileOutputStream fStream = new FileOutputStream(filepath, true);
-            fStream.write(data.getBytes());
+            FileOutputStream fStream = new FileOutputStream(filepath, true);        // Append the data to the file
+            fStream.write(data.getBytes());     // Write the data
         }
-        catch (Exception ex)
+        catch (Exception ex)        // If it failed
         {
-            flag = false;
+            flag = false;       // Set the flag to false, and try again
         }
 
-        return flag;
+        return flag;        // Return the flag value
     }
 }
