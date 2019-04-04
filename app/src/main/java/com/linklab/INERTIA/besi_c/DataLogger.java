@@ -4,6 +4,7 @@ package com.linklab.INERTIA.besi_c;
 
 import android.annotation.SuppressLint;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +22,7 @@ public class DataLogger     // A function that runs the data logging data
 
     public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
-        FileName = new Preferences().DeviceID +"_"+filename;        // Initiates a variable for the filename
+        FileName = new Preferences().DeviceID +"_"+filename;        // Initiates a variable for the filename from preferences
         Content = content;      // Initiates a variable for the content of the file name
     }
 
@@ -46,12 +47,9 @@ public class DataLogger     // A function that runs the data logging data
                 @SuppressLint("SdCardPath")     // Suppresses the path name.
                 File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
 
-                if (BESI_directory.isDirectory())       // If there is a directory with that name
+                if (!BESI_directory.isDirectory())    // If there is no directory with that name
                 {
-                    // Do nothing
-                }
-                else    // If there is no directory with that name
-                {
+                    Log.i("Data Logger", "Making a directory called " + BESI_directory);     // Logs on Console.
                     BESI_directory.mkdirs();        // Make a directory with the name.
                 }
 
@@ -65,17 +63,17 @@ public class DataLogger     // A function that runs the data logging data
             }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
             catch (Exception ex)
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
         }
 
         else        // If we canot make the directory
         {
-            // Do nothing.
+            Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
         }
     }
 
@@ -88,12 +86,9 @@ public class DataLogger     // A function that runs the data logging data
                 @SuppressLint("SdCardPath")     // Suppresses the sdcard image name.
                 File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
 
-                if (BESI_directory.isDirectory())       // If there is a directory with the name
+                if (!BESI_directory.isDirectory())        // If there is no directory with the name
                 {
-                    // Do nothing
-                }
-                else        // If there is no directory with the name
-                {
+                    Log.i("Data Logger", "Making a directory called " + BESI_directory);     // Logs on Console.
                     BESI_directory.mkdirs();        // Do nothing.
                 }
 
@@ -107,24 +102,24 @@ public class DataLogger     // A function that runs the data logging data
             }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
             catch (Exception ex)
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
         }
 
         else        // If we canot make the directory
         {
-          // Do nothing.
+            Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
         }
     }
 
     public String ReadData()    // This reads the data from the sdcard
     {
         StringBuilder text = new StringBuilder();       // This is the new string that is built
-        try     // Tires to run the following.
+        try     // Tries to run the following.
         {
             File file = new File("/sdcard/BESI_C/",FileName);       // Creates a filename with the new filename
             BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
