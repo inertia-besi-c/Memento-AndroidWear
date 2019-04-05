@@ -32,19 +32,18 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <service
             android:name=".FollowUpEMASchedulerService"
-            android:enabled="true"
-            android:exported="true"></service>
+            android:enabled="true"/>
 
         <uses-library
             android:name="com.google.android.wearable"
-            android:required="true"></uses-library>
+            android:required="true"/>
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true"></meta-data>
+            android:value="true"/>
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"></meta-data>
+            android:value="@integer/google_play_services_version"/>
 
         <service
             android:name=".BESIWatchFace"
@@ -117,16 +116,16 @@
         </activity>
         <activity
             android:name=".FollowUpEMA"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".PainEMA"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".EndOfDayEMA"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".EndOfDayPrompt1"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".EndOfDayPrompt2"
             android:launchMode="singleInstance" >
