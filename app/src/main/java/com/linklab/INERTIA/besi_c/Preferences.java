@@ -6,8 +6,8 @@ public class Preferences        // System wide one stop place to set all setting
 {
     // Settings for Device and Deployment
     String DeviceID = "Fossil_43mm";        // This is the current device type that you are using with screen size
-    String DeploymentID = "Personal Test";      // This is the deployment you are currently on
-    String Role = "CG";     // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    String DeploymentID = "Developer Testing";      // This is the deployment you are currently on
+    String Role = "PT";     // Role of user wearing the watch; CG for Caregiver or PT for Patient
     String Directory = "sdcard/BESI_C/";     // Directory on the watch where all files are saved
 
     // Settings for Pain EMA | Time is in ms |
