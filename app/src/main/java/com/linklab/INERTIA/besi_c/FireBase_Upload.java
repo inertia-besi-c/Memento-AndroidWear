@@ -108,8 +108,7 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                         storageRef = storage.getReference();       // Get a reference to the storage spot.
                         done = false;       // Set done to false to begin
                         final String file = DeviceID + fileName[i];     // The file is a combination of the DeviceID and the filename in the directory you are in now above.
-                        final String remotePath = path+type_[i]+"/"+timeStamp+"/";      // Gets a path separated by the "/"
-
+                        final String remotePath = path+type_[i]+"/";      // Gets a path separated by the "/"
                         Log.i("Firebase","Uploading: "+file+" to: " + remotePath);      // Logs to Console
 
                         final Thread uploaderThread = new Thread()      // Starts a thread to upload the files
