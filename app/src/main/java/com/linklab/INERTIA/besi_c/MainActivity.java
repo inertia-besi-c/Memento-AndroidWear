@@ -1,7 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -67,9 +66,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             ActivityCompat.requestPermissions(this, Required_Permissions,0);     // Allow them to work on device.
         }
 
-
-        //  -----------------------------------------------------------------------------------------  //
-
+        //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------  //
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
@@ -231,7 +228,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             // Do nothing
         }
-
     }
 
     Thread time_updater = new Thread()    /* This Updates the Date and Time Every second when UI is in the foreground */
@@ -288,13 +284,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
-                                    if (!BatteryCharge && isDeviceOnline())
+                                    if (!BatteryCharge && isDeviceOnline())     // If there is a connection.
                                     {
                                         String data =  ("Uploading Data to Firebase" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                                         DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                                         datalog.LogData();      // Saves the data into the directory.
 
-                                        uploadData();
+                                        uploadData();       // Calls the upload method.
                                     }
 
                                     if (!SleepMode)     // If it is not in sleep mode
@@ -353,20 +349,20 @@ public class MainActivity extends WearableActivity  // This is the activity that
         toast.show();       // Shows the toast.
     }
 
-    private void uploadData()
+    private void uploadData()       // This calls the Fire Base activity to upload of data
     {
-        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);
-        if(!isRunning(FireBase_Upload.class))
+        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);      // Makes an intent of the system
+        if(!isRunning(FireBase_Upload.class))       // Checks if it is already running
         {
-            startActivity(upload);
+            startActivity(upload);      // If not, start it.
         }
     }
 
-    public boolean isDeviceOnline()
+    public boolean isDeviceOnline()     // This checks if the device is online and has an internet connection
     {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkinfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkinfo != null && activeNetworkinfo.isConnected();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);     // Gets the connection service manager
+        NetworkInfo activeNetworkinfo = connectivityManager.getActiveNetworkInfo();     // It checks if there is a connection to the system
+        return activeNetworkinfo != null && activeNetworkinfo.isConnected();        // It returns the outcome.
     }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
@@ -416,7 +412,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     }
 
     @Override
-    public void onResume()
+    public void onResume()      // When the system resumes
     {
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
@@ -440,7 +436,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         super.onResume();       // Restarts the thread left.
     }
-
 
     @Override
     protected void onStop()     // To stop the activity.

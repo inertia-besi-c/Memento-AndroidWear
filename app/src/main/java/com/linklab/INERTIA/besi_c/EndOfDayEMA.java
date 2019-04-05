@@ -6,12 +6,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Vibrator;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class EndOfDayEMA extends WearableActivity       // This is the main activity for the questions
+public class EndOfDayEMA extends WearableActivity       // This is the main service file for the End of Day EMA questions
 {
     private PowerManager.WakeLock wakeLock;
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
@@ -34,9 +36,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     private Timer EMARemindertimer;     // This is the EMA reminder time interval
     private int[] UserResponseIndex;        // This is the user response index.
     private int resTaps = 0;        // This is a tap that increments to show the different options.
-    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;      // This is the EMA reminder delay set from preferences.
-    private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //    Time before pinging user after not finishing EMA
-    private int ReminderNumber = new Preferences().PainEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
+    private int EMAReminderDelay = new Preferences().EoDEMAReminderDelay;      // This is the EMA reminder delay set from preferences.
+    private long EMAReminderInterval = new Preferences().EoDEMAReminderInterval; //    Time before pinging user after not finishing EMA
+    private int ReminderNumber = new Preferences().EoDEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
     private int ReminderCount = 0;      // This is the amount of reminders left to do.
     private int CurrentQuestion = 0;       // This is the current question that the person is on.
     public Vibrator v;      // The vibrator that provides haptic feedback.
@@ -98,6 +100,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        Log.i("End of Day EMA", "Starting End of Day EMA Service");     // Logs on Console.
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);      // The screen turns off after the timeout is passed.
@@ -115,11 +119,15 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
         if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
+            Log.i("End of Day EMA", "This is a Patient");     // Logs on Console.
+
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
         }
         else if (new Preferences().Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
+            Log.i("End of Day EMA", "This is a Care Giver");     // Logs on Console.
+
             Questions = CaregiverQuestions;     // If it is, it sets the set of questions to be asked to the caregiver questions.
             Answers = CaregiverAnswers;       // And it sets the available answers to be asked to the caregiver answers.
         }
@@ -135,11 +143,23 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 if (ReminderCount <= ReminderNumber)        // If there are still questions to be answered, move to the question.
                 {
+                    Log.i("End of Day EMA", "Reminding User to Continue Survey");     // Logs on Console.
+
+                    String data =  ("End Of Day EMA 'Survey Reminder' Timer Initiated at" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     v.vibrate(600);     // Vibrate for the assigned time.
                     ReminderCount ++;       // Increment the reminder count by 1.
                 }
                 else        // If their are no more questions left to ask
                 {
+                    Log.i("End of Day EMA", "Automatically Ending Survey");     // Logs on Console.
+
+                    String data =  ("End Of Day EMA 'Survey Reminder' Timer Automatically Submitting Survey at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    datalog.LogData();      // Saves the data into the directory.
+
                     Submit();       // Submit the response to the questions.
                 }
             }
@@ -149,12 +169,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         {
             public void onClick(View view)      // When the res button is clicked, this is run.
             {
+                Log.i("End of Day EMA", "Answer Button Tapped");     // Logs on Console.
+
                 String data =  ("End Of Day EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 v.vibrate(20);      // A slight vibration for haptic feedback.
-                resTaps+=1;     // Increments the amount of taps by 1
+                resTaps += 1;     // Increments the amount of taps by 1
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
             }
         });
@@ -198,6 +220,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 public void onClick(View view)      // When the next/submit button is clicked.
                 {
+                    Log.i("End of Day EMA", "Next/Submit Button Tapped");     // Logs on Console.
+
                     String data =  ("End of Day EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
@@ -208,11 +232,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
                     LogActivity();      // The log activity method is called.
 
-                    if (CurrentQuestion == Questions.length-1)
+                    if (CurrentQuestion == Questions.length-1)      // If there are no more questions left or this is the last question
                     {
-                        Submit();
+                        Submit();       // Submit the survey.
                     }
-                    else
+                    else        // If there are still some more questions.
                     {
                         CurrentQuestion++;      // The number of questions answered is incremented.
                         QuestionSystem();       // The question system method is called again for the next question.
@@ -224,6 +248,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
             {
                 public void onClick(View view)      // When the back button is clicked.
                 {
+                    Log.i("End of Day EMA", "Back Button Tapped");     // Logs on Console.
+
                     String data =  ("End of Day EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
@@ -235,7 +261,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        // Do nothing.
+                        // Do nothing for this first question only.
                     }
                     else        // If we are not on the first question
                     {
@@ -245,6 +271,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
                 }
             });
         }
+
         else        // If there are no more questions to be asked.
         {
             Submit();       // Submit the survey.
@@ -253,6 +280,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
 
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
+        Log.i("End of Day EMA", "Submitting Results");     // Logs on Console.
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         Date date = new Date();     // Starts a new date call.
         StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
@@ -278,6 +307,15 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         finish();       // Finishes the toast.
     }
 
+    private void LogActivity()      // Logs the activity of the person.
+    {
+        Log.i("End of Day EMA", "Logging Activity");     // Logs on Console.
+
+        String data =  (new SystemInformation().getTimeStamp()) + ",EMA_EndOfDay," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
+        DataLogger datalog = new DataLogger("EndOfDay_EMA_Activity.csv",data);      // This saves the data into a datalog.
+        datalog.LogData();      // Logs the data into the directory specified.
+    }
+
     private int Cycle_Responses()       // This cycles through all the possible responses that the person can provide.
     {
         int index = resTaps%responses.size();       // Index gets the size of all the possible responses.
@@ -285,16 +323,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main acti
         return index;       // Returns the number of the index.
     }
 
-    private void LogActivity()      // Logs the activity of the person.
-    {
-        String data =  (new SystemInformation().getTimeStamp()) + ",EMA_EndOfDay," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
-        DataLogger datalog = new DataLogger("EndOfDay_EMA_Activity.csv",data);      // This saves the data into a datalog.
-        datalog.LogData();      // Logs the data into the directory specified.
-    }
-
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
+        Log.i("End of Day EMA", "Destroying End Of Day EMA");     // Logs on Console.
+
         wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.

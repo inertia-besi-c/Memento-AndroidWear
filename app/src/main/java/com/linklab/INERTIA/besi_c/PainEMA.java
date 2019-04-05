@@ -2,24 +2,26 @@ package com.linklab.INERTIA.besi_c;
 
 // Imports
 import android.annotation.SuppressLint;
-import android.support.wearable.activity.WearableActivity;
 import android.content.Context;
-import android.os.Vibrator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
+import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.text.DateFormat;
-import java.util.TimerTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class PainEMA extends WearableActivity       // This is the main activity for the pain survey questions.
@@ -78,6 +80,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        Log.i("Pain EMA", "Starting Followup Service");     // Logs on Console.
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Pain EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
         wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);      // The screen turns off after the timeout is passed.
@@ -97,11 +101,15 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
         if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
+            Log.i("Pain EMA", "This is Patient");     // Logs on Console.
+
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
         }
         else if (new Preferences().Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
+            Log.i("Pain EMA", "This is Care Giver");     // Logs on Console.
+
             Questions = CaregiverQuestions;     // If it is, it sets the set of questions to be asked to the caregiver questions.
             Answers = CaregiverAnswers;       // And it sets the available answers to be asked to the caregiver answers.
         }
@@ -113,6 +121,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             public void onClick(View view)      // When the res button is clicked, this is run.
             {
+                Log.i("Pain EMA", "Answer Button Tapped");     // Logs on Console.
+
                 String data =  ("Pain EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
@@ -130,11 +140,15 @@ public class PainEMA extends WearableActivity       // This is the main activity
             {
                 if (ReminderCount <= ReminderNumber)        // If there are still questions to be answered, move to the question.
                 {
+                    Log.i("Pain EMA", "Reminding User to Continue Survey");     // Logs on Console.
+
                     v.vibrate(600);     // Vibrate for the assigned time.
                     ReminderCount ++;       // Increment the reminder count by 1.
                 }
                 else        // If their are no more questions left to ask
                 {
+                    Log.i("Pain EMA", "Automatically Ending Survey");     // Logs on Console.
+
                     Submit();       // Submit the response to the questions.
                 }
             }
@@ -146,22 +160,19 @@ public class PainEMA extends WearableActivity       // This is the main activity
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
-
     private void QuestionSystem()       // This is the logic behind the question system.
     {
         if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
         {
-            //back.setBackgroundColor(getColor(R.color.grey));        // Make the back button greyed out and unresponsive.
             next.setText("Yes");       // Leave the text of the button as next.
-            back.setText("No");
-            res.setVisibility(View.INVISIBLE);
+            back.setText("No");     // Sets the back button to No
+            res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
         }
         else        // If we are in any other question.
         {
-            //back.setBackgroundColor(getColor(R.color.dark_red));        // make the back button dark red and activate it.
             next.setText("Next");       // Leave the text of the button as next.
-            back.setText("Back");
-            res.setVisibility(View.VISIBLE);
+            back.setText("Back");       // Sets the back button to back
+            res.setVisibility(View.VISIBLE);        // Makes them visible
         }
 
         if (CurrentQuestion < Questions.length)     // If there are still question left to answer.
@@ -177,6 +188,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
             {
                 public void onClick(View view)      // When the next/submit button is clicked.
                 {
+                    Log.i("Pain EMA", "Next/Submit Button Tapped");     // Logs on Console.
+
                     String data =  ("Pain EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
@@ -186,10 +199,10 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // The log activity method is called.
 
-                    if (CurrentQuestion == Questions.length-1)
+                    if (CurrentQuestion == Questions.length-1)      // If this is the last question
                     {
-                        UserResponses[Questions.length -1] = "Yes";
-                        Submit();
+                        UserResponses[Questions.length -1] = "Yes";     // And they answer yes
+                        Submit();       // Submit the survey
                     }
                     else if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
                     {
@@ -207,6 +220,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
             {
                 public void onClick(View view)      // When the back button is clicked.
                 {
+                    Log.i("Pain EMA", "Back Button Tapped");     // Logs on Console.
+
                     String data =  ("Pain EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
@@ -220,10 +235,10 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {
                         ThankYou();
                     }
-                    else if (CurrentQuestion == Questions.length-1)
+                    else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
-                        UserResponses[Questions.length -1] = "No";
-                        Submit();
+                        UserResponses[Questions.length -1] = "No";      // And they answer no
+                        Submit();       // Submit the survey
                     }
                     else        // If we are not on the first question
                     {
@@ -242,6 +257,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
+        Log.i("Pain EMA", "Submitting Results");     // Logs on Console.
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         Date date = new Date();     // Makes a new date call from the system
         StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
@@ -284,6 +301,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void LogActivity()      // Logs the activity of the person.
     {
+        Log.i("Pain EMA", "Logging Activity");     // Logs on Console.
+
         String data =  (new SystemInformation().getTimeStamp()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger("Pain_EMA_Activity.csv",data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
@@ -292,6 +311,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
+        Log.i("Pain EMA", "Destroying Followup EMA");     // Logs on Console.
+
         wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.

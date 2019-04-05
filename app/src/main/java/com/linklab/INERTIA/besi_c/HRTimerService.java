@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Service;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,6 +39,8 @@ public class HRTimerService extends Service         /* This runs the delay timer
 
         if (Stop)       // If it says stop, it kills the HRService.
         {
+            Log.i("Heart Rate Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
+
             String data =  ("Heart Rate Timer Service stopped Heart Rate Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
@@ -50,6 +54,8 @@ public class HRTimerService extends Service         /* This runs the delay timer
             {
                 public void run()       // Runs the imported file based on the timer specified.
                 {
+                    Log.i("Heart Rate Timer Sensor", "Starting Heart Rate Sensor");     // Logs on Console.
+
                     SystemInformation info = new SystemInformation();
                     String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());
                     DataLogger datalog = new DataLogger("Battery_Activity.csv",data);      // Logs it into a file called Charging time.
@@ -83,6 +89,8 @@ public class HRTimerService extends Service         /* This runs the delay timer
     @Override
     public void onDestroy()     // When the service is destroyed.
     {
+        Log.i("Heart Rate Timer Sensor", "Destroying Timer Service");     // Logs on Console.
+
         HRTimerService.cancel();        //  Cancels the HR Timer Service.
         wakeLock.release();     // Releases the wakelock
 
