@@ -92,43 +92,73 @@
             android:launchMode="singleInstance" />
 
         <activity
-            android:name=".FireBase_Upload"
-            android:label="Upload Files"
-            android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!-- Comment this out to be able to return to the regular home settings for the watch -->
-                <!-- <category android:name="android.intent.category.HOME" /> -->
-                <!-- Comment this out to be able to have the default watch activity be the default for the watch -->
-                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".FireBase_Upload"
+            android:label="BESI: Upload Files"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".FollowUpEMA"
-            android:launchMode="singleInstance"/>
+            android:label="BESI: Follow-up EMA"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".PainEMA"
-            android:launchMode="singleInstance"/>
+            android:label="BESI: Pain EMA"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".EndOfDayEMA"
-            android:launchMode="singleInstance"/>
+            android:label="BESI: EoD EMA"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".EndOfDayPrompt1"
-            android:launchMode="singleInstance"/>
+            android:label="BESI: EoD Prompt 1"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".EndOfDayPrompt2"
-            android:launchMode="singleInstance" >
+            android:label="BESI: EoD Prompt 2"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
     </application>
