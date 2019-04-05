@@ -30,9 +30,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <service
-            android:name=".FollowUpEMASchedulerService"
-            android:enabled="true"/>
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -62,34 +59,50 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
-
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".FollowUpEMASchedulerService"
+            android:enabled="true" >
+        </service>
+
+        <service
+            android:name=".HeartRateSensor"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".AccelerometerSensor"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".HRTimerService"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".ESTimerService"
+            android:launchMode="singleInstance" >
+        </service>
+
         <service
             android:name=".PedometerSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService" />
-        <service
-            android:name=".HeartRateSensor"
-            android:launchMode="singleInstance" />
-        <service
-            android:name=".AccelerometerSensor"
-            android:launchMode="singleInstance" />
-        <service
-            android:name=".HRTimerService"
-            android:launchMode="singleInstance" />
+            tools:ignore="ExportedService" >
+        </service>
+
         <service
             android:name=".EstimoteService"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService" />
-        <service
-            android:name=".ESTimerService"
-            android:launchMode="singleInstance" />
+            tools:ignore="ExportedService" >
+        </service>
 
         <activity
             android:name=".MainActivity"
@@ -105,60 +118,36 @@
             android:name=".FireBase_Upload"
             android:label="BESI: Upload Files"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".FollowUpEMA"
             android:label="BESI: Follow-up EMA"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".PainEMA"
             android:label="BESI: Pain EMA"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".EndOfDayEMA"
             android:label="BESI: EoD EMA"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".EndOfDayPrompt1"
             android:label="BESI: EoD Prompt 1"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".EndOfDayPrompt2"
             android:label="BESI: EoD Prompt 2"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
     </application>

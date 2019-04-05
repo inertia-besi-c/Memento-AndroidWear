@@ -58,16 +58,16 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             };
     private String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
-                    {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
-                    {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very", "Unsure"},
             };
 
     private String[] PatientQuestions =      // These are strictly the patient questions.
@@ -85,18 +85,19 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             };
     private String[][] PatientAnswers =      // These are strictly the patient answers.
             {
-                    {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Excellent"},
-                    {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very", "Unsure"},
             };
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
@@ -104,7 +105,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
-        wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);      // The screen turns off after the timeout is passed.
+        wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(1000);        // The watch vibrates for the allotted amount of time.

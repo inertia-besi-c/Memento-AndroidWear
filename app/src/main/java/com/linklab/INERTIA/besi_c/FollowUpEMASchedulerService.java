@@ -7,22 +7,24 @@ import android.os.IBinder;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FollowUpEMASchedulerService extends Service {
-    public FollowUpEMASchedulerService() {
-    }
-
+public class FollowUpEMASchedulerService extends Service        // This is a service file that allows a new pain EMA to interrupt the followup EMA.
+{
     private Timer FollowUpEMATimer;     // This is the timer for the follow up EMA
-    private long FollowUpEMADelay = new Preferences().FollowUpEMADelay; //Time before followup EMA / EMA2 following submission
+    private long FollowUpEMADelay = new Preferences().FollowUpEMADelay;     // Time before followup EMA / EMA2 following submission
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public int onStartCommand(Intent intent, int flags, int startId)        // When the service is called this is started.
     {
-        try{
-        FollowUpEMATimer.cancel();}
-        catch (Exception ex){}
+        try     // Tries the following first if it can.
+        {
+            FollowUpEMATimer.cancel();      // It tries to cancel the old timer.
+        }
+        catch (Exception ex)   // If it cannot
+        {
+
+        }
 
         FollowUpEMATimer = new Timer();     // Creates a timer for the follow up EMA
-
         FollowUpEMATimer.schedule(new TimerTask()       // If they did, it starts a timer for the follow up EMA.
         {
             @Override
@@ -30,21 +32,22 @@ public class FollowUpEMASchedulerService extends Service {
             {
                 Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the Follow up EMA file
                 startActivity(StartEMAActivity);    // Starts the Follow up EMA file.
-                stopSelf();
+                stopSelf();     // Automatically stops and kills this service.
             }
-        },FollowUpEMADelay);        // Waits the specified time as specified in the preference section.
+        }, FollowUpEMADelay);        // Waits the specified time as specified in the preference section.
 
-        return START_NOT_STICKY;
+        return START_NOT_STICKY;        // Does not restart the service if killed.
     }
 
     @Override
     public void onDestroy()
     {
-        FollowUpEMATimer.cancel();
+        FollowUpEMATimer.cancel();      // When the service is destroyed, the timer is canceled.
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent)
+    {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }

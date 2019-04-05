@@ -54,8 +54,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
-                    {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very", "Unsure"},
                     {"Yes", "No", "Unsure"}
             };
 
@@ -71,11 +71,12 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
-                    {"Not at all", "A little", "Moderately", "Very"},
-                    {"Not at all", "A little", "Moderately", "Very", "Unsure"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Not at all", "A little", "Fairly", "Very", "Unsure"},
                     {"Yes", "No"}
             };
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
@@ -83,7 +84,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "FollowUpEMA: WakeLock");        // The wakelock that turns on the screen.
-        wakeLock.acquire((1+ReminderNumber)*EMAReminderInterval+5000);      // The screen turns off after the timeout is passed.
+        wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(1000);        // The watch vibrates for the allotted amount of time.

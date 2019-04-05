@@ -114,10 +114,16 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                         final Thread uploaderThread = new Thread()      // Starts a thread to upload the files
                         {
                             @Override
-                            public void run() {
-                                try{
-                                UploadFile(remotePath,file,timeStamp);}
-                                catch (Exception ex){Log.i("Upload","File does not exist");}
+                            public void run()
+                            {
+                                try
+                                {
+                                    UploadFile(remotePath,file,timeStamp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Log.i("Upload","File does not exist");
+                                }
                             }
                         };
 

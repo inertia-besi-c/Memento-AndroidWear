@@ -97,7 +97,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
-            //startService(AccelService);        // Starts the service.
+            // startService(AccelService);        // Starts the service.
         }
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
@@ -211,7 +211,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
                             datalogA.LogData();      // Saves the data into the directory.
 
-                            //startService(AccelService);        // Starts the service.
+                            // startService(AccelService);        // Starts the service.
                         }
                     }
                 }
@@ -351,7 +351,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
     private void uploadData()       // This calls the Fire Base activity to upload of data
     {
-        Intent upload = new Intent(getApplicationContext(),FireBase_Upload.class);      // Makes an intent of the system
+        Intent upload = new Intent(getApplicationContext(), FireBase_Upload.class);      // Makes an intent of the system
         if(!isRunning(FireBase_Upload.class))       // Checks if it is already running
         {
             startActivity(upload);      // If not, start it.
