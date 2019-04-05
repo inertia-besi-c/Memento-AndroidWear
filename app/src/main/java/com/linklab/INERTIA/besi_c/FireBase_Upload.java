@@ -101,7 +101,7 @@ public class FireBase_Upload extends WearableActivity {
 
                         done = false;
                         final String file = DeviceID + fileName[i];
-                        final String remotePath = path+type_[i]+"/"+timeStamp+"/";
+                        final String remotePath = path+type_[i]+"/";
 
                         Log.i("Upload","Uploading: "+file+" to: " + remotePath);
 
@@ -109,7 +109,7 @@ public class FireBase_Upload extends WearableActivity {
                             @Override
                             public void run() {
                                 try{
-                                UploadFile(remotePath,file);}
+                                UploadFile(remotePath,file,timeStamp);}
                                 catch (Exception ex){Log.i("Upload","File does not exist");}
 
                             }
@@ -138,10 +138,10 @@ public class FireBase_Upload extends WearableActivity {
 
 
 
-    void UploadFile(String remotePath , String fileName)
+    void UploadFile(String remotePath , String fileName, String timeStamp)
     {
         Uri file = Uri.fromFile(new File(localDirPath+fileName));
-        StorageReference riversRef = storageRef.child(remotePath+file.getLastPathSegment());
+        StorageReference riversRef = storageRef.child(remotePath+timeStamp+"_"+file.getLastPathSegment());
         UploadTask uploadTask = riversRef.putFile(file);
 
         // Register observers to listen for when the download is done or if it fails

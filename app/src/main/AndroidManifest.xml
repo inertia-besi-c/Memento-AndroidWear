@@ -30,21 +30,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <service
+            android:name=".FollowUpEMASchedulerService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <uses-library
             android:name="com.google.android.wearable"
-            android:required="true" >
-        </uses-library>
+            android:required="true"></uses-library>
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true" >
-        </meta-data>
-
+            android:value="true"></meta-data>
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" >
-        </meta-data>
+            android:value="@integer/google_play_services_version"></meta-data>
 
         <service
             android:name=".BESIWatchFace"
@@ -67,7 +67,6 @@
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".PedometerSensor"
             android:enabled="true"
@@ -99,10 +98,10 @@
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -116,41 +115,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".FollowUpEMA"
-            android:launchMode="singleInstance">
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".PainEMA"
-            android:launchMode="singleInstance">
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".PainScreen"
-            android:launchMode="singleInstance" >
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".EndOfDayEMA"
-            android:launchMode="singleInstance">
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".EndOfDayPrompt1"
-            android:launchMode="singleInstance" >
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".EndOfDayPrompt2"
-            android:launchMode="singleInstance" >
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".EndOfDayPrompt3"
-            android:launchMode="singleInstance" >
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
     </application>
+
 </manifest>

@@ -27,14 +27,12 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private PowerManager.WakeLock wakeLock;     // This is the power manager service for the system.
     private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
-    private Timer FollowUpEMATimer;     // This is the timer for the follow up EMA
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
-    private long FollowUpEMADelay = new Preferences().FollowUpEMADelay; //Time before followup EMA / EMA2 following submission
     private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
     private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
@@ -90,7 +88,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
 
-        FollowUpEMATimer = new Timer();     // Creates a timer for the follow up EMA
         EMARemindertimer = new Timer();     // Creates the EMA reminder timer.
 
         back = findViewById(R.id.Back);         // Sets the back button to a variable.
@@ -259,15 +256,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
         if(UserResponses[Questions.length -1] != null && UserResponses[Questions.length - 1].toLowerCase().contains("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
         {
-            FollowUpEMATimer.schedule(new TimerTask()       // If they did, it starts a timer for the follow up EMA.
-            {
-                @Override
-                public void run()       // When the timer is called, this is run.
-                {
-                    Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the Follow up EMA file
-                    startActivity(StartEMAActivity);    // Starts the Follow up EMA file.
-                }
-            },FollowUpEMADelay);        // Waits the specified time as specified in the preference section.
+            // Start FollowUpScheduler
+            Intent FollowUpScheduler = new Intent(getApplicationContext(), FollowUpEMASchedulerService.class);
+            startService(FollowUpScheduler);
         }
 
         ThankYou();     // Calls the thank you method.

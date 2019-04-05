@@ -100,7 +100,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
-            startService(AccelService);        // Starts the service.
+            //startService(AccelService);        // Starts the service.
         }
 
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
@@ -214,7 +214,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
                             datalogA.LogData();      // Saves the data into the directory.
 
-                            startService(AccelService);        // Starts the service.
+                            //startService(AccelService);        // Starts the service.
                         }
                     }
                 }
@@ -274,14 +274,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (isCharging)     // If the battery is charging
                             {
+                                if (!BatteryCharge){
                                 while (!isDeviceOnline())
                                 {
+                                    if(systemInformation.isSystemCharging(getApplicationContext()))
+                                    {break;} // Stop infinite loop if no WiFi available and device is disconnected from charger
                                     String data =  ("Trying to enable an Internet connection at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
 
                                     wifi.setWifiEnabled(true);
-                                }
+                                }}
 
                                 if (!BatteryCharge || !SleepMode)       // If the battery is not charging and it is not in sleep mode
                                 {
@@ -306,13 +309,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             else        // If the watch is not charging.
                             {
+                                wifi.setWifiEnabled(false);     // Disable the wifi.
                                 if (isDeviceOnline())       // If the wifi system is enabled.
                                 {
                                     String data =  ("Wifi is disabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
-
-                                    wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
