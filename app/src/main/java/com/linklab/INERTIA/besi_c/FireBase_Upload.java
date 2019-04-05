@@ -115,24 +115,10 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                         final Thread uploaderThread = new Thread()      // Starts a thread to upload the files
                         {
                             @Override
-                                    String data =  ("Uploading Files at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
-                                    datalog.LogData();      // Saves the data into the directory.
                             public void run() {
                                 try{
                                 UploadFile(remotePath,file,timeStamp);}
                                 catch (Exception ex){Log.i("Upload","File does not exist");}
-
-                                    UploadFile(remotePath,file);        // Tries to upload the files and their directories
-                                }
-                                catch (Exception ex)        // If it fails
-                                {
-                                    String data =  ("Uploading Files failed at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
-                                    datalog.LogData();      // Saves the data into the directory.
-
-                                    Log.i("Firebase","File does not exist in watch");      // Log shows that the file does not exist
-                                }
                             }
                         };
 
