@@ -1,12 +1,12 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,6 +22,8 @@ public class ESTimerService extends Service         /* This runs the delay timer
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
+        Log.i("Estimote", "Starting Estimote Timer Service");     // Logs on Console.
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Starts the power manager service from the system
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ESService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
         wakeLock.acquire();     // Starts the wakelock without any timeout.
@@ -38,6 +40,8 @@ public class ESTimerService extends Service         /* This runs the delay timer
         {
             public void run()       // Runs the imported file based on the timer specified.
             {
+                Log.i("Estimote", "Starting Estimote Service");     // Logs on Console.
+
                 String data =  ("Estimote Timer started Estimote Service at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
@@ -50,6 +54,8 @@ public class ESTimerService extends Service         /* This runs the delay timer
     @Override
     public void onDestroy()     // When the service is destroyed.
     {
+        Log.i("Estimote", "Destroying Estimote Timer Service");     // Logs on Console.
+
         String data =  ("Estimote Timer stopped Estimote Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
         DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.

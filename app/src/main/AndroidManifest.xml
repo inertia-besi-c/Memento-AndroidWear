@@ -128,11 +128,6 @@
         </activity>
 
         <activity
-            android:name=".PainScreen"
-            android:launchMode="singleInstance" >
-        </activity>
-
-        <activity
             android:name=".EndOfDayEMA"
             android:launchMode="singleInstance">
         </activity>
@@ -144,11 +139,6 @@
 
         <activity
             android:name=".EndOfDayPrompt2"
-            android:launchMode="singleInstance" >
-        </activity>
-
-        <activity
-            android:name=".EndOfDayPrompt3"
             android:launchMode="singleInstance" >
         </activity>
 

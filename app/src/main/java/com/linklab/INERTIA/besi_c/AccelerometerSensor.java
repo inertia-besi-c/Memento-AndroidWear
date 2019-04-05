@@ -1,15 +1,17 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.os.PowerManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.app.Service;
+import android.os.PowerManager;
+import android.util.Log;
 
 public class AccelerometerSensor extends Service implements SensorEventListener     // This initializes the accelerometer sensor.
 {
@@ -20,6 +22,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)        // Establishes the sensor and the ability to collect data at the start of the data collection
     {
+        Log.i("Accelerometer", "Started Accelerometer Sensor Service");     // Logs on Console.
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);    // Controls the power distribution of the system.
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AccelService:wakeLock");      // Gets partial power to run the sensor.
         wakeLock.acquire();     // Turns on the wakelock and acquires what is needed.
@@ -55,6 +59,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         {
             public void run()       // Re-runs every time.
             {
+                Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
+
                 DataLogger dataLogger = new DataLogger("Accelerometer_Data.csv", accelerometerValues);       // Logs the data into a file that can be retrieved from the watch.
                 dataLogger.LogData();   // Logs the data to a folder on the watch.
             }
@@ -64,6 +70,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     @Override
     public void onDestroy()     // A destroy service switch (kill switch)
     {
+        Log.i("Accelerometer", "Destroying Accelerometer Sensor Service");     // Logs on Console.
+
         mSensorManager.unregisterListener(this);    // Kills the service that listens to the accelerometer sensor.
         wakeLock.release();     // Releases the wakelock on the service.
     }

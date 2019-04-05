@@ -63,7 +63,6 @@ public class Beacon implements Parcelable
         {
             return new Beacon(in);
         }
-
         public Beacon[] newArray(int size)
         {
             return new Beacon[size];

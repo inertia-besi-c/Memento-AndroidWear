@@ -38,7 +38,7 @@ class SystemInformation     // Class that acquires the current time from the sys
 
     String getFolderTimeStamp()        // Puts the system time acquired into the desired format wanted.
     {
-        DateFormat datetimeFormat = new SimpleDateFormat("MM|dd|yyyy HH.mm", Locale.US);      // Specified format of the time, in US style.
+        DateFormat datetimeFormat = new SimpleDateFormat("yyMMdd_HHmm", Locale.US);      // Specified format of the time, in US style.
         Date current = new Date();      // Calls the current date from the system.
         return datetimeFormat.format(current);  // Returns the date and time the system is in.
     }

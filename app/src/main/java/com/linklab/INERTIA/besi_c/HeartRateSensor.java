@@ -3,11 +3,12 @@ package com.linklab.INERTIA.besi_c;
 // Imports
 import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.IBinder;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +32,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         {
             public void run()       // Runs the imported file based on the timer specified.
             {
+                Log.i("Heart Rate Sensor", "Stopping Sensor");     // Logs on Console.
+
                 String data =  ("Heart Rate Sensor killed Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
@@ -66,6 +69,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     @Override
     public void onDestroy()     // A destroy all activity switch (kill switch)
     {
+        Log.i("Heart Rate Sensor", "Destroying Sensor Service");     // Logs on Console.
+
         mSensorManager.unregisterListener(this);        // Kills the listener
         HRSensorTimer.cancel();     // Kills the timer.
     }

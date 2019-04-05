@@ -2,8 +2,8 @@ package com.linklab.INERTIA.besi_c;
 
 // Imports
 
-import android.annotation.SuppressLint;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,10 +18,11 @@ import java.util.Date;
 public class DataLogger     // A function that runs the data logging data
 {
     private String FileName, Content;        // Variable names for the file characters and contents.
+    private String Directory = new Preferences().Directory;     // Gets the directory from the preferences class.
 
     public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
-        FileName = new Preferences().DeviceID +"_"+filename;        // Initiates a variable for the filename
+        FileName = new Preferences().DeviceID+"_"+filename;        // Initiates a variable for the filename from preferences
         Content = content;      // Initiates a variable for the content of the file name
     }
 
@@ -43,19 +44,15 @@ public class DataLogger     // A function that runs the data logging data
         {
             try
             {
-                @SuppressLint("SdCardPath")     // Suppresses the path name.
-                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+                File BESI_directory = new File(Directory);    // Path to file in the storage of the device
 
-                if (BESI_directory.isDirectory())       // If there is a directory with that name
+                if (!BESI_directory.isDirectory())    // If there is no directory with that name
                 {
-                    // Do nothing
-                }
-                else    // If there is no directory with that name
-                {
+                    Log.i("Data Logger", "Making a directory called " + BESI_directory);     // Logs on Console.
                     BESI_directory.mkdirs();        // Make a directory with the name.
                 }
 
-                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,true);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -65,17 +62,17 @@ public class DataLogger     // A function that runs the data logging data
             }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
             catch (Exception ex)
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
         }
 
         else        // If we canot make the directory
         {
-            // Do nothing.
+            Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
         }
     }
 
@@ -85,19 +82,15 @@ public class DataLogger     // A function that runs the data logging data
         {
             try
             {
-                @SuppressLint("SdCardPath")     // Suppresses the sdcard image name.
-                File BESI_directory = new File("/sdcard/BESI_C/");    // Path to file in the storage of the device
+                File BESI_directory = new File(Directory);    // Path to file in the storage of the device
 
-                if (BESI_directory.isDirectory())       // If there is a directory with the name
+                if (!BESI_directory.isDirectory())        // If there is no directory with the name
                 {
-                    // Do nothing
-                }
-                else        // If there is no directory with the name
-                {
+                    Log.i("Data Logger", "Making a directory called " + BESI_directory);     // Logs on Console.
                     BESI_directory.mkdirs();        // Do nothing.
                 }
 
-                File myFile = new File("/sdcard/BESI_C/"+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,false);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -107,26 +100,26 @@ public class DataLogger     // A function that runs the data logging data
             }
             catch (IOException e)       // If it does not write the file, imform us it failed.
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
             catch (Exception ex)
             {
-                // Do nothing.
+                Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
         }
 
         else        // If we canot make the directory
         {
-          // Do nothing.
+            Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
         }
     }
 
     public String ReadData()    // This reads the data from the sdcard
     {
         StringBuilder text = new StringBuilder();       // This is the new string that is built
-        try     // Tires to run the following.
+        try     // Tries to run the following.
         {
-            File file = new File("/sdcard/BESI_C/",FileName);       // Creates a filename with the new filename
+            File file = new File(Directory,FileName);       // Creates a filename with the new filename
             BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
             String line;        // Creates a new line.
 
@@ -146,28 +139,29 @@ public class DataLogger     // A function that runs the data logging data
 
     public static boolean writeToFile(Date time1, String data)      /* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
     {
-        boolean flag = true;
-        String path = Environment.getExternalStorageDirectory() + "/BESI_C";
-        String fileName = new Preferences().DeviceID + "_Estimote_Data.csv";
-        File file = new File(path);
+        String deviceID = new Preferences().DeviceID;
+        boolean flag = true;        // Sets a flag
+        String path = Environment.getExternalStorageDirectory() + "/BESI_C";        // Gets the path to the storage in the sdcard
+        String fileName = deviceID + "_Estimote_Data.csv";        // Names the file.
+        File file = new File(path);     // Makes a path to the file.
 
-        if (file.exists() == false)
+        if (file.exists() == false)     // If there is no directory with this name
         {
-            file.mkdirs();
+            file.mkdirs();      // Make the directory
         }
 
-        String filepath = path + "/" + fileName;
+        String filepath = path + "/" + fileName;        // Go into the directory, and make a file with the given filename
 
-        try
+        try     // Try the following
         {
-            FileOutputStream fStream = new FileOutputStream(filepath, true);
-            fStream.write(data.getBytes());
+            FileOutputStream fStream = new FileOutputStream(filepath, true);        // Append the data to the file
+            fStream.write(data.getBytes());     // Write the data
         }
-        catch (Exception ex)
+        catch (Exception ex)        // If it failed
         {
-            flag = false;
+            flag = false;       // Set the flag to false, and try again
         }
 
-        return flag;
+        return flag;        // Return the flag value
     }
 }
