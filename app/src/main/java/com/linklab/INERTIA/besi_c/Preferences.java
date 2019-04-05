@@ -4,11 +4,12 @@ package com.linklab.INERTIA.besi_c;
 @SuppressWarnings("ALL")    // Service wide suppression for the Errors.
 public class Preferences        // System wide one stop place to set all settings for a particular individual
 {
-    String Directory = "sdcard/BESI_C/";     // Directory on the watch where all files are saved
     // Settings for Deployment
-    String DeviceID = "Fossil_41mm";
-    String DeploymentID = "Test1";
+    // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
+    String DeviceID = "Fossil_41mm"; // Internal ID of Device assigned to Dyad
+    String DeploymentID = "Test1"; // Deployment ID
     String Role = "PT";  // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    String Directory = "sdcard/BESI_C/";     // Directory on the watch where all files are saved
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0; // How long to give the user before starting the timer to remind user to complete the ema
