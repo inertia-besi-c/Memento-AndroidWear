@@ -20,19 +20,28 @@ import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.File;
+
+/* ************************************************************************************* MAIN ACTIVITY OF THE APP ************************************************************************************************** */
 
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
     private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics.
+    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
+    private String Battery = new Preferences().Battery;     // Gets the sensors from preferences.
+    private String System = new Preferences().System;     // Gets the sensors from preferences.
+    private String Estimote = new Preferences().Estimote;       // Gets the Estimote from preferences.
+    private String Pedometer = new Preferences().Pedometer;       // Gets the Estimote from preferences.
+    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
-    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
     private boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
     private Vibrator vibrator;      // The vibrator that provides haptic feedback.
 
@@ -89,11 +98,76 @@ public class MainActivity extends WearableActivity  // This is the activity that
         time = findViewById(R.id.TIME);     // The time view ID
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
 
+        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (sensors.exists())      // If the file exists
+        {
+            Log.i("Main Activity", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        if (system.exists())      // If the file exists
+        {
+            Log.i("Main Activity", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File battery = new File(new Preferences().Directory + new SystemInformation().Battery_Path);     // Gets the path to the Sensors from the system.
+        if (battery.exists())      // If the file exists
+        {
+            Log.i("Main Activity", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Battery, new Preferences().Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File estimote = new File(new Preferences().Directory + new SystemInformation().Estimote_Path);     // Gets the path to the Sensors from the system.
+        if (estimote.exists())      // If the file exists
+        {
+            Log.i("Estimote Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Estimote, new Preferences().Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File pedometer = new File(new Preferences().Directory + new SystemInformation().Pedometer_Path);     // Gets the path to the Pedometer from the system.
+        if (pedometer.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Pedometer, new Preferences().Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
         {
-            String data =  ("Main Activity Started Heart Rate Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("Main Activity," + "Started Heart Rate Timer at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(HRService);        // That starts the heartrate sensor if it is not already running.
@@ -102,8 +176,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
         {
-            String data =  ("Main Activity Started Accelerometer Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("Main Activity," + "Started Accelerometer Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
 //            startService(AccelService);        // Starts the service.
@@ -112,8 +186,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
-            String data =  ("Main Activity Started Pedometer Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("Main Activity," + "Started Pedometer Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(PedomService);        // Starts the service.
@@ -122,8 +196,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
-            String data =  ("Main Activity Started Estimote Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("Main Activity," + "Started Estimote Timer at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(EstimService);        // Starts the service.
@@ -133,10 +207,36 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
+                File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+                if (system.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+                if (sensors.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
                 vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
 
-                String data =  ("Main Activity 'Start' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("Main Activity," + "'Start' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
@@ -149,18 +249,44 @@ public class MainActivity extends WearableActivity  // This is the activity that
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
             public void onClick(View v)     // When the sleep button is clicked
             {
+                File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+                if (system.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+                if (sensors.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
                 vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
 
-                String data =  ("Main Activity 'Sleep' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("Main Activity," + "'Sleep' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 if (isCharging)     // Checks if the watch is charging
                 {
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
-                        String dataHR =  ("Sleep Button Stopped Heart Rate Sensor while charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalogHR = new DataLogger("Sensor_Activity.csv",dataHR);      // Logs it into a file called System Activity.
+                        String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger(Sensors, dataHR);      // Logs it into a file called System Activity.
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         stopService(HRService);     // It stops the service
@@ -171,8 +297,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
                         {
-                            String dataA =  ("Sleep Button Stopped Accelerometer Sensor while charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                            DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
+                            String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
                             datalogA.LogData();      // Saves the data into the directory.
 
                             stopService(AccelService);        // Stop the service.
@@ -186,8 +312,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 {
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
-                        String dataHR =  ("Sleep Button Stopped Heart Rate Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalogHR = new DataLogger("Sensor_Activity.csv",dataHR);      // Logs it into a file called System Activity.
+                        String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger(Sensors, dataHR);      // Logs it into a file called System Activity.
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         stopService(HRService);     // It stops the service
@@ -198,8 +324,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
                         {
-                            String dataA =  ("Sleep Button Stopped Accelerometer Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                            DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
+                            String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
                             datalogA.LogData();      // Saves the data into the directory.
 
                             stopService(AccelService);        // Stop the service.
@@ -208,8 +334,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                     else        // If the heart rate timer is not running
                     {
-                        String dataHR =  ("Sleep Button Started Heart Rate Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalogHR = new DataLogger("Sensor_Activity.csv",dataHR);      // Logs it into a file called System Activity.
+                        String dataHR =  ("Sleep Button," + "Started Heart Rate Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger(Sensors, dataHR);      // Logs it into a file called System Activity.
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         startService(HRService);        // It starts the heart rate timer service
@@ -220,8 +346,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
                         {
-                            String dataA =  ("Sleep Button Started Accelerometer Sensor while NOT charging at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                            DataLogger datalogA = new DataLogger("Sensor_Activity.csv",dataA);      // Logs it into a file called System Activity.
+                            String dataA =  ("Sleep Button," + "Started Accelerometer Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
                             datalogA.LogData();      // Saves the data into the directory.
 
 //                            startService(AccelService);        // Starts the service.
@@ -260,7 +386,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         public void run()       // This is run on the main system.
                         {
                             SystemInformation systemInformation = new SystemInformation();      // Gets the methods from the system information class.
-                            DataLogger stepActivity = new DataLogger("StepActivity","no");      // Logs step data to the file.
+                            DataLogger stepActivity = new DataLogger("Step_Activity","no");      // Logs step data to the file.
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
                             BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
 
@@ -271,8 +397,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (!bluetooth.isEnabled())     // If the bluetooth is not enabled on the watch
                             {
-                                String data =  ("Bluetooth enabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                String data =  ("Main Thread," + "Enabled Bluetooth at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                                 datalog.LogData();      // Saves the data into the directory.
 
                                 bluetooth.enable();     // Enable it.
@@ -287,8 +413,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                         if(systemInformation.isSystemCharging(getApplicationContext()))     // Gets the system status from system information.
                                         {break;}    // Stop infinite loop if no WiFi available and device is disconnected from charger
 
-                                        String data =  ("Trying to enable an Internet connection at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                                        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                        String data =  ("Main Thread," + "Trying to enable an Internet connection at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                                         datalog.LogData();      // Saves the data into the directory.
 
                                         wifi.setWifiEnabled(true);      // Sets the wifi of the system on.
@@ -299,8 +425,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 {
                                     if (!BatteryCharge && isDeviceOnline())     // If there is a connection.
                                     {
-                                        String data =  ("Uploading Data to Firebase" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                                        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                        String data =  ("Main Thread," + "Uploading Data to Firebase at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                                         datalog.LogData();      // Saves the data into the directory.
 
                                         uploadData();       // Calls the upload method.
@@ -322,8 +448,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                                 if (isDeviceOnline())       // If the wifi system is enabled.
                                 {
-                                    String data =  ("Wifi is disabled at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                                    String data =  ("Main Thread," + "Wifi is disabled at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
                                 }
 
@@ -361,8 +487,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
-            String data =  ("Main Activity Resuming Started Pedometer Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("Main Activity," + "Resuming Started Pedometer Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(PedomService);        // Starts the service.
@@ -371,8 +497,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
-            String data =  ("Main Activity Resuming Started Estimote Timer at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("Main Activity," + "Resuming Started Estimote Timer at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(EstimService);        // Starts the service.
@@ -384,18 +510,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private void LogActivityCharge()        // Logs the times when the battery is charging.
     {
         String data;        // This is the data to be logged
-        String timeStamp = new SystemInformation().getTimeStamp();      // This is the time stamp from the system
 
         if (isCharging)     // If the system is charging
         {
-            data =  (timeStamp + ",Plugged");      // Data is the time that we are charging
+            data = new SystemInformation().getTimeStamp() + ",Plugged," + new SystemInformation().getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
         }
         else      // If we are not charging
         {
-            data =  (timeStamp + ",Unplugged");     // Data is the time that we are not charging
+            data = new SystemInformation().getTimeStamp() + ",UnPlugged," + new SystemInformation().getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
         }
 
-        DataLogger datalog = new DataLogger("Battery_Activity.csv", data);      // Logs it into a file called Charging time.
+        DataLogger datalog = new DataLogger(Battery, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
     }
 

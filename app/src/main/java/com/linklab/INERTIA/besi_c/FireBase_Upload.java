@@ -32,6 +32,24 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
     private ProgressBar uploading;      // This is the progress of the upload
     private boolean done;       // If the upload is done
     private boolean succeed;        // If the upload suceeded
+    private String PreferenceDeviceID = new Preferences().DeviceID;       // Gets the Device ID from preferences
+    private String PreferenceDeploymentID = new Preferences().DeploymentID;         // Gets the deployment ID from preferences
+    private String PreferenceRole = new Preferences().Role;       // Gets the Role from preferences
+    private String Accelerometer = new Preferences().Accelerometer;       // Gets the Accelerometer file from preferences
+    private String Battery = new Preferences().Battery;       // Gets the Battery level file from preferences
+    private String Estimote = new Preferences().Estimote;       // Gets the Estimote file from preferences
+    private String Pedometer = new Preferences().Pedometer;            // Gets the Pedometer file from preferences
+    private String Pain_Activity = new Preferences().Pain_Activity;           // Gets the Pain Activity file from preferences
+    private String Pain_Results = new Preferences().Pain_Results;              // Gets the Pain Results file from preferences
+    private String Followup_Activity = new Preferences().Followup_Activity;           // Gets the Followup Activity file from preferences
+    private String Followup_Results = new Preferences().Followup_Results;           // Gets the Followup Results file from preferences
+    private String EndOfDay_Activity = new Preferences().EndOfDay_Activity;           // Gets the End of Day Activity file from preferences
+    private String EndOfDay_Results = new Preferences().EndOfDay_Results;           // Gets the End of Day Results file from preferences
+    private String Sensors = new Preferences().Sensors;           // Gets the Sensors file from preferences
+    private String Steps = new Preferences().Steps;           // Gets the Steps file from preferences
+    private String System = new Preferences().System;           // Gets the System file from preferences
+    private String Heart_Rate = new Preferences().Heart_Rate;       // Gets the Heart Rate file from preferences
+    final String timeStamp = new SystemInformation().getFolderTimeStamp();      // Gets a time stamp from System information
     FirebaseStorage storage;        // The storage on firebase
     StorageReference storageRef;        // The storage reference on firbase
     PowerManager.WakeLock wakeLock;     // Wakelock
@@ -40,8 +58,21 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        String data =  ("Firebase Started at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+        File file = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the accelerometer from the system.
+        if (file.exists())      // If the file exists
+        {
+            Log.i("Firebase Service", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Firebase Service", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Accelerometer data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        String data =  ("Firebase Service," + "Started at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
@@ -53,7 +84,6 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
 
         upload = findViewById(R.id.upload);     // This is the upload button
         uploading = findViewById(R.id.progressBar);     // This is the upload progress bar
-
         upload.setVisibility(View.INVISIBLE);       // Sets the upload button to be invisible
         uploading.setVisibility(View.INVISIBLE);        // Sets the progress bar to be invisible
 
@@ -62,10 +92,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);     // Get a connection status from the system
         final NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);     // Gets the connection status with respect to wifi
 
-        Preferences pref = new Preferences();       // Creates a new preference folder
-        final String timeStamp = new SystemInformation().getFolderTimeStamp();      // Gets a time stamp from System information
-        final String DeviceID = pref.DeviceID + "_";        // Sets the device ID to what it is in preferences
-        final String path = pref.DeploymentID + "/" + pref.Role + "/";      // Gets the deployment ID and the role of the watch.
+        final String DeviceID = PreferenceDeviceID + "_";        // Sets the device ID to what it is in preferences
+        final String path = PreferenceDeploymentID + "/" + PreferenceRole + "/";      // Gets the deployment ID and the role of the watch.
 
         upload.setOnClickListener(new View.OnClickListener()        // Waits for the upload button to be clicked
         {
@@ -78,30 +106,32 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
 
                     String [] fileName =        // These are all the files that we want to upload to firebase
                     {
-                            "System_Activity.csv",
-                            "Battery_Activity.csv",
-                            "Estimote_Data.csv",
-                            "Pain_EMA_Results.csv",
-                            "Pain_EMA_Activity.csv",
-                            "EndOfDay_EMA_Results.csv",
-                            "Followup_EMA_Results.csv",
-                            "Followup_EMA_Activity.csv",
-                            "Pedometer_Data.csv",
-                            "Heart_Rate_Data.csv"
+                        System,
+                        Battery,
+                        Estimote,
+                        Pain_Results,
+                        Pain_Activity,
+                        EndOfDay_Results,
+                        EndOfDay_Activity,
+                        Followup_Results,
+                        Followup_Activity,
+                        Pedometer,
+                        Heart_Rate
                     };
 
                     String [] type_ =       // These are the directory we want them to uplaod to <------------------------------  NOTE: THE ORDER CORRESPONDS TO THE FILE ORDER ABOVE
                     {
-                            "SystemLog",
-                            "SystemLog",
-                            "EstimoteData",
-                            "EMAResponses",
-                            "EMAActivity",
-                            "EMAResponses",
-                            "EMAResponses",
-                            "EMAActivity",
-                            "PedometerData",
-                            "HeartRateData"
+                        "SystemLog",
+                        "SystemLog",
+                        "EstimoteData",
+                        "EMAResponses",
+                        "EMAActivity",
+                        "EMAResponses",
+                        "EMAActivity",
+                        "EMAResponses",
+                        "EMAActivity",
+                        "PedometerData",
+                        "HeartRateData"
                     };
 
                     for(int i = 0; i < fileName.length; i++)        // For every file and directory listed above
@@ -140,8 +170,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
 
                 else        // If there is no internet
                 {
-                    String data =  ("Tried to Upload Files without Internet at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("Firebase Service," + "Tried to Upload Files without Internet at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     uploading.setVisibility(View.INVISIBLE);        // Set the uploading to invisible
@@ -169,8 +199,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
             @Override
             public void onFailure(@NonNull Exception exception)         // If it fails
             {
-                String data =  ("Uploading Files failed at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("Firebase Service," + "Uploading Files failed at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Log.i("Firebase","Upload Failed");      // Logs to Console
@@ -184,8 +214,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)         // If it succeded
             {
-                String data =  ("Uploading Files Succeded at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("Firebase Service," + "Uploading Files Succeded at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Log.i("Firebase","Uploaded Successfully");      // Logs to Console
@@ -215,8 +245,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
     @Override
     public void onDestroy()     // When the activity is ended
     {
-        String data =  ("Firebase is killed at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+        String data =  ("Firebase Service," + "is killed at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
 
         Log.i("Firebase","Activity Destroyed");      // Logs to Console

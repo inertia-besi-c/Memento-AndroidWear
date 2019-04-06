@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +36,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
+    private String System = new Preferences().System;      // Gets the System File label from Preferences
+    private String Followup_Activity = new Preferences().Followup_Activity;      // Gets the Followup Activity File label from Preferences
+    private String Followup_Results = new Preferences().Followup_Results;      // Gets the Followup Results File label from Preferences
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
@@ -84,6 +90,45 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        File Result = new File(new Preferences().Directory + new SystemInformation().Followup_EMA_Results_Path);     // Gets the path to the system from the system.
+        if (Result.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Followup_Results, new Preferences().Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File Activity = new File(new Preferences().Directory + new SystemInformation().Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
+        if (Activity.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Followup_Activity, new Preferences().Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        if (system.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         Log.i("Followup EMA", "Starting Followup Service");     // Logs on Console.
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
@@ -127,8 +172,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 Log.i("Followup EMA", "Answer Button Tapped");     // Logs on Console.
 
-                String data =  ("Followup EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("Followup EMA," + "'Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                 datalog.LogData();      // Saves the data into the directory.
 
                 v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
@@ -194,8 +239,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "Next/Submit Button Tapped");     // Logs on Console.
 
-                    String data =  ("Followup EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("Followup EMA," + "'Next/Submit' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
@@ -226,8 +271,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "Back Button Tapped");     // Logs on Console.
 
-                    String data =  ("Followup EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("Followup EMA," + "'Back' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.

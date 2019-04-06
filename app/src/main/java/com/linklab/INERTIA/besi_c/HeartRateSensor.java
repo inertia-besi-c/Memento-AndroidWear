@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -9,6 +10,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,12 +19,40 @@ public class HeartRateSensor extends Service implements SensorEventListener     
 {
     public long Duration = new Preferences().HRSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
+    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
+    private String Heart_Rate = new Preferences().Heart_Rate;     // This is the file name set from preferences.
     int Time_zero;      // Time at start of measurement (milliseconds)
     final Timer HRSensorTimer = new Timer();          // Makes a new timer for HRSensorTimer.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
+        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (sensors.exists())      // If the file exists
+        {
+            Log.i("Heart Rate Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File HRSensors = new File(new Preferences().Directory + new SystemInformation().Heart_Rate_Path);     // Gets the path to the Sensors from the system.
+        if (HRSensors.exists())      // If the file exists
+        {
+            Log.i("Heart Rate Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Heart_Rate, new Preferences().Heart_Rate_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Starts the sensor service for any sensor in the system.
         Sensor mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);        // Makes sure it is for the Heart Rate sensor.
         mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);      // Registers the listener for the HR sensor in the system.
@@ -33,8 +64,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
             {
                 Log.i("Heart Rate Sensor", "Stopping Sensor");     // Logs on Console.
 
-                String data =  ("Heart Rate Sensor killed Sensor at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("Heart Rate Sensor," + "Killed Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 stopSelf();    // Stops the Heart Rate Sensor
@@ -54,7 +85,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         {
             public void run()       // Runs when the runnable is called
             {
-                DataLogger dataLogger = new DataLogger("Heart_Rate_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger(Heart_Rate, logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();     // Starts the runnable.

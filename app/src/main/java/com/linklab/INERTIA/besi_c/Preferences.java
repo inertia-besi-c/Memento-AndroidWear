@@ -1,15 +1,49 @@
 package com.linklab.INERTIA.besi_c;
 
+import android.os.Environment;
+
 @SuppressWarnings("ALL")    // Service wide suppression for the Errors.
 public class Preferences        // System wide one stop place to set all settings for a particular individual
 {
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ---------------------------------------------------------------------------------- */
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    String DeviceID = "Fossil_43mm";        // Internal ID of Device assigned to Dyad
-    String DeploymentID = "Virginia_Test";      // Deployment ID
-    String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
-    String Directory = "sdcard/BESI_C/";        // Directory on the watch where all files are saved
+    public String DeviceID = "White-Tickwatch";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "Personal_Test";      // Deployment ID
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
+
+    /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
+    public String Accelerometer = "Accelerometer_Data.csv";     // This is the Accelerometer File
+    public String Battery = "Battery_Activity.csv";        // This is the Battery Information Folder
+    public String Estimote = "Estimote_Data.csv";      // This is the Estimote File
+    public String Pedometer = "Pedometer_Data.csv";        // This is the Pedometer File
+    public String Pain_Activity = "Pain_EMA_Activity.csv";     // This is the Pain EMA Activity File
+    public String Pain_Results = "Pain_EMA_Results.csv";       // This is the Pain EMA Response File
+    public String Followup_Activity = "Followup_EMA_Activity.csv";     // This is the Followup EMA Activity File
+    public String Followup_Results = "Followup_EMA_Results.csv";     // This is the Folloup EMA Response File
+    public String EndOfDay_Activity = "EndOfDay_EMA_Activity.csv";       // This is the system file for the End of Day Activity
+    public String EndOfDay_Results = "EndOfDay_EMA_Results.csv";        // This is the system file for the End of Day Results
+    public String Sensors = "Sensor_Activity.csv";     // This is the Sensor Activity File
+    public String Steps = "Step_Activity";     // This is the Step Activity File
+    public String System = "System_Activity.csv";      // This is the System Activity File
+    public String Heart_Rate = "Heart_Rate_Data.csv";           // This is the system file for the Heart Rate Sensor
+
+    /* Headers to individual files that are being logged to <--------------------------------------------- This is the order that the headers will appear in */
+    public String EndOfDay_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for EndOfDay_EMA_Activity
+    public String EndOfDay_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";        // Column Headers for EndOfDay_EMA_Results
+    public String Pain_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Pain_EMA_Activity
+    public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";       // Column Headers for Pain_EMA_Results
+    public String Followup_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Followup_EMA_Activity
+    public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";        // Column Headers for Followup_EMA_Results
+    public String Heart_Rate_Data_Headers = "Date --- Time, Unknown, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
+    public String Accelerometer_Data_Headers = "Date --- Time, Unknown Data, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
+    public String Pedometer_Data_Headers = "Date --- Time, Unknown Data, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data
+    public String Estimote_Data_Headers = "Estimote ID, Unknown Data, Unknown Data, Date --- Time";       // Column Headers for Estimote_Data
+    public String Battery_Data_Headers = "Date --- Time, Charging State, Battery Level";       // Column Headers for the Battery.
+    public String Sensor_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the Sensor Logs.
+    public String System_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the System Logs.
+    public String Step_Data_Headers = "yes";        // Column Headers for Steps.
 
     // Settings for Vibration | Time is in ms |
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
@@ -22,14 +56,14 @@ public class Preferences        // System wide one stop place to set all setting
     public int PainEMAReminderNumber = 2;       // Ho1w many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
-    public int FollowUpEMADelay = 30*60*1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMADelay = 1*60*1000;       //(30) How long to wait after PainEMA submitted to prompt follow-up ema
     public int FollowUpEMAReminderNumber = 3;       // How many times to remind the wearer to complete the follow-up ema
     public int FollowUpEMAReminderInterval = 5*60*1000;         // How long to wait between each ping reminding user to complete ema
 
     // Settings for Daily EMA | Time is in ms |
     public long EoDPrompt_TimeOut = 15*60*1000;         // Delay before snoozing and eventually dismissing daily ema
-    public int EoDEMA_Time_Hour = 21;       // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 0;      // Minute of hour at which daily ema should go off
+    public int EoDEMA_Time_Hour = 04;       // Hour at which the daily ema should go off
+    public int EoDEMA_Time_Minute = 25;      // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0;      // Second of minute at which daily ema should go off
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
     public long EoDEMA_Period = 24*60*60*1000;      // This is how often the timer waits before firing again
@@ -45,16 +79,4 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 30000;           // How long should estimote be measured each time?
     public long ESMeasurementInterval = 60000;          // Every how often should a measurement be taken?
-
-/* Settings for Log Files -- NOT YET IMPLEMENTED <------------------- COMING SOON!! */
-//    public String EndOfDay_EMA_Activity_Headers = ""; // Column Headers for EndOfDay_EMA_Activity
-//    public String EndOfDay_EMA_Results_Headers = ""; // Column Headers for EndOfDay_EMA_Results
-//    public String Pain_EMA_Activity_Headers = ""; // Column Headers for Pain_EMA_Activity
-//    public String Pain_EMA_Results_Headers = ""; // Column Headers for Pain_EMA_Results
-//    public String Followup_EMA_Activity_Headers = ""; // Column Headers for Followup_EMA_Activity
-//    public String Followup_EMA_Results_Headers = ""; // Column Headers for Followup_EMA_Results
-//    public String Heart_Rate_Data_Headers = ""; // Column Headers for Heart_Rate_Data
-//    public String Accelerometer_Data_Headers = ""; // Column Headers for Accelerometer_Data
-//    public String Pedometer_Data_Headers = ""; // Column Headers for Pedometer_Data
-//    public String Estimote_Data_Headers = ""; // Column Headers for Estimote_Data
 }
