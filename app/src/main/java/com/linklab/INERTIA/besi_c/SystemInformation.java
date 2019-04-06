@@ -11,8 +11,41 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@SuppressWarnings("ALL")
 class SystemInformation     // Class that acquires the current time from the system and saves it.
 {
+    private String DeviceID = new Preferences().DeviceID;       // Gets the Device ID from preferences
+    private String Accelerometer = new Preferences().Accelerometer;       // Gets the Accelerometer file from preferences
+    private String Battery = new Preferences().Battery;       // Gets the Battery level file from preferences
+    private String Estimote = new Preferences().Estimote;       // Gets the Estimote file from preferences
+    private String Pedometer = new Preferences().Pedometer;            // Gets the Pedometer file from preferences
+    private String Pain_Activity = new Preferences().Pain_Activity;           // Gets the Pain Activity file from preferences
+    private String Pain_Results = new Preferences().Pain_Results;              // Gets the Pain Results file from preferences
+    private String Followup_Activity = new Preferences().Followup_Activity;           // Gets the Followup Activity file from preferences
+    private String Followup_Results = new Preferences().Followup_Results;           // Gets the Followup Results file from preferences
+    private String EndOfDay_Activity = new Preferences().EndOfDay_Activity;           // Gets the End of Day Activity file from preferences
+    private String EndOfDay_Results = new Preferences().EndOfDay_Results;           // Gets the End of Day Results file from preferences
+    private String Sensors = new Preferences().Sensors;           // Gets the Sensors file from preferences
+    private String Steps = new Preferences().Steps;           // Gets the Steps file from preferences
+    private String System = new Preferences().System;           // Gets the System file from preferences
+    private String Heart_Rate = new Preferences().Heart_Rate;       // Gets the Heart Rate files from preferences
+
+    /* File path for Adding Headers to Individual File Name */
+    public String Accelerometer_Path = DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path
+    public String Battery_Path = DeviceID + "_" + Battery;        // This is the Battery Information Folder path
+    public String Estimote_Path = DeviceID + "_" + Estimote;      // This is the Estimote File path
+    public String Pedometer_Path = DeviceID + "_" + Pedometer;        // This is the Pedometer File path
+    public String Pain_EMA_Activity_Path = DeviceID + "_" + Pain_Activity;     // This is the Pain EMA Activity File path
+    public String Pain_EMA_Results_Path = DeviceID + "_" + Pain_Results;       // This is the Pain EMA Response File path
+    public String Followup_EMA_Activity_Path = DeviceID + "_" + Followup_Activity;     // This is the Followup EMA Activity File path
+    public String Followup_EMA_Results_Path = DeviceID + "_" + Followup_Results;     // This is the Followup EMA Response File path
+    public String EndOfDay_Activity_Path = DeviceID + "_" + EndOfDay_Activity;     // This is the End OF Day EMA Activity File Path
+    public String EndOfDay_Results_Path = DeviceID + "_" + EndOfDay_Results;       // This is the End of Day Response File path
+    public String Sensors_Path = DeviceID + "_" + Sensors;    // This is the Sensor Activity File path
+    public String Steps_Path = DeviceID + "_" + Steps;     // This is the Step Activity File path
+    public String System_Path = DeviceID + "_" + System;      // This is the System Activity File path
+    public String Heart_Rate_Path = DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
+
     String getTime()        // This gets only the current time from the system
     {
         DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.US);      // The time format is called in US format.

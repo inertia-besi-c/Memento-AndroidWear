@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
@@ -12,10 +13,13 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import java.io.File;
+
 public class AccelerometerSensor extends Service implements SensorEventListener     // This initializes the accelerometer sensor.
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
+    private String Accelerometer = new Preferences().Accelerometer;     // This is the file name set from preferences.
 
     @SuppressLint("WakelockTimeout")        // Stops the error message from the wakelock
     @Override
@@ -48,19 +52,32 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[1] = event.values[1] - gravity[1];     // Accelerometer value without gravity on the y-axis
         linear_accel[2] = event.values[2] - gravity[2];     // Accelerometer value without gravity on the z-axis
 
-        final String accelerometerValues = // Shows the values in a string.
-                new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +     // Starts a new string line.
-                String.valueOf(linear_accel[0]) + "," + // Acceleration value on x-axis
-                String.valueOf(linear_accel[1]) + "," + // Acceleration value on y-axis
-                String.valueOf(linear_accel[2]); // Acceleration value on z-axis
+        final String accelerometerValues =      // Shows the values in a string.
+                new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +          // Starts a new string line.
+                String.valueOf(linear_accel[0]) + "," +         // Acceleration value on x-axis
+                String.valueOf(linear_accel[1]) + "," +         // Acceleration value on y-axis
+                String.valueOf(linear_accel[2]);        // Acceleration value on z-axis
 
         new Thread(new Runnable()       // Runs this when one or more of the values change
         {
             public void run()       // Re-runs every time.
             {
+                File accelerometer = new File(new Preferences().Directory + new SystemInformation().Accelerometer_Path);     // Gets the path to the accelerometer from the system.
+                if (accelerometer.exists())      // If the file exists
+                {
+                    Log.i("Accelerometer", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Accelerometer", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Accelerometer, new Preferences().Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
                 Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
 
-                DataLogger dataLogger = new DataLogger("Accelerometer_Data.csv", accelerometerValues);       // Logs the data into a file that can be retrieved from the watch.
+                DataLogger dataLogger = new DataLogger(Accelerometer, accelerometerValues);       // Logs the data into a file that can be retrieved from the watch.
                 dataLogger.LogData();   // Logs the data to a folder on the watch.
             }
         }).start();     // This starts the runnable thread.

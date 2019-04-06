@@ -1,19 +1,37 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports.
+
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import java.io.File;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class EODTimerService extends Application        // Starts the EOD EMA Timer Service when called.
 {
+    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
+
     @Override
     public void onCreate()      // Creates the instance when it is started.
     {
+        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (sensors.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         Log.i("End of Day EMA", "End of Day EMA Timer is starting");     // Logs on Console.
 
         super.onCreate();       // Starts the creation.
@@ -40,8 +58,8 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 {
                     Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
 
-                    String data =  ("End of Day Timer Service started Prompt 1 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
@@ -61,8 +79,8 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 {
                     Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
 
-                    String data =  ("End of Day Timer Service started Prompt 1 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.

@@ -2,7 +2,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -17,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private String[] UserResponses;     // This sets the person whose watch it is.
     private String [] Questions;        // These are the questions present
     private String[][] Answers;         // These are their possible answers.
+    private String System = new Preferences().System;      // Gets the System File label from Preferences
+    private String EndOfDay_Activity = new Preferences().EndOfDay_Activity;      // Gets the End of Day Activity File label from Preferences
+    private String EndOfDay_Results = new Preferences().EndOfDay_Results;      // Gets the End of Day Results File label from Preferences
     private Timer EMARemindertimer;     // This is the EMA reminder time interval
     private int[] UserResponseIndex;        // This is the user response index.
     private int resTaps = 0;        // This is a tap that increments to show the different options.
@@ -107,6 +111,45 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        File EODResults = new File(new Preferences().Directory + new SystemInformation().EndOfDay_Results_Path);     // Gets the path to the End of day from the system.
+        if (EODResults.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("End of Day EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(EndOfDay_Results, new Preferences().EndOfDay_EMA_Results_Headers);        /* Logs the End of day data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File EODActivity = new File(new Preferences().Directory + new SystemInformation().EndOfDay_Activity_Path);     // Gets the path to the End of day from the system.
+        if (EODActivity.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("End of Day EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(EndOfDay_Activity, new Preferences().EndOfDay_EMA_Activity_Headers);        /* Logs the End of day data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        if (system.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         Log.i("End of Day EMA", "Starting End of Day EMA Service");     // Logs on Console.
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
@@ -152,8 +195,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                 {
                     Log.i("End of Day EMA", "Reminding User to Continue Survey");     // Logs on Console.
 
-                    String data =  ("End Of Day EMA 'Survey Reminder' Timer Initiated at" + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("End Of Day EMA," + "'Survey Reminder' Timer Initiated at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(ActivityReminder);     // Vibrate for the assigned time.
@@ -163,8 +206,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                 {
                     Log.i("End of Day EMA", "Automatically Ending Survey");     // Logs on Console.
 
-                    String data =  ("End Of Day EMA 'Survey Reminder' Timer Automatically Submitting Survey at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("End Of Day EMA," + "'Survey Reminder' Automatically Submitted at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     Submit();       // Submit the response to the questions.
@@ -178,8 +221,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                 Log.i("End of Day EMA", "Answer Button Tapped");     // Logs on Console.
 
-                String data =  ("End Of Day EMA 'Answer Toggle' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("End Of Day EMA," + "'Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
@@ -228,8 +271,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                 {
                     Log.i("End of Day EMA", "Next/Submit Button Tapped");     // Logs on Console.
 
-                    String data =  ("End of Day EMA 'Next/Submit' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("End of Day EMA," + "'Next/Submit' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
@@ -256,8 +299,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                 {
                     Log.i("End of Day EMA", "Back Button Tapped");     // Logs on Console.
 
-                    String data =  ("End of Day EMA 'Back' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                    String data =  ("End of Day EMA," + "'Back' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
@@ -297,7 +340,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             log.append(",").append(UserResponse);       // The data is logged and appended to a string.
         }
 
-        DataLogger dataLogger = new DataLogger("EndOfDay_EMA_Results.csv", log.toString());     // Logs the data in a csv format.
+        DataLogger dataLogger = new DataLogger(EndOfDay_Results, log.toString());     // Logs the data in a csv format.
         dataLogger.LogData();       // Logs the data into the BESI_C directory.
 
         ThankYou();     // Calls the thank you method.
@@ -323,7 +366,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         Log.i("End of Day EMA", "Logging Activity");     // Logs on Console.
 
         String data =  (new SystemInformation().getTimeStamp()) + ",EMA_EndOfDay," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
-        DataLogger datalog = new DataLogger("EndOfDay_EMA_Activity.csv",data);      // This saves the data into a datalog.
+        DataLogger datalog = new DataLogger(EndOfDay_Activity, data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
     }
 

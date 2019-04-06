@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
@@ -12,11 +13,16 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import java.io.File;
+
 public class PedometerSensor extends Service implements SensorEventListener     // Starts a service for the pedometer.
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates a wakelock power manager for the service.
     private boolean Started = false;        // Creates a boolean to check if it is started.
+    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
+    private String Pedometer = new Preferences().Pedometer;     // Gets the file name from preferences.
+    private String Steps = new Preferences().Steps;     // Gets the sensors from preferences.
     @SuppressLint("WakelockTimeout")        // Suppresses some error messages.
 
     @Override
@@ -35,13 +41,39 @@ public class PedometerSensor extends Service implements SensorEventListener     
     @Override
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
+        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (sensors.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File steps = new File(new Preferences().Directory + new SystemInformation().Steps_Path);     // Gets the path to the Sensors from the system.
+        if (steps.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         if (!Started)       // If the system is not started.
         {
             Started = true;     // Set the boolean value
         }
         else        // If the system has started.
         {
-            new DataLogger("StepActivity","yes").WriteData();       // Start logging yes to the file.
+            new DataLogger(Steps,"yes").WriteData();       // Start logging yes to the file.
         }
 
         final String logstring = new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," + String.valueOf(event.values[0]) + "," + String.valueOf(event.accuracy);     // Format the data
@@ -50,7 +82,20 @@ public class PedometerSensor extends Service implements SensorEventListener     
         {
             public void run()       // This is run in the thread.
             {
-                DataLogger dataLogger = new DataLogger("Pedometer_Data.csv", logstring);       // Logs the data into a file that can be retrieved.
+                File pedometer = new File(new Preferences().Directory + new SystemInformation().Pedometer_Path);     // Gets the path to the Pedometer from the system.
+                if (pedometer.exists())      // If the file exists
+                {
+                    Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Pedometer, new Preferences().Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                DataLogger dataLogger = new DataLogger(Pedometer, logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the directory.
             }
         }).start();     // Starts the runnable.

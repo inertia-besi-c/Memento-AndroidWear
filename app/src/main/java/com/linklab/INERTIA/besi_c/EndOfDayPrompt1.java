@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,12 +21,40 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
 {
     private PowerManager.WakeLock wakeLock;     // Starts the power manager in the system.
     private Timer promptTimeOut = new Timer();      // Creates a new timer.
+    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
+    private String System = new Preferences().System;       // Gets the system from preferences.
     private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock timer.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)      // When it is created this is initially run.
     {
+        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (sensors.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        if (system.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
         super.onCreate(savedInstanceState);     // Creates a saved instance.
         setContentView(R.layout.activity_end_of_day_prompt);        // Gets the layout from the activity EOD-EMA
 
@@ -46,12 +76,12 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             {
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Proceed Clicked, Starting End of Day EMA");     // Logs on Console.
 
-                String data =  ("First End of Day EMA Prompt 'Proceed' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("First End of Day EMA Prompt," + "'Proceed' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                String data1 =  ("Started End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog1 = new DataLogger("Sensor_Activity.csv",data1);      // Logs it into a file called System Activity.
+                String data1 =  ("First End of Day EMA Prompt," + "Started End of Day EMA at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Sensors, data1);      // Logs it into a file called System Activity.
                 datalog1.LogData();      // Saves the data into the directory.
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
@@ -67,8 +97,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             {
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Snooze Clicked, Starting End of Day EMA Prompt 2");     // Logs on Console.
 
-                String data =  ("First End of Day EMA Prompt 'Snooze' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("First End of Day EMA Prompt," + "'Snooze' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Timer timer = new Timer();      // Starts a timer that runs for the specified time.
@@ -79,8 +109,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
                     {
                         Log.i("End of Day EMA Prompts", "Prompt 1 - Timer Started Prompt 2");     // Logs on Console.
 
-                        String data =  ("End of Day Prompt 1 Started Prompt 2 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                        String data =  ("First End of Day Prompt 1," + "Started Prompt 2 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                         datalog.LogData();      // Saves the data into the directory.
 
                         Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayPrompt2.class);      // Starts the EOD EMA third activity.
@@ -99,12 +129,12 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             {
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Dismiss Clicked, Stopping all End of Day EMA Services");     // Logs on Console.
 
-                String data =  ("First End of Day EMA Prompt 'Dismiss' Button Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("First End of Day EMA Prompt," + "'Dismiss' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                String data1 =  ("End of Day Prompt 1 Dismissed End of Day EMA at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog1 = new DataLogger("Sensor_Activity.csv",data1);      // Logs it into a file called System Activity.
+                String data1 =  ("End of Day Prompt 1," + "Dismissed End of Day EMA at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Sensors, data1);      // Logs it into a file called System Activity.
                 datalog1.LogData();      // Saves the data into the directory.
 
                 finish();       // Finishes the EOD EMA.
@@ -118,8 +148,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             {
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Timeout Initiated");     // Logs on Console.
 
-                String data =  ("End of Day Prompt 1 automatically Snoozed Prompt 1 at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger("Sensor_Activity.csv",data);      // Logs it into a file called System Activity.
+                String data =  ("End of Day Prompt 1," + "Automatically Snoozed Prompt 1 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 snooze.performClick();      // Snooze is automatically clicked by the system.

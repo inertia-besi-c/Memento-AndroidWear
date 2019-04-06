@@ -1,7 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-import android.os.Environment;
 import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
@@ -139,8 +138,8 @@ public class DataLogger     // A function that runs the data logging data
     {
         String deviceID = new Preferences().DeviceID;       // This is the device id that is set from the preferences.
         boolean flag = true;        // Sets a flag
-        String path = Environment.getExternalStorageDirectory() + "/BESI_C";        // Gets the path to the storage in the sdcard
-        String fileName = deviceID + "_Estimote_Data.csv";        // Names the file.
+        String path = new Preferences().Directory;        // Gets the path to the storage in the sdcard
+        String fileName = new SystemInformation().Estimote_Path;        // Names the file.
         File file = new File(path);     // Makes a path to the file.
 
         if (file.exists() == false)     // If there is no directory with this name
