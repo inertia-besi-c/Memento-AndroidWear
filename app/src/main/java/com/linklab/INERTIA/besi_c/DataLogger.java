@@ -1,10 +1,8 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.os.Environment;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,7 +40,7 @@ public class DataLogger     // A function that runs the data logging data
     {
         if (isExternalStorageWritable())        // Checks if the storage is writable
         {
-            try
+            try     // Tries to do this.
             {
                 File BESI_directory = new File(Directory);    // Path to file in the storage of the device
 
@@ -64,7 +62,7 @@ public class DataLogger     // A function that runs the data logging data
             {
                 Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
-            catch (Exception ex)
+            catch (Exception ex)        // Else it does this
             {
                 Log.i("Data Logger", "Failed to make Directory");     // Logs on Console.
             }
@@ -80,7 +78,7 @@ public class DataLogger     // A function that runs the data logging data
     {
         if (isExternalStorageWritable())        // Checks if we can write data to the card.
         {
-            try
+            try     // Tries to do this
             {
                 File BESI_directory = new File(Directory);    // Path to file in the storage of the device
 
@@ -139,7 +137,7 @@ public class DataLogger     // A function that runs the data logging data
 
     public static boolean writeToFile(Date time1, String data)      /* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
     {
-        String deviceID = new Preferences().DeviceID;
+        String deviceID = new Preferences().DeviceID;       // This is the device id that is set from the preferences.
         boolean flag = true;        // Sets a flag
         String path = Environment.getExternalStorageDirectory() + "/BESI_C";        // Gets the path to the storage in the sdcard
         String fileName = deviceID + "_Estimote_Data.csv";        // Names the file.

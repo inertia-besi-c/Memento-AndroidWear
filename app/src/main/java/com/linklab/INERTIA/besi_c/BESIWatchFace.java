@@ -20,7 +20,6 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 import android.widget.Toast;
-
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.TimeZone;

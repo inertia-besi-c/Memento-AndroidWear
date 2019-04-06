@@ -19,6 +19,7 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
 {
     private PowerManager.WakeLock wakeLock;     // Starts the power manager in the system.
     private Timer promptTimeOut = new Timer();      // Creates a new timer.
+    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock timer.
 
     @Override
@@ -32,7 +33,7 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
         wakeLock.acquire();     // Acquires the wakelock without any timeout.
 
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from system
-        v.vibrate(600);     // Vibrates for the specified amount of milliseconds.
+        v.vibrate(ActivityBeginning);     // Vibrates for the specified amount of milliseconds.
 
         Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
         final Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.

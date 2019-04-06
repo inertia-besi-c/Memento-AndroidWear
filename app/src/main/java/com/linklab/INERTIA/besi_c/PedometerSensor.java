@@ -66,7 +66,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
     }
 
     @Override
-    public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy)
+    public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy)     // Changes the accuracy of the system
     {
         // Please do not remove this, the code needs this to function properly. Thank you :-)
     }

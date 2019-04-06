@@ -2,18 +2,21 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,15 +42,18 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private int EMAReminderDelay = new Preferences().EoDEMAReminderDelay;      // This is the EMA reminder delay set from preferences.
     private long EMAReminderInterval = new Preferences().EoDEMAReminderInterval; //    Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().EoDEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
+    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityReminder = new Preferences().ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the amount of reminders left to do.
     private int CurrentQuestion = 0;       // This is the current question that the person is on.
-    public Vibrator v;      // The vibrator that provides haptic feedback.
+    private Vibrator v;      // The vibrator that provides haptic feedback.
 
     private String[] CaregiverQuestions =       // These are strictly the care giver questions.
             {
                     "How active were you?",
                     "How busy was your home?",
-                    "Time spent outside your home?",
+                    "Time spent outside the home?",
                     "Time spent with the patient?",
                     "Time spent with other people?",
                     "How would you rate your sleep quality?",
@@ -63,9 +69,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
-                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"Poor", "Fair", "Good", "Very Good"},
                     {"None", "A little", "Medium", "A lot"},
-                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
             };
@@ -74,14 +80,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                     "How active were you?",
                     "How busy was your home?",
-                    "Time spent outside your home?",
-                    "Time spent with the caregiver?",
+                    "Time spent outside the home?",
+                    "Time spent with your caregiver?",
                     "Time spent with other people?",
-                    "How would you rate your sleep quality?",
-                    "How much did pain interfere with your life?",
-                    "How was your mood overall?",
+                    "How did you sleep?",
+                    "How much did pain bother you?",
+                    "How was your mood?",
                     "How distressed were you overall?",
-                    "How distressed was your caregiver overall?",
+                    "How distressed was your caregiver?",
             };
     private String[][] PatientAnswers =      // These are strictly the patient answers.
             {
@@ -90,9 +96,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
-                    {"Poor", "Fair", "Good", "Excellent"},
-                    {"None", "A little", "Medium", "A lot"},
-                    {"Poor", "Fair", "Good", "Excellent"},
+                    {"Poorly", "Okay", "Well", "Very Well"},
+                    {"Not at all", "A little", "Fairly", "A lot"},
+                    {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
             };
@@ -108,7 +114,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
-        v.vibrate(1000);        // The watch vibrates for the allotted amount of time.
+        v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
 
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
@@ -150,7 +156,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(600);     // Vibrate for the assigned time.
+                    v.vibrate(ActivityReminder);     // Vibrate for the assigned time.
                     ReminderCount ++;       // Increment the reminder count by 1.
                 }
                 else        // If their are no more questions left to ask
@@ -164,7 +170,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     Submit();       // Submit the response to the questions.
                 }
             }
-        },EMAReminderDelay,EMAReminderInterval);        // Sets the time and the delay that they should follow.
+        }, EMAReminderDelay, EMAReminderInterval);        // Sets the time and the delay that they should follow.
 
         res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
         {
@@ -176,7 +182,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                v.vibrate(20);      // A slight vibration for haptic feedback.
+                v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
                 resTaps += 1;     // Increments the amount of taps by 1
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
             }
@@ -188,7 +194,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     }
 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
-
     private void QuestionSystem()       // This is the logic behind the question system.
     {
         if (CurrentQuestion == 0)       // If the current question is the first question.
@@ -202,7 +207,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
         if (CurrentQuestion == Questions.length-1)      // If we are on the last question available
         {
-            next.setText("Submit");     // Change the text of the next button to be submit.
+            next.setText("Done");     // Change the text of the next button to be submit.
         }
         else        // if we are on any other question
         {
@@ -227,7 +232,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(20);      // A slight haptic feedback is provided.
+                    v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
 
@@ -255,7 +260,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(20);      // A slight haptic feedback is provided.
+                    v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // Logs the activity.
@@ -301,9 +306,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private void ThankYou()     // This is a little thank you toast.
     {
         Context context = getApplicationContext();      // Gets a context from the system.
-        CharSequence text = "Thank You!";       // Pop up information to the person
-        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
-        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        CharSequence showntext = "Thank You!";       // Pop up information to the person
+        int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
+        Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.
+        View view = toast.getView();        // Gets the view from the toast maker
+        TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
+        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
+        text.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.
     }

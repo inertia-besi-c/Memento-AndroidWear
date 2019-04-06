@@ -1,16 +1,15 @@
 package com.linklab.INERTIA.besi_c;
 
+// Imports
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
-
 import com.estimote.coresdk.observation.region.RegionUtils;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.service.BeaconManager;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +22,8 @@ import java.util.UUID;
 
 import static com.linklab.INERTIA.besi_c.DataLogger.writeToFile;
 
-/* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
+/* ------------------------------- Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE ------------------------------- */
+
 public class EstimoteService extends Service
 {
     private BeaconManager beaconManager;

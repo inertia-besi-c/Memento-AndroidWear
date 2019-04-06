@@ -2,6 +2,8 @@ package com.linklab.INERTIA.besi_c;
 
 // Imports
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -10,17 +12,17 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.File;
 
 @SuppressWarnings("ALL")
@@ -114,15 +116,17 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                         final Thread uploaderThread = new Thread()      // Starts a thread to upload the files
                         {
                             @Override
-                            public void run()
+                            public void run()       // Runs this on upload continiously
                             {
-                                try
+                                try     // Tries to do this
                                 {
-                                    UploadFile(remotePath,file,timeStamp);
+                                    Log.i("Upload","File Uploading");      // Logs to Console
+
+                                    UploadFile(remotePath,file,timeStamp);      // Sets the files to be uploaded
                                 }
-                                catch (Exception ex)
+                                catch (Exception ex)        // If not
                                 {
-                                    Log.i("Upload","File does not exist");
+                                    Log.i("Upload","File does not exist");      // Logs to Console
                                 }
                             }
                         };
@@ -154,11 +158,11 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
 
 
 
-    void UploadFile(String remotePath , String fileName, String timeStamp)
+    void UploadFile(String remotePath , String fileName, String timeStamp)      // This is the code that runs the upload file system
     {
-        Uri file = Uri.fromFile(new File(localDirPath+fileName));
-        StorageReference riversRef = storageRef.child(remotePath+timeStamp+"_"+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
+        Uri file = Uri.fromFile(new File(localDirPath+fileName));       // Gets a path to the directory or makes a new directory
+        StorageReference riversRef = storageRef.child(remotePath+timeStamp+"_"+file.getLastPathSegment());      // Gets into the reference directory
+        UploadTask uploadTask = riversRef.putFile(file);        // Puts the file in the directory
 
         uploadTask.addOnFailureListener(new OnFailureListener()         // Register observers to listen for when the download is done or if it fails
         {
@@ -197,8 +201,14 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
     private void Toast(CharSequence text)     // This is a little charging toast notification.
     {
         Context context = getApplicationContext();      // Gets a context from the system.
-        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a Long amount of time.
-        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        CharSequence textShown = (String) text;       // Pop up information to the person
+        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
+        Toast toast = Toast.makeText(context, textShown, duration);          // A short message at the end to say thank you.
+        View view = toast.getView();        // Gets the view from the toast maker
+        TextView textSeen = view.findViewById(android.R.id.message);        // Finds the text being used
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
+        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
+        textSeen.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
     }
 
@@ -214,5 +224,4 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
         wakeLock.release();     // Release the wakelock
         super.onDestroy();      // Destroy the activity.
     }
-
 }

@@ -4,16 +4,18 @@ package com.linklab.INERTIA.besi_c;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,10 +40,13 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
     private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
+    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityReminder = new Preferences().ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
-    public Vibrator v;      // The vibrator that provides haptic feedback.
+    private Vibrator v;      // The vibrator that provides haptic feedback.
 
     private String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
@@ -77,7 +82,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"Yes", "No"}
             };
 
-    @SuppressLint("WakelockTimeout")
+    @SuppressLint("WakelockTimeout")        // Suppresses the wakelock for the system
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
@@ -88,7 +93,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
-        v.vibrate(400);        // The watch vibrates for the allotted amount of time.
+        v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
 
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
@@ -128,7 +133,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                v.vibrate(20);      // A slight vibration for haptic feedback.
+                v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
                 resTaps+=1;     // Increments the amount of taps by 1
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
             }
@@ -143,7 +148,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 {
                     Log.i("Pain EMA", "Reminding User to Continue Survey");     // Logs on Console.
 
-                    v.vibrate(600);     // Vibrate for the assigned time.
+                    v.vibrate(ActivityReminder);     // Vibrate for the assigned time.
                     ReminderCount ++;       // Increment the reminder count by 1.
                 }
                 else        // If their are no more questions left to ask
@@ -153,7 +158,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     Submit();       // Submit the response to the questions.
                 }
             }
-        },EMAReminderDelay,EMAReminderInterval);        // Sets the time and the delay that they should follow.
+        }, EMAReminderDelay, EMAReminderInterval);        // Sets the time and the delay that they should follow.
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Keeps the screen awake when working.
@@ -195,7 +200,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(20);      // A slight haptic feedback is provided.
+                    v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // The log activity method is called.
@@ -227,14 +232,14 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(20);      // A slight haptic feedback is provided.
+                    v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // Logs the activity.
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        ThankYou();
+                        ThankYou();     // Calls the thank you method
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
@@ -274,9 +279,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
         if(UserResponses[Questions.length -1] != null && UserResponses[Questions.length - 1].toLowerCase().contains("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
         {
-            // Start FollowUpScheduler
-            Intent FollowUpScheduler = new Intent(getApplicationContext(), FollowUpEMASchedulerService.class);
-            startService(FollowUpScheduler);
+            Intent FollowUpScheduler = new Intent(getApplicationContext(), FollowUpEMASchedulerService.class);      // Gets an intent for the followup EMA
+            startService(FollowUpScheduler);        // Starts the service with the scheduler.
         }
 
         ThankYou();     // Calls the thank you method.
@@ -284,11 +288,15 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void ThankYou()     // This is a little thank you toast.
     {
-        EMARemindertimer.cancel();      // Cancels the EMA reminder timer.
         Context context = getApplicationContext();      // Gets a context from the system.
-        CharSequence text = "Thank You!";       // Pop up information to the person
-        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
-        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        CharSequence showntext = "Thank You!";       // Pop up information to the person
+        int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
+        Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.
+        View view = toast.getView();        // Gets the view from the toast maker
+        TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
+        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
+        text.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.
     }

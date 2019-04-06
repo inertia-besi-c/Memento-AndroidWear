@@ -1,19 +1,20 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,9 +39,12 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private int EMAReminderDelay = new Preferences().FollowUpEMADelay;  // Calls the Follow up EMA delay from the preferences.
     private long EMAReminderInterval = new Preferences().FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = new Preferences().FollowUpEMAReminderNumber;       // Calls the reminder numbers for the follow up from preferences.
+    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityReminder = new Preferences().ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
-    public Vibrator v;      // The vibrator that provides haptic feedback.
+    private Vibrator v;      // The vibrator that provides haptic feedback.
 
     private String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
@@ -61,7 +65,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private String[] PatientQuestions =         // These are the patient questions in order.
             {
-                    "Are you still having cancer pain now?",
+                    "Are you still having pain now?",
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
@@ -76,7 +80,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"Yes", "No"}
             };
 
-    @SuppressLint("WakelockTimeout")
+    @SuppressLint("WakelockTimeout")        // Suppresses the wakelock from the system.
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
@@ -87,7 +91,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
-        v.vibrate(1000);        // The watch vibrates for the allotted amount of time.
+        v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
 
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
@@ -127,7 +131,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-                v.vibrate(20);      // A slight vibration for haptic feedback.
+                v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
                 resTaps+=1;     // Increments the amount of taps by 1
                 Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
             }
@@ -142,7 +146,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "Reminding User to Continue Survey");     // Logs on Console.
 
-                    v.vibrate(600);     // Vibrate for the assigned time.
+                    v.vibrate(ActivityReminder);     // Vibrate for the assigned time.
                     ReminderCount ++;       // Increment the reminder count by 1.
                 }
                 else        // If their are no more questions left to ask
@@ -162,22 +166,17 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
     private void QuestionSystem()       // This is the logic behind the question system.
     {
-        if (CurrentQuestion == 0)       // If the current question is the first question.
+        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
         {
-            back.setBackgroundColor(getColor(R.color.grey));        // Make the back button greyed out and unresponsive.
+            next.setText("Yes");       // Leave the text of the button as next.
+            back.setText("No");     // Sets the back button to No
+            res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
         }
         else        // If we are in any other question.
         {
-            back.setBackgroundColor(getColor(R.color.dark_red));        // make the back button dark red and activate it.
-        }
-
-        if (CurrentQuestion == Questions.length-1)      // If we are on the last question available
-        {
-            next.setText("Submit");     // Change the text of the next button to be submit.
-        }
-        else        // if we are on any other question
-        {
             next.setText("Next");       // Leave the text of the button as next.
+            back.setText("Back");       // Sets the back button to back
+            res.setVisibility(View.VISIBLE);        // Makes them visible
         }
 
         if (CurrentQuestion < Questions.length)     // If there are still question left to answer.
@@ -199,12 +198,17 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(20);      // A slight haptic feedback is provided.
+                    v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // The log activity method is called.
 
-                    if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
+                    if (CurrentQuestion == Questions.length-1)      // If this is the last question
+                    {
+                        UserResponses[Questions.length -1] = "Yes";     // And they answer yes
+                        Submit();       // Submit the survey
+                    }
+                    else if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
                     {
                         CurrentQuestion++;      // Increments the current question.
                         QuestionSystem();       // The question system method is called again for the next question.
@@ -226,14 +230,19 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    v.vibrate(20);      // A slight haptic feedback is provided.
+                    v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
                     UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
                     UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
                     LogActivity();      // Logs the activity.
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        // Do nothing.
+                        ThankYou();     // Calls the thank you method
+                    }
+                    else if (CurrentQuestion == Questions.length-1)     // If this is the last question
+                    {
+                        UserResponses[Questions.length -1] = "No";      // And they answer no
+                        Submit();       // Submit the survey
                     }
                     else        // If we are not on the first question
                     {
@@ -271,20 +280,17 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private void ThankYou()     // This is a little thank you toast.
     {
-        EMARemindertimer.cancel();      // Cancels the EMA reminder timer.
         Context context = getApplicationContext();      // Gets a context from the system.
-        CharSequence text = "Thank You!";       // Pop up information to the person
+        CharSequence showntext = "Thank You!";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
-        Toast toast = Toast.makeText(context, text, duration);          // A short message at the end to say thank you.
+        Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.
+        View view = toast.getView();        // Gets the view from the toast maker
+        TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
+        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
+        text.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.
-    }
-
-    private int Cycle_Responses()       // This cycles through all the possible responses that the person can provide.
-    {
-        int index = resTaps%responses.size();       // Index gets the size of all the possible responses.
-        res.setText(responses.get(index));      // It sets the text to the index
-        return index;       // Returns the number of the index.
     }
 
     private void LogActivity()      // Logs the activity of the person.
@@ -304,6 +310,13 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
+    }
+
+    private int Cycle_Responses()       // This cycles through all the possible responses that the person can provide.
+    {
+        int index = resTaps%responses.size();       // Index gets the size of all the possible responses.
+        res.setText(responses.get(index));      // It sets the text to the index
+        return index;       // Returns the number of the index.
     }
 
     private void Cancel()       // Cancels the current process.

@@ -1,7 +1,6 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
@@ -17,8 +16,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
-    @SuppressLint("WakelockTimeout")        // Stops the error message from the wakelock
 
+    @SuppressLint("WakelockTimeout")        // Stops the error message from the wakelock
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)        // Establishes the sensor and the ability to collect data at the start of the data collection
     {

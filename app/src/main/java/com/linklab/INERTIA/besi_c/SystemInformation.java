@@ -1,12 +1,10 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,7 +36,7 @@ class SystemInformation     // Class that acquires the current time from the sys
 
     String getFolderTimeStamp()        // Puts the system time acquired into the desired format wanted.
     {
-        DateFormat datetimeFormat = new SimpleDateFormat("yyMMdd_HHmm", Locale.US); 
+        DateFormat datetimeFormat = new SimpleDateFormat("yyMMdd_HHmm", Locale.US);         // Sets the date and time for the file.
         Date current = new Date();      // Calls the current date from the system.
         return datetimeFormat.format(current);  // Returns the date and time the system is in.
     }
