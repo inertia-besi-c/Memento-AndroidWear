@@ -56,14 +56,14 @@ public class Preferences        // System wide one stop place to set all setting
     public int PainEMAReminderNumber = 2;       // Ho1w many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
-    public int FollowUpEMADelay = 1*60*1000;       //(30) How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMADelay = 30*60*1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
     public int FollowUpEMAReminderNumber = 3;       // How many times to remind the wearer to complete the follow-up ema
     public int FollowUpEMAReminderInterval = 5*60*1000;         // How long to wait between each ping reminding user to complete ema
 
     // Settings for Daily EMA | Time is in ms |
     public long EoDPrompt_TimeOut = 15*60*1000;         // Delay before snoozing and eventually dismissing daily ema
-    public int EoDEMA_Time_Hour = 04;       // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 25;      // Minute of hour at which daily ema should go off
+    public int EoDEMA_Time_Hour = 21;       // Hour at which the daily ema should go off
+    public int EoDEMA_Time_Minute = 0;      // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0;      // Second of minute at which daily ema should go off
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
     public long EoDEMA_Period = 24*60*60*1000;      // This is how often the timer waits before firing again
