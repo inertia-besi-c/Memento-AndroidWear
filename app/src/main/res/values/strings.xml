@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">BESI-C</string>
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -27,4 +27,9 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_end_of_day_prompt">EndOfDayPrompt</string>
     <string name="title_activity_fire_base__upload">FireBase_Upload</string>
+    <string name="please_answer_the_following_questions_over_the_past_day" tools:ignore="TypographyEllipsis">Please answer the following questions. Over the past day...</string>
+    <string name="snooze">Snooze</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="go">Go</string>
+    <string name="upload">Upload</string>
 </resources>
