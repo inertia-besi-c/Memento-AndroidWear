@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,44 +90,44 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Results_Path);     // Gets the path to the system from the system.
-        if (Result.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Pain_Results, new Preferences().Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File Activity = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
-        if (Activity.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Pain_Activity, new Preferences().Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
+//        File Result = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Results_Path);     // Gets the path to the system from the system.
+//        if (Result.exists())      // If the file exists
+//        {
+//            Log.i("Followup EMA", "No Header Created");     // Logs to console
+//        }
+//        else        // If the file does not exist
+//        {
+//            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+//
+//            DataLogger dataLogger = new DataLogger(Pain_Results, new Preferences().Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
+//            dataLogger.LogData();       // Saves the data to the directory.
+//        }
+//
+//        File Activity = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
+//        if (Activity.exists())      // If the file exists
+//        {
+//            Log.i("Followup EMA", "No Header Created");     // Logs to console
+//        }
+//        else        // If the file does not exist
+//        {
+//            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+//
+//            DataLogger dataLogger = new DataLogger(Pain_Activity, new Preferences().Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+//            dataLogger.LogData();       // Saves the data to the directory.
+//        }
+//
+//        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+//        if (system.exists())      // If the file exists
+//        {
+//            Log.i("Followup EMA", "No Header Created");     // Logs to console
+//        }
+//        else        // If the file does not exist
+//        {
+//            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+//
+//            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+//            dataLogger.LogData();       // Saves the data to the directory.
+//        }
 
         Log.i("Pain EMA", "Starting Followup Service");     // Logs on Console.
 
@@ -336,10 +334,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
         int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
         Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.
         View view = toast.getView();        // Gets the view from the toast maker
-        TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
+        TextView textSeen = view.findViewById(android.R.id.message);        // Finds the text being used
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
-        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
-        text.setTextColor(Color.WHITE);     // Changes the color of the text
+        textSeen.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.
     }

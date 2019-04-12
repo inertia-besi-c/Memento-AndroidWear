@@ -1,9 +1,9 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -18,11 +18,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.io.File;
 
 @SuppressWarnings("ALL")
@@ -237,7 +239,6 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
         View view = toast.getView();        // Gets the view from the toast maker
         TextView textSeen = view.findViewById(android.R.id.message);        // Finds the text being used
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
-        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
         textSeen.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
     }
