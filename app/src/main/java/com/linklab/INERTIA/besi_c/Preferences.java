@@ -49,7 +49,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Vibration | Time is in ms |
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
-    public int ActivityReminder = 600;          // How the system vibrates when an activity reminds the person to continue survey
+    public int ActivityReminder = 1000;          // How the system vibrates when an activity reminds the person to continue survey
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema
@@ -78,6 +78,6 @@ public class Preferences        // System wide one stop place to set all setting
 
     /* <--- This has been set to a near continuous stream with watch not crashing, please do not touch -----> */
     // Settings for Estimote | Time is in ms |
-    public long ESSampleDuration = 30*1000;           // How long should estimote be measured each time?
+    public long ESSampleDuration = 5*1000;           // How long should estimote be measured each time?
     public long ESMeasurementInterval = 60*1000;          // Every how often should a measurement be taken?
 }

@@ -53,7 +53,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
-                    "Is the patient still having cancer pain now?",
+                    "Is patient still in pain now?",
                     "What is the patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
