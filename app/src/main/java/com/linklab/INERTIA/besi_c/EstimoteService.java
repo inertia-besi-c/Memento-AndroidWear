@@ -39,6 +39,7 @@ public class EstimoteService extends Service
     public long Duration = new Preferences().ESSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
     private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
     private String Estimote = new Preferences().Estimote;     // Gets the sensors from preferences.
+    Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
 
     @SuppressLint("WakelockTimeout")
     @Override
@@ -81,14 +82,17 @@ public class EstimoteService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        final Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
         ESSensorTimer.schedule( new TimerTask()     // Initializes a timer.
         {
             public void run()       // Runs the imported file based on the timer specified.
             {
                 Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
 
-                onDestroy();        // Destroys the service
+                String data =  ("Estimote Sensor," + "Killed Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                stopSelf();         // Stops the service.
             }
         }, Duration);       // Waits for this amount of duration.
 
@@ -217,13 +221,10 @@ public class EstimoteService extends Service
         String data =  ("Estimote Service," + "Killed Estimote Service at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
         DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
-
+        ESSensorTimer.cancel();
         super.onDestroy();
         beaconManager.stopRanging(region);
         stopForeground(true);
-        stopSelf();
-
-        Log.i("Estimote", "Starting Estimote Timer Service from Estimote Service");     // Logs on Console.
     }
 
     @Override
