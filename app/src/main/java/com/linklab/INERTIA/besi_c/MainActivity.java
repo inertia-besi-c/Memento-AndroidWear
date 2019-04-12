@@ -289,6 +289,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             stopService(EstimService);        // Stop the service.
                             stopService(EstimoteService);       // Stops the service.
                         }
+
+                        Intent upload = new Intent(getApplicationContext(), FireBase_Upload.class);      // Makes an intent of the system
+                        if(!isRunning(FireBase_Upload.class))       // Checks if it is already running
+                        {
+                            startActivity(upload);      // If not, start it.
+                        }
+
                     }
 
                     Charging();     // Calls the charging method to inform the person
@@ -430,8 +437,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             else        // If the watch is not charging.
                             {
-                                wifi.setWifiEnabled(false);     // Disable the wifi.
-
                                 if (isDeviceOnline())       // If the wifi system is enabled.
                                 {
                                     String data =  ("Main Thread," + "Wifi is disabled at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
