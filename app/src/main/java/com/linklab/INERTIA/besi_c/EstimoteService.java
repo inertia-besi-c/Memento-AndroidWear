@@ -81,7 +81,7 @@ public class EstimoteService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        final Timer ESSensorTimer = new Timer();          // Makes a new timer for HRSensorTimer.
+        final Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
         ESSensorTimer.schedule( new TimerTask()     // Initializes a timer.
         {
             public void run()       // Runs the imported file based on the timer specified.
@@ -224,9 +224,6 @@ public class EstimoteService extends Service
         stopSelf();
 
         Log.i("Estimote", "Starting Estimote Timer Service from Estimote Service");     // Logs on Console.
-
-        final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a ES service intent from the sensor class.
-        startService(ESService);    // Starts the Estimote service
     }
 
     @Override

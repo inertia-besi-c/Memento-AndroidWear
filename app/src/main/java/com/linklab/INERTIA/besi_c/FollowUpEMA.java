@@ -5,7 +5,6 @@ package com.linklab.INERTIA.besi_c;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -332,7 +331,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         View view = toast.getView();        // Gets the view from the toast maker
         TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
-        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
         text.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.

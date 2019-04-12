@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -11,7 +12,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.File;
 
 /* ************************************************************************************* MAIN ACTIVITY OF THE APP ************************************************************************************************** */
@@ -97,32 +98,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
-
-        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Main Activity", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Main Activity", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("Main Activity", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Main Activity", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(System, new Preferences().Ssystem_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
 
         File battery = new File(new Preferences().Directory + new SystemInformation().Battery_Path);     // Gets the path to the Sensors from the system.
         if (battery.exists())      // If the file exists
@@ -303,6 +278,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             stopService(AccelService);        // Stop the service.
                         }
+
+                        if(isRunning(ESTimerService.class) || (isRunning(EstimoteService.class)))       // If the Estimote service is running
+                        {
+                            String dataB =  ("Sleep Button," + "Stopped Estimote Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
+                            datalogB.LogData();      // Saves the data into the directory.
+
+                            stopService(EstimService);        // Stop the service.
+                        }
                     }
 
                     Charging();     // Calls the charging method to inform the person
@@ -330,6 +314,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             stopService(AccelService);        // Stop the service.
                         }
+
+                        if(isRunning(ESTimerService.class) || (isRunning(EstimoteService.class)))       // If the Estimote service is running
+                        {
+                            String dataB =  ("Sleep Button," + "Stopped Estimote Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
+                            datalogB.LogData();      // Saves the data into the directory.
+
+                            stopService(EstimService);        // Stop the service.
+                        }
                     }
 
                     else        // If the heart rate timer is not running
@@ -351,6 +344,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             datalogA.LogData();      // Saves the data into the directory.
 
 //                            startService(AccelService);        // Starts the service.
+                        }
+
+                        if(!isRunning(ESTimerService.class))       // If the Estimote service is running
+                        {
+                            String dataB =  ("Sleep Button," + "Started Estimote Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                            DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
+                            datalogB.LogData();      // Saves the data into the directory.
+
+                            startService(EstimService);        // Stop the service.
                         }
                     }
                 }
@@ -533,7 +535,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
         View view = toast.getView();        // Gets the view from the toast maker
-        view.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);       // Changes the color of the toast
         TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
         text.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
