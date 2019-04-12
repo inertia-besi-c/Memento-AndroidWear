@@ -8,9 +8,9 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ---------------------------------------------------------------------------------- */
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "Black-Tickwatch";        // Internal ID of Device assigned to Dyad
+    public String DeviceID = "Fossil-41mm";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "Personal_Test";      // Deployment ID
-    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
@@ -79,5 +79,5 @@ public class Preferences        // System wide one stop place to set all setting
     /* <--- This has been set to a near continuous stream with watch not crashing, please do not touch -----> */
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 30000;           // How long should estimote be measured each time?
-    public long ESMeasurementInterval = 60000;          // Every how often should a measurement be taken?
+    public long ESMeasurementInterval = 2*60*1000;          // Every how often should a measurement be taken?
 }
