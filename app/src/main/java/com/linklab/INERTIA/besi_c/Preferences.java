@@ -79,5 +79,5 @@ public class Preferences        // System wide one stop place to set all setting
     /* <--- This has been set to a near continuous stream with watch not crashing, please do not touch -----> */
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 30000;           // How long should estimote be measured each time?
-    public long ESMeasurementInterval = 3*60*1000;          // Every how often should a measurement be taken?
+    public long ESMeasurementInterval = 60*1000;          // Every how often should a measurement be taken?
 }
