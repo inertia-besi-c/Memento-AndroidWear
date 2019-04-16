@@ -60,10 +60,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "Time spent with the patient?",
                     "Time spent with other people?",
                     "How was your sleep?",
-                    "How much did Patient's Pain bother you?",
+                    "How did patient's pain bother you?",      // Maybe thing of adding 'affect' instead of 'bother' ??? (need to ask next meeting)
                     "How was your mood?",
                     "How distressed were you overall?",
-                    "How distressed was the patient?",
+                    "How distressed was the patient overall?",
             };
     private String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
@@ -73,7 +73,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
-                    {"None", "A little", "Medium", "A lot"},
+                    {"None", "A little", "Medium", "A lot"},        // First option will have to be 'Not ar all'        (need to ask next meeting(
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
@@ -90,7 +90,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How much did pain bother you?",
                     "How was your mood?",
                     "How distressed were you overall?",
-                    "How distressed was your caregiver?",
+                    "How distressed was your caregiver overall?",
             };
     private String[][] PatientAnswers =      // These are strictly the patient answers.
             {
