@@ -24,6 +24,7 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
     private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
     private String System = new Preferences().System;       // Gets the system from preferences.
     private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock timer.
 
     @Override
@@ -62,7 +63,7 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 1:wakeLock");     // Gets a full wakelock ability from the system
         wakeLock.acquire();     // Acquires the wakelock without any timeout.
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from system
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from system
         v.vibrate(ActivityBeginning);     // Vibrates for the specified amount of milliseconds.
 
         Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
@@ -74,6 +75,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             @Override
             public void onClick(View view)     // When it is clicked, this is run
             {
+                v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Proceed Clicked, Starting End of Day EMA");     // Logs on Console.
 
                 String data =  ("First End of Day EMA Prompt," + "'Proceed' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
@@ -95,6 +98,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             @Override
             public void onClick(View view)     // When it is clicked, this is run
             {
+                v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Snooze Clicked, Starting End of Day EMA Prompt 2");     // Logs on Console.
 
                 String data =  ("First End of Day EMA Prompt," + "'Snooze' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
@@ -127,6 +132,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             @Override
             public void onClick(View view)     // WHen it is clicked this is run.
             {
+                v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Dismiss Clicked, Stopping all End of Day EMA Services");     // Logs on Console.
 
                 String data =  ("First End of Day EMA Prompt," + "'Dismiss' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
@@ -146,6 +153,8 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             @Override
             public void run()       // This is run when the timer is started
             {
+                v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Timeout Initiated");     // Logs on Console.
 
                 String data =  ("End of Day Prompt 1," + "Automatically Snoozed Prompt 1 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.

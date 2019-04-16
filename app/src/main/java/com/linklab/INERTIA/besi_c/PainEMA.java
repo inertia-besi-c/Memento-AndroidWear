@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,44 +91,44 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-//        File Result = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Results_Path);     // Gets the path to the system from the system.
-//        if (Result.exists())      // If the file exists
-//        {
-//            Log.i("Followup EMA", "No Header Created");     // Logs to console
-//        }
-//        else        // If the file does not exist
-//        {
-//            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-//
-//            DataLogger dataLogger = new DataLogger(Pain_Results, new Preferences().Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
-//        }
-//
-//        File Activity = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
-//        if (Activity.exists())      // If the file exists
-//        {
-//            Log.i("Followup EMA", "No Header Created");     // Logs to console
-//        }
-//        else        // If the file does not exist
-//        {
-//            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-//
-//            DataLogger dataLogger = new DataLogger(Pain_Activity, new Preferences().Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
-//        }
-//
-//        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
-//        if (system.exists())      // If the file exists
-//        {
-//            Log.i("Followup EMA", "No Header Created");     // Logs to console
-//        }
-//        else        // If the file does not exist
-//        {
-//            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-//
-//            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
-//        }
+        File Result = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Results_Path);     // Gets the path to the system from the system.
+        if (Result.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Pain_Results, new Preferences().Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File Activity = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
+        if (Activity.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Pain_Activity, new Preferences().Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        if (system.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
 
         Log.i("Pain EMA", "Starting Followup Service");     // Logs on Console.
 
