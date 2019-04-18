@@ -35,18 +35,20 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
-    private String System = new Preferences().System;      // Gets the System File label from Preferences
-    private String Followup_Activity = new Preferences().Followup_Activity;      // Gets the Followup Activity File label from Preferences
-    private String Followup_Results = new Preferences().Followup_Results;      // Gets the Followup Results File label from Preferences
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private String System = Preference.System;      // Gets the System File label from Preferences
+    private String Followup_Activity = Preference.Followup_Activity;      // Gets the Followup Activity File label from Preferences
+    private String Followup_Results = Preference.Followup_Results;      // Gets the Followup Results File label from Preferences
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
-    private int EMAReminderDelay = new Preferences().FollowUpEMADelay;  // Calls the Follow up EMA delay from the preferences.
-    private long EMAReminderInterval = new Preferences().FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = new Preferences().FollowUpEMAReminderNumber;       // Calls the reminder numbers for the follow up from preferences.
-    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
-    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int ActivityReminder = new Preferences().ActivityReminder;      // This is the haptic feedback for button presses.
+    private int EMAReminderDelay = Preference.FollowUpEMADelay;  // Calls the Follow up EMA delay from the preferences.
+    private long EMAReminderInterval = Preference.FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = Preference.FollowUpEMAReminderNumber;       // Calls the reminder numbers for the follow up from preferences.
+    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private Vibrator v;      // The vibrator that provides haptic feedback.
@@ -89,7 +91,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(new Preferences().Directory + new SystemInformation().Followup_EMA_Results_Path);     // Gets the path to the system from the system.
+        File Result = new File(Preference.Directory + SystemInformation.Followup_EMA_Results_Path);     // Gets the path to the system from the system.
         if (Result.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -98,11 +100,11 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Followup_Results, new Preferences().Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(Followup_Results, Preference.Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File Activity = new File(new Preferences().Directory + new SystemInformation().Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
+        File Activity = new File(Preference.Directory + SystemInformation.Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
         if (Activity.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -111,11 +113,11 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Followup_Activity, new Preferences().Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(Followup_Activity, Preference.Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
         if (system.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -124,7 +126,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -148,14 +150,14 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
         res2 = findViewById(R.id.EMA_res2);       // Sets the res button to a variable.
 
-        if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
+        if (Preference.Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
             Log.i("Followup EMA", "This is Patient");     // Logs on Console.
 
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
         }
-        else if (new Preferences().Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
+        else if (Preference.Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
             Log.i("Followup EMA", "This is Care Giver");     // Logs on Console.
 
@@ -201,13 +203,13 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
             back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
 
-            if (new Preferences().Role.equals("CG"))        // If this is the caregiver watch
+            if (Preference.Role.equals("CG"))        // If this is the caregiver watch
             {
                 res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
                 res2.setBackgroundColor(Color.GRAY);        // Makes the button grey
                 res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
             }
-            if (new Preferences().Role.equals("PT"))        // If this is the patient watch
+            if (Preference.Role.equals("PT"))        // If this is the patient watch
             {
                 // Do nothing yet.
             }
@@ -234,7 +236,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "First Answer Button Tapped");     // Logs on Console.
 
-                    String data =  ("Followup EMA," + "'First Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Followup EMA," + "'First Answer Toggle' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -250,7 +252,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "Second Answer Button Tapped");     // Logs on Console.
 
-                    String data =  ("Followup EMA," + "'Second Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Followup EMA," + "'Second Answer Toggle' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -258,7 +260,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                     if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
                     {
-                        if (new Preferences().Role.equals("CG"))    // If this is the caregiver watch
+                        if (Preference.Role.equals("CG"))    // If this is the caregiver watch
                         {
                             UserResponses[CurrentQuestion] = res2.getText().toString();      // The user response question is moved.
                             LogActivity();      // The log activity method is called.
@@ -274,7 +276,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                             }
                         }
 
-                        if (new Preferences().Role.equals("PT"))
+                        if (Preference.Role.equals("PT"))
                         {
                             // Do nothing for now.
                         }
@@ -289,7 +291,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "Next/Submit Button Tapped");     // Logs on Console.
 
-                    String data =  ("Followup EMA," + "'Next/Submit' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Followup EMA," + "'Next/Submit' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -328,7 +330,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                 {
                     Log.i("Followup EMA", "Back Button Tapped");     // Logs on Console.
 
-                    String data =  ("Followup EMA," + "'Back' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Followup EMA," + "'Back' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -404,7 +406,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     {
         Log.i("Followup EMA", "Logging Activity");     // Logs on Console.
 
-        String data =  (new SystemInformation().getTimeStamp()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
+        String data =  (SystemInformation.getTimeStamp()) + ",EMA_Followup," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger("Followup_EMA_Activity.csv",data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
     }

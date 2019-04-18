@@ -18,9 +18,11 @@ import java.util.TimerTask;
 public class HRTimerService extends Service         /* This runs the delay timer, and also calls the heart rate sensor itself, the heart rate sensor kills itself and returns here when complete */
 {
     public int delay = 0;       // Starts a delay of 0
-    public long period = new Preferences().HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
-    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
-    private String Battery = new Preferences().Battery;     // Gets the sensors from preferences.
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    public long period = Preference.HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
+    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private String Battery = Preference.Battery;     // Gets the sensors from preferences.
     private Timer HRTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
@@ -28,7 +30,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
-        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
         if (sensors.exists())      // If the file exists
         {
             Log.i("Heart Rate Timer Sensor", "No Header Created");     // Logs to console
@@ -37,11 +39,11 @@ public class HRTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Heart Rate Timer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File battery = new File(new Preferences().Directory + new SystemInformation().Battery_Path);     // Gets the path to the Sensors from the system.
+        File battery = new File(Preference.Directory + SystemInformation.Battery_Path);     // Gets the path to the Sensors from the system.
         if (battery.exists())      // If the file exists
         {
             Log.i("Heart Rate Timer Sensor", "No Header Created");     // Logs to console
@@ -50,7 +52,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Heart Rate Timer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Battery, new Preferences().Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -71,7 +73,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Heart Rate Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
 
-            String data =  ("Heart Rate Timer Service," + "Stopped Heart Rate Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            String data =  ("Heart Rate Timer Service," + "Stopped Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
@@ -86,12 +88,12 @@ public class HRTimerService extends Service         /* This runs the delay timer
                 {
                     Log.i("Heart Rate Timer Sensor", "Starting Heart Rate Sensor");     // Logs on Console.
 
-                    SystemInformation info = new SystemInformation();       // Gets system information into the system
+                    SystemInformation info = SystemInformation;       // Gets system information into the system
                     String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
                     DataLogger datalog = new DataLogger(Battery, data);      // Logs it into a file called Charging time.
                     datalog.LogData();      // Saves the data into the directory.
 
-                    String dataHRT =  ("Heart Rate Timer Service," + "Started Heart Rate Sensor at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String dataHRT =  ("Heart Rate Timer Service," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalogHRT = new DataLogger(Sensors, dataHRT);      // Logs it into a file called System Activity.
                     datalogHRT.LogData();      // Saves the data into the directory.
 

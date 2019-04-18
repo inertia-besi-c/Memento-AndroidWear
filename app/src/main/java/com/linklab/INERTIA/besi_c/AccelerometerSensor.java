@@ -19,8 +19,9 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
-    private String Accelerometer = new Preferences().Accelerometer;     // This is the file name set from preferences.
-    private int MaxDataCount = new Preferences().DataCount;        // Gets the Data count number from preferences.
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private String Accelerometer = Preference.Accelerometer;     // This is the file name set from preferences.
+    private int MaxDataCount = Preference.DataCount;        // Gets the Data count number from preferences.
     private int currentCount = 0;       // This is the initial data count for the sensor
     StringBuilder stringBuilder;
 
@@ -35,7 +36,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         wakeLock.acquire();     // Turns on the wakelock and acquires what is needed.
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Initializes the ability to get a sensor from the system.
-        Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);     // Gets the specific sensor called accelerometer.
+        Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);     // Gets the specific sensor called accelerometer.
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);       // It listens to the data acquires from the accelerometer
         stringBuilder = new StringBuilder();
         return START_STICKY;        // Restarts the sensor if it is killed by the system.
@@ -45,17 +46,21 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
         currentCount ++;
-        double[] gravity = new double[3];       // Ability to remove gravity from the sensor.
+//        double[] gravity = new double[3];       // Ability to remove gravity from the sensor.
         double[] linear_accel = new double[3];      // Initializes the accelerometer value from the sensor.
-        final double alpha = 0.8;        // This removes gravity from the accelerometer data using a high pass filter.
+//        final double alpha = 0.8;        // This removes gravity from the accelerometer data using a high pass filter.
 
-        gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];        // The gravity value on the x-axis
-        gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];        // The gravity value on the y-axis
-        gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];        // The gravity value on the z-axis
+//        gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];        // The gravity value on the x-axis
+//        gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];        // The gravity value on the y-axis
+//        gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];        // The gravity value on the z-axis
 
-        linear_accel[0] = event.values[0] - gravity[0];     // Accelerometer value without gravity on the x-axis
-        linear_accel[1] = event.values[1] - gravity[1];     // Accelerometer value without gravity on the y-axis
-        linear_accel[2] = event.values[2] - gravity[2];     // Accelerometer value without gravity on the z-axis
+//        linear_accel[0] = event.values[0] - gravity[0];     // Accelerometer value without gravity on the x-axis
+//        linear_accel[1] = event.values[1] - gravity[1];     // Accelerometer value without gravity on the y-axis
+//        linear_accel[2] = event.values[2] - gravity[2];     // Accelerometer value without gravity on the z-axis
+
+        linear_accel[0] = event.values[0];     // Accelerometer value without gravity on the x-axis
+        linear_accel[1] = event.values[1];     // Accelerometer value without gravity on the y-axis
+        linear_accel[2] = event.values[2];     // Accelerometer value without gravity on the z-axis
 
         final String accelerometerValues =      // Shows the values in a string.
                 new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +          // Starts a new string line.

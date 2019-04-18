@@ -14,12 +14,14 @@ import java.util.TimerTask;
 
 public class EODTimerService extends Application        // Starts the EOD EMA Timer Service when called.
 {
-    private String Sensors = new Preferences().Sensors;     // Gets the sensors from preferences.
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
 
     @Override
     public void onCreate()      // Creates the instance when it is started.
     {
-        File sensors = new File(new Preferences().Directory + new SystemInformation().Sensors_Path);     // Gets the path to the Sensors from the system.
+        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
         if (sensors.exists())      // If the file exists
         {
             Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
@@ -28,7 +30,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
         {
             Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -42,9 +44,9 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
     {
         final Context thisContext = context;        // Gets a context for the file name.
         Calendar calendar = Calendar.getInstance();     // Gets the calendar.
-        calendar.set(Calendar.HOUR_OF_DAY, new Preferences().EoDEMA_Time_Hour);     // Gets the hour of the day from the preference.
-        calendar.set(Calendar.MINUTE, new Preferences().EoDEMA_Time_Minute);     // Gets the minute of the day from the preference.
-        calendar.set(Calendar.SECOND, new Preferences().EoDEMA_Time_Second);     // Gets the seconds of the day from the preference.
+        calendar.set(Calendar.HOUR_OF_DAY, Preference.EoDEMA_Time_Hour);     // Gets the hour of the day from the preference.
+        calendar.set(Calendar.MINUTE, Preference.EoDEMA_Time_Minute);     // Gets the minute of the day from the preference.
+        calendar.set(Calendar.SECOND, Preference.EoDEMA_Time_Second);     // Gets the seconds of the day from the preference.
 
         try     // Try the scheduled task.
         {
@@ -58,14 +60,14 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 {
                     Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
 
-                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                     startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
                 }
-            }, delay, new Preferences().EoDEMA_Period);     // Gets the preferences setting from the preference system.
+            }, delay, Preference.EoDEMA_Period);     // Gets the preferences setting from the preference system.
         }
         catch(Exception ex)     // If it fails manually start the service.
         {
@@ -79,14 +81,14 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 {
                     Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
 
-                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                     startActivity(intent);      // Starts the intent.
                 }
-            }, delay, new Preferences().EoDEMA_Period);     // Gets the preferences setting from the preference system.
+            }, delay, Preference.EoDEMA_Period);     // Gets the preferences setting from the preference system.
         }
     }
 }

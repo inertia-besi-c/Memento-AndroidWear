@@ -38,16 +38,18 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
-    private String System = new Preferences().System;      // Gets the System File label from Preferences
-    private String Pain_Activity = new Preferences().Pain_Activity;      // Gets the Followup Activity File label from Preferences
-    private String Pain_Results = new Preferences().Pain_Results;      // Gets the Followup Results File label from Preferences
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private String System = Preference.System;      // Gets the System File label from Preferences
+    private String Pain_Activity = Preference.Pain_Activity;      // Gets the Followup Activity File label from Preferences
+    private String Pain_Results = Preference.Pain_Results;      // Gets the Followup Results File label from Preferences
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
-    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
-    private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = new Preferences().PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
-    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
-    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int ActivityReminder = new Preferences().ActivityReminder;      // This is the haptic feedback for button presses.
+    private int EMAReminderDelay = Preference.PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
+    private long EMAReminderInterval = Preference.PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = Preference.PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
+    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
@@ -91,7 +93,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Results_Path);     // Gets the path to the system from the system.
+        File Result = new File(Preference.Directory + SystemInformation.Pain_EMA_Results_Path);     // Gets the path to the system from the system.
         if (Result.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -100,11 +102,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Pain_Results, new Preferences().Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(Pain_Results, Preference.Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File Activity = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
+        File Activity = new File(Preference.Directory + SystemInformation.Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
         if (Activity.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -113,11 +115,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Pain_Activity, new Preferences().Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(Pain_Activity, Preference.Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
         if (system.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -126,7 +128,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -150,14 +152,14 @@ public class PainEMA extends WearableActivity       // This is the main activity
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
         res2 = findViewById(R.id.EMA_res2);       // Sets the res button to a variable.
 
-        if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
+        if (Preference.Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
             Log.i("Pain EMA", "This is Patient");     // Logs on Console.
 
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
         }
-        else if (new Preferences().Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
+        else if (Preference.Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
             Log.i("Pain EMA", "This is Care Giver");     // Logs on Console.
 
@@ -226,7 +228,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 {
                     Log.i("Pain EMA", "First Answer Button Tapped");     // Logs on Console.
 
-                    String data =  ("Pain EMA," + "'First Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Pain EMA," + "'First Answer Toggle' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -242,7 +244,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 {
                     Log.i("Pain EMA", "Next/Submit Button Tapped");     // Logs on Console.
 
-                    String data =  ("Pain EMA," + "'Next/Submit' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Pain EMA," + "'Next/Submit' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -281,7 +283,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 {
                     Log.i("Pain EMA", "Back Button Tapped");     // Logs on Console.
 
-                    String data =  ("Pain EMA," + "'Back' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    String data =  ("Pain EMA," + "'Back' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                     DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
@@ -368,7 +370,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         Log.i("Pain EMA", "Logging Activity");     // Logs on Console.
 
-        String data =  (new SystemInformation().getTimeStamp()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
+        String data =  (SystemInformation.getTimeStamp()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger(Pain_Activity, data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
     }
