@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.linklab.INERTIA.besi_c">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <application
+        android:name=".EODTimerService"
+        android:allowBackup="true"
+        android:icon="@mipmap/besi_logo"
+        android:label="@string/app_name"
+        android:launchMode="singleInstance"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true"/>
+
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <service
+            android:name=".BESIWatchFace"
+            android:label="BESI Cancer"
+            android:launchMode="singleInstance"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@mipmap/besi_logo" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@mipmap/besi_logo" />
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".FollowUpEMASchedulerService"
+            android:enabled="true" >
+        </service>
+
+        <service
+            android:name=".HeartRateSensor"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".AccelerometerSensor"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".HRTimerService"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".ESTimerService"
+            android:launchMode="singleInstance" >
+        </service>
+
+        <service
+            android:name=".PedometerSensor"
+            android:enabled="true"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            tools:ignore="ExportedService" >
+        </service>
+
+        <service
+            android:name=".EstimoteService"
+            android:enabled="true"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            tools:ignore="ExportedService" >
+        </service>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".FireBase_Upload"
+            android:label="BESI: Upload Files"
+            android:launchMode="singleInstance">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".FollowUpEMA"
+            android:label="BESI: Follow-up EMA"
+            android:launchMode="singleInstance">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".PainEMA"
+            android:label="BESI: Pain EMA"
+            android:launchMode="singleInstance">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".EndOfDayEMA"
+            android:label="BESI: EoD EMA"
+            android:launchMode="singleInstance">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt1"
+            android:label="BESI: EoD Prompt 1"
+            android:launchMode="singleInstance">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt2"
+            android:label="BESI: EoD Prompt 2"
+            android:launchMode="singleInstance">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+    </application>
+
+</manifest>
