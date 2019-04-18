@@ -82,5 +82,5 @@ public class Preferences        // System wide one stop place to set all setting
     public long ESMeasurementInterval = 60*1000;          // Every how often should a measurement be taken?
 
     // Settings for the Accelerometer Sensor | Time is in ms |
-    public int DataCount = 200;     // How many data do you want to check for.
+    public int AccelDataCount = 200;     // How many data do you want to check for.
 }
