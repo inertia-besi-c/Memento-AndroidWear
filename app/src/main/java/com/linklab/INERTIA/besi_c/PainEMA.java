@@ -382,11 +382,5 @@ public class PainEMA extends WearableActivity       // This is the main activity
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
     }
-
-    private void Cancel()       // Cancels the current process.
-    {
-        ThankYou();     // Calls the thank you method.
-        finish();   // Closes the entire survey.
-    }
 }
 

@@ -424,10 +424,4 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         res.setText(responses.get(index));      // It sets the text to the index
         return index;       // Returns the number of the index.
     }
-
-    private void Cancel()       // Cancels the current process.
-    {
-        ThankYou();     // Calls the thank you method.
-        finish();   // Closes the entire survey.
-    }
 }
