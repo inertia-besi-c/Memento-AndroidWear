@@ -30,7 +30,7 @@ import java.util.TimerTask;
 public class EndOfDayEMA extends WearableActivity       // This is the main service file for the End of Day EMA questions
 {
     private PowerManager.WakeLock wakeLock;
-    private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
+    private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This sets the person whose watch it is.
@@ -73,7 +73,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
-                    {"None", "A little", "Medium", "A lot"},        // First option will have to be 'Not ar all'        (need to ask next meeting(
+                    {"Not at all", "A little", "Medium", "A lot"},        // First option will have to be 'Not ar all'        (need to ask next meeting(
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
@@ -165,6 +165,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
         req = findViewById(R.id.EMA_req);       // Sets the req button to a variable.
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
+        res2 = findViewById(R.id.EMA_res2);      // Sets the res2 button to a variable.
 
         if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
@@ -238,6 +239,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
     private void QuestionSystem()       // This is the logic behind the question system.
     {
+        res2.setVisibility(View.INVISIBLE);     // Sets the second button to be invisible at all times.
+
         if (CurrentQuestion == 0)       // If the current question is the first question.
         {
             back.setBackgroundColor(getColor(R.color.grey));        // Make the back button greyed out and unresponsive.

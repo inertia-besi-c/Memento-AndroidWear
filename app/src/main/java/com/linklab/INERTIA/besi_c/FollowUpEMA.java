@@ -29,7 +29,7 @@ import java.util.TimerTask;
 public class FollowUpEMA extends WearableActivity       // This is the followup activity for the EMA questions
 {
     private PowerManager.WakeLock wakeLock;
-    private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
+    private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This is the user response.
@@ -61,7 +61,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             };
     private String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
-                    {"Yes", "No"},
+                    {"Yes", "No", "Unsure"},
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
@@ -146,6 +146,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
         req = findViewById(R.id.EMA_req);       // Sets the req button to a variable.
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
+        res2 = findViewById(R.id.EMA_res2);       // Sets the res button to a variable.
 
         if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
@@ -164,22 +165,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
         UserResponses = new String[Questions.length];       // Shows the user response to a new string.
         UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
-
-        res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
-        {
-            public void onClick(View view)      // When the res button is clicked, this is run.
-            {
-                Log.i("Followup EMA", "Answer Button Tapped");     // Logs on Console.
-
-                String data =  ("Followup EMA," + "'Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
-                datalog.LogData();      // Saves the data into the directory.
-
-                v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
-                resTaps+=1;     // Increments the amount of taps by 1
-                Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
-            }
-        });
 
         EMARemindertimer.schedule(new TimerTask()       // Assigns the timer a new task when it starts.
         {
@@ -212,15 +197,27 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     {
         if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
         {
-            next.setText("Yes");       // Leave the text of the button as next.
-            back.setText("No");     // Sets the back button to No
             res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+            next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+            back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+
+            if (new Preferences().Role.equals("CG"))        // If this is the caregiver watch
+            {
+                res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
+                res2.setBackgroundColor(Color.GRAY);        // Makes the button grey
+                res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
+            }
+            if (new Preferences().Role.equals("PT"))        // If this is the patient watch
+            {
+                // Do nothing yet.
+            }
         }
         else        // If we are in any other question.
         {
             next.setText("Next");       // Leave the text of the button as next.
             back.setText("Back");       // Sets the back button to back
-            res.setVisibility(View.VISIBLE);        // Makes them visible
+            res.setVisibility(View.VISIBLE);        // Makes the first answer button visible
+            res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
         }
 
         if (CurrentQuestion < Questions.length)     // If there are still question left to answer.
@@ -231,6 +228,59 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             Collections.addAll(responses, Answers[CurrentQuestion]);        // Keeps the answer that was picked and remembers it.
             Cycle_Responses();      // Calls the cycle response method.
 
+            res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
+            {
+                public void onClick(View view)      // When the res button is clicked, this is run.
+                {
+                    Log.i("Followup EMA", "First Answer Button Tapped");     // Logs on Console.
+
+                    String data =  ("Followup EMA," + "'First Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
+                    datalog.LogData();      // Saves the data into the directory.
+
+                    v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
+                    resTaps+=1;     // Increments the amount of taps by 1
+                    Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
+                }
+            });
+
+            res2.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
+            {
+                public void onClick(View view)      // When the res2 button is clicked, this is run.
+                {
+                    Log.i("Followup EMA", "Second Answer Button Tapped");     // Logs on Console.
+
+                    String data =  ("Followup EMA," + "'Second Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
+                    datalog.LogData();      // Saves the data into the directory.
+
+                    v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
+
+                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
+                    {
+                        if (new Preferences().Role.equals("CG"))    // If this is the caregiver watch
+                        {
+                            UserResponses[CurrentQuestion] = res2.getText().toString();      // The user response question is moved.
+                            LogActivity();      // The log activity method is called.
+
+                            if (CurrentQuestion == 0)       // If this is the first question
+                            {
+                                Cancel();       // Cancel the survey
+                            }
+                            if (CurrentQuestion == Questions.length - 1)        // if this is the last question
+                            {
+                                Submit();       // Submits the survey
+                            }
+                        }
+
+                        if (new Preferences().Role.equals("PT"))
+                        {
+                            // Do nothing for now.
+                        }
+                    }
+
+                }
+            });
 
             next.setOnClickListener( new View.OnClickListener()       // Waits for the next button to be clicked.
             {
@@ -243,23 +293,30 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
-                    UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
-                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
-                    LogActivity();      // The log activity method is called.
 
-                    if (CurrentQuestion == Questions.length-1)      // If this is the last question
+                    if (CurrentQuestion == 0)     // If the answer to is "yes", moves on to question 2
                     {
-                        UserResponses[Questions.length -1] = "Yes";     // And they answer yes
-                        Submit();       // Submit the survey
-                    }
-                    else if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                    {
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
                         CurrentQuestion++;      // Increments the current question.
                         QuestionSystem();       // The question system method is called again for the next question.
                     }
-                    else        // If the users first response is not Yes.
+                    else if (CurrentQuestion == Questions.length-1)      // If this is the last question
                     {
-                        Cancel();    // It closes the question screen.
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        Submit();       // Submit the survey
+                    }
+                    else        // If we are not on the first question
+                    {
+                        UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
+                        UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion ++;     // Increment the question amount to go forward to the next question
+                        QuestionSystem();       // Call the question method again.
                     }
                 }
             });
@@ -275,21 +332,27 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
-                    UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
-                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
-                    LogActivity();      // Logs the activity.
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        ThankYou();     // Calls the thank you method
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        Cancel();     // Calls the thank you method
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
-                        UserResponses[Questions.length -1] = "No";      // And they answer no
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
                         Submit();       // Submit the survey
                     }
                     else        // If we are not on the first question
                     {
+                        UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
+                        UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
+                        LogActivity();      // Logs the activity.
+
                         CurrentQuestion --;     // Decrement the question amount to go back to the previous question
                         QuestionSystem();       // Call the question method again.
                     }

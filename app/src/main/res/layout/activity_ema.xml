@@ -57,6 +57,22 @@
             app:layout_constraintTop_toBottomOf="@+id/EMA_req"
             app:layout_constraintVertical_bias="0.0" />
 
+        <Button
+            android:id="@+id/EMA_res2"
+            android:layout_width="93dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/blue"
+            android:text="@string/button"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/Next"
+            app:layout_constraintStart_toEndOf="@+id/Back"
+            app:layout_constraintTop_toBottomOf="@+id/EMA_req"
+            app:layout_constraintVertical_bias="0.0" />
+
         <TextView
             android:id="@+id/EMA_req"
             android:layout_width="88dp"
