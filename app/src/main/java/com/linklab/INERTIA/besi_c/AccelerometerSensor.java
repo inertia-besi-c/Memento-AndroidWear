@@ -93,7 +93,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 
                     DataLogger dataLogger = new DataLogger(Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
                     dataLogger.LogData();   // Logs the data to a folder on the watch.
-                    stringBuilder = new StringBuilder();
+                    stringBuilder.setLength(0); //Empties the stringBuilder before next set. 
                     currentCount = 0;
                 }
             }).start();     // This starts the runnable thread.
