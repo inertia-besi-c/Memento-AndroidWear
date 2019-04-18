@@ -45,6 +45,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     @Override
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
+        Log.i("Accelerometer", "Logging to StringBuilder");     // Logs to console
+
         currentCount ++;
 //        double[] gravity = new double[3];       // Ability to remove gravity from the sensor.
         double[] linear_accel = new double[3];      // Initializes the accelerometer value from the sensor.
