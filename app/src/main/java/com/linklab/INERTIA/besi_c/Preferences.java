@@ -80,4 +80,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 5*1000;           // How long should estimote be measured each time?
     public long ESMeasurementInterval = 60*1000;          // Every how often should a measurement be taken?
+
+    // Settings for the Accelerometer Sensor | Time is in ms |
+    public int DataCount = 200;     // How many data do you want to check for.
 }

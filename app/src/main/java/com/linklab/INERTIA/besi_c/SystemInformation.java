@@ -14,21 +14,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("ALL")
 class SystemInformation     // Class that acquires the current time from the system and saves it.
 {
-    private String DeviceID = new Preferences().DeviceID;       // Gets the Device ID from preferences
-    private String Accelerometer = new Preferences().Accelerometer;       // Gets the Accelerometer file from preferences
-    private String Battery = new Preferences().Battery;       // Gets the Battery level file from preferences
-    private String Estimote = new Preferences().Estimote;       // Gets the Estimote file from preferences
-    private String Pedometer = new Preferences().Pedometer;            // Gets the Pedometer file from preferences
-    private String Pain_Activity = new Preferences().Pain_Activity;           // Gets the Pain Activity file from preferences
-    private String Pain_Results = new Preferences().Pain_Results;              // Gets the Pain Results file from preferences
-    private String Followup_Activity = new Preferences().Followup_Activity;           // Gets the Followup Activity file from preferences
-    private String Followup_Results = new Preferences().Followup_Results;           // Gets the Followup Results file from preferences
-    private String EndOfDay_Activity = new Preferences().EndOfDay_Activity;           // Gets the End of Day Activity file from preferences
-    private String EndOfDay_Results = new Preferences().EndOfDay_Results;           // Gets the End of Day Results file from preferences
-    private String Sensors = new Preferences().Sensors;           // Gets the Sensors file from preferences
-    private String Steps = new Preferences().Steps;           // Gets the Steps file from preferences
-    private String System = new Preferences().System;           // Gets the System file from preferences
-    private String Heart_Rate = new Preferences().Heart_Rate;       // Gets the Heart Rate files from preferences
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+
+    private String DeviceID = Preference.DeviceID;       // Gets the Device ID from preferences
+    private String Accelerometer = Preference.Accelerometer;       // Gets the Accelerometer file from preferences
+    private String Battery = Preference.Battery;       // Gets the Battery level file from preferences
+    private String Estimote = Preference.Estimote;       // Gets the Estimote file from preferences
+    private String Pedometer = Preference.Pedometer;            // Gets the Pedometer file from preferences
+    private String Pain_Activity = Preference.Pain_Activity;           // Gets the Pain Activity file from preferences
+    private String Pain_Results = Preference.Pain_Results;              // Gets the Pain Results file from preferences
+    private String Followup_Activity = Preference.Followup_Activity;           // Gets the Followup Activity file from preferences
+    private String Followup_Results = Preference.Followup_Results;           // Gets the Followup Results file from preferences
+    private String EndOfDay_Activity = Preference.EndOfDay_Activity;           // Gets the End of Day Activity file from preferences
+    private String EndOfDay_Results = Preference.EndOfDay_Results;           // Gets the End of Day Results file from preferences
+    private String Sensors = Preference.Sensors;           // Gets the Sensors file from preferences
+    private String Steps = Preference.Steps;           // Gets the Steps file from preferences
+    private String System = Preference.System;           // Gets the System file from preferences
+    private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate files from preferences
 
     /* File path for Adding Headers to Individual File Name */
     public String Accelerometer_Path = DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path

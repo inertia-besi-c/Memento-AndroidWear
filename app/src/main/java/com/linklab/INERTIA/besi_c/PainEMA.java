@@ -31,23 +31,25 @@ import java.util.TimerTask;
 public class PainEMA extends WearableActivity       // This is the main activity for the pain survey questions.
 {
     private PowerManager.WakeLock wakeLock;     // This is the power manager service for the system.
-    private Button res, back, next;     // These are the buttons shown on the screen to navigate the watch
+    private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
     private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
-    private String System = new Preferences().System;      // Gets the System File label from Preferences
-    private String Pain_Activity = new Preferences().Pain_Activity;      // Gets the Followup Activity File label from Preferences
-    private String Pain_Results = new Preferences().Pain_Results;      // Gets the Followup Results File label from Preferences
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private String System = Preference.System;      // Gets the System File label from Preferences
+    private String Pain_Activity = Preference.Pain_Activity;      // Gets the Followup Activity File label from Preferences
+    private String Pain_Results = Preference.Pain_Results;      // Gets the Followup Results File label from Preferences
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
-    private int EMAReminderDelay = new Preferences().PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
-    private long EMAReminderInterval = new Preferences().PainEMAReminderInterval; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = new Preferences().PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
-    private int HapticFeedback = new Preferences().HapticFeedback;      // This is the haptic feedback for button presses.
-    private int ActivityBeginning = new Preferences().ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int ActivityReminder = new Preferences().ActivityReminder;      // This is the haptic feedback for button presses.
+    private int EMAReminderDelay = Preference.PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
+    private long EMAReminderInterval = Preference.PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private int ReminderNumber = Preference.PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
+    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
@@ -91,7 +93,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Results_Path);     // Gets the path to the system from the system.
+        File Result = new File(Preference.Directory + SystemInformation.Pain_EMA_Results_Path);     // Gets the path to the system from the system.
         if (Result.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -100,11 +102,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Pain_Results, new Preferences().Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(Pain_Results, Preference.Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File Activity = new File(new Preferences().Directory + new SystemInformation().Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
+        File Activity = new File(Preference.Directory + SystemInformation.Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
         if (Activity.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -113,11 +115,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Pain_Activity, new Preferences().Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(Pain_Activity, Preference.Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        File system = new File(new Preferences().Directory + new SystemInformation().System_Path);     // Gets the path to the system from the system.
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
         if (system.exists())      // If the file exists
         {
             Log.i("Followup EMA", "No Header Created");     // Logs to console
@@ -126,7 +128,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             Log.i("Followup EMA", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(System, new Preferences().System_Data_Headers);        /* Logs the system data in a csv format */
+            DataLogger dataLogger = new DataLogger(System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -148,15 +150,16 @@ public class PainEMA extends WearableActivity       // This is the main activity
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
         req = findViewById(R.id.EMA_req);       // Sets the req button to a variable.
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
+        res2 = findViewById(R.id.EMA_res2);       // Sets the res button to a variable.
 
-        if (new Preferences().Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
+        if (Preference.Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
             Log.i("Pain EMA", "This is Patient");     // Logs on Console.
 
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
         }
-        else if (new Preferences().Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
+        else if (Preference.Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
             Log.i("Pain EMA", "This is Care Giver");     // Logs on Console.
 
@@ -166,22 +169,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
         UserResponses = new String[Questions.length];       // Shows the user response to a new string.
         UserResponseIndex = new int[UserResponses.length];      // Makes the user response to an integer.
-
-        res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
-        {
-            public void onClick(View view)      // When the res button is clicked, this is run.
-            {
-                Log.i("Pain EMA", "Answer Button Tapped");     // Logs on Console.
-
-                String data =  ("Pain EMA," + "'Answer Toggle' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
-                datalog.LogData();      // Saves the data into the directory.
-
-                v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
-                resTaps+=1;     // Increments the amount of taps by 1
-                Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
-            }
-        });
 
         EMARemindertimer.schedule(new TimerTask()       // Assigns the timer a new task when it starts.
         {
@@ -214,15 +201,17 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
         {
-            next.setText("Yes");       // Leave the text of the button as next.
-            back.setText("No");     // Sets the back button to No
             res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+            res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
+            next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+            back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
         }
         else        // If we are in any other question.
         {
             next.setText("Next");       // Leave the text of the button as next.
             back.setText("Back");       // Sets the back button to back
-            res.setVisibility(View.VISIBLE);        // Makes them visible
+            res.setVisibility(View.VISIBLE);        // Makes the first answer button visible
+            res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
         }
 
         if (CurrentQuestion < Questions.length)     // If there are still question left to answer.
@@ -233,6 +222,21 @@ public class PainEMA extends WearableActivity       // This is the main activity
             Collections.addAll(responses, Answers[CurrentQuestion]);        // Keeps the answer that was picked and remembers it.
             Cycle_Responses();      // Calls the cycle response method.
 
+            res.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
+            {
+                public void onClick(View view)      // When the res button is clicked, this is run.
+                {
+                    Log.i("Pain EMA", "First Answer Button Tapped");     // Logs on Console.
+
+                    String data =  ("Pain EMA," + "'First Answer Toggle' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
+                    datalog.LogData();      // Saves the data into the directory.
+
+                    v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
+                    resTaps+=1;     // Increments the amount of taps by 1
+                    Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
+                }
+            });
 
             next.setOnClickListener( new View.OnClickListener()       // Waits for the next button to be clicked.
             {
@@ -240,28 +244,35 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 {
                     Log.i("Pain EMA", "Next/Submit Button Tapped");     // Logs on Console.
 
-                    String data =  ("Pain EMA," + "'Next/Submit' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                    String data =  ("Pain EMA," + "'Next/Submit' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
-                    UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
-                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
-                    LogActivity();      // The log activity method is called.
 
-                    if (CurrentQuestion == Questions.length-1)      // If this is the last question
+                    if (CurrentQuestion == 0)     // If the answer to is "yes", moves on to question 2
                     {
-                        UserResponses[Questions.length -1] = "Yes";     // And they answer yes
-                        Submit();       // Submit the survey
-                    }
-                    else if (UserResponses[0].equals("Yes"))     // If the answer to is "yes", moves on to question 2
-                    {
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
                         CurrentQuestion++;      // Increments the current question.
                         QuestionSystem();       // The question system method is called again for the next question.
                     }
-                    else        // If the users first response is not Yes.
+                    else if (CurrentQuestion == Questions.length-1)      // If this is the last question
                     {
-                        Cancel();    // It closes the question screen.
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        Submit();       // Submit the survey
+                    }
+                    else        // If we are not on the first question
+                    {
+                        UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
+                        UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion ++;     // Increment the question amount to go forward to the next question
+                        QuestionSystem();       // Call the question method again.
                     }
                 }
             });
@@ -272,26 +283,32 @@ public class PainEMA extends WearableActivity       // This is the main activity
                 {
                     Log.i("Pain EMA", "Back Button Tapped");     // Logs on Console.
 
-                    String data =  ("Pain EMA," + "'Back' Button Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                    String data =  ("Pain EMA," + "'Back' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called Preferences.
                     datalog.LogData();      // Saves the data into the directory.
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
-                    UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
-                    UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
-                    LogActivity();      // Logs the activity.
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        ThankYou();     // Calls the thank you method
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        Submit();       // Submit the survey
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
-                        UserResponses[Questions.length -1] = "No";      // And they answer no
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
                         Submit();       // Submit the survey
                     }
                     else        // If we are not on the first question
                     {
+                        UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
+                        UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
+                        LogActivity();      // Logs the activity.
+
                         CurrentQuestion --;     // Decrement the question amount to go back to the previous question
                         QuestionSystem();       // Call the question method again.
                     }
@@ -353,7 +370,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         Log.i("Pain EMA", "Logging Activity");     // Logs on Console.
 
-        String data =  (new SystemInformation().getTimeStamp()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
+        String data =  (SystemInformation.getTimeStamp()) + ",EMA_Pain," + String.valueOf(CurrentQuestion) + "," + UserResponses[CurrentQuestion];        // This is the log that is saved.
         DataLogger datalog = new DataLogger(Pain_Activity, data);      // This saves the data into a datalog.
         datalog.LogData();      // Logs the data into the directory specified.
     }
@@ -366,12 +383,6 @@ public class PainEMA extends WearableActivity       // This is the main activity
         wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
-    }
-
-    private void Cancel()       // Cancels the current process.
-    {
-        ThankYou();     // Calls the thank you method.
-        finish();   // Closes the entire survey.
     }
 }
 

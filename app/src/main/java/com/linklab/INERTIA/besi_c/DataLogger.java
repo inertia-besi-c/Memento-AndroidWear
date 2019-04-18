@@ -15,11 +15,12 @@ import java.util.Date;
 public class DataLogger     // A function that runs the data logging data
 {
     private String FileName, Content;        // Variable names for the file characters and contents.
-    private String Directory = new Preferences().Directory;     // Gets the directory from the preferences class.
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
 
     public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
-        FileName = new Preferences().DeviceID+"_"+filename;        // Initiates a variable for the filename from preferences
+        FileName = Preference.DeviceID+"_"+filename;        // Initiates a variable for the filename from preferences
         Content = content;      // Initiates a variable for the content of the file name
     }
 
@@ -136,9 +137,10 @@ public class DataLogger     // A function that runs the data logging data
 
     public static boolean writeToFile(Date time1, String data)      /* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
     {
-        String deviceID = new Preferences().DeviceID;       // This is the device id that is set from the preferences.
+        Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+        String deviceID = Preference.DeviceID;       // This is the device id that is set from the preferences.
         boolean flag = true;        // Sets a flag
-        String path = new Preferences().Directory;        // Gets the path to the storage in the sdcard
+        String path = Preference.Directory;        // Gets the path to the storage in the sdcard
         String fileName = new SystemInformation().Estimote_Path;        // Names the file.
         File file = new File(path);     // Makes a path to the file.
 

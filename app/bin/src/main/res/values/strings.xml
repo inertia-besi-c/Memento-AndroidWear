@@ -1,0 +1,35 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">BESI-C</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="start">START</string>
+    <string name="sleep">SLEEP</string>
+    <string name="title_activity_ema">EMA</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment"> </string>
+    <string name="battery">Battery: %</string>
+    <string name="mar_4_2019"> </string>
+    <string name="_8_58_am"> </string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="button">Button</string>
+    <string name="ema_text">EMA Text</string>
+    <string name="title_activity_sensor_data">SensorData</string>
+    <string name="title_activity_accelerometer_sensor_timer">AccelerometerSensorTimer</string>
+    <string name="message">Watch face tapped</string>
+    <string name="my_digital_name">BESI C</string>
+    <string name="title_activity_pain_screen">PainScreen</string>
+    <string name="pain">Pain</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_end_of_day_prompt">EndOfDayPrompt</string>
+    <string name="title_activity_fire_base__upload">FireBase_Upload</string>
+    <string name="please_answer_the_following_questions_over_the_past_day" tools:ignore="TypographyEllipsis">Please answer the following questions. Over the past day...</string>
+    <string name="snooze">Snooze</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="go">Go</string>
+    <string name="upload">Upload</string>
+</resources>
