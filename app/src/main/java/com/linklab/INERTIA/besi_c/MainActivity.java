@@ -270,14 +270,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                         SleepMode = true;       // And it sets the boolean value to true.
 
-                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
-                        {
-                            String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
-                            datalogA.LogData();      // Saves the data into the directory.
-
-                            stopService(AccelService);        // Stop the service.
-                        }
+//                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+//                        {
+//                            String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+//                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
+//                            datalogA.LogData();      // Saves the data into the directory.
+//
+//                            stopService(AccelService);        // Stop the service.
+//                        }
 
                         if(isRunning(ESTimerService.class) || isRunning(EstimoteService.class))       // If the Estimote service is running
                         {
@@ -314,14 +314,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                         SleepMode = true;       // And it sets the boolean value to true.
 
-                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
-                        {
-                            String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
-                            datalogA.LogData();      // Saves the data into the directory.
-
-                            stopService(AccelService);        // Stop the service.
-                        }
+//                        if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+//                        {
+//                            String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while NOT charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+//                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
+//                            datalogA.LogData();      // Saves the data into the directory.
+//
+//                            stopService(AccelService);        // Stop the service.
+//                        }
                     }
 
                     else        // If the heart rate timer is not running

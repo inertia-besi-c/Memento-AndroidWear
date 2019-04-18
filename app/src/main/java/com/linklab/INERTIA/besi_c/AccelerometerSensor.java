@@ -20,6 +20,9 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
     private String Accelerometer = new Preferences().Accelerometer;     // This is the file name set from preferences.
+    private int MaxDataCount = new Preferences().DataCount;        // Gets the Data count number from preferences.
+    private int currentCount = 0;       // This is the initial data count for the sensor
+    StringBuilder stringBuilder;
 
     @SuppressLint("WakelockTimeout")        // Stops the error message from the wakelock
     @Override
@@ -33,13 +36,15 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Initializes the ability to get a sensor from the system.
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);     // Gets the specific sensor called accelerometer.
-        mSensorManager.registerListener(this, mAccelerometer, 1, 1000);       // It listens to the data acquires from the accelerometer
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);       // It listens to the data acquires from the accelerometer
+        stringBuilder = new StringBuilder();
         return START_STICKY;        // Restarts the sensor if it is killed by the system.
     }
 
     @Override
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
+        currentCount ++;
         double[] gravity = new double[3];       // Ability to remove gravity from the sensor.
         double[] linear_accel = new double[3];      // Initializes the accelerometer value from the sensor.
         final double alpha = 0.8;        // This removes gravity from the accelerometer data using a high pass filter.
@@ -58,29 +63,36 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                 String.valueOf(linear_accel[1]) + "," +         // Acceleration value on y-axis
                 String.valueOf(linear_accel[2]);        // Acceleration value on z-axis
 
-        new Thread(new Runnable()       // Runs this when one or more of the values change
+        stringBuilder.append(accelerometerValues);
+        stringBuilder.append("\n");
+
+        if ((currentCount >= MaxDataCount) && (stringBuilder != null))
         {
-            public void run()       // Re-runs every time.
+            new Thread(new Runnable()       // Runs this when one or more of the values change
             {
-                File accelerometer = new File(new Preferences().Directory + new SystemInformation().Accelerometer_Path);     // Gets the path to the accelerometer from the system.
-                if (accelerometer.exists())      // If the file exists
+                public void run()       // Re-runs every time.
                 {
-                    Log.i("Accelerometer", "No Header Created");     // Logs to console
+                    File accelerometer = new File(new Preferences().Directory + new SystemInformation().Accelerometer_Path);     // Gets the path to the accelerometer from the system.
+                    if (accelerometer.exists())      // If the file exists
+                    {
+                        Log.i("Accelerometer", "No Header Created");     // Logs to console
+                    } else        // If the file does not exist
+                    {
+                        Log.i("Accelerometer", "Creating Header");     // Logs on Console.
+
+                        DataLogger dataLogger = new DataLogger(Accelerometer, new Preferences().Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
+                        dataLogger.LogData();       // Saves the data to the directory.
+                    }
+
+                    Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
+                    dataLogger.LogData();   // Logs the data to a folder on the watch.
+                    stringBuilder = new StringBuilder();
+                    currentCount = 0;
                 }
-                else        // If the file does not exist
-                {
-                    Log.i("Accelerometer", "Creating Header");     // Logs on Console.
-
-                    DataLogger dataLogger = new DataLogger(Accelerometer, new Preferences().Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
-                    dataLogger.LogData();       // Saves the data to the directory.
-                }
-
-                Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
-
-                DataLogger dataLogger = new DataLogger(Accelerometer, accelerometerValues);       // Logs the data into a file that can be retrieved from the watch.
-                dataLogger.LogData();   // Logs the data to a folder on the watch.
-            }
-        }).start();     // This starts the runnable thread.
+            }).start();     // This starts the runnable thread.
+        }
     }
 
     @Override
