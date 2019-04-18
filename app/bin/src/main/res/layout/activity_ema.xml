@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_grey"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".ema"
+    tools:deviceIds="wear">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#DE1C1C1C">
+
+        <Button
+            android:id="@+id/Back"
+            android:layout_width="46dp"
+            android:layout_height="225dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/dark_red"
+            android:text="@string/back"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.463" />
+
+        <Button
+            android:id="@+id/Next"
+            android:layout_width="46dp"
+            android:layout_height="225dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/green"
+            android:text="@string/next"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/EMA_res"
+            android:layout_width="93dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/blue"
+            android:text="@string/button"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/Next"
+            app:layout_constraintStart_toEndOf="@+id/Back"
+            app:layout_constraintTop_toBottomOf="@+id/EMA_req"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/EMA_res2"
+            android:layout_width="93dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/blue"
+            android:text="@string/button"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/Next"
+            app:layout_constraintStart_toEndOf="@+id/Back"
+            app:layout_constraintTop_toBottomOf="@+id/EMA_req"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/EMA_req"
+            android:layout_width="88dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/ema_text"
+            android:textAlignment="center"
+            android:textColor="#E0E0E0"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/Next"
+            app:layout_constraintStart_toEndOf="@+id/Back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.182" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.wear.widget.BoxInsetLayout>

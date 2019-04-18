@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "328128691703",
+    "firebase_url": "https://besi-c-watchapp.firebaseio.com",
+    "project_id": "besi-c-watchapp",
+    "storage_bucket": "besi-c-watchapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328128691703:android:ca87cab65a7bb0bf",
+        "android_client_info": {
+          "package_name": "com.linklab.INERTIA.besi_c"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPhFgcJ2syu6toULF1desXfegPkFwdShM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328128691703-pivjuie2g9adbqah629h9mjl1ulg9ke5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
