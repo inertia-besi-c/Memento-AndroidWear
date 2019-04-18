@@ -292,7 +292,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
 
-                        Cancel();     // Calls the thank you method
+                        Submit();       // Submit the survey
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {

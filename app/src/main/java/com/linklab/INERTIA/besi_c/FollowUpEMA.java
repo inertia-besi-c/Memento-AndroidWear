@@ -265,7 +265,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
-                                Cancel();       // Cancel the survey
+                                Submit();       // Submit the survey
                             }
                             if (CurrentQuestion == Questions.length - 1)        // if this is the last question
                             {
@@ -338,7 +338,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
 
-                        Cancel();     // Calls the thank you method
+                        Submit();       // Submit the survey
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
