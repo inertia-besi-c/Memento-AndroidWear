@@ -60,10 +60,10 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                 String.valueOf(linear_accel[1]) + "," +         // Acceleration value on y-axis
                 String.valueOf(linear_accel[2]);        // Acceleration value on z-axis
 
-        stringBuilder.append(accelerometerValues);
-        stringBuilder.append("\n");
+        stringBuilder.append(accelerometerValues);      // Appends the values to the string builder
+        stringBuilder.append("\n");     // Makes a new line
 
-        if ((currentCount >= MaxDataCount) && (stringBuilder != null))
+        if ((currentCount >= MaxDataCount) && (stringBuilder != null))      // If the string builder length is thing and it is not empty
         {
             new Thread(new Runnable()       // Runs this when one or more of the values change
             {
@@ -84,9 +84,9 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                     Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
 
                     DataLogger dataLogger = new DataLogger(Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
-                    dataLogger.LogData();   // Logs the data to a folder on the watch.
-                    stringBuilder.setLength(0); //Empties the stringBuilder before next set. 
-                    currentCount = 0;
+                    dataLogger.LogData();       // Logs the data to a folder on the watch.
+                    stringBuilder.setLength(0);     //Empties the stringBuilder before next set.
+                    currentCount = 0;       // Reset the count
                 }
             }).start();     // This starts the runnable thread.
         }
