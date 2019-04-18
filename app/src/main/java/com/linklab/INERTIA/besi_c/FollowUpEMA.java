@@ -265,7 +265,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
-                                Submit();       // Submit the survey
+                                CurrentQuestion++;      // Increments the current question.
+                                QuestionSystem();       // The question system method is called again for the next question.
                             }
                             if (CurrentQuestion == Questions.length - 1)        // if this is the last question
                             {
