@@ -118,7 +118,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                         Followup_Results,
                         Followup_Activity,
                         Pedometer,
-                        Heart_Rate
+                        Heart_Rate,
+                        Accelerometer
                     };
 
                     String [] type_ =       // These are the directory we want them to uplaod to <------------------------------  NOTE: THE ORDER CORRESPONDS TO THE FILE ORDER ABOVE
@@ -133,7 +134,8 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                         "EMAResponses",
                         "EMAActivity",
                         "PedometerData",
-                        "HeartRateData"
+                        "HeartRateData",
+                        "AccelerometerData"
                     };
 
                     for(int i = 0; i < fileName.length; i++)        // For every file and directory listed above

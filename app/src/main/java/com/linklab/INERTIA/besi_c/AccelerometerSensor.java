@@ -33,7 +33,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Initializes the ability to get a sensor from the system.
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);     // Gets the specific sensor called accelerometer.
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);       // It listens to the data acquires from the accelerometer
+        mSensorManager.registerListener(this, mAccelerometer, 1, 1000);       // It listens to the data acquires from the accelerometer
         return START_STICKY;        // Restarts the sensor if it is killed by the system.
     }
 

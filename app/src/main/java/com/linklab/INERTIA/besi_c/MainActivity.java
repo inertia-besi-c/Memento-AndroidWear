@@ -320,7 +320,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 //                            DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
 //                            datalogA.LogData();      // Saves the data into the directory.
 //
-//                          stopService(AccelService);        // Stop the service.
+//                            stopService(AccelService);        // Stop the service.
 //                        }
                     }
 

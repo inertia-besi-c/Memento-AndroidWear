@@ -66,6 +66,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
     private void PeriodicService(boolean Stop)      // Starts the periodic data sampling.
     {
         final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);       // Starts a HR service intent from the sensor class.
+//        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
 
         if (Stop)       // If it says stop, it kills the HRService.
         {
@@ -76,6 +77,15 @@ public class HRTimerService extends Service         /* This runs the delay timer
             datalog.LogData();      // Saves the data into the directory.
 
             stopService(HRService);     // Stops the Heart Rate Sensor
+
+//            if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+//            {
+//                String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+//                DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
+//                datalogA.LogData();      // Saves the data into the directory.
+//
+//                startService(AccelService);        // Stop the service.
+//            }
         }
         else    // Else it just keeps going.
         {
@@ -95,25 +105,32 @@ public class HRTimerService extends Service         /* This runs the delay timer
                     DataLogger datalogHRT = new DataLogger(Sensors, dataHRT);      // Logs it into a file called System Activity.
                     datalogHRT.LogData();      // Saves the data into the directory.
 
+//                    if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
+//                    {
+//                        String dataA =  ("Sleep Button," + "Stopped Accelerometer Sensor while charging at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+//                        DataLogger datalogA = new DataLogger(Sensors, dataA);      // Logs it into a file called System Activity.
+//                        datalogA.LogData();      // Saves the data into the directory.
+//
+//                        stopService(AccelService);        // Stop the service.
+//                    }
+
                     startService(HRService);    // Starts the Heart Rate Sensor
                 }
             }, delay, period);      // Waits for this amount of delay and runs every stated period.
         }
     }
 
-    private boolean isRunning()         // IF the system is running.
+    private boolean isRunning(Class<?> serviceClass)        // A general file that checks if a system is running.
     {
-        ActivityManager HRManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Get the activity manager for heartrate.
-
-        for (ActivityManager.RunningServiceInfo service : HRManager.getRunningServices(Integer.MAX_VALUE))      // For every running service.
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Starts the activity manager to check the service called.
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))        // For each service called by the running service.
         {
-            if (HeartRateSensor.class.getName().equals(service.service.getClassName()))     // If HRService is equal to the class name
+            if (serviceClass.getName().equals(service.service.getClassName()))      // It checks if it is running.
             {
-                return true;        // Return true.
+                return true;        // Returns true
             }
         }
-
-        return false;       // If not, return false.
+        return false;       // If not, it returns false.
     }
 
     @Override
@@ -124,7 +141,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
         HRTimerService.cancel();        //  Cancels the HR Timer Service.
         wakeLock.release();     // Releases the wakelock
 
-        if (isRunning())        // If the periodic service is running
+        if (isRunning(HeartRateSensor.class))        // If the periodic service is running
         {
             PeriodicService(true);      // Stops the periodic service.
         }
