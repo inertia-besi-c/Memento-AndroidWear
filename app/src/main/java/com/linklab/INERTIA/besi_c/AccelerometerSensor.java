@@ -20,6 +20,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Accelerometer = Preference.Accelerometer;     // This is the file name set from preferences.
     private int MaxDataCount = Preference.AccelDataCount;        // Gets the Data count number from preferences.
     private int currentCount = 0;       // This is the initial data count for the sensor
@@ -55,7 +56,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[2] = event.values[2];     // Accelerometer value with gravity on the z-axis
 
         final String accelerometerValues =      // Shows the values in a string.
-                new SystemInformation().getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +          // Starts a new string line.
+                SystemInformation.getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +          // Starts a new string line.
                 String.valueOf(linear_accel[0]) + "," +         // Acceleration value on x-axis
                 String.valueOf(linear_accel[1]) + "," +         // Acceleration value on y-axis
                 String.valueOf(linear_accel[2]);        // Acceleration value on z-axis
@@ -69,15 +70,16 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
             {
                 public void run()       // Re-runs every time.
                 {
-                    File accelerometer = new File(new Preferences().Directory + new SystemInformation().Accelerometer_Path);     // Gets the path to the accelerometer from the system.
+                    File accelerometer = new File(Preference.Directory + SystemInformation.Accelerometer_Path);     // Gets the path to the accelerometer from the system.
                     if (accelerometer.exists())      // If the file exists
                     {
                         Log.i("Accelerometer", "No Header Created");     // Logs to console
-                    } else        // If the file does not exist
+                    }
+                    else        // If the file does not exist
                     {
                         Log.i("Accelerometer", "Creating Header");     // Logs on Console.
 
-                        DataLogger dataLogger = new DataLogger(Accelerometer, new Preferences().Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
+                        DataLogger dataLogger = new DataLogger(Accelerometer, Preference.Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
                         dataLogger.LogData();       // Saves the data to the directory.
                     }
 
