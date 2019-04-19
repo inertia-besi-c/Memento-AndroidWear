@@ -381,6 +381,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (isCharging)     // If the battery is charging
                             {
+                                final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
+                                final Intent EstimoteService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote service.
+                                if(isRunning(ESTimerService.class) || isRunning(EstimoteService.class))       // If the Estimote service is running
+                                {
+                                    String dataB =  ("Sleep Button," + "Stopped Estimote Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
+                                    datalogB.LogData();      // Saves the data into the directory.
+
+                                    stopService(EstimService);        // Stop the service.
+                                    stopService(EstimoteService);       // Stops the service.
+                                }
+
                                 if (!BatteryCharge)     // Checks if the battery is charging
                                 {
                                     while (!isDeviceOnline())       // Checks if the device has an internet connection
