@@ -10,7 +10,7 @@ public class Preferences        // System wide one stop place to set all setting
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Fossil-43mm";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "Full-Test";      // Deployment ID
-    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
@@ -54,7 +54,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema
     public int PainEMAReminderInterval = 5*60*1000;         // How long to wait between each ping reminding user to complete ema
-    public int PainEMAReminderNumber = 2;       // Ho1w many times to remind the wearer to complete ema
+    public int PainEMAReminderNumber = 2;       // How many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
     public int FollowUpEMATimer = 30*60*1000;       // How long to wait after PainEMA submitted to prompt follow-up ema

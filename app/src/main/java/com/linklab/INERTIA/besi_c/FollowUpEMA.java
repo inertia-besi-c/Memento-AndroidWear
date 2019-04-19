@@ -199,19 +199,20 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     {
         if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
         {
-            res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
             next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
             back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
 
             if (Preference.Role.equals("CG"))        // If this is the caregiver watch
             {
+                res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
                 res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
                 res2.setBackgroundColor(Color.GRAY);        // Makes the button grey
                 res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
             }
             if (Preference.Role.equals("PT"))        // If this is the patient watch
             {
-                // Do nothing yet.
+                res.setVisibility(View.VISIBLE);        // Makes the first answer button visible
+                res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
             }
         }
         else        // If we are in any other question.
