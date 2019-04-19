@@ -86,9 +86,9 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
     private boolean isRunning()         // IF the system is running.
     {
-        ActivityManager HRManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Get the activity manager for heartrate.
+        ActivityManager ESManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Get the activity manager for heartrate.
 
-        for (ActivityManager.RunningServiceInfo service : HRManager.getRunningServices(Integer.MAX_VALUE))      // For every running service.
+        for (ActivityManager.RunningServiceInfo service : ESManager.getRunningServices(Integer.MAX_VALUE))      // For every running service.
         {
             if (ESTimerService.class.getName().equals(service.service.getClassName()))     // If HRService is equal to the class name
             {
