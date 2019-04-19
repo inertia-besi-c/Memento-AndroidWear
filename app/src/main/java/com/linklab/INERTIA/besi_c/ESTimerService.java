@@ -48,14 +48,18 @@ public class ESTimerService extends Service         /* This runs the delay timer
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ESService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
         wakeLock.acquire();     // Starts the wakelock without any timeout.
         PeriodicService(false);     // Makes the periodic service false initially.
-
         return START_STICKY;    // This allows it to restart if the service is killed
     }
 
     private void PeriodicService(boolean Stop)      // Starts the periodic data sampling.
     {
         final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a ES service intent from the sensor class.
+        boolean isCharging = SystemInformation.isSystemCharging(getApplicationContext());     // Checks if the battery is currently charging.
 
+        if (isCharging)     // Checks if the system is charging
+        {
+            ESTimerService.cancel();        //  Cancels the ES Timer Service.
+        }
         if (Stop)       // If it says stop, it kills the HRService.
         {
             Log.i("Estimote Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
@@ -66,7 +70,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
             stopService(ESService);     // Stops the Heart Rate Sensor
         }
-        else
+        else        // If the system is not charging or is not asked to stop
         {
             ESTimerService = new Timer();          // Makes a new timer.
             ESTimerService.schedule(new TimerTask()     // Initializes a timer.
