@@ -211,7 +211,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             }
             if (Preference.Role.equals("PT"))        // If this is the patient watch
             {
-                res.setVisibility(View.VISIBLE);        // Makes the first answer button visible
+                res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
                 res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
             }
         }
