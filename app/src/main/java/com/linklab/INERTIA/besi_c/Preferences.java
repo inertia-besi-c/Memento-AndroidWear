@@ -57,7 +57,8 @@ public class Preferences        // System wide one stop place to set all setting
     public int PainEMAReminderNumber = 2;       // Ho1w many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
-    public int FollowUpEMADelay = 30*60*1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMATimer = 30*60*1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowupEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema
     public int FollowUpEMAReminderNumber = 3;       // How many times to remind the wearer to complete the follow-up ema
     public int FollowUpEMAReminderInterval = 5*60*1000;         // How long to wait between each ping reminding user to complete ema
 

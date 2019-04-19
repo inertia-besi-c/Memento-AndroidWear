@@ -16,7 +16,7 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
     private Timer FollowUpEMATimer;     // This is the timer for the follow up EMA
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private long FollowUpEMADelay = Preference.FollowUpEMADelay;     // Time before followup EMA / EMA2 following submission
+    private long FollowUpEMADelay = Preference.FollowUpEMATimer;     // Time before followup EMA / EMA2 following submission
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
 
     @Override

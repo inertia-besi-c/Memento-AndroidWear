@@ -43,7 +43,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
-    private int EMAReminderDelay = Preference.FollowUpEMADelay;  // Calls the Follow up EMA delay from the preferences.
+    private int EMAReminderDelay = Preference.FollowupEMAReminderDelay;  // Calls the Follow up EMA delay from the preferences.
     private long EMAReminderInterval = Preference.FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
     private int ReminderNumber = Preference.FollowUpEMAReminderNumber;       // Calls the reminder numbers for the follow up from preferences.
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
