@@ -54,7 +54,12 @@ public class ESTimerService extends Service         /* This runs the delay timer
     private void PeriodicService(boolean Stop)      // Starts the periodic data sampling.
     {
         final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);       // Starts a ES service intent from the sensor class.
+        boolean isCharging = SystemInformation.isSystemCharging(getApplicationContext());     // Checks if the battery is currently charging.
 
+        if (isCharging)     // Checks if the system is charging
+        {
+            ESTimerService.cancel();        //  Cancels the ES Timer Service.
+        }
         if (Stop)       // If it says stop, it kills the HRService.
         {
             Log.i("Estimote Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
