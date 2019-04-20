@@ -36,14 +36,14 @@
                     android:id="@+id/EMA_Start"
                     android:layout_width="118dp"
                     android:layout_height="64dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="48dp"
                     android:background="@color/green"
                     android:text="@string/start"
                     android:textSize="33sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/SLEEP"
-                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintEnd_toStartOf="@+id/EODEMA_Start"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <Button
@@ -60,16 +60,34 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <Button
-                    android:id="@+id/SLEEP"
+                    android:id="@+id/EODEMA_Start"
                     android:layout_width="77dp"
                     android:layout_height="64dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="48dp"
                     android:background="@color/blue"
-                    android:text="@string/sleep"
+                    android:text="@string/daily_survey"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+                <Button
+                    android:id="@+id/SLEEP"
+                    android:layout_width="72dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/blue"
+                    android:text="@string/sleep"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.914"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.48" />
 
                 <Button
                     android:id="@+id/SLEEP2"

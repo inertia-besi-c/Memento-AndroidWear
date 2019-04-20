@@ -33,7 +33,7 @@ import java.io.File;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP, SLEEP2;       // This is the sleep button on the screen, along with the other button for aesthetics.
+    private Button SLEEP;       // This is the sleep button on the screen, along with the other button for aesthetics.
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -95,7 +95,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
         SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
-        SLEEP2 = findViewById(R.id.SLEEP2);     // A fake button that compensates for the extra spaces in some watches.
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
@@ -268,7 +267,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         stopService(HRService);     // It stops the service
                         SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                         SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                         SleepMode = true;       // And it sets the boolean value to true.
                     }
@@ -311,7 +309,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         stopService(HRService);     // It stops the service
                         SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
                         SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                         SleepMode = true;       // And it sets the boolean value to true.
                     }
@@ -324,7 +321,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         startService(HRService);        // It starts the heart rate timer service
                         SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
-                        SLEEP2.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
                         SLEEP.setText("Sleep");     // It sets the text of the button to sleep
                         SleepMode = false;      // It sets the boolean value to false.
                     }
@@ -385,7 +381,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 final Intent EstimoteService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote service.
                                 if(isRunning(ESTimerService.class) || isRunning(EstimoteService.class))       // If the Estimote service is running
                                 {
-                                    String dataB =  ("Sleep Button," + "Stopped Estimote Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                    String dataB =  ("Main Activity," + "Stopped Estimote Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
                                     datalogB.LogData();      // Saves the data into the directory.
 

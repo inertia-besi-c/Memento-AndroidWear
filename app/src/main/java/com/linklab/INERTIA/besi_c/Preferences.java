@@ -9,7 +9,7 @@ public class Preferences        // System wide one stop place to set all setting
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Fossil-43mm";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "Full-Test";      // Deployment ID
+    public String DeploymentID = "End-Of-Day-Button-Test";      // Deployment ID
     public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
 
@@ -80,7 +80,7 @@ public class Preferences        // System wide one stop place to set all setting
     /* <--- This has been set to a near continuous stream with watch not crashing, please do not touch -----> */
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 15*1000;           // How long should estimote be measured each time?
-    public long ESMeasurementInterval = 60*1000;          // Every how often should a measurement be taken?
+    public long ESMeasurementInterval = 15*60*100;          // Every how often should a measurement be taken?
 
     // Settings for the Accelerometer Sensor | Time is in ms |
     public int AccelDataCount = 400;     // How many data do you want to check for.
