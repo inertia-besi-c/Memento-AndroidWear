@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -33,7 +34,7 @@ import java.io.File;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP;       // This is the sleep button on the screen, along with the other button for aesthetics.
+    private Button SLEEP;       // This is the sleep button
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -93,8 +94,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
         Main_Timer.start();       // The time updater
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
 
-        Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
-        SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
+        Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the first ema button that is mainly used by the system
+        Button EMA_Start2 = findViewById(R.id.EMA_Start2);      // This is the second ema button that is used
+//        Button EODEMA = findViewById(R.id.EODEMA_Start);       // This is the end of day EMA button
+        SLEEP = findViewById(R.id.SLEEP);        // The sleep button is made
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
@@ -179,7 +182,49 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(EstimService);        // Starts the service.
         }
 
+
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
+        {
+            public void onClick(View v)     // When the button is clicked the is run
+            {
+                File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+                if (system.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+                if (sensors.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
+
+                String data =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
+                startActivity(StartEMAActivity);    // Starts the Pain EMA file
+            }
+        });
+
+        EMA_Start2.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
@@ -377,18 +422,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (isCharging)     // If the battery is charging
                             {
-                                final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
-                                final Intent EstimoteService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote service.
-                                if(isRunning(ESTimerService.class) || isRunning(EstimoteService.class))       // If the Estimote service is running
-                                {
-                                    String dataB =  ("Main Activity," + "Stopped Estimote Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
-                                    datalogB.LogData();      // Saves the data into the directory.
-
-                                    stopService(EstimService);        // Stop the service.
-                                    stopService(EstimoteService);       // Stops the service.
-                                }
-
                                 if (!BatteryCharge)     // Checks if the battery is charging
                                 {
                                     while (!isDeviceOnline())       // Checks if the device has an internet connection
