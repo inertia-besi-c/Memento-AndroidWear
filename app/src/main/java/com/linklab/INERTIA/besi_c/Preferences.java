@@ -67,9 +67,9 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_Time_Hour = 21;       // Hour at which the daily ema should go off
     public int EoDEMA_Time_Minute = 0;      // Minute of hour at which daily ema should go off
     public int EoDEMA_Time_Second = 0;      // Second of minute at which daily ema should go off
-    public int EoDEMA_Pop_Hour = 17;       // Hour at which the daily ema should pop on
-    public int EoDEMA_Pop_Minute = 0;      // Minute of hour at which daily ema should pop up on
-    public int EoDEMA_Pop_Second = 0;      // Second of minute at which daily ema should pop on
+    public int EoDEMA_ManualPop_Hour = 17;       // Hour at which the daily ema should pop on
+    public int EoDEMA_ManualPop_Minute = 0;      // Minute of hour at which daily ema should pop up on
+    public int EoDEMA_ManualPop_Second = 0;      // Second of minute at which daily ema should pop on
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
     public long EoDEMA_Period = 24*60*60*1000;      // This is how often the timer waits before firing again
     public int EoDEMAReminderDelay = 0;         // How long to give the user before starting the timer to remind user to complete the ema
