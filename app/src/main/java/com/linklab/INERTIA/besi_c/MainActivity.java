@@ -423,6 +423,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         @Override
                         public void run()       // This is run on the main system.
                         {
+                            EODEMAUIUpdater();      // Checks if the Ui needs to be changed in reference to the time for daily EMA.
+
                             SystemInformation systemInformation = SystemInformation;      // Gets the methods from the system information class.
                             DataLogger stepActivity = new DataLogger("Step_Activity","no");      // Logs step data to the file.
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
@@ -508,8 +510,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             {
                                 stepActivity.WriteData();       // Keep writing the data.
                             }
-
-                            EODEMAUIUpdater();      // Checks if the Ui needs to be changed in reference to the time for daily EMA.
                         }
                     });
                 }
