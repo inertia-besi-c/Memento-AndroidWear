@@ -1,15 +1,19 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 class SystemInformation     // Class that acquires the current time from the system and saves it.
@@ -29,6 +33,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     private String EndOfDay_Results = Preference.EndOfDay_Results;           // Gets the End of Day Results file from preferences
     private String Sensors = Preference.Sensors;           // Gets the Sensors file from preferences
     private String Steps = Preference.Steps;           // Gets the Steps file from preferences
+    private String EODEMA_Date = Preference.EODEMA_Date;           // Gets the EODEMA date file from preferences
     private String System = Preference.System;           // Gets the System file from preferences
     private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate files from preferences
 
@@ -45,6 +50,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     public String EndOfDay_Results_Path = DeviceID + "_" + EndOfDay_Results;       // This is the End of Day Response File path
     public String Sensors_Path = DeviceID + "_" + Sensors;    // This is the Sensor Activity File path
     public String Steps_Path = DeviceID + "_" + Steps;     // This is the Step Activity File path
+    public String EODEMA_Date_Path = DeviceID + "_" + EODEMA_Date;           // Gets the EODEMA date file from preferences
     public String System_Path = DeviceID + "_" + System;      // This is the System Activity File path
     public String Heart_Rate_Path = DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
 
@@ -53,6 +59,13 @@ class SystemInformation     // Class that acquires the current time from the sys
         DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.US);      // The time format is called in US format.
         Date current = new Date();      // The current date and timer is set.
         return timeFormat.format(current);       // The current time is set to show on the time text view.
+    }
+
+    String getTimeMilitary()        // Gets the current time in military format
+    {
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);      // The time format military wise is called in US format.
+        Date current = new Date();      // The current date and timer is set.
+        return timeFormat.format(current);       // The current time in military format is returned
     }
 
     String getDate()        // This gets only the current date from the system
@@ -95,5 +108,29 @@ class SystemInformation     // Class that acquires the current time from the sys
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);        //  Gets extra data from the battery level service.
         AtomicBoolean isCharging = new AtomicBoolean(status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_PLUGGED_AC);      // If the system is charging.
         return isCharging.get();        // Return true, or false.
+    }
+
+    boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)     // Checks if the current time is between two times
+    {
+        String time_regex = "([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])";        // A regex expression for the time in 24 hour format.
+        Pattern pattern = Pattern.compile(time_regex);      // This compiles the regex expression
+        Matcher match = pattern.matcher(currentTime);       // This checks if the regex expression matches the pattern given.
+        if (match.matches())        // If the system time does match
+        {
+            String hourString = match.group(1);     // It set the first string to the hour
+            String minuteString = match.group(2);       // It sets the second string to the minutes
+            String secondString = match.group(3);       // Ir sets the thrid string to the seconds
+
+            int hour = Integer.parseInt(hourString);        // Makes the string an integer for the hour
+            int minute = Integer.parseInt(minuteString);        // Makes the string an integer for the minute
+            int second = Integer.parseInt(secondString);        // Makes the string an integer for the seconds
+
+            if ((hour >= startHour && minute >= startMinute && second >= startSecond) && (hour <= endHour && minute <= endMinute && second <= endSecond))    // If the time of the system is between the given time limits
+            {
+                return true;        // Return true
+            }
+            return false;       // If it is not between the given limits, return false.
+        }
+        return false;       // If it does not match the expression needed, return false.
     }
 }

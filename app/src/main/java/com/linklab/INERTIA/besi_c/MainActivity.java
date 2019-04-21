@@ -1,6 +1,7 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -26,14 +27,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /* ************************************************************************************* MAIN ACTIVITY OF THE APP ************************************************************************************************** */
-
+@SuppressWarnings("ALL")
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP;       // This is the sleep button on the screen, along with the other button for aesthetics.
+    private Button SLEEP, EMA_Start, EOD_EMA_Start, Daily_Survey;       // This is the sleep button
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -41,6 +49,19 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private String System = Preference.System;     // Gets the sensors from preferences.
     private String Estimote = Preference.Estimote;       // Gets the Estimote from preferences.
     private String Pedometer = Preference.Pedometer;       // Gets the Estimote from preferences.
+    private String EODEMA_Date = Preference.EODEMA_Date;        // Gets the EODEMA file from preferences.
+    private String Step = Preference.Steps;     // Gets the step file from preferences.
+    private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
+    private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    private String lastLine;        // Last line variable
+    private String currentLine;         // Current line being read by the system
+    private File file = new File(Directory, FileName);       // Looks for a filename with the new filename
+    private int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
+    private int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
+    private int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
+    private int endHour = Preference.EoDEMA_ManualEnd_Hour;     // This is the hour the button goes away
+    private int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
+    private int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
@@ -93,8 +114,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
         Main_Timer.start();       // The time updater
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
 
-        Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the Start button
-        SLEEP = findViewById(R.id.SLEEP);        // The Sleep button is made
+        EOD_EMA_Start = findViewById(R.id.EOD_EMA_Start);        // This is the first ema button that is mainly used by the system
+        EMA_Start = findViewById(R.id.EMA_Start);      // This is the second ema button that is used
+        Daily_Survey = findViewById(R.id.DAILY_SURVEY);       // This is the end of day EMA button
+        SLEEP = findViewById(R.id.SLEEP);        // The sleep button is made
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
@@ -179,6 +202,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(EstimService);        // Starts the service.
         }
 
+
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
@@ -217,6 +241,69 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
                 startActivity(StartEMAActivity);    // Starts the Pain EMA file
+            }
+        });
+
+        EOD_EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
+        {
+            public void onClick(View v)     // When the button is clicked the is run
+            {
+                File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+                if (system.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+                if (sensors.exists())      // If the file exists
+                {
+                    Log.i("Main Activity", "No Header Created");     // Logs to console
+                }
+                else        // If the file does not exist
+                {
+                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+                    dataLogger.LogData();       // Saves the data to the directory.
+                }
+
+                vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
+
+                String data =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
+                startActivity(StartEMAActivity);    // Starts the Pain EMA file
+            }
+        });
+
+        Daily_Survey.setOnClickListener(new View.OnClickListener()     // Listens for an action on the button.
+        {
+            public void onClick(View v)     // When the button is clicked
+            {
+                Log.i("Main Activity", "Main Activity End of Day EMA Clicked, Starting End of Day EMA");     // Logs on Console.
+
+                String data =  ("End of Day EMA Prompt," + "'Daily Survey' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                String data1 =  ("Main Activity 'Daily Survey' Button," + "Started End of Day EMA at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Sensors, data1);      // Logs it into a file called System Activity.
+                datalog1.LogData();      // Saves the data into the directory.
+
+                vibrator.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
+                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
+                startActivity(StartEMAActivity);        // Starts the EOD EMA file.
+                finish();       // Finished the EOD EMA screen.
             }
         });
 
@@ -259,6 +346,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 if (isCharging)     // Checks if the watch is charging
                 {
+                    DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
+                    stepActivity.WriteData();       // Writes no to the system to stop repetitive clicking of sleep button.
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -356,8 +446,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         @Override
                         public void run()       // This is run on the main system.
                         {
+                            EODEMAUIUpdater();      // Checks if the Ui needs to be changed in reference to the time for daily EMA.
+
                             SystemInformation systemInformation = SystemInformation;      // Gets the methods from the system information class.
-                            DataLogger stepActivity = new DataLogger("Step_Activity","no");      // Logs step data to the file.
+                            DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
                             BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
 
@@ -377,18 +469,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             if (isCharging)     // If the battery is charging
                             {
-                                final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
-                                final Intent EstimoteService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote service.
-                                if(isRunning(ESTimerService.class) || isRunning(EstimoteService.class))       // If the Estimote service is running
-                                {
-                                    String dataB =  ("Main Activity," + "Stopped Estimote Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalogB = new DataLogger(Sensors, dataB);      // Logs it into a file called System Activity.
-                                    datalogB.LogData();      // Saves the data into the directory.
-
-                                    stopService(EstimService);        // Stop the service.
-                                    stopService(EstimoteService);       // Stops the service.
-                                }
-
                                 if (!BatteryCharge)     // Checks if the battery is charging
                                 {
                                     while (!isDeviceOnline())       // Checks if the device has an internet connection
@@ -488,6 +568,62 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         super.onResume();       // Restarts the thread left.
+    }
+
+    private void EODEMAUIUpdater()      // Updates the user interface for the daily EMA if the time is right.
+    {
+        SystemInformation systemInformation = SystemInformation;        // This is the system information center for the app.
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
+        Date date = new Date();     // Starts a new date call.
+
+        try     // Tries to run the following.
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
+
+            while ((currentLine = bufferedReader.readLine()) != null)     // While the line is not blank
+            {
+                lastLine = currentLine;     // Set the last line to the last line with words
+            }
+            bufferedReader.close() ;       // Close the buffer reader.
+        }
+        catch (IOException e)   // Catch statement
+        {
+            e.printStackTrace();        // Ignore this.
+        }
+
+        if(!file.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
+        {
+            DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
+            DailyActivity.LogData();      // Logs the data to the BESI_C directory.
+        }
+        if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
+        {
+            EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
+            EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
+            Daily_Survey.setBackgroundColor(Color.GRAY);        // Sets the color of button to grey.
+            Daily_Survey.setOnClickListener( new View.OnClickListener()    // If the daily EMA  button is clicked
+            {
+                public void onClick(View view)      // When the back button is clicked.
+                {
+                    vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
+
+                    // Do nothing
+                }
+            });
+        }
+        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
+        {
+            EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
+            EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
+        }
+        else        // If we are not in the range of time we are looking for.
+        {
+            EMA_Start.setVisibility(View.VISIBLE);          // Sets the normal button to visible
+            EOD_EMA_Start.setVisibility(View.INVISIBLE);    // Sets the daily EMA start button to invisible
+            Daily_Survey.setVisibility(View.INVISIBLE);     // Sets the daily EMA button to invisible.
+        }
     }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.

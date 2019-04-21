@@ -9,7 +9,7 @@ public class Preferences        // System wide one stop place to set all setting
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Fossil-43mm";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "End-Of-Day-Button-Test";      // Deployment ID
+    public String DeploymentID = "Daily-EMA-Battery-Test";      // Deployment ID
     public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
 
@@ -26,6 +26,7 @@ public class Preferences        // System wide one stop place to set all setting
     public String EndOfDay_Results = "EndOfDay_EMA_Results.csv";        // This is the system file for the End of Day Results
     public String Sensors = "Sensor_Activity.csv";     // This is the Sensor Activity File
     public String Steps = "Step_Activity";     // This is the Step Activity File
+    public String EODEMA_Date = "EODEMA_DailyActivity";      // This is the Daily EMA time logger file
     public String System = "System_Activity.csv";      // This is the System Activity File
     public String Heart_Rate = "Heart_Rate_Data.csv";           // This is the system file for the Heart Rate Sensor
 
@@ -45,6 +46,7 @@ public class Preferences        // System wide one stop place to set all setting
     public String Sensor_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the Sensor Logs.
     public String System_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the System Logs.
     public String Step_Data_Headers = "yes";        // Column Headers for Steps.
+    public String EODEMA_Date_Headers = "Date";     // Column Header for the EODEMA daily.
 
     // Settings for Vibration | Time is in ms |
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
@@ -64,9 +66,15 @@ public class Preferences        // System wide one stop place to set all setting
 
     // Settings for Daily EMA | Time is in ms |
     public long EoDPrompt_TimeOut = 15*60*1000;         // Delay before snoozing and eventually dismissing daily ema
-    public int EoDEMA_Time_Hour = 21;       // Hour at which the daily ema should go off
-    public int EoDEMA_Time_Minute = 0;      // Minute of hour at which daily ema should go off
-    public int EoDEMA_Time_Second = 0;      // Second of minute at which daily ema should go off
+    public int EoDEMA_Time_Hour = 21;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
+    public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Hour = 17;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
+    public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop | This is the actual hour that you want it to stop on.(If you are stopping on the hour, make sure it is off by 1
+    public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop | Make sure to stop 1 minute off from the actual minute you want it to stop !!!
+    public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop | Make sure to stop 1 second off from the actual second you want it to stop !!!
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
     public long EoDEMA_Period = 24*60*60*1000;      // This is how often the timer waits before firing again
     public int EoDEMAReminderDelay = 0;         // How long to give the user before starting the timer to remind user to complete the ema
@@ -77,11 +85,10 @@ public class Preferences        // System wide one stop place to set all setting
     public long HRSampleDuration = 30000;           // How long should heart rate be measured each time?
     public long HRMeasurementInterval = 5*60*1000;          // Every how often should a measurement be taken?
 
-    /* <--- This has been set to a near continuous stream with watch not crashing, please do not touch -----> */
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 15*1000;           // How long should estimote be measured each time?
     public long ESMeasurementInterval = 15*60*100;          // Every how often should a measurement be taken?
 
     // Settings for the Accelerometer Sensor | Time is in ms |
-    public int AccelDataCount = 400;     // How many data do you want to check for.
+    public int AccelDataCount = 500;     // How many data do you want to check for.
 }
