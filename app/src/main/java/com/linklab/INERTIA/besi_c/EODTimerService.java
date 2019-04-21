@@ -72,10 +72,11 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
                     Date date = new Date();     // Starts a new date call.
+                    File file = new File(Directory, FileName);       // Looks for a filename with the new filename
+
 
                     try     // Tries to run the following.
                     {
-                        File file = new File(Directory, FileName);       // Looks for a filename with the new filename
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
 
                         while ((currentLine = bufferedReader.readLine()) != null)     // While the line is not blank
@@ -89,7 +90,21 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         e.printStackTrace();        // Ignore this.
                     }
 
-                    if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // if the last line says that an EOD EMA has been completed that day
+                    if(!file.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
+                    {
+                        Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
+
+                        String data = ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                        datalog.LogData();      // Saves the data into the directory.
+
+                        DataLogger DailyActivity = new DataLogger(EODEMA_Date, String.valueOf(dateFormat.format(date)));      // Logs date data to the file.
+                        DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
+
+                        Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                        startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
+                    }
+                    else if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // if the last line says that an EOD EMA has been completed that day
                     {
                         // Do nothing
                     }

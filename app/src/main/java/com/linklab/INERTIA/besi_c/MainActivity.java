@@ -327,6 +327,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 if (isCharging)     // Checks if the watch is charging
                 {
+                    DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
+                    stepActivity.WriteData();       // Writes no to the system
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
