@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /* ************************************************************************************* MAIN ACTIVITY OF THE APP ************************************************************************************************** */
-
+@SuppressWarnings("ALL")
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
@@ -53,9 +53,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private String Step = Preference.Steps;     // Gets the step file from preferences.
     private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
     private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
-    File file = new File(Directory, FileName);       // Looks for a filename with the new filename
     private String lastLine;        // Last line variable
     private String currentLine;         // Current line being read by the system
+    private File file = new File(Directory, FileName);       // Looks for a filename with the new filename
     private int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
     private int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
     private int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
@@ -612,8 +612,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 }
             });
         }
-        /* Checks if the daily EMA button should be up or if they have already completed */
-        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))
+        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
         {
             EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
             EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
