@@ -98,13 +98,13 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                         datalog.LogData();      // Saves the data into the directory.
 
-                        DataLogger DailyActivity = new DataLogger(EODEMA_Date, String.valueOf(dateFormat.format(date)));      // Logs date data to the file.
-                        DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
+                        DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
+                        DailyActivity.LogData();      // Logs the data to the BESI_C directory.
 
                         Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                         startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
                     }
-                    else if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // if the last line says that an EOD EMA has been completed that day
+                    if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // if the last line says that an EOD EMA has been completed that day
                     {
                         // Do nothing
                     }
@@ -116,8 +116,8 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                         datalog.LogData();      // Saves the data into the directory.
 
-                        DataLogger DailyActivity = new DataLogger(EODEMA_Date, String.valueOf(dateFormat.format(date)));      // Logs date data to the file.
-                        DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
+                        DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
+                        DailyActivity.LogData();      // Logs the data to the BESI_C directory.
 
                         Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                         startActivity(StartEMAActivity);      // Starts the StartEMAActivity.

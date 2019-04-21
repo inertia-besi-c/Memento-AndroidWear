@@ -27,7 +27,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /* ************************************************************************************* MAIN ACTIVITY OF THE APP ************************************************************************************************** */
 
@@ -42,7 +49,19 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private String System = Preference.System;     // Gets the sensors from preferences.
     private String Estimote = Preference.Estimote;       // Gets the Estimote from preferences.
     private String Pedometer = Preference.Pedometer;       // Gets the Estimote from preferences.
+    private String EODEMA_Date = Preference.EODEMA_Date;        // Gets the EODEMA file from preferences.
     private String Step = Preference.Steps;     // Gets the step file from preferences.
+    private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
+    private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    File file = new File(Directory, FileName);       // Looks for a filename with the new filename
+    private String lastLine;        // Last line variable
+    private String currentLine;         // Current line being read by the system
+    private int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
+    private int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
+    private int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
+    private int endHour = Preference.EoDEMA_ManualEnd_Hour;     // This is the hour the button goes away
+    private int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
+    private int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
@@ -554,14 +573,47 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private void EODEMAUIUpdater()      // Updates the user interface for the daily EMA if the time is right.
     {
         SystemInformation systemInformation = SystemInformation;        // This is the system information center for the app.
-        int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
-        int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
-        int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
-        int endHour = Preference.EoDEMA_ManualEnd_Hour;     // This is the hour the button goes away
-        int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
-        int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
+        Date date = new Date();     // Starts a new date call.
 
-        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))       // Checks if the daily EMA button should be up
+        try     // Tries to run the following.
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
+
+            while ((currentLine = bufferedReader.readLine()) != null)     // While the line is not blank
+            {
+                lastLine = currentLine;     // Set the last line to the last line with words
+            }
+            bufferedReader.close() ;       // Close the buffer reader.
+        }
+        catch (IOException e)   // Catch statement
+        {
+            e.printStackTrace();        // Ignore this.
+        }
+
+        if(!file.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
+        {
+            DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
+            DailyActivity.LogData();      // Logs the data to the BESI_C directory.
+        }
+        if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
+        {
+            EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
+            EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
+            Daily_Survey.setBackgroundColor(Color.GRAY);        // Sets the color of button to grey.
+            Daily_Survey.setOnClickListener( new View.OnClickListener()    // If the daily EMA  button is clicked
+            {
+                public void onClick(View view)      // When the back button is clicked.
+                {
+                    vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
+
+                    // Do nothing
+                }
+            });
+        }
+        /* Checks if the daily EMA button should be up or if they have already completed */
+        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))
         {
             EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
             EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
