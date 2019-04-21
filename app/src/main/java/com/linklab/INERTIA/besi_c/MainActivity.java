@@ -42,6 +42,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private String System = Preference.System;     // Gets the sensors from preferences.
     private String Estimote = Preference.Estimote;       // Gets the Estimote from preferences.
     private String Pedometer = Preference.Pedometer;       // Gets the Estimote from preferences.
+    private String Step = Preference.Steps;     // Gets the step file from preferences.
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
@@ -426,7 +427,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             EODEMAUIUpdater();      // Checks if the Ui needs to be changed in reference to the time for daily EMA.
 
                             SystemInformation systemInformation = SystemInformation;      // Gets the methods from the system information class.
-                            DataLogger stepActivity = new DataLogger("Step_Activity","no");      // Logs step data to the file.
+                            DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
                             BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
 

@@ -33,6 +33,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     private String EndOfDay_Results = Preference.EndOfDay_Results;           // Gets the End of Day Results file from preferences
     private String Sensors = Preference.Sensors;           // Gets the Sensors file from preferences
     private String Steps = Preference.Steps;           // Gets the Steps file from preferences
+    private String EODEMA_Date = Preference.EODEMA_Date;           // Gets the EODEMA date file from preferences
     private String System = Preference.System;           // Gets the System file from preferences
     private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate files from preferences
 
@@ -49,6 +50,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     public String EndOfDay_Results_Path = DeviceID + "_" + EndOfDay_Results;       // This is the End of Day Response File path
     public String Sensors_Path = DeviceID + "_" + Sensors;    // This is the Sensor Activity File path
     public String Steps_Path = DeviceID + "_" + Steps;     // This is the Step Activity File path
+    public String EODEMA_Date_Path = DeviceID + "_" + EODEMA_Date;           // Gets the EODEMA date file from preferences
     public String System_Path = DeviceID + "_" + System;      // This is the System Activity File path
     public String Heart_Rate_Path = DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
 

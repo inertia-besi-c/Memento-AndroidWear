@@ -39,6 +39,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String System = Preference.System;      // Gets the System File label from Preferences
+    private String EODEMA_Date = Preference.EODEMA_Date;     // Gets the EODEMA date File label from Preferences
     private String EndOfDay_Activity = Preference.EndOfDay_Activity;      // Gets the End of Day Activity File label from Preferences
     private String EndOfDay_Results = Preference.EndOfDay_Results;      // Gets the End of Day Results File label from Preferences
     private Timer EMARemindertimer;     // This is the EMA reminder time interval
@@ -62,7 +63,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "Time spent with the patient?",
                     "Time spent with other people?",
                     "How was your sleep?",
-                    "How did patient's pain bother you?",      // Maybe thing of adding 'affect' instead of 'bother' ??? (need to ask next meeting)
+                    "How did patient's pain bother you?",
                     "How was your mood?",
                     "How distressed were you overall?",
                     "How distressed was the patient overall?",
@@ -75,7 +76,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
-                    {"Not at all", "A little", "Medium", "A lot"},        // First option will have to be 'Not ar all'        (need to ask next meeting(
+                    {"Not at all", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
@@ -336,6 +337,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         Log.i("End of Day EMA", "Submitting Results");     // Logs on Console.
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
+        DateFormat dateFormatII = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
         Date date = new Date();     // Starts a new date call.
         StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
 
@@ -346,6 +348,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
         DataLogger dataLogger = new DataLogger(EndOfDay_Results, log.toString());     // Logs the data in a csv format.
         dataLogger.LogData();       // Logs the data into the BESI_C directory.
+
+        DataLogger DailyActivity = new DataLogger(EODEMA_Date, String.valueOf(dateFormatII.format(date)));      // Logs date data to the file.
+        DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
 
         ThankYou();     // Calls the thank you method.
     }

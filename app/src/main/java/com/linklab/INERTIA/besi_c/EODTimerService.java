@@ -7,8 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,6 +24,10 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
+    private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    private String currentLine;     // Line reader variable
+    private String lastLine;        // Last line variable
 
     @Override
     public void onCreate()      // Creates the instance when it is started.
@@ -58,14 +69,40 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                 @Override
                 public void run()       // Runs when it is called.
                 {
-                    Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
+                    Date date = new Date();     // Starts a new date call.
 
-                    String data =  ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-                    datalog.LogData();      // Saves the data into the directory.
+                    try     // Tries to run the following.
+                    {
+                        File file = new File(Directory, FileName);       // Looks for a filename with the new filename
+                        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
 
-                    Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
-                    startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
+                        while ((currentLine = bufferedReader.readLine()) != null)     // While the line is not blank
+                        {
+                            lastLine = currentLine;     // Set the last line to the last line with words
+                        }
+                        bufferedReader.close() ;       // Close the buffer reader.
+                    }
+                    catch (IOException e)   // Catch statement
+                    {
+                        e.printStackTrace();        // Ignore this.
+                    }
+
+                    if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // if the last line says that an EOD EMA has been completed that day
+                    {
+                        // Do nothing
+                    }
+                    else        // If an EOD EMA has not been completed
+                    {
+                        Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
+
+                        String data = ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                        datalog.LogData();      // Saves the data into the directory.
+
+                        Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                        startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
+                    }
                 }
             }, delay, Preference.EoDEMA_Period);     // Gets the preferences setting from the preference system.
         }
