@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -121,14 +122,14 @@ class SystemInformation     // Class that acquires the current time from the sys
             int minute = Integer.parseInt(minuteString);
             int second = Integer.parseInt(secondString);
 
-            if (hour >= startHour && hour <= endHour)
+            Log.i("Main Activity", "Hour" + String.valueOf(hour));
+            Log.i("Main Activity", "Minutes"+ String.valueOf(minute));
+            Log.i("Main Activity", String.valueOf(second));
+
+            if ((hour >= startHour && hour <= endHour) && (minute >= startMinute && minute <= endMinute) && (second >= startSecond && second <= endMinute))
             {
                 return true;
             }
-//            if (hour >= startHour && hour <= endHour && minute >= startMinute && minute <= endMinute && second >= startSecond && second <= endSecond)
-//            {
-//                return true;
-//            }
         }
         return false;
 //        }

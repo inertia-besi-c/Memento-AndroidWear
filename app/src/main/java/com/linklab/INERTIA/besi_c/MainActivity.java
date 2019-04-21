@@ -531,9 +531,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
         int startHour = Preference.EoDEMA_ManualPop_Hour;     // Gets the hour of the day from the preference.
         int startMinute = Preference.EoDEMA_ManualPop_Minute;     // Gets the minutes of the day from the preference.
         int startSecond = Preference.EoDEMA_ManualPop_Second;
-        int endHour = Preference.EoDEMA_Time_Hour;     // Gets the hour of the day from the preference.
-        int endMinute = Preference.EoDEMA_Time_Minute;     // Gets the hour of the day from the preference.
-        int endSecond = Preference.EoDEMA_Time_Second;     // Gets the hour of the day from the preference.
+        int endHour = Preference.EoDEMA_ManualEnd_Hour;     // Gets the hour of the day from the preference.
+        int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // Gets the hour of the day from the preference.
+        int endSecond = Preference.EoDEMA_ManualEnd_Second;     // Gets the hour of the day from the preference.
 
         Log.i("Main Activity", String.valueOf(systemInformation.isTimeBetweenTwoTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond)));
 
