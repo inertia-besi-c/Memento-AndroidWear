@@ -1,15 +1,19 @@
 package com.linklab.INERTIA.besi_c;
 
 // Imports
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 class SystemInformation     // Class that acquires the current time from the system and saves it.
@@ -55,6 +59,13 @@ class SystemInformation     // Class that acquires the current time from the sys
         return timeFormat.format(current);       // The current time is set to show on the time text view.
     }
 
+    String getTimeMilitary()
+    {
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss", Locale.US);      // The time format is called in US format.
+        Date current = new Date();      // The current date and timer is set.
+        return timeFormat.format(current);       // The current time is set to show on the time text view.
+    }
+
     String getDate()        // This gets only the current date from the system
     {
         Date current = new Date();      // The current date and timer is set.
@@ -95,5 +106,66 @@ class SystemInformation     // Class that acquires the current time from the sys
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);        //  Gets extra data from the battery level service.
         AtomicBoolean isCharging = new AtomicBoolean(status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_PLUGGED_AC);      // If the system is charging.
         return isCharging.get();        // Return true, or false.
+    }
+
+    boolean isTimeBetweenTwoTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)
+    {
+        Pattern p = Pattern.compile("([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])");
+        Matcher m = p.matcher(currentTime);
+        if (m.matches())
+        {
+            String hourString = m.group(1);
+            String minuteString = m.group(2);
+            String secondString = m.group(3);
+            int hour = Integer.parseInt(hourString);
+            int minute = Integer.parseInt(minuteString);
+            int second = Integer.parseInt(secondString);
+
+            if (hour >= startHour && hour <= endHour)
+            {
+                return true;
+            }
+//            if (hour >= startHour && hour <= endHour && minute >= startMinute && minute <= endMinute && second >= startSecond && second <= endSecond)
+//            {
+//                return true;
+//            }
+        }
+        return false;
+//        }
+//        SimpleDateFormat startTime = new SimpleDateFormat('HH:mm');
+//        Calendar startTimeCal = Calendar.getInstance();
+//        startTimeCal.setTime(startTime);
+//
+//        int startTimeHour = startTimeCal.get(Calendar.HOUR_OF_DAY);
+//        int startTimeMinutes = startTimeCal.get(Calendar.MINUTE);
+//        if (startTimeHour == 0)
+//        {
+//            startTimeHour = 24;
+//        }
+//
+//        Calendar curTimeCal = Calendar.getInstance();
+//        curTimeCal.setTime(currentTime);
+//
+//        int curTimeHour = curTimeCal.get(Calendar.HOUR_OF_DAY);
+//        int curTimeMinutes = curTimeCal.get(Calendar.MINUTE);
+//
+//        Calendar endTimeCal = Calendar.getInstance();
+//        endTimeCal.setTime(endTime);
+//
+//        int endTimeHour = endTimeCal.get(Calendar.HOUR_OF_DAY);
+//        int endTimeMinutes = endTimeCal.get(Calendar.MINUTE);
+//        if (endTimeHour == 0)
+//        {
+//            endTimeHour = 24;
+//        }
+//
+//        if (((curTimeHour > startTimeHour) || (curTimeHour == startTimeHour && curTimeMinutes >= startTimeMinutes)) && ((curTimeHour < endTimeHour) || (curTimeHour == endTimeHour && curTimeMinutes <= endTimeHour)))
+//        {
+//            return true;
+//        }
+//        else
+//        {
+//            return false;
+//        }
     }
 }

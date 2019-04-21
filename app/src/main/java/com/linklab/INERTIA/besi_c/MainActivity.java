@@ -34,7 +34,7 @@ import java.io.File;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP;       // This is the sleep button
+    private Button SLEEP, EMA_Start, EOD_EMA_Start, Daily_Survey;       // This is the sleep button
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -94,9 +94,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
         Main_Timer.start();       // The time updater
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
 
-        Button EMA_Start = findViewById(R.id.EMA_Start);        // This is the first ema button that is mainly used by the system
-        Button EMA_Start2 = findViewById(R.id.EMA_Start2);      // This is the second ema button that is used
-//        Button EODEMA = findViewById(R.id.EODEMA_Start);       // This is the end of day EMA button
+        EOD_EMA_Start = findViewById(R.id.EOD_EMA_Start);        // This is the first ema button that is mainly used by the system
+        EMA_Start = findViewById(R.id.EMA_Start);      // This is the second ema button that is used
+        Daily_Survey = findViewById(R.id.DAILY_SURVEY);       // This is the end of day EMA button
         SLEEP = findViewById(R.id.SLEEP);        // The sleep button is made
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
@@ -224,7 +224,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
-        EMA_Start2.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
+        EOD_EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
@@ -486,6 +486,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             {
                                 stepActivity.WriteData();       // Keep writing the data.
                             }
+
+                            UIUpdater();
                         }
                     });
                 }
@@ -521,6 +523,32 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         super.onResume();       // Restarts the thread left.
+    }
+
+    private void UIUpdater()
+    {
+        SystemInformation systemInformation = SystemInformation;
+        int startHour = Preference.EoDEMA_ManualPop_Hour;     // Gets the hour of the day from the preference.
+        int startMinute = Preference.EoDEMA_ManualPop_Minute;     // Gets the minutes of the day from the preference.
+        int startSecond = Preference.EoDEMA_ManualPop_Second;
+        int endHour = Preference.EoDEMA_Time_Hour;     // Gets the hour of the day from the preference.
+        int endMinute = Preference.EoDEMA_Time_Minute;     // Gets the hour of the day from the preference.
+        int endSecond = Preference.EoDEMA_Time_Second;     // Gets the hour of the day from the preference.
+
+        Log.i("Main Activity", String.valueOf(systemInformation.isTimeBetweenTwoTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond)));
+
+        if (systemInformation.isTimeBetweenTwoTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))
+        {
+            EMA_Start.setVisibility(View.INVISIBLE);
+            EOD_EMA_Start.setVisibility(View.VISIBLE);
+            Daily_Survey.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            EMA_Start.setVisibility(View.VISIBLE);
+            EOD_EMA_Start.setVisibility(View.INVISIBLE);
+            Daily_Survey.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void LogActivityCharge()        // Logs the times when the battery is charging.
