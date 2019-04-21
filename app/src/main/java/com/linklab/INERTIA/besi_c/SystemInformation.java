@@ -112,7 +112,7 @@ class SystemInformation     // Class that acquires the current time from the sys
 
     boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)     // Checks if the current time is between two times
     {
-        String time_regex = "([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])";        // A regex expression for the time in 24 hour format.
+        String time_regex = "([01]?[0-9]|2[0-3]):([0-5]?[0-9]):([0-5]?[0-9])";        // A regex expression for the time in 24 hour format.
         Pattern pattern = Pattern.compile(time_regex);      // This compiles the regex expression
         Matcher match = pattern.matcher(currentTime);       // This checks if the regex expression matches the pattern given.
         if (match.matches())        // If the system time does match

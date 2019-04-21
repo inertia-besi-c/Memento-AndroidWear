@@ -26,6 +26,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
     private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    private String EODEMA_Date = Preference.EODEMA_Date;        // This is the file name from preferences
     private String currentLine;     // Line reader variable
     private String lastLine;        // Last line variable
 
@@ -99,6 +100,9 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         String data = ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                         DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                         datalog.LogData();      // Saves the data into the directory.
+
+                        DataLogger DailyActivity = new DataLogger(EODEMA_Date, String.valueOf(dateFormat.format(date)));      // Logs date data to the file.
+                        DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
 
                         Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
                         startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
