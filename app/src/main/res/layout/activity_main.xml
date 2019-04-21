@@ -34,7 +34,7 @@
 
                 <Button
                     android:id="@+id/EOD_EMA_Start"
-                    android:layout_width="117dp"
+                    android:layout_width="116dp"
                     android:layout_height="64dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
@@ -70,7 +70,7 @@
 
                 <Button
                     android:id="@+id/DAILY_SURVEY"
-                    android:layout_width="90dp"
+                    android:layout_width="91dp"
                     android:layout_height="64dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"

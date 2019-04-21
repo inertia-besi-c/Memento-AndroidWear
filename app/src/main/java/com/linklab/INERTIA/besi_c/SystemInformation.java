@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,11 +59,11 @@ class SystemInformation     // Class that acquires the current time from the sys
         return timeFormat.format(current);       // The current time is set to show on the time text view.
     }
 
-    String getTimeMilitary()
+    String getTimeMilitary()        // Gets the current time in military format
     {
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss", Locale.US);      // The time format is called in US format.
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss", Locale.US);      // The time format military wise is called in US format.
         Date current = new Date();      // The current date and timer is set.
-        return timeFormat.format(current);       // The current time is set to show on the time text view.
+        return timeFormat.format(current);       // The current time in military format is returned
     }
 
     String getDate()        // This gets only the current date from the system
@@ -109,64 +108,27 @@ class SystemInformation     // Class that acquires the current time from the sys
         return isCharging.get();        // Return true, or false.
     }
 
-    boolean isTimeBetweenTwoTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)
+    boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)     // Checks if the current time is between two times
     {
-        Pattern p = Pattern.compile("([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])");
-        Matcher m = p.matcher(currentTime);
-        if (m.matches())
+        String time_regex = "([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])";        // A regex expression for the time in 24 hour format.
+        Pattern pattern = Pattern.compile(time_regex);      // This compiles the regex expression
+        Matcher match = pattern.matcher(currentTime);       // This checks if the regex expression matches the pattern given.
+        if (match.matches())        // If the system time does match
         {
-            String hourString = m.group(1);
-            String minuteString = m.group(2);
-            String secondString = m.group(3);
-            int hour = Integer.parseInt(hourString);
-            int minute = Integer.parseInt(minuteString);
-            int second = Integer.parseInt(secondString);
+            String hourString = match.group(1);     // It set the first string to the hour
+            String minuteString = match.group(2);       // It sets the second string to the minutes
+            String secondString = match.group(3);       // Ir sets the thrid string to the seconds
 
-            Log.i("Main Activity", "Hour" + String.valueOf(hour));
-            Log.i("Main Activity", "Minutes"+ String.valueOf(minute));
-            Log.i("Main Activity", String.valueOf(second));
+            int hour = Integer.parseInt(hourString);        // Makes the string an integer for the hour
+            int minute = Integer.parseInt(minuteString);        // Makes the string an integer for the minute
+            int second = Integer.parseInt(secondString);        // Makes the string an integer for the seconds
 
-            if ((hour >= startHour && hour <= endHour) && (minute >= startMinute && minute <= endMinute) && (second >= startSecond && second <= endMinute))
+            if ((hour >= startHour && minute >= startMinute && second >= startSecond) && (hour <= endHour && minute <= endMinute && second <= endSecond))    // If the time of the system is between the given time limits
             {
-                return true;
+                return true;        // Return true
             }
+            return false;       // If it is not between the given limits, return false.
         }
-        return false;
-//        }
-//        SimpleDateFormat startTime = new SimpleDateFormat('HH:mm');
-//        Calendar startTimeCal = Calendar.getInstance();
-//        startTimeCal.setTime(startTime);
-//
-//        int startTimeHour = startTimeCal.get(Calendar.HOUR_OF_DAY);
-//        int startTimeMinutes = startTimeCal.get(Calendar.MINUTE);
-//        if (startTimeHour == 0)
-//        {
-//            startTimeHour = 24;
-//        }
-//
-//        Calendar curTimeCal = Calendar.getInstance();
-//        curTimeCal.setTime(currentTime);
-//
-//        int curTimeHour = curTimeCal.get(Calendar.HOUR_OF_DAY);
-//        int curTimeMinutes = curTimeCal.get(Calendar.MINUTE);
-//
-//        Calendar endTimeCal = Calendar.getInstance();
-//        endTimeCal.setTime(endTime);
-//
-//        int endTimeHour = endTimeCal.get(Calendar.HOUR_OF_DAY);
-//        int endTimeMinutes = endTimeCal.get(Calendar.MINUTE);
-//        if (endTimeHour == 0)
-//        {
-//            endTimeHour = 24;
-//        }
-//
-//        if (((curTimeHour > startTimeHour) || (curTimeHour == startTimeHour && curTimeMinutes >= startTimeMinutes)) && ((curTimeHour < endTimeHour) || (curTimeHour == endTimeHour && curTimeMinutes <= endTimeHour)))
-//        {
-//            return true;
-//        }
-//        else
-//        {
-//            return false;
-//        }
+        return false;       // If it does not match the expression needed, return false.
     }
 }

@@ -265,6 +265,28 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
+        EOD_EMA_Start.setOnClickListener(new View.OnClickListener()     // Listens for an action on the button.
+        {
+            public void onClick(View v)     // When the button is clicked
+            {
+                Log.i("Main Activity", "Main Activity End of Day EMA Clicked, Starting End of Day EMA");     // Logs on Console.
+
+                String data =  ("End of Day EMA Prompt," + "'Daily Survey' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                String data1 =  ("Main Activity 'Daily Survey' Button," + "Started End of Day EMA at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Sensors, data1);      // Logs it into a file called System Activity.
+                datalog1.LogData();      // Saves the data into the directory.
+
+                vibrator.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
+                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
+                startActivity(StartEMAActivity);        // Starts the EOD EMA file.
+                finish();       // Finished the EOD EMA screen.
+            }
+        });
+
         SLEEP.setOnClickListener(new View.OnClickListener()        // Listens for the SLEEP button "SLEEP" to be clicked.
         {
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
@@ -487,7 +509,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 stepActivity.WriteData();       // Keep writing the data.
                             }
 
-                            UIUpdater();
+                            EODEMAUIUpdater();      // Checks if the Ui needs to be changed in reference to the time for daily EMA.
                         }
                     });
                 }
@@ -525,29 +547,27 @@ public class MainActivity extends WearableActivity  // This is the activity that
         super.onResume();       // Restarts the thread left.
     }
 
-    private void UIUpdater()
+    private void EODEMAUIUpdater()      // Updates the user interface for the daily EMA if the time is right.
     {
-        SystemInformation systemInformation = SystemInformation;
-        int startHour = Preference.EoDEMA_ManualPop_Hour;     // Gets the hour of the day from the preference.
-        int startMinute = Preference.EoDEMA_ManualPop_Minute;     // Gets the minutes of the day from the preference.
-        int startSecond = Preference.EoDEMA_ManualPop_Second;
-        int endHour = Preference.EoDEMA_ManualEnd_Hour;     // Gets the hour of the day from the preference.
-        int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // Gets the hour of the day from the preference.
-        int endSecond = Preference.EoDEMA_ManualEnd_Second;     // Gets the hour of the day from the preference.
+        SystemInformation systemInformation = SystemInformation;        // This is the system information center for the app.
+        int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
+        int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
+        int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
+        int endHour = Preference.EoDEMA_ManualEnd_Hour;     // This is the hour the button goes away
+        int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
+        int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
 
-        Log.i("Main Activity", String.valueOf(systemInformation.isTimeBetweenTwoTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond)));
-
-        if (systemInformation.isTimeBetweenTwoTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))
+        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))       // Checks if the daily EMA button should be up
         {
-            EMA_Start.setVisibility(View.INVISIBLE);
-            EOD_EMA_Start.setVisibility(View.VISIBLE);
-            Daily_Survey.setVisibility(View.VISIBLE);
+            EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
+            EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
         }
-        else
+        else        // If we are not in the range of time we are looking for.
         {
-            EMA_Start.setVisibility(View.VISIBLE);
-            EOD_EMA_Start.setVisibility(View.INVISIBLE);
-            Daily_Survey.setVisibility(View.INVISIBLE);
+            EMA_Start.setVisibility(View.VISIBLE);          // Sets the normal button to visible
+            EOD_EMA_Start.setVisibility(View.INVISIBLE);    // Sets the daily EMA start button to invisible
+            Daily_Survey.setVisibility(View.INVISIBLE);     // Sets the daily EMA button to invisible.
         }
     }
 
