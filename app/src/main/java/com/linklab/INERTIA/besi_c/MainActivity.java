@@ -328,7 +328,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 if (isCharging)     // Checks if the watch is charging
                 {
                     DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
-                    stepActivity.WriteData();       // Writes no to the system
+                    stepActivity.WriteData();       // Writes no to the system to stop repetitive clicking of sleep button.
 
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {

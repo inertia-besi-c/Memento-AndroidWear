@@ -28,7 +28,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="13dp" />
+                android:layout_height="26dp" />
 
             <TextView
                 android:id="@+id/Info"
@@ -48,7 +48,7 @@
             <Button
                 android:id="@+id/Proceed"
                 android:layout_width="match_parent"
-                android:layout_height="34dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@color/green"
@@ -61,7 +61,7 @@
             <Button
                 android:id="@+id/Snooze"
                 android:layout_width="match_parent"
-                android:layout_height="34dp"
+                android:layout_height="31dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
