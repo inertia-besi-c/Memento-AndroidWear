@@ -69,11 +69,11 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
 
     public int EoDEMA_ManualStart_Hour = 04;       // Hour at which the automatic daily ema should start
-    public int EoDEMA_ManualStart_Minute = 15;      // Minute of hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Minute = 25;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* !!! Make sure the stopping timer is 1 second off from the actual time you want it to stop !!!        <-------------------- PAY ATTENTION TO THIS  !!!! */
     public int EoDEMA_ManualEnd_Hour = 04;       // Hour at which the automatic daily ema should stop
-    public int EoDEMA_ManualEnd_Minute = 19;      // Minute of hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Minute = 29;      // Minute of hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop
 
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again

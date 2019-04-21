@@ -265,7 +265,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
-        EOD_EMA_Start.setOnClickListener(new View.OnClickListener()     // Listens for an action on the button.
+        Daily_Survey.setOnClickListener(new View.OnClickListener()     // Listens for an action on the button.
         {
             public void onClick(View v)     // When the button is clicked
             {
