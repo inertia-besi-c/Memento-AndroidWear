@@ -430,6 +430,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 bluetooth.enable();     // Enable it.
                             }
 
+                            if (stepActivity.ReadData().contains("yes"))
+                            {
+                                if (!isRunning(ESTimerService.class))
+                                {
+                                    Intent estimote = new Intent(getBaseContext(),ESTimerService.class);
+                                    startService(estimote);
+                                }
+                            }
+
                             if (isCharging)     // If the battery is charging
                             {
                                 if (!BatteryCharge)     // Checks if the battery is charging

@@ -24,6 +24,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private Timer ESTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
+    private String Step = Preference.Steps;     // Gets the step file from preferences.
 
     private int ActivityCycleCount = 0;
     private int MaxActivityCycleCount = Preference.MaxActivityCycleCount;
@@ -35,17 +36,17 @@ public class ESTimerService extends Service         /* This runs the delay timer
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
         if (sensors.exists())      // If the file exists
         {
-            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
+            Log.i("Estimote Timer Sensor", "No Header Created");     // Logs to console
         }
         else        // If the file does not exist
         {
-            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+            Log.i("Estimote Timer Sensor", "Creating Header");     // Logs on Console.
 
             DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        Log.i("Estimote", "Starting Estimote Timer Service");     // Logs on Console.
+        Log.i("Estimote Timer Sensor", "Starting Estimote Timer Service");     // Logs on Console.
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Starts the power manager service from the system
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ESService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
@@ -86,9 +87,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
                     if (Active())
                         startService(ESService);    // Starts the Estimote service
                     else
+                    {
+                        cancel();
                         stopSelf();
-
-
+                    }
                 }
             }, delay, period);      // Waits for this amount of delay and runs every stated period.
         }
@@ -135,9 +137,39 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
     public boolean Active()
     {
+
+        DataLogger stepActivity = new DataLogger(Step,"no");
         // Code for Checking if there is activity and then returning whether there is or not
+        if(stepActivity.ReadData().contains("yes"))     // And there are steps going
+        {
+            ActivityCycleCount = 0;
+            stepActivity.WriteData();
 
+            String data =  ("Estimote Timer," + "Starting the Estimote," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
 
-        return true;
+            return true;
+        }
+        else
+        {
+            ActivityCycleCount ++;
+
+            String data =  ("Estimote Timer," + "No Activity at " + ActivityCycleCount + "," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+        }
+        if (ActivityCycleCount >= MaxActivityCycleCount)
+        {
+            String data =  ("Estimote Timer," + "Stopped the Estimote Timer," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

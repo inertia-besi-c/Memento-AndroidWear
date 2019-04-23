@@ -24,6 +24,11 @@ public class DataLogger     // A function that runs the data logging data
         Content = content;      // Initiates a variable for the content of the file name
     }
 
+    public DataLogger(String filename)
+    {
+        FileName = Preference.DeviceID + "_" + filename;
+    }
+
     private boolean isExternalStorageWritable()     /* Checks if external storage is available for read and write */
     {
         String state = android.os.Environment.getExternalStorageState();        // Checks if the sdcard can be written to.
