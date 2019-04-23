@@ -24,9 +24,8 @@ public class ESTimerService extends Service         /* This runs the delay timer
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private Timer ESTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
-
-    private int ActivityCycleCount = 0;
-    private int MaxActivityCycleCount = Preference.MaxActivityCycleCount;
+    private int ActivityCycleCount = 0;     // This is the current number of times estimote has run without activity
+    private int MaxActivityCycleCount = Preference.MaxActivityCycleCount;       // This is set in the preferences.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
 
     @Override
@@ -81,14 +80,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
                     DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-
-                    // Code here for stopping the Estimote Service if no Step Activity
-                    if (Active())
-                        startService(ESService);    // Starts the Estimote service
-                    else
-                        stopSelf();
-
-
+                    if (Active())       // Checks if the system is moving
+                        startService(ESService);        // Starts the Estimote service
+                    else        // If the system is not moving
+                        stopSelf();     // Stops the timer service, which will in turn stop the system.
                 }
             }, delay, period);      // Waits for this amount of delay and runs every stated period.
         }
