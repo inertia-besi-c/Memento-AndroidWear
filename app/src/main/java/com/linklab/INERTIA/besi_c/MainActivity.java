@@ -104,10 +104,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         /*  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
-        /*  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
-        /*  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
-        /*  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
-        /*  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
@@ -123,49 +119,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
 
-        File battery = new File(Preference.Directory + SystemInformation.Battery_Path);     // Gets the path to the Sensors from the system.
-        if (battery.exists())      // If the file exists
-        {
-            Log.i("Main Activity", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Main Activity", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
-        if (estimote.exists())      // If the file exists
-        {
-            Log.i("Estimote Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File pedometer = new File(Preference.Directory + SystemInformation.Pedometer_Path);     // Gets the path to the Pedometer from the system.
-        if (pedometer.exists())      // If the file exists
-        {
-            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Pedometer, Preference.Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-        if(!EODEMAfile.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
-        {
-            DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
-            DailyActivity.LogData();      // Logs the data to the BESI_C directory.
-        }
+        CheckFiles();
 
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
@@ -741,5 +695,52 @@ public class MainActivity extends WearableActivity  // This is the activity that
     public void onEnterAmbient (Bundle ambientDetails)      // When you enter ambient mode
     {
         super.onEnterAmbient(ambientDetails);       // Set it to the ambient details set.
+    }
+
+    private void CheckFiles()
+    {
+        File battery = new File(Preference.Directory + SystemInformation.Battery_Path);     // Gets the path to the Sensors from the system.
+        if (battery.exists())      // If the file exists
+        {
+            Log.i("Main Activity", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
+        if (estimote.exists())      // If the file exists
+        {
+            Log.i("Estimote Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File pedometer = new File(Preference.Directory + SystemInformation.Pedometer_Path);     // Gets the path to the Pedometer from the system.
+        if (pedometer.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Pedometer, Preference.Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+        if(!EODEMAfile.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
+        {
+            DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
+            DailyActivity.LogData();      // Logs the data to the BESI_C directory.
+        }
     }
 }
