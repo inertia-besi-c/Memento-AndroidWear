@@ -109,6 +109,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
 
         Main_Timer.start();       // The time updater
+        CheckFiles();       // Runs the check files method to make sure all the files needed are up
+
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
 
         EOD_EMA_Start = findViewById(R.id.EOD_EMA_Start);        // This is the first ema button that is mainly used by the system
@@ -118,8 +120,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
-
-        CheckFiles();
 
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller

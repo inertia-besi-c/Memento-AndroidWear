@@ -53,12 +53,10 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 15*1000;           // How long should estimote be measured each time?
     public long ESMeasurementInterval = 15*60*100;          // Every how often should a measurement be taken?
+    public int MaxActivityCycleCount = 5;       // How many cycles of esetimote service running with no step activity before estimote doesn't run.
 
     // Settings for the Accelerometer Sensor | Time is in ms |
     public int AccelDataCount = 400;     // How many data do you want to check for.
-
-    // Settings for Estomote Service
-    public int MaxActivityCycleCount = 5; // How many cycles of esetimote service running with no step activity before estimote doesn't run.
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
     public String Accelerometer = "Accelerometer_Data.csv";     // This is the Accelerometer File
