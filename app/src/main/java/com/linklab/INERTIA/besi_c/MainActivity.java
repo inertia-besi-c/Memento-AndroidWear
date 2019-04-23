@@ -55,7 +55,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
     private String lastLine;        // Last line variable
     private String currentLine;         // Current line being read by the system
-    private File file = new File(Directory, FileName);       // Looks for a filename with the new filename
+    private File EODEMAfile = new File(Directory, FileName);       // Looks for a filename with the new filename
     private int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
     private int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
     private int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
@@ -63,6 +63,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
     private int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private int UIUpdatevariable = 0;
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
     private boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
@@ -160,6 +161,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger dataLogger = new DataLogger(Pedometer, Preference.Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
+        if(!EODEMAfile.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
+        {
+            DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
+            DailyActivity.LogData();      // Logs the data to the BESI_C directory.
+        }
 
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
@@ -192,7 +198,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
-        final Intent EstimoteService = new Intent(getBaseContext(), EstimoteService.class);        // Creates an intent for calling the Estimote service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
             String data =  ("Main Activity," + "Started Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -349,6 +354,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
                     stepActivity.WriteData();       // Writes no to the system to stop repetitive clicking of sleep button.
 
+                    SLEEP.setBackgroundColor(Color.WHITE);      // Changes the color of the Sleep button.
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -356,8 +363,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         stopService(HRService);     // It stops the service
-                        SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                        SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                         SleepMode = true;       // And it sets the boolean value to true.
                     }
 
@@ -377,7 +382,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         datalogB.LogData();      // Saves the data into the directory.
 
                         stopService(EstimService);        // Stop the service.
-                        stopService(EstimoteService);       // Stops the service.
                     }
 
                     Intent upload = new Intent(getApplicationContext(), FireBase_Upload.class);      // Makes an intent of the system
@@ -391,6 +395,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 else        // If the watch is not charging
                 {
+                    SLEEP.setBackgroundColor(Color.BLACK);      // Changes the color of the Sleep button.
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -398,8 +404,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         stopService(HRService);     // It stops the service
-                        SLEEP.setBackgroundColor(getResources().getColor(R.color.grey));    // It sets the color of the button to grey
-                        SLEEP.setText("Sleep");      // It sets the text of the button to sleep
                         SleepMode = true;       // And it sets the boolean value to true.
                     }
 
@@ -410,8 +414,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         startService(HRService);        // It starts the heart rate timer service
-                        SLEEP.setBackgroundColor(getResources().getColor(R.color.blue));        // It sets the color of the button to blue
-                        SLEEP.setText("Sleep");     // It sets the text of the button to sleep
                         SleepMode = false;      // It sets the boolean value to false.
                     }
                 }
@@ -428,6 +430,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         {
             // Do nothing
         }
+
+        EODEMAUIUpdater();      // Calls the system to update itself immediatelty
     }
 
     Thread Main_Timer = new Thread()    /* This Updates the Date and Time Every second when UI is in the foreground */
@@ -439,24 +443,29 @@ public class MainActivity extends WearableActivity  // This is the activity that
             {
                 while (!Main_Timer.isInterrupted())       // While the timer updater is not interrupted by some other system.
                 {
-                    Thread.sleep(1000);     // Wait 1 second.
+                    Thread.sleep(5000);     // Wait 5 seconds.
                     runOnUiThread(new Runnable()        // Run this while the user interface is on.
                     {
                         @SuppressLint("SetTextI18n")        // Suppresses some more errors.
                         @Override
                         public void run()       // This is run on the main system.
                         {
-                            EODEMAUIUpdater();      // Checks if the Ui needs to be changed in reference to the time for daily EMA.
-
                             SystemInformation systemInformation = SystemInformation;      // Gets the methods from the system information class.
                             DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
                             BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
 
+                            UIUpdatevariable += 5;     // Increments the timer to update the UI
                             time.setText(systemInformation.getTime());       // The current time is set to show on the time text view.
                             date.setText(systemInformation.getDate());       // The current date is set to show on the date text view.
                             isCharging = systemInformation.isSystemCharging(getApplicationContext());     // Checks if the battery is currently charging.
                             batteryLevel.setText("Battery: " + String.valueOf(systemInformation.getBatteryLevel(getApplicationContext())) + "%");       // Sets the text view for the battery to show the battery level.
+
+                            if (UIUpdatevariable >= 60)     // This makes the UI update at the specified rate multiplied by the delay abocve..
+                            {
+                                EODEMAUIUpdater();      // Calls the UI updater method
+                                UIUpdatevariable = 0;       // Resets the variable
+                            }
 
                             if (!bluetooth.isEnabled())     // If the bluetooth is not enabled on the watch
                             {
@@ -547,10 +556,30 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     public void onResume()      // When the system resumes
     {
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+        if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
+        {
+            String data =  ("Main Activity," + "Restarted Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(HRService);        // That starts the heartrate sensor if it is not already running.
+        }
+
+        final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
+        if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
+        {
+            String data =  ("Main Activity," + "Restarted Accelerometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(AccelService);        // Starts the service.
+        }
+
         final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
         if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
         {
-            String data =  ("Main Activity," + "Resuming Started Pedometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            String data =  ("Main Activity," + "Restarted Pedometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
@@ -560,14 +589,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
-            String data =  ("Main Activity," + "Resuming Started Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            String data =  ("Main Activity," + "Restarted Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(EstimService);        // Starts the service.
         }
-
-        super.onResume();       // Restarts the thread left.
+        super.onResume();       // Forces the resume.
     }
 
     private void EODEMAUIUpdater()      // Updates the user interface for the daily EMA if the time is right.
@@ -578,7 +606,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         try     // Tries to run the following.
         {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(EODEMAfile));      // Reads the buffer in the system
 
             while ((currentLine = bufferedReader.readLine()) != null)     // While the line is not blank
             {
@@ -591,12 +619,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
             e.printStackTrace();        // Ignore this.
         }
 
-        if(!file.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
+        if(!EODEMAfile.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
         {
             DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.
             DailyActivity.LogData();      // Logs the data to the BESI_C directory.
         }
-        if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
+        else if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
         {
             EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
             EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
@@ -646,7 +674,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private void Charging()     // This is a little charging toast notification.
     {
         Context context = getApplicationContext();      // Gets a context from the system.
-        CharSequence showntext = "Disabled while Charging";       // Pop up information to the person
+        CharSequence showntext = "Charging";       // Pop up information to the person
         int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
 
         Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.

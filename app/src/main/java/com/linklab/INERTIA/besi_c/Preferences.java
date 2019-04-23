@@ -10,7 +10,7 @@ public class Preferences        // System wide one stop place to set all setting
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Fossil-43mm";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "Daily-EMA-Battery-Test";      // Deployment ID
-    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
@@ -73,7 +73,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop | This is the actual hour that you want it to stop on.(If you are stopping on the hour, make sure it is off by 1
-    public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop | Make sure to stop 1 minute off from the actual minute you want it to stop !!!
+    public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop | Make sure to stop 2 minute off from the actual minute you want it to stop !!!
     public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop | Make sure to stop 1 second off from the actual second you want it to stop !!!
     public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
     public long EoDEMA_Period = 24*60*60*1000;      // This is how often the timer waits before firing again
@@ -90,5 +90,5 @@ public class Preferences        // System wide one stop place to set all setting
     public long ESMeasurementInterval = 15*60*100;          // Every how often should a measurement be taken?
 
     // Settings for the Accelerometer Sensor | Time is in ms |
-    public int AccelDataCount = 500;     // How many data do you want to check for.
+    public int AccelDataCount = 400;     // How many data do you want to check for.
 }

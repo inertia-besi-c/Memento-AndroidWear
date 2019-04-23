@@ -28,7 +28,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="26dp" />
+                android:layout_height="17dp" />
 
             <TextView
                 android:id="@+id/Info"
@@ -39,6 +39,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/please_answer_the_following_questions_over_the_past_day"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +54,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="@color/green"
                 android:text="@string/go"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +70,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="#C8B400"
                 android:text="@string/snooze"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/Dismiss"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,6 +86,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@color/dark_red"
                 android:text="@string/dismiss"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
