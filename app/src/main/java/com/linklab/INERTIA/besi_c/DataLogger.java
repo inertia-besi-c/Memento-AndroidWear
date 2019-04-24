@@ -24,9 +24,9 @@ public class DataLogger     // A function that runs the data logging data
         Content = content;      // Initiates a variable for the content of the file name
     }
 
-    public DataLogger(String filename)
+    public DataLogger(String filename)      // This just includes all the variable for the data logger function
     {
-        FileName = Preference.DeviceID + "_" + filename;
+        FileName = Preference.DeviceID + "_" + filename;        // Initiates a variable for the filename from preferences
     }
 
     private boolean isExternalStorageWritable()     /* Checks if external storage is available for read and write */

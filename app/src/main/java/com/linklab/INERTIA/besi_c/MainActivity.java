@@ -430,12 +430,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 bluetooth.enable();     // Enable it.
                             }
 
-                            if (stepActivity.ReadData().contains("yes"))
+                            if (stepActivity.ReadData().contains("yes"))        // If the file contains yes
                             {
-                                if (!isRunning(ESTimerService.class))
+                                if (!isRunning(ESTimerService.class))       // And you are not running the estimote timer
                                 {
-                                    Intent estimote = new Intent(getBaseContext(),ESTimerService.class);
-                                    startService(estimote);
+                                    Intent Estimote = new Intent(getBaseContext(),ESTimerService.class);        // Create an intent
+                                    startService(Estimote);     // Start the estimote timer
                                 }
                             }
 

@@ -9,9 +9,9 @@ public class Preferences        // System wide one stop place to set all setting
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Fossil-43mm";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "Daily-EMA-Battery-Test";      // Deployment ID
+    public String DeploymentID = "Personal-Test";      // Deployment ID
     public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
-    public String Directory = Environment.getExternalStorageDirectory() + "/BESI_C/";        // Directory on the watch where all files are saved
+    public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
