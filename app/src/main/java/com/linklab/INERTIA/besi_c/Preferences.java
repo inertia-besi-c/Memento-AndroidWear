@@ -8,9 +8,9 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ---------------------------------------------------------------------------------- */
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "Fossil-43mm";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "Personal-Test";      // Deployment ID
-    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String DeviceID = "Device-Identification-Here";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "Deployment-Identification-Here";      // Deployment ID
+    public String Role = "Role-of-Watch";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
@@ -53,7 +53,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Estimote | Time is in ms |
     public long ESSampleDuration = 15*1000;           // How long should estimote be measured each time?
     public long ESMeasurementInterval = 15*60*100;          // Every how often should a measurement be taken?
-    public int MaxActivityCycleCount = 5;       // How many cycles of esetimote service running with no step activity before estimote doesn't run.
+    public int MaxActivityCycleCount = 5;       // How many cycles of estimote service running with no step activity before estimote doesn't run.
 
     // Settings for the Accelerometer Sensor | Time is in ms |
     public int AccelDataCount = 400;     // How many data do you want to check for.

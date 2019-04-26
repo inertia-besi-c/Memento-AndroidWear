@@ -59,7 +59,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "What is the patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
-                    "Did the patient take an additional opioid for the pain?"
+                    "Did the patient take another opioid for the pain?"
             };
     private String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
@@ -76,7 +76,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
-                    "Did you take an additional opioid for the pain?"
+                    "Did you take another opioid for the pain?"
             };
     private String[][] PatientAnswers =        // These are the patient answers in order.
             {

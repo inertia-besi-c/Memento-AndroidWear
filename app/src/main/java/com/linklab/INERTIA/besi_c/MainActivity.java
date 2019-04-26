@@ -460,11 +460,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 {
                                     if (!BatteryCharge && isDeviceOnline())     // If there is a connection.
                                     {
-                                        String data =  ("Main Thread," + "Uploading Data to Firebase at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                        String data =  ("Main Thread," + "Waiting to upload to BESI-Station at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                         DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                                         datalog.LogData();      // Saves the data into the directory.
 
-                                        uploadData();       // Calls the upload method.
+//                                        String data =  ("Main Thread," + "Uploading Data to Firebase at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//                                        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//                                        datalog.LogData();      // Saves the data into the directory.
+
+//                                        uploadData();       // Calls the upload method.
                                     }
 
                                     if (!SleepMode)     // If it is not in sleep mode
@@ -661,14 +665,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
         return false;       // If not, it returns false.
     }
 
-    private void uploadData()       // This calls the Fire Base activity to upload of data
-    {
-        Intent upload = new Intent(getApplicationContext(), FireBase_Upload.class);      // Makes an intent of the system
-        if(!isRunning(FireBase_Upload.class))       // Checks if it is already running
-        {
-            startActivity(upload);      // If not, start it.
-        }
-    }
+//    private void uploadData()       // This calls the Fire Base activity to upload of data
+//    {
+//        Intent upload = new Intent(getApplicationContext(), FireBase_Upload.class);      // Makes an intent of the system
+//        if(!isRunning(FireBase_Upload.class))       // Checks if it is already running
+//        {
+//            startActivity(upload);      // If not, start it.
+//        }
+//    }
 
     public boolean isDeviceOnline()     // This checks if the device is online and has an internet connection
     {
