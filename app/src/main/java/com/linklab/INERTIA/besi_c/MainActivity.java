@@ -750,6 +750,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger dataLogger = new DataLogger(Pedometer, Preference.Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
+
         if(!EODEMAfile.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
         {
             DataLogger DailyActivity = new DataLogger(EODEMA_Date, "Date");      // Logs date data to the file.

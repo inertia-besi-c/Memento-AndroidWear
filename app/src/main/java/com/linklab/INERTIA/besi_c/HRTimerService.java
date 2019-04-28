@@ -90,10 +90,10 @@ public class HRTimerService extends Service         /* This runs the delay timer
 
                     SystemInformation info = SystemInformation;       // Gets system information into the system
 
-                    if (SystemInformation.getBatteryPercent(getApplicationContext()) <= Preference.LowBatPercent) // Checks whether battery is low
+                    if (SystemInformation.getBatteryPercent(getApplicationContext()) <= Preference.LowBatPercent)   // Checks whether battery is low
                     {
-                        Intent intent = new Intent(getApplicationContext(),LowBattery.class);
-                        startActivity(intent); // Starts low battery screen
+                        Intent intent = new Intent(getApplicationContext(), LowBattery.class);       // Calls the low battery class
+                        startActivity(intent);      // Starts low battery screen
                     }
 
                     String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it

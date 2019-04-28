@@ -100,14 +100,14 @@ class SystemInformation     // Class that acquires the current time from the sys
         return String.valueOf(batteryPct);      // This is the battery level string
     }
 
-    int getBatteryPercent(Context context)
+    int getBatteryPercent(Context context)      // This returns the battery level as an integer
     {
         IntentFilter battery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);     // Starts an intent that calls the battery level service.
         Intent batteryStatus = context.registerReceiver(null, battery);     // This gets the battery status from that service.
         assert batteryStatus != null;       // Asserts that the battery level is not null.
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);      // Initializes an integer value for the battery level
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);      // Scales the battery level to 100 from whatever default value it is.
-        return (level*100/scale);
+        return (level*100/scale);       // Returns the current battery level
     }
 
     boolean isSystemCharging(Context context)       // Returns a boolean that checks if the system is charging or not.

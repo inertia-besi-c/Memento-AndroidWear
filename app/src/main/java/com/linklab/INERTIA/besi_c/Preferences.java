@@ -59,8 +59,8 @@ public class Preferences        // System wide one stop place to set all setting
     public int AccelDataCount = 400;     // How many data do you want to check for.
 
     // Settings for Low Battery
-    public int LowBatPercent = 15; // Battery percentage at which to trigger low battery warning.
-    public int LowBatBuzzDuration = 3000; // How long to vibrate for to alert user that battery is low.
+    public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
+    public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
     public String Accelerometer = "Accelerometer_Data.csv";     // This is the Accelerometer File
