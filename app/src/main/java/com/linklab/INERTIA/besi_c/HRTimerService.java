@@ -89,6 +89,13 @@ public class HRTimerService extends Service         /* This runs the delay timer
                     Log.i("Heart Rate Timer Sensor", "Starting Heart Rate Sensor");     // Logs on Console.
 
                     SystemInformation info = SystemInformation;       // Gets system information into the system
+
+                    if (SystemInformation.getBatteryPercent(getApplicationContext()) <= Preference.LowBatPercent) // Checks whether battery is low
+                    {
+                        Intent intent = new Intent(getApplicationContext(),LowBattery.class);
+                        startActivity(intent); // Starts low battery screen
+                    }
+
                     String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
                     DataLogger datalog = new DataLogger(Battery, data);      // Logs it into a file called Charging time.
                     datalog.LogData();      // Saves the data into the directory.
