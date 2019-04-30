@@ -488,10 +488,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
-
-                                    wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
 
+                                wifi.setWifiEnabled(false);     // Disable the wifi.
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
