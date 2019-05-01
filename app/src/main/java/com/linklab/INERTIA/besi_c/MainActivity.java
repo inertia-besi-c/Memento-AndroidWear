@@ -305,6 +305,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 if (isCharging)     // Checks if the watch is charging
                 {
+                    WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
+
+                    String datawifi =  ("Main Thread," + "Trying to enable an Internet connection at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalogwifi = new DataLogger(Sensors, datawifi);      // Logs it into a file called System Activity.
+                    datalogwifi.LogData();      // Saves the data into the directory.
+
+                    wifi.setWifiEnabled(true);      // Sets the wifi of the system on.
+
                     DataLogger stepActivity = new DataLogger(Step,"no");      // Logs step data to the file.
                     stepActivity.WriteData();       // Writes no to the system to stop repetitive clicking of sleep button.
 
@@ -349,6 +357,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 else        // If the watch is not charging
                 {
+                    WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
+
+                    String datawifi =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalogwifi = new DataLogger(Sensors, datawifi);      // Logs it into a file called System Activity.
+                    datalogwifi.LogData();      // Saves the data into the directory.
+
+                    wifi.setWifiEnabled(false);     // Disable the wifi.
+
                     SLEEP.setBackgroundColor(Color.BLACK);      // Changes the color of the Sleep button.
 
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
@@ -483,12 +499,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             else        // If the watch is not charging.
                             {
-                                if (isDeviceOnline())       // If the wifi system is enabled.
-                                {
-                                    String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-                                    datalog.LogData();      // Saves the data into the directory.
-                                }
+                                String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                                datalog.LogData();      // Saves the data into the directory.
 
                                 wifi.setWifiEnabled(false);     // Disable the wifi.
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
