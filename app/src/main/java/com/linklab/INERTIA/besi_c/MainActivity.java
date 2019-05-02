@@ -53,6 +53,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private String Step = Preference.Steps;     // Gets the step file from preferences.
     private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
     private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    private String Pain_Activity = Preference.Pain_Activity;      // Gets the Followup Activity File label from Preferences
     private String lastLine;        // Last line variable
     private String currentLine;         // Current line being read by the system
     private File EODEMAfile = new File(Directory, FileName);       // Looks for a filename with the new filename
@@ -198,6 +199,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
+                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Pain_Activity, data1);      // Logs it into a file called Preferences.
+                datalog1.LogData();      // Saves the data into the directory.
+
                 Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
                 startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
@@ -238,6 +243,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 String data =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                 DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
+
+                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Pain_Activity, data1);      // Logs it into a file called Preferences.
+                datalog1.LogData();      // Saves the data into the directory.
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
                 startActivity(StartEMAActivity);    // Starts the Pain EMA file
