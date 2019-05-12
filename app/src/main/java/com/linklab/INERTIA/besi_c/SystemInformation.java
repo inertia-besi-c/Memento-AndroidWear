@@ -116,7 +116,8 @@ class SystemInformation     // Class that acquires the current time from the sys
         Intent batteryStatus = context.registerReceiver(null, battery);     // This gets the battery status from that service.
         assert batteryStatus != null;       // Asserts that the battery level is not null.
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);        //  Gets extra data from the battery level service.
-        AtomicBoolean isCharging = new AtomicBoolean(status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_PLUGGED_AC);      // If the system is charging.
+        AtomicBoolean isCharging = new AtomicBoolean(status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_PLUGGED_AC
+        || status == BatteryManager.BATTERY_STATUS_FULL);      // If the system is charging.
         return isCharging.get();        // Return true, or false.
     }
 
