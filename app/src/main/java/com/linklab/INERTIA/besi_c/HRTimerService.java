@@ -96,7 +96,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
                         startActivity(intent);      // Starts low battery screen
                     }
 
-                    String data = info.getTimeStamp() + ",Discharging," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
+                    String data = info.getTimeStamp() + ", Unplugged," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
                     DataLogger datalog = new DataLogger(Battery, data);      // Logs it into a file called Charging time.
                     datalog.LogData();      // Saves the data into the directory.
 
