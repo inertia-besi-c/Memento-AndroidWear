@@ -56,10 +56,10 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[2] = event.values[2];     // Accelerometer value with gravity on the z-axis
 
         final String accelerometerValues =      // Shows the values in a string.
-                SystemInformation.getTimeStamp() + "," + event.timestamp + "," +          // Starts a new string line.
-                linear_accel[0] + "," +         // Acceleration value on x-axis
-                linear_accel[1] + "," +         // Acceleration value on y-axis
-                linear_accel[2];        // Acceleration value on z-axis
+                SystemInformation.getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +          // Starts a new string line.
+                String.valueOf(linear_accel[0]) + "," +         // Acceleration value on x-axis
+                String.valueOf(linear_accel[1]) + "," +         // Acceleration value on y-axis
+                String.valueOf(linear_accel[2]);        // Acceleration value on z-axis
 
         stringBuilder.append(accelerometerValues);      // Appends the values to the string builder
         stringBuilder.append("\n");     // Makes a new line
@@ -73,20 +73,22 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                     File accelerometer = new File(Preference.Directory + SystemInformation.Accelerometer_Path);     // Gets the path to the accelerometer from the system.
                     if (accelerometer.exists())      // If the file exists
                     {
-                        Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
-
-                        DataLogger dataLogger = new DataLogger(Accelerometer, stringBuilder.toString(), "Accelerometer_Data");       // Logs the data into a file that can be retrieved from the watch.
-                        dataLogger.LogData();       // Logs the data to a folder on the watch.
-                        stringBuilder.setLength(0);     //Empties the stringBuilder before next set.
-                        currentCount = 0;       // Reset the count
+                        Log.i("Accelerometer", "No Header Created");     // Logs to console
                     }
                     else        // If the file does not exist
                     {
                         Log.i("Accelerometer", "Creating Header");     // Logs on Console.
 
-                        DataLogger dataLogger = new DataLogger(Accelerometer, Preference.Accelerometer_Data_Headers, "Accelerometer_Data");        /* Logs the Accelerometer data in a csv format */
+                        DataLogger dataLogger = new DataLogger(Accelerometer, Preference.Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
                         dataLogger.LogData();       // Saves the data to the directory.
                     }
+
+                    Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
+
+                    DataLogger dataLogger = new DataLogger(Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
+                    dataLogger.LogData();       // Logs the data to a folder on the watch.
+                    stringBuilder.setLength(0);     //Empties the stringBuilder before next set.
+                    currentCount = 0;       // Reset the count
                 }
             }).start();     // This starts the runnable thread.
         }

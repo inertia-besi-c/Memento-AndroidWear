@@ -8,26 +8,25 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 // src: https://developer.android.com/training/data-storage/files.html#WriteExternalStorage
 @SuppressWarnings("ALL")    // Service wide suppression for the data logger names.
 public class DataLogger     // A function that runs the data logging data
 {
-    private String FileName, FileFolder, Content, DirectoryPath;        // Variable names for the file characters and contents.
+    private String FileName, Content;        // Variable names for the file characters and contents.
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation systemInformation = new SystemInformation();
     private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
-    private List Subdirectories = systemInformation.Subdirectories;
 
-    public DataLogger(String filename, String content, String filefolder)      // This just includes all the variable for the data logger function
+    public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
     {
         FileName = Preference.DeviceID + "_" + filename;        // Initiates a variable for the filename from preferences
         Content = content;      // Initiates a variable for the content of the file name
-        FileFolder = filefolder;
+    }
+
+    public DataLogger(String filename)      // This just includes all the variable for the data logger function
+    {
+        FileName = Preference.DeviceID + "_" + filename;        // Initiates a variable for the filename from preferences
     }
 
     private boolean isExternalStorageWritable()     /* Checks if external storage is available for read and write */
@@ -56,19 +55,7 @@ public class DataLogger     // A function that runs the data logging data
                     BESI_directory.mkdirs();        // Make a directory with the name.
                 }
 
-//                if (Subdirectories.contains(FileFolder))
-//                {
-//                    DirectoryPath = Directory+FileFolder;
-//                    File BESI_subdirectory = new File(DirectoryPath);
-//
-//                    if (!BESI_subdirectory.isDirectory())    // If there is no directory with that name
-//                    {
-//                        Log.i("Data Logger", "Making a directory called " + FileFolder);     // Logs on Console.
-//                        BESI_subdirectory.mkdirs();        // Make a directory with the name.
-//                    }
-//                }
-
-                File myFile = new File(Directory+FileFolder+"/"+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,true);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -106,19 +93,7 @@ public class DataLogger     // A function that runs the data logging data
                     BESI_directory.mkdirs();        // Do nothing.
                 }
 
-                if (Subdirectories.contains(FileFolder))
-                {
-                    DirectoryPath = Directory+FileFolder;
-                    File BESI_subdirectory = new File(DirectoryPath);
-
-                    if (!BESI_subdirectory.isDirectory())    // If there is no directory with that name
-                    {
-                        Log.i("Data Logger", "Making a directory called " + FileFolder);     // Logs on Console.
-                        BESI_subdirectory.mkdirs();        // Make a directory with the name.
-                    }
-                }
-
-                File myFile = new File(Directory + FileFolder + FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,false);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -147,7 +122,7 @@ public class DataLogger     // A function that runs the data logging data
         StringBuilder text = new StringBuilder();       // This is the new string that is built
         try     // Tries to run the following.
         {
-            File file = new File(Directory, FileName);       // Creates a filename with the new filename
+            File file = new File(Directory,FileName);       // Creates a filename with the new filename
             BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
             String line;        // Creates a new line.
 
