@@ -9,7 +9,10 @@ import android.os.BatteryManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
@@ -19,6 +22,17 @@ import java.util.regex.Pattern;
 class SystemInformation     // Class that acquires the current time from the system and saves it.
 {
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+
+    List <String> Subdirectories = new ArrayList<>
+            (Arrays.asList(
+                    "System_Data",
+                    "Estimote_Data",
+                    "EMA_Responses",
+                    "EMA_Activity",
+                    "Pedometer_Data",
+                    "HeartRate_Data",
+                    "Accelerometer_Data")
+            );
 
     private String DeviceID = Preference.DeviceID;       // Gets the Device ID from preferences
     private String Accelerometer = Preference.Accelerometer;       // Gets the Accelerometer file from preferences
@@ -38,7 +52,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate files from preferences
 
     /* File path for Adding Headers to Individual File Name */
-    public String Accelerometer_Path = DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path
+    public String Accelerometer_Path = "Accelerometer_Data" + "/" + DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path
     public String Battery_Path = DeviceID + "_" + Battery;        // This is the Battery Information Folder path
     public String Estimote_Path = DeviceID + "_" + Estimote;      // This is the Estimote File path
     public String Pedometer_Path = DeviceID + "_" + Pedometer;        // This is the Pedometer File path
@@ -51,7 +65,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     public String Sensors_Path = DeviceID + "_" + Sensors;    // This is the Sensor Activity File path
     public String Steps_Path = DeviceID + "_" + Steps;     // This is the Step Activity File path
     public String EODEMA_Date_Path = DeviceID + "_" + EODEMA_Date;           // Gets the EODEMA date file from preferences
-    public String System_Path = DeviceID + "_" + System;      // This is the System Activity File path
+    public String System_Path = "App_Interactions" + "/" + DeviceID + "_" + System;      // This is the System Activity File path
     public String Heart_Rate_Path = DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
 
     String getTime()        // This gets only the current time from the system
