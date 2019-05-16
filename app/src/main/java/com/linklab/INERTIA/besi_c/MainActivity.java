@@ -519,7 +519,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                                 datalog.LogData();      // Saves the data into the directory.
 
-//                                wifi.setWifiEnabled(false);     // Disable the wifi.
+                                wifi.setWifiEnabled(false);     // Disable the wifi.
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
