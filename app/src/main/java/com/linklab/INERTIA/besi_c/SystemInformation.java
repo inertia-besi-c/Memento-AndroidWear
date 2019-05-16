@@ -57,7 +57,6 @@ class SystemInformation     // Class that acquires the current time from the sys
     public String System_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + System;      // This is the System Activity File path
     public String Heart_Rate_Path = Preference.Subdirectory_HeartRate + "/" + DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
 
-
     /* Subdirectories to be made by the system */
     List <String> Subdirectories = new ArrayList<>(Arrays.asList        // Creates a list of the subdirectories to be created.
             (

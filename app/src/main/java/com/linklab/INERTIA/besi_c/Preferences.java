@@ -86,7 +86,7 @@ public class Preferences        // System wide one stop place to set all setting
     public String Subdirectory_EMAActivities = "EMA_Activities";        // This is where the EMA activity data are kept
     public String Subdirectory_EMAResults = "EMA_Results";          // This is where the EMA responses data are kept
     public String Subdirectory_DeviceActivities = "Device_Updater";     // This is where the device data that is used to update something in the app is kept
-    public String Subdirectory_DeviceLogs = "Activity";        // This is where all the system logs and data are kept.
+    public String Subdirectory_DeviceLogs = "Device_Activity";        // This is where all the system logs and data are kept.
 
     /* Headers to individual files that are being logged to <--------------------------------------------- This is the order that the headers will appear in */
     public String EndOfDay_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for EndOfDay_EMA_Activity
