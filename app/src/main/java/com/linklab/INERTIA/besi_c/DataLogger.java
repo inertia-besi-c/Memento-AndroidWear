@@ -118,7 +118,7 @@ public class DataLogger     // A function that runs the data logging data
         StringBuilder text = new StringBuilder();       // This is the new string that is built
         try     // Tries to run the following.
         {
-            File file = new File(Directory,FileName);       // Creates a filename with the new filename
+            File file = new File(Directory+Subdirectory+FileName);       // Creates a filename with the new filename
             BufferedReader bufferedReaderr = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
             String line;        // Creates a new line.
 
