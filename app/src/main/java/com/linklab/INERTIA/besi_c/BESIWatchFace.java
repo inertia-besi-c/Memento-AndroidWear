@@ -197,7 +197,7 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime)
         {
-            String data =  ("BESI Watchface Screen Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            String data =  ("BESI Watchface," + "Screen Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System_Log, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
