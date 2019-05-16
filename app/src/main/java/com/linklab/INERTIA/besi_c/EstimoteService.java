@@ -32,15 +32,17 @@ public class EstimoteService extends Service
 {
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private BeaconManager beaconManager;
+    private BeaconManager beaconManager;        // This is the beacon manager
     private BeaconRegion region;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private ArrayList<Beacon> eas;
     Date starttime=Calendar.getInstance().getTime();
-    StringBuilder strBuilder;
+    StringBuilder strBuilder;       // This is the string builder to build the string.
     public long Duration = Preference.ESSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private String Estimote = Preference.Estimote;     // Gets the sensors from preferences.
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private String Subdirectory_Estimote = Preference.Subdirectory_Estimote;        // This is where the estimote is kept
     Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
 
     @SuppressLint("WakelockTimeout")
@@ -66,9 +68,9 @@ public class EstimoteService extends Service
             {
                 Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
 
-//                String data =  ("Estimote Sensor," + "Killed Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-//                datalog.LogData();      // Saves the data into the directory.
+                String data =  ("Estimote Sensor," + "Killed Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
 
                 stopSelf();         // Stops the service.
             }
@@ -103,15 +105,15 @@ public class EstimoteService extends Service
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
                         String time1 = sdf.format(dt);
                         eas.add(new Beacon(t++, list.size(), beacon.getRssi(), RegionUtils.computeAccuracy(beacon), time1));
-                        strBuilder.append(String.valueOf(beacon.getMajor()));
+                        strBuilder.append(beacon.getMajor());
                         strBuilder.append(",");
-                        strBuilder.append(String.valueOf(beacon.getRssi()));
+                        strBuilder.append(beacon.getRssi());
                         strBuilder.append(",");
-                        strBuilder.append(String.valueOf(RegionUtils.computeAccuracy(beacon)));
+                        strBuilder.append(RegionUtils.computeAccuracy(beacon));
                         strBuilder.append(",");
                         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
                         String sametime = sdf2.format(Calendar.getInstance().getTime());
-                        strBuilder.append(String.valueOf(sametime));
+                        strBuilder.append(sametime);
                         strBuilder.append("\n");
 
                         if (strBuilder != null)
@@ -152,8 +154,8 @@ public class EstimoteService extends Service
             {
                 Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-//                DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-//                dataLogger.LogData();       // Saves the data to the directory.
+                DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+                dataLogger.LogData();       // Saves the data to the directory.
             }
 
             File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
@@ -165,8 +167,8 @@ public class EstimoteService extends Service
             {
                 Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-//                DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
-//                dataLogger.LogData();       // Saves the data to the directory.
+                DataLogger dataLogger = new DataLogger(Subdirectory_Estimote, Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
+                dataLogger.LogData();       // Saves the data to the directory.
             }
 
             try
@@ -196,9 +198,10 @@ public class EstimoteService extends Service
     {
         Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
 
-//        String data =  ("Estimote Service," + "Killed Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-//        datalog.LogData();      // Saves the data into the directory.
+        String data =  ("Estimote Service," + "Killed Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+        datalog.LogData();      // Saves the data into the directory.
+
         ESSensorTimer.cancel();
         super.onDestroy();
         beaconManager.stopRanging(region);
@@ -221,8 +224,8 @@ public class EstimoteService extends Service
         {
             Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-//            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
         }
 
         File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
@@ -234,8 +237,8 @@ public class EstimoteService extends Service
         {
             Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-//            DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
+            DataLogger dataLogger = new DataLogger(Subdirectory_Estimote, Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
         }
 
     }
