@@ -42,8 +42,8 @@ public class ESTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Estimote Timer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
+//            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+//            dataLogger.LogData();       // Saves the data to the directory.
         }
 
         Log.i("Estimote Timer Sensor", "Starting Estimote Timer Service");     // Logs on Console.
@@ -63,9 +63,9 @@ public class ESTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Estimote Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
 
-            String data =  ("Estimote Timer Service," + "Stopped Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-            datalog.LogData();      // Saves the data into the directory.
+//            String data =  ("Estimote Timer Service," + "Stopped Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//            datalog.LogData();      // Saves the data into the directory.
 
             stopService(ESService);     // Stops the Heart Rate Sensor
         }
@@ -78,9 +78,9 @@ public class ESTimerService extends Service         /* This runs the delay timer
                 {
                     Log.i("Estimote", "Starting Estimote Service");     // Logs on Console.
 
-                    String data = ("Estimote Timer," + "Started Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-                    datalog.LogData();      // Saves the data into the directory.
+//                    String data = ("Estimote Timer," + "Started Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//                    datalog.LogData();      // Saves the data into the directory.
 
                     if (Active())       // If the estimote is asked to be active
                         startService(ESService);    // Starts the Estimote service
@@ -114,9 +114,9 @@ public class ESTimerService extends Service         /* This runs the delay timer
     {
         Log.i("Estimote", "Destroying Estimote Timer Service");     // Logs on Console.
 
-        String data =  ("Estimote Timer," + "Stopped Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-        datalog.LogData();      // Saves the data into the directory.
+//        String data =  ("Estimote Timer," + "Stopped Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//        datalog.LogData();      // Saves the data into the directory.
         if (isRunning())        // If the periodic service is running
         {
             PeriodicService(true);      // Stops the periodic service.
@@ -127,31 +127,31 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
     public boolean Active()     // Checks if the person is active
     {
-        DataLogger stepActivity = new DataLogger(Step,"no");        // Logs data to the step file
-        if(stepActivity.ReadData().contains("yes"))     // And there are steps going
-        {
-            ActivityCycleCount = 0;     // Resets the activity
-            stepActivity.WriteData();       // writes the data
-
-            String data =  ("Estimote Timer," + "Starting the Estimote," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-            datalog.LogData();      // Saves the data into the directory.
-
-            return true;        // Returns true
-        }
-        else        // If there are no steps
-        {
-            ActivityCycleCount ++;      // Increment activity cycle
-
-            String data =  ("Estimote Timer," + "No Activity at " + ActivityCycleCount + "," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-            datalog.LogData();      // Saves the data into the directory.
-        }
+//        DataLogger stepActivity = new DataLogger(Step,"no");        // Logs data to the step file
+//        if(stepActivity.ReadData().contains("yes"))     // And there are steps going
+//        {
+//            ActivityCycleCount = 0;     // Resets the activity
+//            stepActivity.WriteData();       // writes the data
+//
+//            String data =  ("Estimote Timer," + "Starting the Estimote," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//            datalog.LogData();      // Saves the data into the directory.
+//
+//            return true;        // Returns true
+//        }
+//        else        // If there are no steps
+//        {
+//            ActivityCycleCount ++;      // Increment activity cycle
+//
+//            String data =  ("Estimote Timer," + "No Activity at " + ActivityCycleCount + "," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//            datalog.LogData();      // Saves the data into the directory.
+//        }
         if (ActivityCycleCount >= MaxActivityCycleCount)        // If the activity cycle is greater than the max set
         {
-            String data =  ("Estimote Timer," + "Stopped the Estimote Timer," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-            datalog.LogData();      // Saves the data into the directory.
+//            String data =  ("Estimote Timer," + "Stopped the Estimote Timer," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//            datalog.LogData();      // Saves the data into the directory.
 
             return false;       // Return false
         }

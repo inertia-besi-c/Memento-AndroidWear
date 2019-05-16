@@ -66,9 +66,9 @@ public class EstimoteService extends Service
             {
                 Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
 
-                String data =  ("Estimote Sensor," + "Killed Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-                datalog.LogData();      // Saves the data into the directory.
+//                String data =  ("Estimote Sensor," + "Killed Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//                datalog.LogData();      // Saves the data into the directory.
 
                 stopSelf();         // Stops the service.
             }
@@ -152,8 +152,8 @@ public class EstimoteService extends Service
             {
                 Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-                DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-                dataLogger.LogData();       // Saves the data to the directory.
+//                DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+//                dataLogger.LogData();       // Saves the data to the directory.
             }
 
             File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
@@ -165,8 +165,8 @@ public class EstimoteService extends Service
             {
                 Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-                DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
-                dataLogger.LogData();       // Saves the data to the directory.
+//                DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
+//                dataLogger.LogData();       // Saves the data to the directory.
             }
 
             try
@@ -196,9 +196,9 @@ public class EstimoteService extends Service
     {
         Log.i("Estimote", "Destroying Estimote Service");     // Logs on Console.
 
-        String data =  ("Estimote Service," + "Killed Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-        datalog.LogData();      // Saves the data into the directory.
+//        String data =  ("Estimote Service," + "Killed Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+//        datalog.LogData();      // Saves the data into the directory.
         ESSensorTimer.cancel();
         super.onDestroy();
         beaconManager.stopRanging(region);
@@ -221,8 +221,8 @@ public class EstimoteService extends Service
         {
             Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
+//            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+//            dataLogger.LogData();       // Saves the data to the directory.
         }
 
         File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
@@ -234,8 +234,8 @@ public class EstimoteService extends Service
         {
             Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
+//            DataLogger dataLogger = new DataLogger(Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
+//            dataLogger.LogData();       // Saves the data to the directory.
         }
 
     }

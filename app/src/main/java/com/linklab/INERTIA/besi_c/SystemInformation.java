@@ -9,7 +9,10 @@ import android.os.BatteryManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
@@ -38,21 +41,35 @@ class SystemInformation     // Class that acquires the current time from the sys
     private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate files from preferences
 
     /* File path for Adding Headers to Individual File Name */
-    public String Accelerometer_Path = DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path
-    public String Battery_Path = DeviceID + "_" + Battery;        // This is the Battery Information Folder path
-    public String Estimote_Path = DeviceID + "_" + Estimote;      // This is the Estimote File path
-    public String Pedometer_Path = DeviceID + "_" + Pedometer;        // This is the Pedometer File path
-    public String Pain_EMA_Activity_Path = DeviceID + "_" + Pain_Activity;     // This is the Pain EMA Activity File path
-    public String Pain_EMA_Results_Path = DeviceID + "_" + Pain_Results;       // This is the Pain EMA Response File path
-    public String Followup_EMA_Activity_Path = DeviceID + "_" + Followup_Activity;     // This is the Followup EMA Activity File path
-    public String Followup_EMA_Results_Path = DeviceID + "_" + Followup_Results;     // This is the Followup EMA Response File path
-    public String EndOfDay_Activity_Path = DeviceID + "_" + EndOfDay_Activity;     // This is the End OF Day EMA Activity File Path
-    public String EndOfDay_Results_Path = DeviceID + "_" + EndOfDay_Results;       // This is the End of Day Response File path
-    public String Sensors_Path = DeviceID + "_" + Sensors;    // This is the Sensor Activity File path
-    public String Steps_Path = DeviceID + "_" + Steps;     // This is the Step Activity File path
-    public String EODEMA_Date_Path = DeviceID + "_" + EODEMA_Date;           // Gets the EODEMA date file from preferences
-    public String System_Path = DeviceID + "_" + System;      // This is the System Activity File path
-    public String Heart_Rate_Path = DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
+    public String Accelerometer_Path = Preference.Subdirectory_Accelerometer + "/" + DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path
+    public String Battery_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + Battery;        // This is the Battery Information Folder path
+    public String Estimote_Path = Preference.Subdirectory_Estimote + "/" + DeviceID + "_" + Estimote;      // This is the Estimote File path
+    public String Pedometer_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + Pedometer;        // This is the Pedometer File path
+    public String Pain_EMA_Activity_Path = Preference.Subdirectory_EMAActivities + "/" + DeviceID + "_" + Pain_Activity;     // This is the Pain EMA Activity File path
+    public String Pain_EMA_Results_Path = Preference.Subdirectory_EMAResults + "/" + DeviceID + "_" + Pain_Results;       // This is the Pain EMA Response File path
+    public String Followup_EMA_Activity_Path = Preference.Subdirectory_EMAActivities + "/" + DeviceID + "_" + Followup_Activity;     // This is the Followup EMA Activity File path
+    public String Followup_EMA_Results_Path = Preference.Subdirectory_EMAResults + "/" + DeviceID + "_" + Followup_Results;     // This is the Followup EMA Response File path
+    public String EndOfDay_Activity_Path = Preference.Subdirectory_EMAActivities + "/" + DeviceID + "_" + EndOfDay_Activity;     // This is the End OF Day EMA Activity File Path
+    public String EndOfDay_Results_Path = Preference.Subdirectory_EMAResults + "/" + DeviceID + "_" + EndOfDay_Results;       // This is the End of Day Response File path
+    public String Sensors_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + Sensors;    // This is the Sensor Activity File path
+    public String Steps_Path = Preference.Subdirectory_DeviceActivities + "/" + DeviceID + "_" + Steps;     // This is the Step Activity File path
+    public String EODEMA_Date_Path = Preference.Subdirectory_DeviceActivities + "/" + DeviceID + "_" + EODEMA_Date;           // Gets the EODEMA date file from preferences
+    public String System_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + System;      // This is the System Activity File path
+    public String Heart_Rate_Path = Preference.Subdirectory_HeartRate + "/" + DeviceID + "_" + Heart_Rate;        // This is the Heart Rate path
+
+
+    /* Subdirectories to be made by the system */
+    List <String> Subdirectories = new ArrayList<>(Arrays.asList        // Creates a list of the subdirectories to be created.
+            (
+                    Preference.Subdirectory_Accelerometer,        // This is where the accelerometer data is kept
+                    Preference.Subdirectory_HeartRate,        // This is where the Heartrate data is kept
+                    Preference.Subdirectory_Estimote,      // This is where the estimote is kept
+                    Preference.Subdirectory_EMAActivities,        // This is where the EMA activity data are kept
+                    Preference.Subdirectory_EMAResults,          // This is where the EMA responses data are kept
+                    Preference.Subdirectory_DeviceActivities,     // This is where the device data that is used to update something in the app is kept
+                    Preference.Subdirectory_DeviceLogs        // This is where all the system logs and data are kept.
+            )
+    );
 
     String getTime()        // This gets only the current time from the system
     {

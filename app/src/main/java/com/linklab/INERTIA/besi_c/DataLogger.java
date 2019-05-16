@@ -14,19 +14,15 @@ import java.util.Date;
 @SuppressWarnings("ALL")    // Service wide suppression for the data logger names.
 public class DataLogger     // A function that runs the data logging data
 {
-    private String FileName, Content;        // Variable names for the file characters and contents.
+    private String FileName, Content, Subdirectory;        // Variable names for the file characters and contents.
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
 
-    public DataLogger(String filename ,String content)      // This just includes all the variable for the data logger function
+    public DataLogger(String subdirectory, String filename ,String content)      // This just includes all the variable for the data logger function
     {
         FileName = Preference.DeviceID + "_" + filename;        // Initiates a variable for the filename from preferences
         Content = content;      // Initiates a variable for the content of the file name
-    }
-
-    public DataLogger(String filename)      // This just includes all the variable for the data logger function
-    {
-        FileName = Preference.DeviceID + "_" + filename;        // Initiates a variable for the filename from preferences
+        Subdirectory = subdirectory + "/";        // Saves the file into this subdirectory
     }
 
     private boolean isExternalStorageWritable()     /* Checks if external storage is available for read and write */
@@ -55,7 +51,7 @@ public class DataLogger     // A function that runs the data logging data
                     BESI_directory.mkdirs();        // Make a directory with the name.
                 }
 
-                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+Subdirectory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,true);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -93,7 +89,7 @@ public class DataLogger     // A function that runs the data logging data
                     BESI_directory.mkdirs();        // Do nothing.
                 }
 
-                File myFile = new File(Directory+FileName);     // Adds the filename to the path of the file
+                File myFile = new File(Directory+Subdirectory+FileName);     // Adds the filename to the path of the file
                 myFile.createNewFile();     // Cretates the new file
                 FileOutputStream fileOut = new FileOutputStream(myFile,false);       // This is what the file outputs.
                 OutputStreamWriter myOutWriter =new OutputStreamWriter(fileOut);        // Enters the new line in the file
@@ -145,8 +141,8 @@ public class DataLogger     // A function that runs the data logging data
         Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
         String deviceID = Preference.DeviceID;       // This is the device id that is set from the preferences.
         boolean flag = true;        // Sets a flag
-        String path = Preference.Directory;        // Gets the path to the storage in the sdcard
-        String fileName = new SystemInformation().Estimote_Path;        // Names the file.
+        String path = Preference.Directory + Preference.Subdirectory_Estimote;        // Gets the path to the storage in the sdcard
+        String fileName = Preference.DeviceID + "_" + Preference.Estimote;        // Names the file.
         File file = new File(path);     // Makes a path to the file.
 
         if (file.exists() == false)     // If there is no directory with this name
