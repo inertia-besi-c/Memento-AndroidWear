@@ -356,7 +356,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     if(isRunning(ESTimerService.class) || isRunning(EstimoteService.class))       // If the Estimote service is running
                     {
                         String dataB =  ("Sleep Button," + "Stopped Estimote Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalogB = new DataLogger(Subdirectory_DeviceActivities, Sensors, dataB);      // Logs it into a file called System Activity.
+                        DataLogger datalogB = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataB);      // Logs it into a file called System Activity.
                         datalogB.LogData();      // Saves the data into the directory.
 
                         stopService(EstimService);        // Stop the service.
@@ -515,11 +515,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             else        // If the watch is not charging.
                             {
-                                String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
-                                datalog.LogData();      // Saves the data into the directory.
+                                if (wifi.isWifiEnabled())
+                                {
+                                    String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+                                    datalog.LogData();      // Saves the data into the directory.
 
-                                wifi.setWifiEnabled(false);     // Disable the wifi.
+                                    wifi.setWifiEnabled(false);     // Disable the wifi.
+                                }
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 

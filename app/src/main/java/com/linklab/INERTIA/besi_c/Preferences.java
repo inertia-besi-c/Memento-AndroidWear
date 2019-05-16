@@ -8,8 +8,8 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ---------------------------------------------------------------------------------- */
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "Device-Identification";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "Deployment-Identification";      // Deployment ID
+    public String DeviceID = "Patient-Device";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "P3D1-Development";      // Deployment ID
     public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
