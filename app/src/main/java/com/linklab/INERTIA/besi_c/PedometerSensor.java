@@ -67,7 +67,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
         {
             Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceActivities, Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
