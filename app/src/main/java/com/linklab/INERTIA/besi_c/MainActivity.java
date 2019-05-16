@@ -129,15 +129,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
 
-//        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
-//        if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
-//        {
-//            String data =  ("Main Activity," + "Started Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-//            datalog.LogData();      // Saves the data into the directory.
-//
-//            startService(HRService);        // That starts the heartrate sensor if it is not already running.
-//        }
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+        if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
+        {
+            String data =  ("Main Activity," + "Started Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(HRService);        // That starts the heartrate sensor if it is not already running.
+        }
 
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
@@ -149,15 +149,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(AccelService);        // Starts the service.
         }
 
-//        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
-//        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
-//        {
-//            String data =  ("Main Activity," + "Started Pedometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
-//            datalog.LogData();      // Saves the data into the directory.
-//
-//            startService(PedomService);        // Starts the service.
-//        }
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
+        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
+        {
+            String data =  ("Main Activity," + "Started Pedometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(PedomService);        // Starts the service.
+        }
 
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
@@ -206,12 +206,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-//                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//                DataLogger datalog1 = new DataLogger(Pain_Activity, data1);      // Logs it into a file called Preferences.
-//                datalog1.LogData();      // Saves the data into the directory.
+                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Subdirectory_EMAActivities, Pain_Activity, data1);      // Logs it into a file called Preferences.
+                datalog1.LogData();      // Saves the data into the directory.
 
-//                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
-//                startActivity(StartEMAActivity);    // Starts the Pain EMA file
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
+                startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
         });
 
@@ -251,12 +251,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
                 DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
-//                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//                DataLogger datalog1 = new DataLogger(Pain_Activity, data1);      // Logs it into a file called Preferences.
-//                datalog1.LogData();      // Saves the data into the directory.
-//
-//                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
-//                startActivity(StartEMAActivity);    // Starts the Pain EMA file
+                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog1 = new DataLogger(Subdirectory_EMAActivities, Pain_Activity, data1);      // Logs it into a file called Preferences.
+                datalog1.LogData();      // Saves the data into the directory.
+
+                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
+                startActivity(StartEMAActivity);    // Starts the Pain EMA file
             }
         });
 
@@ -276,9 +276,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 vibrator.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
 
-//                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
-//                startActivity(StartEMAActivity);        // Starts the EOD EMA file.
-//                finish();       // Finished the EOD EMA screen.
+                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
+                startActivity(StartEMAActivity);        // Starts the EOD EMA file.
+                finish();       // Finished the EOD EMA screen.
             }
         });
 
@@ -334,15 +334,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                     SLEEP.setBackgroundColor(Color.WHITE);      // Changes the color of the Sleep button.
 
-//                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
-//                    {
-//                        String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//                        DataLogger datalogHR = new DataLogger(Sensors, dataHR);      // Logs it into a file called System Activity.
-//                        datalogHR.LogData();      // Saves the data into the directory.
-//
-//                        stopService(HRService);     // It stops the service
-//                        SleepMode = true;       // And it sets the boolean value to true.
-//                    }
+                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
+                    {
+                        String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+                        datalogHR.LogData();      // Saves the data into the directory.
+
+                        stopService(HRService);     // It stops the service
+                        SleepMode = true;       // And it sets the boolean value to true.
+                    }
 
                     if(isRunning(AccelerometerSensor.class))       // If the accelerometer service is running
                     {
@@ -383,25 +383,25 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                     SLEEP.setBackgroundColor(Color.BLACK);      // Changes the color of the Sleep button.
 
-//                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
-//                    {
-//                        String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//                        DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
-//                        datalogHR.LogData();      // Saves the data into the directory.
-//
-//                        stopService(HRService);     // It stops the service
-//                        SleepMode = true;       // And it sets the boolean value to true.
-//                    }
-//
-//                    else        // If the heart rate timer is not running
-//                    {
-//                        String dataHR =  ("Sleep Button," + "Started Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//                        DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
-//                        datalogHR.LogData();      // Saves the data into the directory.
-//
-//                        startService(HRService);        // It starts the heart rate timer service
-//                        SleepMode = false;      // It sets the boolean value to false.
-//                    }
+                    if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
+                    {
+                        String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+                        datalogHR.LogData();      // Saves the data into the directory.
+
+                        stopService(HRService);     // It stops the service
+                        SleepMode = true;       // And it sets the boolean value to true.
+                    }
+
+                    else        // If the heart rate timer is not running
+                    {
+                        String dataHR =  ("Sleep Button," + "Started Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                        DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+                        datalogHR.LogData();      // Saves the data into the directory.
+
+                        startService(HRService);        // It starts the heart rate timer service
+                        SleepMode = false;      // It sets the boolean value to false.
+                    }
                 }
             }
         });
@@ -553,15 +553,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
     {
         CheckFiles();       // Checks the files and subdirectories to make sure the system files are up
 
-//        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
-//        if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
-//        {
-//            String data =  ("Main Activity," + "Restarted Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
-//            datalog.LogData();      // Saves the data into the directory.
-//
-//            startService(HRService);        // That starts the heartrate sensor if it is not already running.
-//        }
+        final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+        if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
+        {
+            String data =  ("Main Activity," + "Restarted Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(HRService);        // That starts the heartrate sensor if it is not already running.
+        }
 
         final Intent AccelService = new Intent(getBaseContext(), AccelerometerSensor.class);        // Creates an intent for calling the accelerometer service.
         if(!isRunning(AccelerometerSensor.class))       // If the accelerometer service is not running
@@ -573,15 +573,15 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(AccelService);        // Starts the service.
         }
 
-//        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
-//        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
-//        {
-//            String data =  ("Main Activity," + "Restarted Pedometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-//            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
-//            datalog.LogData();      // Saves the data into the directory.
-//
-//            startService(PedomService);        // Starts the service.
-//        }
+        final Intent PedomService = new Intent(getBaseContext(), PedometerSensor.class);        // Creates an intent for calling the pedometer service.
+        if(!isRunning(PedometerSensor.class))       // If the pedometer service is not running
+        {
+            String data =  ("Main Activity," + "Restarted Pedometer Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
+            startService(PedomService);        // Starts the service.
+        }
 
         final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
@@ -753,18 +753,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         }
 
-//        File battery = new File(Preference.Directory + SystemInformation.Battery_Path);     // Gets the path to the Sensors from the system.
-//        if (battery.exists())      // If the file exists
-//        {
-//            Log.i("Main Activity", "No Header Created");     // Logs to console
-//        }
-//        else        // If the file does not exist
-//        {
-//            Log.i("Main Activity", "Creating Header");     // Logs on Console.
-//
-//            DataLogger dataLogger = new DataLogger(Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
-//        }
+        File battery = new File(Preference.Directory + SystemInformation.Battery_Path);     // Gets the path to the Sensors from the system.
+        if (battery.exists())      // If the file exists
+        {
+            Log.i("Main Activity", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Main Activity", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
 
         File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
         if (estimote.exists())      // If the file exists
@@ -779,18 +779,18 @@ public class MainActivity extends WearableActivity  // This is the activity that
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-//        File pedometer = new File(Preference.Directory + SystemInformation.Pedometer_Path);     // Gets the path to the Pedometer from the system.
-//        if (pedometer.exists())      // If the file exists
-//        {
-//            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
-//        }
-//        else        // If the file does not exist
-//        {
-//            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
-//
-//            DataLogger dataLogger = new DataLogger(Pedometer, Preference.Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
-//            dataLogger.LogData();       // Saves the data to the directory.
-//        }
+        File pedometer = new File(Preference.Directory + SystemInformation.Pedometer_Path);     // Gets the path to the Pedometer from the system.
+        if (pedometer.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
+        }
+        else        // If the file does not exist
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Pedometer, Preference.Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
 
         if(!EODEMAfile.exists())      // Checks if the file even exist in the system. If not, it makes one and calls the EMA.
         {
