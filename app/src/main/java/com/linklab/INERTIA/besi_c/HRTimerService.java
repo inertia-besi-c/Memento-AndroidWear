@@ -17,13 +17,12 @@ import java.util.TimerTask;
 
 public class HRTimerService extends Service         /* This runs the delay timer, and also calls the heart rate sensor itself, the heart rate sensor kills itself and returns here when complete */
 {
-    public int delay = 0;       // Starts a delay of 0
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    public long period = Preference.HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String Battery = Preference.Battery;     // Gets the sensors from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final long period = Preference.HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Battery = Preference.Battery;     // Gets the sensors from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private Timer HRTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
@@ -83,7 +82,9 @@ public class HRTimerService extends Service         /* This runs the delay timer
         else    // Else it just keeps going.
         {
             HRTimerService = new Timer();          // Makes a new timer.
-            HRTimerService.schedule( new TimerTask()     // Initializes a timer.
+            // Starts a delay of 0
+            int delay = 0;
+            HRTimerService.schedule(new TimerTask()     // Initializes a timer.
             {
                 public void run()       // Runs the imported file based on the timer specified.
                 {

@@ -7,11 +7,11 @@ import android.os.Parcelable;
 /* Special way to log data for the estimote.. (This was moved from Jamie's File and was just used) PLEASE DO NOT REMOVE */
 public class Beacon implements Parcelable
 {
-    private int id;
-    private int Major;
-    private int Rsi;
-    private String tim;
-    private double distane;
+    private final int id;
+    private final int Major;
+    private final int Rsi;
+    private final String tim;
+    private final double distane;
 
     Beacon(int id, int major, int rsi, double distance, String time)
     {
@@ -20,16 +20,6 @@ public class Beacon implements Parcelable
         this.Rsi=rsi;
         this.tim = time;
         this.distane = distance;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 
     private Beacon(Parcel in)

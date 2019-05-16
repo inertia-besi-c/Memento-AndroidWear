@@ -20,14 +20,14 @@ import java.util.TimerTask;
 public class EndOfDayPrompt2 extends WearableActivity       // This is the EOD EMA that is run for the second and last time.
 {
     private PowerManager.WakeLock wakeLock;     // Starts the power manager and the wakelock from the system.
-    private Timer promptTimeOut = new Timer();
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String System = Preference.System;       // Gets the system from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private final Timer promptTimeOut = new Timer();
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String System = Preference.System;       // Gets the system from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
     @SuppressLint({"WakelockTimeout", "SetTextI18n"})       // Suppresses the timeouts.
 
     @Override

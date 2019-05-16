@@ -14,11 +14,11 @@ import java.util.TimerTask;
 public class FollowUpEMASchedulerService extends Service        // This is a service file that allows a new pain EMA to interrupt the followup EMA.
 {
     private Timer FollowUpEMATimer;     // This is the timer for the follow up EMA
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private long FollowUpEMADelay = Preference.FollowUpEMATimer;     // Time before followup EMA / EMA2 following submission
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final long FollowUpEMADelay = Preference.FollowUpEMATimer;     // Time before followup EMA / EMA2 following submission
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)        // When the service is called this is started.

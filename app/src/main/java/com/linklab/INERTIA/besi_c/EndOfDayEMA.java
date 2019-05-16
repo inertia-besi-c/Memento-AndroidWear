@@ -32,34 +32,34 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private PowerManager.WakeLock wakeLock;
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
-    private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
+    private final ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This sets the person whose watch it is.
     private String [] Questions;        // These are the questions present
     private String[][] Answers;         // These are their possible answers.
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String System = Preference.System;      // Gets the System File label from Preferences
-    private String EODEMA_Date = Preference.EODEMA_Date;     // Gets the EODEMA date File label from Preferences
-    private String EndOfDay_Activity = Preference.EndOfDay_Activity;      // Gets the End of Day Activity File label from Preferences
-    private String EndOfDay_Results = Preference.EndOfDay_Results;      // Gets the End of Day Results File label from Preferences
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String System = Preference.System;      // Gets the System File label from Preferences
+    private final String EODEMA_Date = Preference.EODEMA_Date;     // Gets the EODEMA date File label from Preferences
+    private final String EndOfDay_Activity = Preference.EndOfDay_Activity;      // Gets the End of Day Activity File label from Preferences
+    private final String EndOfDay_Results = Preference.EndOfDay_Results;      // Gets the End of Day Results File label from Preferences
     private Timer EMARemindertimer;     // This is the EMA reminder time interval
     private int[] UserResponseIndex;        // This is the user response index.
     private int resTaps = 0;        // This is a tap that increments to show the different options.
-    private int EMAReminderDelay = Preference.EoDEMAReminderDelay;      // This is the EMA reminder delay set from preferences.
-    private long EMAReminderInterval = Preference.EoDEMAReminderInterval; //    Time before pinging user after not finishing EMA
-    private int ReminderNumber = Preference.EoDEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
-    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
-    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
-    private String Subdirectory_EMAActivities = Preference.Subdirectory_EMAActivities;      // This is where the EMA activity data are kept
-    private String Subdirectory_EMAResults = Preference.Subdirectory_EMAResults;        // This is where the EMA responses data are kept
+    private final int EMAReminderDelay = Preference.EoDEMAReminderDelay;      // This is the EMA reminder delay set from preferences.
+    private final long EMAReminderInterval = Preference.EoDEMAReminderInterval; //    Time before pinging user after not finishing EMA
+    private final int ReminderNumber = Preference.EoDEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
+    private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private final int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
+    private final String Subdirectory_EMAActivities = Preference.Subdirectory_EMAActivities;      // This is where the EMA activity data are kept
+    private final String Subdirectory_EMAResults = Preference.Subdirectory_EMAResults;        // This is where the EMA responses data are kept
     private int ReminderCount = 0;      // This is the amount of reminders left to do.
     private int CurrentQuestion = 0;       // This is the current question that the person is on.
     private Vibrator v;      // The vibrator that provides haptic feedback.
 
-    private String[] CaregiverQuestions =       // These are strictly the care giver questions.
+    private final String[] CaregiverQuestions =       // These are strictly the care giver questions.
             {
                     "How active were you?",
                     "How busy was your home?",
@@ -72,7 +72,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How distressed were you overall?",
                     "How distressed was the patient overall?",
             };
-    private String[][] CaregiverAnswers =      // These are strictly the care giver answers.
+    private final String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very"},
@@ -86,7 +86,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
             };
 
-    private String[] PatientQuestions =      // These are strictly the patient questions.
+    private final String[] PatientQuestions =      // These are strictly the patient questions.
             {
                     "How active were you?",
                     "How busy was your home?",
@@ -99,7 +99,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How distressed were you overall?",
                     "How distressed was your caregiver overall?",
             };
-    private String[][] PatientAnswers =      // These are strictly the patient answers.
+    private final String[][] PatientAnswers =      // These are strictly the patient answers.
             {
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very"},

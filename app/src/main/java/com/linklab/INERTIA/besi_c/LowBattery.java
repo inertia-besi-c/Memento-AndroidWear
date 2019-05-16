@@ -9,11 +9,11 @@ import android.widget.Button;
 
 public class LowBattery extends WearableActivity
 {
-    Preferences Preference = new Preferences();     // Gets the preferences list from preferences class
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
-    private String System = Preference.System;     // Gets the sensors from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final Preferences Preference = new Preferences();     // Gets the preferences list from preferences class
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
+    private final String System = Preference.System;     // Gets the sensors from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is run on creation

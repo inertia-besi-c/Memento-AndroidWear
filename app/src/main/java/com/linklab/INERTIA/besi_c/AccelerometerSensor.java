@@ -19,13 +19,13 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String Accelerometer = Preference.Accelerometer;     // This is the file name set from preferences.
-    private int MaxDataCount = Preference.AccelDataCount;        // Gets the Data count number from preferences.
-    private String Subdirectory_Accelerometer = Preference.Subdirectory_Accelerometer;       // This is where the accelerometer data is kept
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String Accelerometer = Preference.Accelerometer;     // This is the file name set from preferences.
+    private final int MaxDataCount = Preference.AccelDataCount;        // Gets the Data count number from preferences.
+    private final String Subdirectory_Accelerometer = Preference.Subdirectory_Accelerometer;       // This is where the accelerometer data is kept
     private int currentCount = 0;       // This is the initial data count for the sensor
-    StringBuilder stringBuilder;
+    private StringBuilder stringBuilder;
 
     @SuppressLint("WakelockTimeout")        // Stops the error message from the wakelock
     @Override

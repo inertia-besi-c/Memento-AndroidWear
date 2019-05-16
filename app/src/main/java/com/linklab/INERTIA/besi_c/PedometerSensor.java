@@ -20,13 +20,13 @@ public class PedometerSensor extends Service implements SensorEventListener     
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private PowerManager.WakeLock wakeLock;     // Creates a wakelock power manager for the service.
     private boolean Started = false;        // Creates a boolean to check if it is started.
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String Pedometer = Preference.Pedometer;     // Gets the file name from preferences.
-    private String Steps = Preference.Steps;     // Gets the sensors from preferences.
-    private String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Pedometer = Preference.Pedometer;     // Gets the file name from preferences.
+    private final String Steps = Preference.Steps;     // Gets the sensors from preferences.
+    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     @SuppressLint("WakelockTimeout")        // Suppresses some error messages.
 
     @Override

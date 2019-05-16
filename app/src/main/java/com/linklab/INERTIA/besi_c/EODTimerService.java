@@ -19,16 +19,17 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressWarnings("ALL")
 public class EODTimerService extends Application        // Starts the EOD EMA Timer Service when called.
 {
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String Directory = Preference.Directory;     // Gets the directory from the preferences class.
-    private String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
-    private String EODEMA_Date = Preference.EODEMA_Date;        // This is the file name from preferences
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Directory = Preference.Directory;     // Gets the directory from the preferences class.
+    private final String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    private final String EODEMA_Date = Preference.EODEMA_Date;        // This is the file name from preferences
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
     private String currentLine;     // Line reader variable
     private String lastLine;        // Last line variable
 

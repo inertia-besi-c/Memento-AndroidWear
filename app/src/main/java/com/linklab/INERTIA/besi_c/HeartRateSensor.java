@@ -17,16 +17,15 @@ import java.util.TimerTask;
 
 public class HeartRateSensor extends Service implements SensorEventListener     // This is the file heading, it listens to the physical Heart Rate Senor
 {
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    public long Duration = Preference.HRSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final long Duration = Preference.HRSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String Heart_Rate = Preference.Heart_Rate;     // This is the file name set from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_Heartrate = Preference.Subdirectory_HeartRate;      // This is where the Heartrate data is kept
-    int Time_zero;      // Time at start of measurement (milliseconds)
-    final Timer HRSensorTimer = new Timer();          // Makes a new timer for HRSensorTimer.
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Heart_Rate = Preference.Heart_Rate;     // This is the file name set from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_Heartrate = Preference.Subdirectory_HeartRate;      // This is where the Heartrate data is kept
+    private final Timer HRSensorTimer = new Timer();          // Makes a new timer for HRSensorTimer.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
@@ -60,7 +59,6 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Starts the sensor service for any sensor in the system.
         Sensor mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);        // Makes sure it is for the Heart Rate sensor.
         mSensorManager.registerListener(this, mHeartRate, SensorManager.SENSOR_DELAY_FASTEST);      // Registers the listener for the HR sensor in the system.
-        Time_zero = getTime();      // Gets the current system time.
 
         HRSensorTimer.schedule( new TimerTask()     // Initializes a timer.
         {
@@ -93,11 +91,6 @@ public class HeartRateSensor extends Service implements SensorEventListener     
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();     // Starts the runnable.
-    }
-
-    private int getTime()   // Gets the time from the system
-    {
-        return (int)System.currentTimeMillis();     // Returns the system time.
     }
 
     @Override

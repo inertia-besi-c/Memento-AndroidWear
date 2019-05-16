@@ -30,20 +30,20 @@ import static com.linklab.INERTIA.besi_c.DataLogger.writeToFile;
 
 public class EstimoteService extends Service
 {
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private BeaconManager beaconManager;        // This is the beacon manager
     private BeaconRegion region;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private ArrayList<Beacon> eas;
-    Date starttime=Calendar.getInstance().getTime();
-    StringBuilder strBuilder;       // This is the string builder to build the string.
-    public long Duration = Preference.ESSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private String Estimote = Preference.Estimote;     // Gets the sensors from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_Estimote = Preference.Subdirectory_Estimote;        // This is where the estimote is kept
-    Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
+    private Date starttime=Calendar.getInstance().getTime();
+    private StringBuilder strBuilder;       // This is the string builder to build the string.
+    private final long Duration = Preference.ESSampleDuration;        // This is the sampling rate in milliseconds gotten from preferences.
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Estimote = Preference.Estimote;     // Gets the sensors from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_Estimote = Preference.Subdirectory_Estimote;        // This is where the estimote is kept
+    private final Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
 
     @SuppressLint("WakelockTimeout")
     @Override
@@ -131,10 +131,10 @@ public class EstimoteService extends Service
         return START_NOT_STICKY;
     }
 
-    public class writethread extends Thread
+    class writethread extends Thread
     {
-        Date st;
-        StringBuilder buf;
+        final Date st;
+        final StringBuilder buf;
 
         writethread(StringBuilder sb, Date starttime)
         {

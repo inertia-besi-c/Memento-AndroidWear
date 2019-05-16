@@ -34,31 +34,31 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
-    private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
+    private final ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String System = Preference.System;      // Gets the System File label from Preferences
-    private String Pain_Activity = Preference.Pain_Activity;      // Gets the Followup Activity File label from Preferences
-    private String Pain_Results = Preference.Pain_Results;      // Gets the Followup Results File label from Preferences
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_EMAActivities = Preference.Subdirectory_EMAActivities;      // This is where the EMA activity data are kept
-    private String Subdirectory_EMAResults = Preference.Subdirectory_EMAResults;        // This is where the EMA responses data are kept
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String System = Preference.System;      // Gets the System File label from Preferences
+    private final String Pain_Activity = Preference.Pain_Activity;      // Gets the Followup Activity File label from Preferences
+    private final String Pain_Results = Preference.Pain_Results;      // Gets the Followup Results File label from Preferences
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_EMAActivities = Preference.Subdirectory_EMAActivities;      // This is where the EMA activity data are kept
+    private final String Subdirectory_EMAResults = Preference.Subdirectory_EMAResults;        // This is where the EMA responses data are kept
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
-    private int EMAReminderDelay = Preference.PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
-    private long EMAReminderInterval = Preference.PainEMAReminderInterval; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = Preference.PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
-    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
-    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
+    private final int EMAReminderDelay = Preference.PainEMAReminderDelay;      // This is the ema reminder delay that is set for this specific EMA.
+    private final long EMAReminderInterval = Preference.PainEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private final int ReminderNumber = Preference.PainEMAReminderNumber;       // This is the amount of reminders that you want to give before submitting automatically.
+    private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private final int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
     private Vibrator v;      // The vibrator that provides haptic feedback.
 
-    private String[] CaregiverQuestions =       // These are the questions for the care giver in order.
+    private final String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
                     "Is patient having pain now?",
                     "What is patient's pain level?",
@@ -66,7 +66,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "How distressed is the patient?",
                     "Did patient take an opioid for the pain?"
             };
-    private String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
+    private final String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
@@ -75,7 +75,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"Yes", "No", "Unsure"}
             };
 
-    private String[] PatientQuestions =         // These are the patient questions in order.
+    private final String[] PatientQuestions =         // These are the patient questions in order.
             {
                     "Are you in pain now?",
                     "What is your pain level?",
@@ -83,7 +83,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "How distressed is your caregiver?",
                     "Did you take an opioid for the pain?"
             };
-    private String[][] PatientAnswers =         // These are the patient answers in order.
+    private final String[][] PatientAnswers =         // These are the patient answers in order.
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},

@@ -17,18 +17,17 @@ import java.util.TimerTask;
 
 public class ESTimerService extends Service         /* This runs the delay timer, and also calls the heart rate sensor itself, the heart rate sensor kills itself and returns here when complete */
 {
-    public int delay = 0;       // Starts a delay of 0
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    public long period = Preference.ESMeasurementInterval + 30000;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
-    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final long period = Preference.ESMeasurementInterval + 30000;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private Timer ESTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
-    private String Step = Preference.Steps;     // Gets the step file from preferences.
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
+    private final String Step = Preference.Steps;     // Gets the step file from preferences.
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
     private int ActivityCycleCount = 0;     // This is the amount of times the watch has not moved in a given time
-    private int MaxActivityCycleCount = Preference.MaxActivityCycleCount;       // This is the maximum amount of inactivity that turns off the estimt
+    private final int MaxActivityCycleCount = Preference.MaxActivityCycleCount;       // This is the maximum amount of inactivity that turns off the estimote
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
 
     @Override
@@ -73,6 +72,8 @@ public class ESTimerService extends Service         /* This runs the delay timer
         else        // If the system is not charging or is not asked to stop
         {
             ESTimerService = new Timer();          // Makes a new timer.
+            // Starts a delay of 0
+            int delay = 0;
             ESTimerService.schedule(new TimerTask()     // Initializes a timer.
             {
                 public void run()       // Runs the imported file based on the timer specified.
@@ -127,7 +128,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
         wakeLock.release();     // Releases the wakelock
     }
 
-    public boolean Active()     // Checks if the person is active
+    private boolean Active()     // Checks if the person is active
     {
         DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");        // Logs data to the step file
         if(stepActivity.ReadData().contains("yes"))     // And there are steps going

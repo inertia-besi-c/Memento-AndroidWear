@@ -31,32 +31,32 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private PowerManager.WakeLock wakeLock;
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
-    private ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
+    private final ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
-    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private String System = Preference.System;      // Gets the System File label from Preferences
-    private String Followup_Activity = Preference.Followup_Activity;      // Gets the Followup Activity File label from Preferences
-    private String Followup_Results = Preference.Followup_Results;      // Gets the Followup Results File label from Preferences
-    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private String Subdirectory_EMAActivities = Preference.Subdirectory_EMAActivities;      // This is where the EMA activity data are kept
-    private String Subdirectory_EMAResults = Preference.Subdirectory_EMAResults;        // This is where the EMA responses data are kept
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String System = Preference.System;      // Gets the System File label from Preferences
+    private final String Followup_Activity = Preference.Followup_Activity;      // Gets the Followup Activity File label from Preferences
+    private final String Followup_Results = Preference.Followup_Results;      // Gets the Followup Results File label from Preferences
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_EMAActivities = Preference.Subdirectory_EMAActivities;      // This is where the EMA activity data are kept
+    private final String Subdirectory_EMAResults = Preference.Subdirectory_EMAResults;        // This is where the EMA responses data are kept
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
     private int[] UserResponseIndex;        // This is the user response index that keeps track of the response of the user.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
-    private int EMAReminderDelay = Preference.FollowupEMAReminderDelay;  // Calls the Follow up EMA delay from the preferences.
-    private long EMAReminderInterval = Preference.FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
-    private int ReminderNumber = Preference.FollowUpEMAReminderNumber;       // Calls the reminder numbers for the follow up from preferences.
-    private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
-    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
-    private int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
+    private final int EMAReminderDelay = Preference.FollowupEMAReminderDelay;  // Calls the Follow up EMA delay from the preferences.
+    private final long EMAReminderInterval = Preference.FollowUpEMAReminderInterval; //Time before pinging user after not finishing EMA
+    private final int ReminderNumber = Preference.FollowUpEMAReminderNumber;       // Calls the reminder numbers for the follow up from preferences.
+    private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private final int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private Vibrator v;      // The vibrator that provides haptic feedback.
 
-    private String[] CaregiverQuestions =       // These are the questions for the care giver in order.
+    private final String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
                     "Is patient still in pain now?",
                     "What is the patient's pain level?",
@@ -64,7 +64,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "How distressed is the patient?",
                     "Did the patient take another opioid for the pain?"
             };
-    private String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
+    private final String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
                     {"Yes", "No", "Unsure"},
                     {"1","2","3","4","5","6","7","8","9","10"},
@@ -73,7 +73,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"Yes", "No", "Unsure"}
             };
 
-    private String[] PatientQuestions =         // These are the patient questions in order.
+    private final String[] PatientQuestions =         // These are the patient questions in order.
             {
                     "Are you still having pain now?",
                     "What is your pain level?",
@@ -81,7 +81,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "How distressed is your caregiver?",
                     "Did you take another opioid for the pain?"
             };
-    private String[][] PatientAnswers =        // These are the patient answers in order.
+    private final String[][] PatientAnswers =        // These are the patient answers in order.
             {
                     {"Yes", "No"},
                     {"1","2","3","4","5","6","7","8","9","10"},
