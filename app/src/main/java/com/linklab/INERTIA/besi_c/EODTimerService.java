@@ -103,8 +103,8 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, "Date");      // Logs date data to the file.
                         DailyActivity.LogData();      // Logs the data to the BESI_C directory.
 
-//                        Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
-//                        startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
+                        Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                        startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
                     }
                     if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // if the last line says that an EOD EMA has been completed that day
                     {
@@ -121,8 +121,8 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, "Date");      // Logs date data to the file.
                         DailyActivity.LogData();      // Logs the data to the BESI_C directory.
 
-//                        Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
-//                        startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
+                        Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                        startActivity(StartEMAActivity);      // Starts the StartEMAActivity.
                     }
                 }
             }, delay, Preference.EoDEMA_Period);     // Gets the preferences setting from the preference system.
@@ -143,8 +143,8 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                     DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
-//                    Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
-//                    startActivity(intent);      // Starts the intent.
+                    Intent intent = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
+                    startActivity(intent);      // Starts the intent.
                 }
             }, delay, Preference.EoDEMA_Period);     // Gets the preferences setting from the preference system.
         }
