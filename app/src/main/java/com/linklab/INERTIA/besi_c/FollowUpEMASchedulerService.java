@@ -18,6 +18,7 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private long FollowUpEMADelay = Preference.FollowUpEMATimer;     // Time before followup EMA / EMA2 following submission
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)        // When the service is called this is started.
@@ -31,12 +32,12 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
         {
             Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
         String data =  ("Followup EMA Scheduler Timer," + "(Re)Initiated at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
 
         try     // Tries the following first if it can.
@@ -59,7 +60,7 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
                 Log.i("Followup EMA", "Timer is started");     // Logs on Console.
 
                 String data =  ("Followup EMA Timer Scheduler," + "Started at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the Follow up EMA file

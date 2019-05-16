@@ -25,6 +25,8 @@ public class PedometerSensor extends Service implements SensorEventListener     
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private String Pedometer = Preference.Pedometer;     // Gets the file name from preferences.
     private String Steps = Preference.Steps;     // Gets the sensors from preferences.
+    private String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     @SuppressLint("WakelockTimeout")        // Suppresses some error messages.
 
     @Override
@@ -52,7 +54,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
         {
             Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -65,7 +67,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
         {
             Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceActivities, Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -75,10 +77,11 @@ public class PedometerSensor extends Service implements SensorEventListener     
         }
         else        // If the system has started.
         {
-            new DataLogger(Steps,"yes").WriteData();       // Start logging yes to the file.
+            DataLogger datalogger = new DataLogger(Subdirectory_DeviceActivities, Steps,"yes");      // Logs the file to a string.
+            datalogger.WriteData();       // Start logging yes to the file.
         }
 
-        final String logstring = SystemInformation.getTimeStamp() + "," + String.valueOf(event.timestamp) + "," + String.valueOf(event.values[0]) + "," + String.valueOf(event.accuracy);     // Format the data
+        final String logstring = SystemInformation.getTimeStamp() + "," + event.timestamp + "," + event.values[0] + "," + event.accuracy;     // Format the data
 
         new Thread(new Runnable()       // Starts a new thread for the service.
         {
@@ -93,11 +96,11 @@ public class PedometerSensor extends Service implements SensorEventListener     
                 {
                     Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
 
-                    DataLogger dataLogger = new DataLogger(Pedometer, new Preferences().Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
+                    DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Pedometer, new Preferences().Pedometer_Data_Headers);        /* Logs the Pedometer data in a csv format */
                     dataLogger.LogData();       // Saves the data to the directory.
                 }
 
-                DataLogger dataLogger = new DataLogger(Pedometer, logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Pedometer, logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the directory.
             }
         }).start();     // Starts the runnable.

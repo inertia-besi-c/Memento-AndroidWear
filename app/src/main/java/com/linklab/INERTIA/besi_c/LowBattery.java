@@ -13,6 +13,7 @@ public class LowBattery extends WearableActivity
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
     private String System = Preference.System;     // Gets the sensors from preferences.
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is run on creation
@@ -25,7 +26,7 @@ public class LowBattery extends WearableActivity
         Button dismiss = findViewById(R.id.Dismiss);        // Sets the dismiss button
 
         String data =  ("Low Battery," + "Started at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
 
         dismiss.setOnClickListener(new View.OnClickListener() // Waits for the dismiss button to be clicked.
@@ -34,7 +35,7 @@ public class LowBattery extends WearableActivity
             public void onClick(View v)         // When the button is clicked
             {
                 String data =  ("Low Battery," + "Dismissed at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(System, data);      // Logs it into a file called System Activity.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 finish();       // It stops the class and the buzzing

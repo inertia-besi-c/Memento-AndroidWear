@@ -34,7 +34,9 @@ public class BESIWatchFace extends CanvasWatchFaceService
     private static final Typeface NORMAL_TYPEFACE = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);        // Update rate in milliseconds for interactive mode. Defaults to one second.
     private static final int MSG_UPDATE_TIME = 0;   //      * Handler message id for updating the time periodically in interactive mode.
-
+    private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private String System_Log = Preference.System;     // Gets the sensors from preferences.
     @Override
     public Engine onCreateEngine()
     {
@@ -56,10 +58,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
             BESIWatchFace.Engine engine = mWeakReference.get();
             if (engine != null)
             {
-                switch (msg.what)
-                {
-                    case MSG_UPDATE_TIME: engine.handleUpdateTimeMessage();
-                    break;
+                if (msg.what == MSG_UPDATE_TIME) {
+                    engine.handleUpdateTimeMessage();
                 }
             }
         }
@@ -83,8 +83,6 @@ public class BESIWatchFace extends CanvasWatchFaceService
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                //Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);
-                //startActivity(StartWatchActivity);    // Starts the watch face
                 mCalendar.setTimeZone(TimeZone.getDefault());
                 invalidate();
             }
@@ -199,8 +197,8 @@ public class BESIWatchFace extends CanvasWatchFaceService
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime)
         {
-            String data =  ("BESI Watchface Screen Tapped at " + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger("System_Activity.csv",data);      // Logs it into a file called System Activity.
+            String data =  ("BESI Watchface," + "Screen Tapped at," + new SystemInformation().getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System_Log, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             Intent StartWatchActivity = new Intent(getBaseContext(), MainActivity.class);

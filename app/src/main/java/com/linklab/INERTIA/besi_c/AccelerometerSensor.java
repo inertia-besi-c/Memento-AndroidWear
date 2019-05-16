@@ -23,6 +23,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Accelerometer = Preference.Accelerometer;     // This is the file name set from preferences.
     private int MaxDataCount = Preference.AccelDataCount;        // Gets the Data count number from preferences.
+    private String Subdirectory_Accelerometer = Preference.Subdirectory_Accelerometer;       // This is where the accelerometer data is kept
     private int currentCount = 0;       // This is the initial data count for the sensor
     StringBuilder stringBuilder;
 
@@ -56,10 +57,10 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[2] = event.values[2];     // Accelerometer value with gravity on the z-axis
 
         final String accelerometerValues =      // Shows the values in a string.
-                SystemInformation.getTimeStamp() + "," + String.valueOf(event.timestamp) + "," +          // Starts a new string line.
-                String.valueOf(linear_accel[0]) + "," +         // Acceleration value on x-axis
-                String.valueOf(linear_accel[1]) + "," +         // Acceleration value on y-axis
-                String.valueOf(linear_accel[2]);        // Acceleration value on z-axis
+                SystemInformation.getTimeStamp() + "," + event.timestamp + "," +          // Starts a new string line.
+                linear_accel[0] + "," +         // Acceleration value on x-axis
+                linear_accel[1] + "," +         // Acceleration value on y-axis
+                linear_accel[2];        // Acceleration value on z-axis
 
         stringBuilder.append(accelerometerValues);      // Appends the values to the string builder
         stringBuilder.append("\n");     // Makes a new line
@@ -79,13 +80,13 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                     {
                         Log.i("Accelerometer", "Creating Header");     // Logs on Console.
 
-                        DataLogger dataLogger = new DataLogger(Accelerometer, Preference.Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
+                        DataLogger dataLogger = new DataLogger(Subdirectory_Accelerometer, Accelerometer, Preference.Accelerometer_Data_Headers);        /* Logs the Accelerometer data in a csv format */
                         dataLogger.LogData();       // Saves the data to the directory.
                     }
 
                     Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
 
-                    DataLogger dataLogger = new DataLogger(Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
+                    DataLogger dataLogger = new DataLogger(Subdirectory_Accelerometer, Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
                     dataLogger.LogData();       // Logs the data to a folder on the watch.
                     stringBuilder.setLength(0);     //Empties the stringBuilder before next set.
                     currentCount = 0;       // Reset the count

@@ -8,8 +8,8 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ---------------------------------------------------------------------------------- */
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "Device-Internal-ID";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "Deployment-ID";      // Deployment ID
+    public String DeviceID = "Device-Identification";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "Deployment-Identification";      // Deployment ID
     public String Role = "Role";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
@@ -78,6 +78,15 @@ public class Preferences        // System wide one stop place to set all setting
     public String EODEMA_Date = "EODEMA_DailyActivity";      // This is the Daily EMA time logger file
     public String System = "System_Activity.csv";      // This is the System Activity File
     public String Heart_Rate = "Heart_Rate_Data.csv";           // This is the system file for the Heart Rate Sensor
+
+    /* Settings for Changing the Subdirectories in the Main Directory */
+    public String Subdirectory_Accelerometer = "Accelerometer";        // This is where the accelerometer data is kept
+    public String Subdirectory_HeartRate = "Heart_Rate";        // This is where the Heartrate data is kept
+    public String Subdirectory_Estimote = "Estimote";      // This is where the estimote is kept
+    public String Subdirectory_EMAActivities = "EMA_Activities";        // This is where the EMA activity data are kept
+    public String Subdirectory_EMAResults = "EMA_Results";          // This is where the EMA responses data are kept
+    public String Subdirectory_DeviceActivities = "Device_Updater";     // This is where the device data that is used to update something in the app is kept
+    public String Subdirectory_DeviceLogs = "Device_Activity";        // This is where all the system logs and data are kept.
 
     /* Headers to individual files that are being logged to <--------------------------------------------- This is the order that the headers will appear in */
     public String EndOfDay_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for EndOfDay_EMA_Activity

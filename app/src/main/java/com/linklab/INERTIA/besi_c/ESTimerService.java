@@ -25,9 +25,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
     private Timer ESTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
     private String Step = Preference.Steps;     // Gets the step file from preferences.
-
-    private int ActivityCycleCount = 0;
-    private int MaxActivityCycleCount = Preference.MaxActivityCycleCount;
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
+    private int ActivityCycleCount = 0;     // This is the amount of times the watch has not moved in a given time
+    private int MaxActivityCycleCount = Preference.MaxActivityCycleCount;       // This is the maximum amount of inactivity that turns off the estimt
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
 
     @Override
@@ -42,7 +43,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Estimote Timer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -61,10 +62,10 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
         if (Stop)       // If it says stop, it kills the HRService.
         {
-            Log.i("Estimote Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
+            Log.i("Estimote Timer Sensor", "Stopping Estimote Timer Service");     // Logs on Console.
 
-            String data =  ("Estimote Timer Service," + "Stopped Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            String data =  ("Estimote Timer Service," + "Stopped Estimote Timer Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             stopService(ESService);     // Stops the Heart Rate Sensor
@@ -79,7 +80,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
                     Log.i("Estimote", "Starting Estimote Service");     // Logs on Console.
 
                     String data = ("Estimote Timer," + "Started Estimote Service at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     if (Active())       // If the estimote is asked to be active
@@ -115,8 +116,9 @@ public class ESTimerService extends Service         /* This runs the delay timer
         Log.i("Estimote", "Destroying Estimote Timer Service");     // Logs on Console.
 
         String data =  ("Estimote Timer," + "Stopped Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
+
         if (isRunning())        // If the periodic service is running
         {
             PeriodicService(true);      // Stops the periodic service.
@@ -127,14 +129,14 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
     public boolean Active()     // Checks if the person is active
     {
-        DataLogger stepActivity = new DataLogger(Step,"no");        // Logs data to the step file
+        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");        // Logs data to the step file
         if(stepActivity.ReadData().contains("yes"))     // And there are steps going
         {
             ActivityCycleCount = 0;     // Resets the activity
             stepActivity.WriteData();       // writes the data
 
             String data =  ("Estimote Timer," + "Starting the Estimote," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             return true;        // Returns true
@@ -144,13 +146,13 @@ public class ESTimerService extends Service         /* This runs the delay timer
             ActivityCycleCount ++;      // Increment activity cycle
 
             String data =  ("Estimote Timer," + "No Activity at " + ActivityCycleCount + "," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
         }
         if (ActivityCycleCount >= MaxActivityCycleCount)        // If the activity cycle is greater than the max set
         {
             String data =  ("Estimote Timer," + "Stopped the Estimote Timer," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             return false;       // Return false

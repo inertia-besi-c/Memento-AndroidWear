@@ -23,6 +23,8 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private String Heart_Rate = Preference.Heart_Rate;     // This is the file name set from preferences.
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private String Subdirectory_Heartrate = Preference.Subdirectory_HeartRate;      // This is where the Heartrate data is kept
     int Time_zero;      // Time at start of measurement (milliseconds)
     final Timer HRSensorTimer = new Timer();          // Makes a new timer for HRSensorTimer.
 
@@ -38,7 +40,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         {
             Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -51,7 +53,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         {
             Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Heart_Rate, Preference.Heart_Rate_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_Heartrate, Heart_Rate, Preference.Heart_Rate_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -67,7 +69,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
                 Log.i("Heart Rate Sensor", "Stopping Sensor");     // Logs on Console.
 
                 String data =  ("Heart Rate Sensor," + "Killed Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 stopSelf();    // Stops the Heart Rate Sensor
@@ -81,13 +83,13 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
         String HeartRateMonitor = String.valueOf(event.values[0]);      // This changes the value of the sensor data to a string.
-        final String logstring = SystemInformation.getTimeStamp() + "," + String.valueOf(event.timestamp) + "," + HeartRateMonitor + "," + event.accuracy;     // Appends the Heart Rate value onto the string
+        final String logstring = SystemInformation.getTimeStamp() + "," + event.timestamp + "," + HeartRateMonitor + "," + event.accuracy;     // Appends the Heart Rate value onto the string
 
         new Thread(new Runnable()       // Starts a new runnable file.
         {
             public void run()       // Runs when the runnable is called
             {
-                DataLogger dataLogger = new DataLogger(Heart_Rate, logstring);       // Logs the data into a file that can be retrieved.
+                DataLogger dataLogger = new DataLogger(Subdirectory_Heartrate, Heart_Rate, logstring);       // Logs the data into a file that can be retrieved.
                 dataLogger.LogData();   // Logs the data to the computer.
             }
         }).start();     // Starts the runnable.

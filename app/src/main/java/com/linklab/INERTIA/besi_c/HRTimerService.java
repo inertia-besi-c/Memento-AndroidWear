@@ -23,6 +23,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
     public long period = Preference.HRMeasurementInterval;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private String Battery = Preference.Battery;     // Gets the sensors from preferences.
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private Timer HRTimerService;         // Starts the variable timer.
     private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
@@ -39,7 +40,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Heart Rate Timer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -52,7 +53,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
         {
             Log.i("Heart Rate Timer Sensor", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
@@ -74,7 +75,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
             Log.i("Heart Rate Timer Sensor", "Stopping Heart Rate Sensor");     // Logs on Console.
 
             String data =  ("Heart Rate Timer Service," + "Stopped Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             stopService(HRService);     // Stops the Heart Rate Sensor
@@ -97,11 +98,11 @@ public class HRTimerService extends Service         /* This runs the delay timer
                     }
 
                     String data = info.getTimeStamp() + ", Unplugged," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
-                    DataLogger datalog = new DataLogger(Battery, data);      // Logs it into a file called Charging time.
+                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Battery, data);      // Logs it into a file called Charging time.
                     datalog.LogData();      // Saves the data into the directory.
 
                     String dataHRT =  ("Heart Rate Timer Service," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalogHRT = new DataLogger(Sensors, dataHRT);      // Logs it into a file called System Activity.
+                    DataLogger datalogHRT = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHRT);      // Logs it into a file called System Activity.
                     datalogHRT.LogData();      // Saves the data into the directory.
 
                     startService(HRService);    // Starts the Heart Rate Sensor

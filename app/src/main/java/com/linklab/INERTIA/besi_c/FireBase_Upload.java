@@ -49,13 +49,14 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
     private String Followup_Results = Preference.Followup_Results;           // Gets the Followup Results file from preferences
     private String EndOfDay_Activity = Preference.EndOfDay_Activity;           // Gets the End of Day Activity file from preferences
     private String EndOfDay_Results = Preference.EndOfDay_Results;           // Gets the End of Day Results file from preferences
+    private String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private String Sensors = Preference.Sensors;           // Gets the Sensors file from preferences
     private String Steps = Preference.Steps;           // Gets the Steps file from preferences
     private String System = Preference.System;           // Gets the System file from preferences
     private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate file from preferences
     final String timeStamp = SystemInformation.getFolderTimeStamp();      // Gets a time stamp from System information
     FirebaseStorage storage;        // The storage on firebase
-    StorageReference storageRef;        // The storage reference on firbase
+    StorageReference storageRef;        // The storage reference on firebase
     PowerManager.WakeLock wakeLock;     // Wakelock
     String localDirPath = Preference.Directory;     // The directory path on the watch
 
@@ -71,12 +72,12 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
         {
             Log.i("Firebase Service", "Creating Header");     // Logs on Console.
 
-            DataLogger dataLogger = new DataLogger(Sensors, Preference.Sensor_Data_Headers);        /* Logs the Accelerometer data in a csv format */
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Accelerometer data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
         String data =  ("Firebase Service," + "Started at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
@@ -177,7 +178,7 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
                 else        // If there is no internet
                 {
                     String data =  ("Firebase Service," + "Tried to Upload Files without Internet at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                    DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                     datalog.LogData();      // Saves the data into the directory.
 
                     uploading.setVisibility(View.INVISIBLE);        // Set the uploading to invisible
@@ -206,7 +207,7 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
             public void onFailure(@NonNull Exception exception)         // If it fails
             {
                 String data =  ("Firebase Service," + "Uploading Files failed at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Log.i("Firebase","Upload Failed");      // Logs to Console
@@ -221,7 +222,7 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)         // If it succeded
             {
                 String data =  ("Firebase Service," + "Uploading Files Succeded at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                 datalog.LogData();      // Saves the data into the directory.
 
                 Log.i("Firebase","Uploaded Successfully");      // Logs to Console
@@ -251,7 +252,7 @@ public class FireBase_Upload extends WearableActivity       // This is the fireb
     public void onDestroy()     // When the activity is ended
     {
         String data =  ("Firebase Service," + "is killed at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Sensors, data);      // Logs it into a file called System Activity.
+        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
         datalog.LogData();      // Saves the data into the directory.
 
         Log.i("Firebase","Activity Destroyed");      // Logs to Console
