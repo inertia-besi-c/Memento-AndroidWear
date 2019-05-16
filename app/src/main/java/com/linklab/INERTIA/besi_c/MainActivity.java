@@ -515,7 +515,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                             else        // If the watch is not charging.
                             {
-                                if (wifi.isWifiEnabled())
+                                if (wifi.isWifiEnabled())       // If the wifi is still when the watch is not charging
                                 {
                                     String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
