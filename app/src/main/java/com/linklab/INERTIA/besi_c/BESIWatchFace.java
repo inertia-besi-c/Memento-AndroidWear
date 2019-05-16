@@ -58,8 +58,10 @@ public class BESIWatchFace extends CanvasWatchFaceService
             BESIWatchFace.Engine engine = mWeakReference.get();
             if (engine != null)
             {
-                if (msg.what == MSG_UPDATE_TIME) {
-                    engine.handleUpdateTimeMessage();
+                switch (msg.what)
+                {
+                    case MSG_UPDATE_TIME: engine.handleUpdateTimeMessage();
+                    break;
                 }
             }
         }

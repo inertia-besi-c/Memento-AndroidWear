@@ -10,7 +10,7 @@ public class Preferences        // System wide one stop place to set all setting
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Device-Identification";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "Deployment-Identification";      // Deployment ID
-    public String Role = "Role";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
@@ -34,7 +34,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_Time_Hour = 21;       // Hour at which the automatic daily ema should start
     public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
-    public int EoDEMA_ManualStart_Hour = 17;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Hour = 16;       // Hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop | This is the actual hour that you want it to stop on.(If you are stopping on the hour, make sure it is off by 1

@@ -519,7 +519,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                                 datalog.LogData();      // Saves the data into the directory.
 
-                                wifi.setWifiEnabled(false);     // Disable the wifi.
+//                                wifi.setWifiEnabled(false);     // Disable the wifi.
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
 
@@ -621,22 +621,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, "Date");      // Logs date data to the file.
             DailyActivity.LogData();      // Logs the data to the BESI_C directory.
         }
-        else if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
-        {
-            EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
-            EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
-            Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
-            Daily_Survey.setBackgroundColor(Color.GRAY);        // Sets the color of button to grey.
-            Daily_Survey.setOnClickListener( new View.OnClickListener()    // If the daily EMA  button is clicked
-            {
-                public void onClick(View view)      // When the back button is clicked.
-                {
-                    vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
 
-                    // Do nothing
-                }
-            });
-        }
         if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
         {
             EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
@@ -648,6 +633,13 @@ public class MainActivity extends WearableActivity  // This is the activity that
             EMA_Start.setVisibility(View.VISIBLE);          // Sets the normal button to visible
             EOD_EMA_Start.setVisibility(View.INVISIBLE);    // Sets the daily EMA start button to invisible
             Daily_Survey.setVisibility(View.INVISIBLE);     // Sets the daily EMA button to invisible.
+        }
+
+        if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
+        {
+            EMA_Start.setVisibility(View.VISIBLE);        // Sets the normal button to invisible
+            EOD_EMA_Start.setVisibility(View.INVISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            Daily_Survey.setVisibility(View.INVISIBLE);       // Sets the daily EMA button to visible.
         }
     }
 
