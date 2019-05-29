@@ -36,12 +36,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.view.View.INVISIBLE;
+
 /* ************************************************************************************* MAIN ACTIVITY OF THE APP ************************************************************************************************** */
 @SuppressWarnings("ALL")
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP, EMA_Start, EOD_EMA_Start, Daily_Survey;       // This is the sleep button
+    private Button SLEEP, EMA_Start, EOD_EMA_Start, Daily_Survey, SleepButton;       // This is the sleep button
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -128,6 +130,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
+
+        EMA_Start.setVisibility(INVISIBLE);
 
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
@@ -282,7 +286,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             }
         });
 
-        SLEEP.setOnClickListener(new View.OnClickListener()        // Listens for the SLEEP button "SLEEP" to be clicked.
+        View.OnClickListener ClickSleep = new View.OnClickListener()        // Listens for the SLEEP button "SLEEP" to be clicked.
         {
             @SuppressLint("SetTextI18n")        // Suppresses some error messages.
             public void onClick(View v)     // When the sleep button is clicked
@@ -333,7 +337,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     stepActivity.WriteData();       // Writes no to the system to stop repetitive clicking of sleep button.
 
                     SLEEP.setBackgroundColor(Color.WHITE);      // Changes the color of the Sleep button.
-
+                    //SleepButton.setBackgroundColor(Color.GRAY);
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -382,7 +386,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     wifi.setWifiEnabled(false);     // Disable the wifi.
 
                     SLEEP.setBackgroundColor(Color.BLACK);      // Changes the color of the Sleep button.
-
+                    //SleepButton.setBackgroundColor(Color.BLUE);
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -403,8 +407,22 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         SleepMode = false;      // It sets the boolean value to false.
                     }
                 }
+                if (SleepMode)
+                {
+                    SleepButton.setBackgroundColor(Color.GRAY);
+                }
+                else
+                {
+                    SleepButton.setBackgroundColor(0XFF2979FF);
+                }
             }
-        });
+        };
+
+        SLEEP.setOnClickListener(ClickSleep);
+
+        SleepButton = findViewById(R.id.SleepButton);
+
+        SleepButton.setOnClickListener(ClickSleep);
 
         setAutoResumeEnabled(true);     // Keeps the screen awake.
 
@@ -627,22 +645,25 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
         {
-            EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
-            EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            //EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
+            //EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
             Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
+            SleepButton.setVisibility(INVISIBLE);
         }
         else        // If we are not in the range of time we are looking for.
         {
-            EMA_Start.setVisibility(View.VISIBLE);          // Sets the normal button to visible
-            EOD_EMA_Start.setVisibility(View.INVISIBLE);    // Sets the daily EMA start button to invisible
-            Daily_Survey.setVisibility(View.INVISIBLE);     // Sets the daily EMA button to invisible.
+            //EMA_Start.setVisibility(View.VISIBLE);          // Sets the normal button to visible
+            //EOD_EMA_Start.setVisibility(View.INVISIBLE);    // Sets the daily EMA start button to invisible
+            Daily_Survey.setVisibility(INVISIBLE);     // Sets the daily EMA button to invisible.
+            SleepButton.setVisibility(View.VISIBLE);
         }
 
         if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
         {
-            EMA_Start.setVisibility(View.VISIBLE);        // Sets the normal button to invisible
-            EOD_EMA_Start.setVisibility(View.INVISIBLE);      // Sets a new start with exactly the same attributes as the old one.
-            Daily_Survey.setVisibility(View.INVISIBLE);       // Sets the daily EMA button to visible.
+            //EMA_Start.setVisibility(View.VISIBLE);        // Sets the normal button to invisible
+            //EOD_EMA_Start.setVisibility(View.INVISIBLE);      // Sets a new start with exactly the same attributes as the old one.
+            Daily_Survey.setVisibility(INVISIBLE);       // Sets the daily EMA button to visible.
+            SleepButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -792,5 +813,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, "Date");      // Logs date data to the file.
             DailyActivity.LogData();      // Logs the data to the BESI_C directory.
         }
+    }
+
+    private void Toast(String message)
+    {
+        int duration = Toast.LENGTH_LONG;      // Shows the toast only for a short amount of time.
+        Toast msg = Toast.makeText(getApplicationContext(), message, duration);          // A short message at the end to say thank you.
+        msg.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
+        View view = msg.getView();        // Gets the view from the toast maker
+        TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
+        text.setTextColor(Color.WHITE);     // Changes the color of the text
+        msg.show();       // Shows the toast.
     }
 }

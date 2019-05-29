@@ -64,7 +64,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "What is patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
-                    "Did patient take an opioid for the pain?"
+                    "Did patient take an opioid for the pain?",
+                    "Why not?",
+                    "Are you satisfied with your answers?"
             };
     private final String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
@@ -72,6 +74,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
+                    {"Not time", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
                     {"Yes", "No", "Unsure"}
             };
 
@@ -81,7 +84,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
-                    "Did you take an opioid for the pain?"
+                    "Did you take an opioid for the pain?",
+                    "Why not?",
+                    "Are you satisfied with your answers?"
             };
     private final String[][] PatientAnswers =         // These are the patient answers in order.
             {
@@ -89,6 +94,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
+                    {"Yes", "No"},
+                    {"Not time", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
                     {"Yes", "No"}
             };
 
@@ -202,7 +209,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
     private void QuestionSystem()       // This is the logic behind the question system.
     {
-        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
+        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1 || CurrentQuestion == Questions.length-3)       // If the current question is the first question.
         {
             res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
             res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
@@ -253,7 +260,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
 
-                    if (CurrentQuestion == 0)     // If the answer to is "yes", moves on to question 2
+                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-3)     // If the answer to is "yes", moves on to question 2
                     {
                         UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
@@ -299,12 +306,18 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
                         Submit();       // Submit the survey
                     }
-                    else if (CurrentQuestion == Questions.length-1)     // If this is the last question
+                    else if (CurrentQuestion == Questions.length-3)
                     {
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
-
-                        Submit();       // Submit the survey
+                        UserResponses[CurrentQuestion+1] = null;
+                        CurrentQuestion += 2;
+                        QuestionSystem();
+                    }
+                    else if (CurrentQuestion == Questions.length-1)     // If this is the last question
+                    {
+                        CurrentQuestion = 0;
+                        QuestionSystem();
                     }
                     else        // If we are not on the first question
                     {

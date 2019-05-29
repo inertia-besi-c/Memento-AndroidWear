@@ -139,25 +139,22 @@ class SystemInformation     // Class that acquires the current time from the sys
 
     boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)     // Checks if the current time is between two times
     {
-        String time_regex = "([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])";        // A regex expression for the time in 24 hour format.
-        Pattern pattern = Pattern.compile(time_regex);      // This compiles the regex expression
-        Matcher match = pattern.matcher(currentTime);       // This checks if the regex expression matches the pattern given.
-        if (match.matches())        // If the system time does match
+        if (true)        // If the system time does match
         {
-            String hourString = match.group(1);     // It set the first string to the hour
-            String minuteString = match.group(2);       // It sets the second string to the minutes
-            String secondString = match.group(3);       // Ir sets the thrid string to the seconds
+            String hourString = currentTime.split(":")[0];     // It set the first string to the hour
+            String minuteString = currentTime.split(":")[1];       // It sets the second string to the minutes
+            String secondString = currentTime.split(":")[2];       // Ir sets the thrid string to the seconds
 
             int hour = Integer.parseInt(hourString);        // Makes the string an integer for the hour
             int minute = Integer.parseInt(minuteString);        // Makes the string an integer for the minute
             int second = Integer.parseInt(secondString);        // Makes the string an integer for the seconds
 
-            if ((hour >= startHour && minute >= startMinute && second >= startSecond) && (hour <= endHour && minute <= endMinute && second <= endSecond))    // If the time of the system is between the given time limits
+            if ((hour >= startHour) && (hour < endHour))    // If the time of the system is between the given time limits
             {
                 return true;        // Return true
             }
             return false;       // If it is not between the given limits, return false.
         }
-        return false;       // If it does not match the expression needed, return false.
+        return true;       // If it does not match the expression needed, return false.
     }
 }

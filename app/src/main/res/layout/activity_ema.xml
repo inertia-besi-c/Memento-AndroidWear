@@ -67,7 +67,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="8dp"
-            android:background="@color/blue"
+            android:background="#2979FF"
             android:text="@string/button"
             android:textColor="@color/white"
             android:textSize="18sp"
