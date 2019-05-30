@@ -260,7 +260,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
                     v.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
 
-                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-3)     // Checks the respective question
+                    if (CurrentQuestion == 0)     // Checks the respective question
                     {
                         UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
@@ -274,6 +274,14 @@ public class PainEMA extends WearableActivity       // This is the main activity
                         LogActivity();      // The log activity method is called.
 
                         Submit();       // Submit the survey
+                    }
+                    else if (CurrentQuestion == Questions.length-3)     // Checks the respective question
+                    {
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+                        UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                        CurrentQuestion += 2;       // Skips one question not pertaining to this answer
+                        QuestionSystem();       // Calls the question system method
                     }
                     else        // If we are not on the first question
                     {
@@ -306,18 +314,18 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
                         Submit();       // Submit the survey
                     }
-                    else if (CurrentQuestion == Questions.length-3)     // Checks the respective question
-                    {
-                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
-                        LogActivity();      // The log activity method is called.
-                        UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
-                        CurrentQuestion += 2;       // Skips one question not pertaining to this answer
-                        QuestionSystem();       // Calls the question system method
-                    }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
                         CurrentQuestion = 0;        // Current question is 0
                         QuestionSystem();       // Calls the question system method
+                    }
+                    else if (CurrentQuestion == Questions.length-3)     // Checks the respective question
+                    {
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion++;      // Increments the current question.
+                        QuestionSystem();       // The question system method is called again for the next question.
                     }
                     else        // If we are not on the first question
                     {
