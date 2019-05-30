@@ -68,8 +68,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private File EODEMAfile = new File(Directory, FileName);       // Looks for a filename with the new filename
     private int startHour = Preference.EoDEMA_ManualStart_Hour;     // This is the hour the button pops up
     private int startMinute = Preference.EoDEMA_ManualStart_Minute;     // This is the minute the button pops up
+    private int startSecond = Preference.EoDEMA_ManualStart_Second;     // This is the second the button pops up
     private int endHour = Preference.EoDEMA_ManualEnd_Hour;     // This is the hour the button goes away
     private int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
+    private int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
     private int UIUpdatevariable = 0;
     private boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
@@ -580,7 +582,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             DailyActivity.LogData();      // Logs the data to the BESI_C directory.
         }
 
-        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute))         /* Checks if the daily EMA button should be up */
+        if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
         {
             Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
             SLEEP.setVisibility(INVISIBLE);     // Sets the sleep button to invisible

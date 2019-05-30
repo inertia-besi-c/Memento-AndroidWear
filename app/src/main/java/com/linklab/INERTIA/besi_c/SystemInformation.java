@@ -135,15 +135,17 @@ class SystemInformation     // Class that acquires the current time from the sys
         return isCharging.get();        // Return true, or false.
     }
 
-    boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute)     // Checks if the current time is between two times
+    boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)     // Checks if the current time is between two times
     {
         if (true)        // If the system time does match
         {
             String hourString = currentTime.split(":")[0];     // It set the first string to the hour
             String minuteString = currentTime.split(":")[1];       // It sets the second string to the minutes
+            String secondString = currentTime.split(":")[2];       // Ir sets the thrid string to the seconds
 
             int hour = Integer.parseInt(hourString);        // Makes the string an integer for the hour
             int minute = Integer.parseInt(minuteString);        // Makes the string an integer for the minute
+            int second = Integer.parseInt(secondString);        // Makes the string an integer for the seconds
 
             if ((hour >= startHour) && (hour < endHour))    // If the time of the system is between the given time limits
             {
@@ -153,9 +155,20 @@ class SystemInformation     // Class that acquires the current time from the sys
             {
                 if (hour == endHour)        // Check if the hour is the current hour
                 {
-                    if ((minute <= endMinute))      // Check the minute, anbd if it is less than the end minute time
+                    if ((minute >= startMinute) && (minute < endMinute))      // Check the minute, and if it is less than the end minute time
                     {
                         return true;        // Return true
+                    }
+                    else        // If it fails the first check
+                    {
+                        if (minute == endMinute)        // Check if the minute is the current minute
+                        {
+                            if ((second >= startSecond) && (second < endSecond))      // Check the seconds, and if it is less than the end second time
+                            {
+                                return true;        // Return true
+                            }
+                        }
+                        return false;       // If not return false
                     }
                 }
                 return false;       // If not return false
