@@ -43,7 +43,7 @@ import static android.view.View.INVISIBLE;
 public class MainActivity extends WearableActivity  // This is the activity that runs on the main screen. This is the main User interface and dominates the start of the app.
 {
     private TextView batteryLevel, date, time;    // This is the variables that shows the battery level, date, and time
-    private Button SLEEP, EMA_Start, EOD_EMA_Start, Daily_Survey, SleepButton;       // This is the sleep button
+    private Button SLEEP, EMA_Start, EOD_EMA_Start, Daily_Survey;       // This is the sleep button
     private Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -123,15 +123,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
 
-        EOD_EMA_Start = findViewById(R.id.EOD_EMA_Start);        // This is the first ema button that is mainly used by the system
         EMA_Start = findViewById(R.id.EMA_Start);      // This is the second ema button that is used
         Daily_Survey = findViewById(R.id.DAILY_SURVEY);       // This is the end of day EMA button
         SLEEP = findViewById(R.id.SLEEP);        // The sleep button is made
         batteryLevel = findViewById(R.id.BATTERY_LEVEL);    // Battery level view ID
         date = findViewById(R.id.DATE);     // The date view ID
         time = findViewById(R.id.TIME);     // The time view ID
-
-        EMA_Start.setVisibility(INVISIBLE);
 
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
         if (!isRunning(HRTimerService.class))       // Starts the heart rate timer controller
@@ -175,51 +172,6 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
 
         EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
-        {
-            public void onClick(View v)     // When the button is clicked the is run
-            {
-                File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
-                if (system.exists())      // If the file exists
-                {
-                    Log.i("Main Activity", "No Header Created");     // Logs to console
-                }
-                else        // If the file does not exist
-                {
-                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
-
-                    DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
-                    dataLogger.LogData();       // Saves the data to the directory.
-                }
-
-                File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-                if (sensors.exists())      // If the file exists
-                {
-                    Log.i("Main Activity", "No Header Created");     // Logs to console
-                }
-                else        // If the file does not exist
-                {
-                    Log.i("Main Activity", "Creating Header");     // Logs on Console.
-
-                    DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-                    dataLogger.LogData();       // Saves the data to the directory.
-                }
-
-                vibrator.vibrate(HapticFeedback);      // A slight haptic feedback is provided.
-
-                String data =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
-                datalog.LogData();      // Saves the data into the directory.
-
-                String data1 =  ("Main Activity," + "'Start' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog1 = new DataLogger(Subdirectory_EMAActivities, Pain_Activity, data1);      // Logs it into a file called Preferences.
-                datalog1.LogData();      // Saves the data into the directory.
-
-                Intent StartEMAActivity = new Intent(getBaseContext(), PainEMA.class);      // Links to the Pain EMA File
-                startActivity(StartEMAActivity);    // Starts the Pain EMA file
-            }
-        });
-
-        EOD_EMA_Start.setOnClickListener(new View.OnClickListener()     /* Listens for the EMA button "START" to be clicked. */
         {
             public void onClick(View v)     // When the button is clicked the is run
             {
@@ -336,8 +288,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
                     stepActivity.WriteData();       // Writes no to the system to stop repetitive clicking of sleep button.
 
-                    SLEEP.setBackgroundColor(Color.WHITE);      // Changes the color of the Sleep button.
-                    //SleepButton.setBackgroundColor(Color.GRAY);
+                    SLEEP.setBackgroundColor(Color.GRAY);      // Changes the color of the Sleep button.
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -385,8 +337,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                     wifi.setWifiEnabled(false);     // Disable the wifi.
 
-                    SLEEP.setBackgroundColor(Color.BLACK);      // Changes the color of the Sleep button.
-                    //SleepButton.setBackgroundColor(Color.BLUE);
+                    SLEEP.setBackgroundColor(Color.BLUE);      // Changes the color of the Sleep button.
+
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -407,22 +359,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         SleepMode = false;      // It sets the boolean value to false.
                     }
                 }
-                if (SleepMode)
-                {
-                    SleepButton.setBackgroundColor(Color.GRAY);
-                }
-                else
-                {
-                    SleepButton.setBackgroundColor(0XFF2979FF);
-                }
             }
         };
-
-        SLEEP.setOnClickListener(ClickSleep);
-
-        SleepButton = findViewById(R.id.SleepButton);
-
-        SleepButton.setOnClickListener(ClickSleep);
 
         setAutoResumeEnabled(true);     // Keeps the screen awake.
 
@@ -435,6 +373,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             // Do nothing
         }
 
+        SLEEP.setOnClickListener(ClickSleep);   // Ties the sleep button to the clicksleep listener.
         EODEMAUIUpdater();      // Calls the system to update itself immediatelty
     }
 
@@ -645,25 +584,19 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
         {
-            //EMA_Start.setVisibility(View.INVISIBLE);        // Sets the normal button to invisible
-            //EOD_EMA_Start.setVisibility(View.VISIBLE);      // Sets a new start with exactly the same attributes as the old one.
             Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
-            SleepButton.setVisibility(INVISIBLE);
+            SLEEP.setVisibility(INVISIBLE);     // Sets the sleep button to invisible
         }
         else        // If we are not in the range of time we are looking for.
         {
-            //EMA_Start.setVisibility(View.VISIBLE);          // Sets the normal button to visible
-            //EOD_EMA_Start.setVisibility(View.INVISIBLE);    // Sets the daily EMA start button to invisible
             Daily_Survey.setVisibility(INVISIBLE);     // Sets the daily EMA button to invisible.
-            SleepButton.setVisibility(View.VISIBLE);
+            SLEEP.setVisibility(View.VISIBLE);      // Sets the sleep button to visibile
         }
 
         if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
         {
-            //EMA_Start.setVisibility(View.VISIBLE);        // Sets the normal button to invisible
-            //EOD_EMA_Start.setVisibility(View.INVISIBLE);      // Sets a new start with exactly the same attributes as the old one.
             Daily_Survey.setVisibility(INVISIBLE);       // Sets the daily EMA button to visible.
-            SleepButton.setVisibility(View.VISIBLE);
+            SLEEP.setVisibility(View.VISIBLE);      // Sets the sleep button to visible.
         }
     }
 

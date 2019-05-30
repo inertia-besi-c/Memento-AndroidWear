@@ -15,8 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 class SystemInformation     // Class that acquires the current time from the system and saves it.
@@ -153,8 +151,29 @@ class SystemInformation     // Class that acquires the current time from the sys
             {
                 return true;        // Return true
             }
-            return false;       // If it is not between the given limits, return false.
+            else        // If it fails the first check
+            {
+                if (hour == endHour)        // Check if the hour is the current hour
+                {
+                    if ((minute >= startMinute) && (minute < endMinute))      // Check the minute, and if it is less than the end minute time
+                    {
+                        return true;        // Return true
+                    }
+                    else        // If it fails the first check
+                    {
+                        if (minute == endMinute)        // Check if the minute is the current minute
+                        {
+                            if ((second >= startSecond) && (second < endSecond))      // Check the seconds, and if it is less than the end second time
+                            {
+                                return true;        // Return true
+                            }
+                        }
+                        return false;       // If not return false
+                    }
+                }
+                return false;       // If not return false
+            }
         }
-        return true;       // If it does not match the expression needed, return false.
+        return false;       // If it does not match the time needed, return false.
     }
 }
