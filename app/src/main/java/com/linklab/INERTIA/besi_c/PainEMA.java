@@ -74,8 +74,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
+                    {"Yes", "No", "Unsure"},
                     {"Not time", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
-                    {"Yes", "No", "Unsure"}
+                    {"Yes", "No"},
             };
 
     private final String[] PatientQuestions =         // These are the patient questions in order.
