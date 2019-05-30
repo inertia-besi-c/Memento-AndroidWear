@@ -337,25 +337,33 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                     wifi.setWifiEnabled(false);     // Disable the wifi.
 
-                    SLEEP.setBackgroundColor(Color.BLUE);      // Changes the color of the Sleep button.
-
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
+                        SLEEP.setBackgroundColor(Color.GRAY);      // Changes the color of the Sleep button.
+
                         String dataHR =  ("Sleep Button," + "Stopped Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                         DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
                         datalogHR.LogData();      // Saves the data into the directory.
 
                         stopService(HRService);     // It stops the service
+                        stopService(AccelService);        // Stop the service.
+                        stopService(EstimService);        // Stop the service.
+
                         SleepMode = true;       // And it sets the boolean value to true.
                     }
 
                     else        // If the heart rate timer is not running
                     {
+                        SLEEP.setBackgroundColor(Color.BLUE);      // Changes the color of the Sleep button.
+
                         String dataHR =  ("Sleep Button," + "Started Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                         DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
                         datalogHR.LogData();      // Saves the data into the directory.
 
-                        startService(HRService);        // It starts the heart rate timer service
+                        startService(HRService);     // It starts the service
+                        startService(AccelService);        // It starts the service.
+                        startService(EstimService);        // It starts the service.
+
                         SleepMode = false;      // It sets the boolean value to false.
                     }
                 }
