@@ -15,8 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 class SystemInformation     // Class that acquires the current time from the system and saves it.
@@ -137,24 +135,32 @@ class SystemInformation     // Class that acquires the current time from the sys
         return isCharging.get();        // Return true, or false.
     }
 
-    boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute, int startSecond, int endSecond)     // Checks if the current time is between two times
+    boolean isTimeBetweenTimes (String currentTime, int startHour, int endHour, int startMinute, int endMinute)     // Checks if the current time is between two times
     {
         if (true)        // If the system time does match
         {
             String hourString = currentTime.split(":")[0];     // It set the first string to the hour
             String minuteString = currentTime.split(":")[1];       // It sets the second string to the minutes
-            String secondString = currentTime.split(":")[2];       // Ir sets the thrid string to the seconds
 
             int hour = Integer.parseInt(hourString);        // Makes the string an integer for the hour
             int minute = Integer.parseInt(minuteString);        // Makes the string an integer for the minute
-            int second = Integer.parseInt(secondString);        // Makes the string an integer for the seconds
 
             if ((hour >= startHour) && (hour < endHour))    // If the time of the system is between the given time limits
             {
                 return true;        // Return true
             }
-            return false;       // If it is not between the given limits, return false.
+            else        // If it fails the first check
+            {
+                if (hour == endHour)        // Check if the hour is the current hour
+                {
+                    if ((minute <= endMinute))      // Check the minute, anbd if it is less than the end minute time
+                    {
+                        return true;        // Return true
+                    }
+                }
+                return false;       // If not return false
+            }
         }
-        return true;       // If it does not match the expression needed, return false.
+        return false;       // If it does not match the time needed, return false.
     }
 }

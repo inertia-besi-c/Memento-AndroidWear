@@ -20,35 +20,40 @@ public class Preferences        // System wide one stop place to set all setting
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema
-    public int PainEMAReminderInterval = 5*60*1000;         // How long to wait between each ping reminding user to complete ema
+    public int PainEMAReminderInterval = 5 * 60 * 1000;         // How long to wait between each ping reminding user to complete ema
     public int PainEMAReminderNumber = 2;       // How many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
-    public int FollowUpEMATimer = 30*60*1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMATimer = 30 * 60 * 1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
     public int FollowupEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema
     public int FollowUpEMAReminderNumber = 3;       // How many times to remind the wearer to complete the follow-up ema
-    public int FollowUpEMAReminderInterval = 5*60*1000;         // How long to wait between each ping reminding user to complete ema
+    public int FollowUpEMAReminderInterval = 5 * 60 * 1000;         // How long to wait between each ping reminding user to complete ema
 
-    // Settings for Daily EMA | Time is in ms |
-    public long EoDPrompt_TimeOut = 15*60*1000;         // Delay before snoozing and eventually dismissing daily ema
+    // Settings for Daily EMA | Time is in milliseconds unless specified otherwise |
+    public long EoDPrompt_TimeOut = 15 * 60 * 1000;         // Delay before snoozing and eventually dismissing daily ema
+    public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
+    public long EoDEMA_Period = 24 * 60 * 60 * 1000;      // This is how often the timer waits before firing again
+    public int EoDEMAReminderDelay = 0;         // How long to give the user before starting the timer to remind user to complete the ema
+    public int EoDEMAReminderInterval = 5 * 60 * 1000;      // How long to wait between each ping reminding user to complete ema
+    public int EoDEMAReminderNumber = 2;        // How many times to remind the wearer to complete ema
+    /* The times should be exactly on the time you want it to come on */
     public int EoDEMA_Time_Hour = 21;       // Hour at which the automatic daily ema should start
     public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
-    public int EoDEMA_ManualStart_Hour = 9;       // Hour at which the automatic daily ema should start
-    public int EoDEMA_ManualEnd_Hour = 21;       // Hour at which the automatic daily ema should stop
-    public long EoDEMA_Timer_Delay = 10 * 60 * 1000;        // This is how often the timer waits before firing again
-    public long EoDEMA_Period = 24*60*60*1000;      // This is how often the timer waits before firing again
-    public int EoDEMAReminderDelay = 0;         // How long to give the user before starting the timer to remind user to complete the ema
-    public int EoDEMAReminderInterval = 5*60*1000;      // How long to wait between each ping reminding user to complete ema
-    public int EoDEMAReminderNumber = 2;        // How many times to remind the wearer to complete ema
+    /* The start time should always be on the exact time that you want them to start */
+    public int EoDEMA_ManualStart_Hour = 17;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
+    /* The end time should always be one minute off from desired mark. */
+    public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop
 
     // Settings for Heart Rate Monitoring | Time is in ms |
     public long HRSampleDuration = 30000;           // How long should heart rate be measured each time?
-    public long HRMeasurementInterval = 5*60*1000;          // Every how often should a measurement be taken?
+    public long HRMeasurementInterval = 5 * 60 * 1000;          // Every how often should a measurement be taken?
 
     // Settings for Estimote | Time is in ms |
-    public long ESSampleDuration = 15*1000;           // How long should estimote be measured each time?
-    public long ESMeasurementInterval = 15*60*100;          // Every how often should a measurement be taken?
+    public long ESSampleDuration = 15 * 1000;           // How long should estimote be measured each time?
+    public long ESMeasurementInterval = 15 * 60 * 100;          // Every how often should a measurement be taken?
     public int MaxActivityCycleCount = 5;       // How many cycles of estimote service running with no step activity before estimote doesn't run.
 
     // Settings for the Accelerometer Sensor | Time is in ms |
@@ -102,9 +107,4 @@ public class Preferences        // System wide one stop place to set all setting
     public String Step_Data_Headers = "yes";        // Column Headers for Steps.
     public String EODEMA_Date_Headers = "Date";     // Column Header for the EODEMA daily.
 
-    //***DEPRICATED***
-    public int EoDEMA_ManualStart_Minute = 0;      // Minute of hour at which the automatic daily ema should start | ***DEPRICATED***
-    public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start | ***DEPRICATED***
-    public int EoDEMA_ManualEnd_Minute = 0;      // Minute of hour at which the automatic daily ema should stop  | ***DEPRICATED***
-    public int EoDEMA_ManualEnd_Second = 0;      // Second of minute at which the automatic daily ema should stop | ***DEPRICATED***
 }
