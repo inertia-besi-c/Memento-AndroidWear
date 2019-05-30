@@ -45,8 +45,8 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The end time should always be one second off from desired mark. */
-    public int EoDEMA_ManualEnd_Hour = 23;       // Hour at which the automatic daily ema should stop
-    public int EoDEMA_ManualEnd_Minute = 55;      // Minute of hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Hour = 21;       // Hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop
 
     // Settings for Heart Rate Monitoring | Time is in ms |
