@@ -5,12 +5,13 @@ import android.os.Environment;
 @SuppressWarnings("ALL")    // Service wide suppression for the Errors.
 public class Preferences        // System wide one stop place to set all settings for a particular individual
 {
+    SystemInformation systemInformation = new SystemInformation();      // Imports the system information settings.
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "Caregiver-Device";        // Internal ID of Device assigned to Dyad
+    public String DeviceID = "DEVICE IDENTIFICATION";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "P3D1-Development";      // Deployment ID
-    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
@@ -66,7 +67,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
-    public String Accelerometer = "Accelerometer_Data.csv";     // This is the Accelerometer File
+    public String Accelerometer = "Accelerometer_Data" + "_" + String.valueOf(systemInformation.getDataStamp()) + ".csv";     // This is the Accelerometer File
     public String Battery = "Battery_Activity.csv";        // This is the Battery Information Folder
     public String Estimote = "Estimote_Data.csv";      // This is the Estimote File
     public String Pedometer = "Pedometer_Data.csv";        // This is the Pedometer File
