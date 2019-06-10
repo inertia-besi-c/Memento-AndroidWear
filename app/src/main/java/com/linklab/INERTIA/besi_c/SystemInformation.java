@@ -75,6 +75,13 @@ class SystemInformation     // Class that acquires the current time from the sys
         return timeFormat.format(current);       // The current time is set to show on the time text view.
     }
 
+    String getTimeStamp()        // Puts the system time acquired into the desired format wanted.
+    {
+        DateFormat datetimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS", Locale.US);      // Specified format of the time, in US style.
+        Date current = new Date();      // Calls the current date from the system.
+        return datetimeFormat.format(current);  // Returns the date and time the system is in.
+    }
+
     String getTimeMilitary()        // Gets the current time in military format
     {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);      // The time format military wise is called in US format.
@@ -89,18 +96,11 @@ class SystemInformation     // Class that acquires the current time from the sys
         return dateFormat.format(current);       // The current date is set to show on the date text view.
     }
 
-    String getDataStamp()       // Gets the data stamp from the system
+    String getDateStamp()       // Gets the data stamp from the system
     {
         Date current = new Date();      // The current date and timer is set.
-        DateFormat dateFormat = new SimpleDateFormat("MMM_d_yyyy", Locale.US);     // The date is called in US format.
+        DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd", Locale.US);     // The date is called in US format.
         return dateFormat.format(current);       // The current date is set to show on the date text view.
-    }
-
-    String getTimeStamp()        // Puts the system time acquired into the desired format wanted.
-    {
-        DateFormat datetimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS", Locale.US);      // Specified format of the time, in US style.
-        Date current = new Date();      // Calls the current date from the system.
-        return datetimeFormat.format(current);  // Returns the date and time the system is in.
     }
 
     String getFolderTimeStamp()        // Puts the system time acquired into the desired format wanted.
