@@ -8,8 +8,8 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "Caregiver-Device";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "P3D1-Development";      // Deployment ID
+    public String DeviceID = "CG2";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "P3D1-V";      // Deployment ID
     public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
@@ -45,7 +45,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The end time should always be one second off from desired mark. */
-    public int EoDEMA_ManualEnd_Hour = 21;       // Hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop
 
