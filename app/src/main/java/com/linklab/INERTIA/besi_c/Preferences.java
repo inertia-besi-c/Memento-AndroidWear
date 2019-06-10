@@ -67,7 +67,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
-    public String Accelerometer = "Accelerometer_Data" + "_" + String.valueOf(systemInformation.getDataStamp()) + ".csv";     // This is the Accelerometer File
+    public String Accelerometer = "Accelerometer_Data" + "_" + String.valueOf(systemInformation.getDateStamp()) + ".csv";     // This is the Accelerometer File
     public String Battery = "Battery_Activity.csv";        // This is the Battery Information Folder
     public String Estimote = "Estimote_Data.csv";      // This is the Estimote File
     public String Pedometer = "Pedometer_Data.csv";        // This is the Pedometer File
