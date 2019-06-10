@@ -89,6 +89,13 @@ class SystemInformation     // Class that acquires the current time from the sys
         return dateFormat.format(current);       // The current date is set to show on the date text view.
     }
 
+    String getDataStamp()       // Gets the data stamp from the system
+    {
+        Date current = new Date();      // The current date and timer is set.
+        DateFormat dateFormat = new SimpleDateFormat("MMM_d_yyyy", Locale.US);     // The date is called in US format.
+        return dateFormat.format(current);       // The current date is set to show on the date text view.
+    }
+
     String getTimeStamp()        // Puts the system time acquired into the desired format wanted.
     {
         DateFormat datetimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS", Locale.US);      // Specified format of the time, in US style.

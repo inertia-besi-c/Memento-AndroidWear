@@ -335,7 +335,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     DataLogger datalogwifi = new DataLogger(Subdirectory_DeviceLogs, Sensors, datawifi);      // Logs it into a file called System Activity.
                     datalogwifi.LogData();      // Saves the data into the directory.
 
-                    wifi.setWifiEnabled(false);     // Disable the wifi.
+//                    wifi.setWifiEnabled(false);     // Disable the wifi.
 
                     if (isRunning(HRTimerService.class))        // If the heart rate timer service is running
                     {
@@ -486,7 +486,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
 
-                                    wifi.setWifiEnabled(false);     // Disable the wifi.
+//                                    wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
