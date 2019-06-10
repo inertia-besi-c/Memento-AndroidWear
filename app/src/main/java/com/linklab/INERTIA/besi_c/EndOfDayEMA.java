@@ -63,6 +63,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                     "How active were you?",
                     "How busy was your home?",
+                    "Where did you spend most of your time today?",
                     "Time spent outside the home?",
                     "Time spent with the patient?",
                     "Time spent with other people?",
@@ -76,6 +77,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very"},
+                    {"Living Room", "Bedroom", "Kitchen", "Outside the house", "Other"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
@@ -90,6 +92,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                     "How active were you?",
                     "How busy was your home?",
+                    "Where did you spend most of your time today?",
                     "Time spent outside the home?",
                     "Time spent with your caregiver?",
                     "Time spent with other people?",
@@ -103,6 +106,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very"},
+                    {"Living Room", "Bedroom", "Kitchen", "Outside the house", "Other"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
