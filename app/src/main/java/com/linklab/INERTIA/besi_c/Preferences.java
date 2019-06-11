@@ -5,13 +5,12 @@ import android.os.Environment;
 @SuppressWarnings("ALL")    // Service wide suppression for the Errors.
 public class Preferences        // System wide one stop place to set all settings for a particular individual
 {
-    SystemInformation systemInformation = new SystemInformation();      // Imports the system information settings.
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "DEVICE-IDENTIFICATION";        // Internal ID of Device assigned to Dyad
+    public String DeviceID = "PT2";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "P3D1-V";      // Deployment ID
-    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
