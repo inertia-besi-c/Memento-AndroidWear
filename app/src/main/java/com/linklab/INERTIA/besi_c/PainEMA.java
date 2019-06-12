@@ -361,7 +361,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Pain_Results, log.toString());        /* Logs the pain data in a csv format */
         dataLogger.LogData();       // Saves the data to the directory.
 
-        if(UserResponses[Questions.length -1] != null && UserResponses[Questions.length - 1].toLowerCase().contains("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
+        if(UserResponses[Questions.length - 3] != null && UserResponses[Questions.length - 3].toLowerCase().contains("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
         {
             Intent FollowUpScheduler = new Intent(getApplicationContext(), FollowUpEMASchedulerService.class);      // Gets an intent for the followup EMA
             startService(FollowUpScheduler);        // Starts the service with the scheduler.
