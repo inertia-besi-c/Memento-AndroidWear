@@ -39,7 +39,7 @@ class SystemInformation     // Class that acquires the current time from the sys
     private String Heart_Rate = Preference.Heart_Rate;       // Gets the Heart Rate files from preferences
 
     /* File path for Adding Headers to Individual File Name */
-    public String Accelerometer_Path = Preference.Subdirectory_Accelerometer + "/" + DeviceID + "_" + Accelerometer;     // This is the Accelerometer File path
+    public String Accelerometer_Path = Preference.Subdirectory_Accelerometer + "/" + DeviceID + "_" + "Accelerometer_Data_" + getDateStamp() + ".csv";     // This is the Accelerometer File path
     public String Battery_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + Battery;        // This is the Battery Information Folder path
     public String Estimote_Path = Preference.Subdirectory_Estimote + "/" + DeviceID + "_" + Estimote;      // This is the Estimote File path
     public String Pedometer_Path = Preference.Subdirectory_DeviceLogs + "/" + DeviceID + "_" + Pedometer;        // This is the Pedometer File path
