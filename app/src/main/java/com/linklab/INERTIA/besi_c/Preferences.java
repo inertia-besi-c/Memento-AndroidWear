@@ -10,7 +10,7 @@ public class Preferences        // System wide one stop place to set all setting
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "DEVICE-IDENTIFICATION";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "P3D1-V";      // Deployment ID
-    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
@@ -66,7 +66,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
-    public String Accelerometer = "Accelerometer_Data.csv";     // This is the Accelerometer File
+    public String Accelerometer = "Accelerometer_Data";     // This is the Accelerometer File (DO NOT ADD .CSV here as the accelerometer data are saved differently)
     public String Battery = "Battery_Activity.csv";        // This is the Battery Information Folder
     public String Estimote = "Estimote_Data.csv";      // This is the Estimote File
     public String Pedometer = "Pedometer_Data.csv";        // This is the Pedometer File
@@ -94,7 +94,7 @@ public class Preferences        // System wide one stop place to set all setting
     /* Headers to individual files that are being logged to <--------------------------------------------- This is the order that the headers will appear in */
     public String EndOfDay_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for EndOfDay_EMA_Activity
     public String EndOfDay_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
-            "Question 6 Answer, Question 7 Answer, Question 8 Answer, Question 9 Answer, Question 10 Answer";        // Column Headers for EndOfDay_EMA_Results
+                                                 "Question 6 Answer, Question 7 Answer, Question 8 Answer, Question 9 Answer, Question 10 Answer";        // Column Headers for EndOfDay_EMA_Results
     public String Pain_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Pain_EMA_Activity
     public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";       // Column Headers for Pain_EMA_Results
     public String Followup_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Followup_EMA_Activity
@@ -108,5 +108,4 @@ public class Preferences        // System wide one stop place to set all setting
     public String System_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the System Logs.
     public String Step_Data_Headers = "yes";        // Column Headers for Steps.
     public String EODEMA_Date_Headers = "Date";     // Column Header for the EODEMA daily.
-
 }

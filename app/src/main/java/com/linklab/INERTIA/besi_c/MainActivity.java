@@ -84,8 +84,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
     protected void onCreate(Bundle savedInstanceState)      // This is created on startup
     {
         /* ***************************************************** PERMISSIONS NEED TO BE CHECKED AND REQUESTED BEFORE STARTING ANY SERVICES OR DRAWING UI ****************************************************** */
-        CheckPermissions();
-        /*  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
+        CheckPermissions();     // Checks the permissions needed for the device to save files and operate within normal parameter.
+
+        /*  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  */
 
         super.onCreate(savedInstanceState);      // Creates the main screen.
         setContentView(R.layout.activity_main);     // This is where the texts and buttons seen were made. (Look into: res/layout/activity_main)
@@ -458,7 +459,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
 
-//                                    wifi.setWifiEnabled(false);     // Disable the wifi.
+                                    wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
                             }
@@ -523,7 +524,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
     @Override
     public void onResume()      // When the system resumes
     {
-        CheckPermissions();
+        CheckPermissions();     // Checks that all the permissions needed are enabled. If not, it request them.
         CheckFiles();       // Checks the files and subdirectories to make sure the system files are up
 
         final Intent HRService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
