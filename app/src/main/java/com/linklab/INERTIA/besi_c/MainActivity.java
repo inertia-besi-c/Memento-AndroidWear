@@ -494,6 +494,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         String[] Required_Permissions =     // Checks if Device has permission to work on device.
                 {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,     // This is to access the storage
+                        Manifest.permission.READ_EXTERNAL_STORAGE,      // This is to access the storage
                         Manifest.permission.BODY_SENSORS,       // This is to access the sensors of the device
                         Manifest.permission.ACCESS_WIFI_STATE,      // This is to access the wifi of the device.
                         Manifest.permission.CHANGE_WIFI_STATE,      // This is to change the wifi state of the device.
