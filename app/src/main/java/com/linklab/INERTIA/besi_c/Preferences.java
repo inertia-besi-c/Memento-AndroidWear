@@ -67,7 +67,7 @@ public class Preferences        // System wide one stop place to set all setting
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
     public String Accelerometer = "Accelerometer_Data";     // This is the Accelerometer File (DO NOT ADD .CSV here as the accelerometer data are saved differently)
-    public String Battery = "Battery_Activity.csv";        // This is the Battery Information Folder
+    public String Battery = "Battery_Activity.csv";        // This is the Battery Information File
     public String Estimote = "Estimote_Data.csv";      // This is the Estimote File
     public String Pedometer = "Pedometer_Data.csv";        // This is the Pedometer File
     public String Pain_Activity = "Pain_EMA_Activity.csv";     // This is the Pain EMA Activity File
