@@ -63,7 +63,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
             {
                     "How active were you?",
                     "How busy was your home?",
-                    "Where did you spend most of your time today?",
                     "Time spent outside the home?",
                     "Time spent with the patient?",
                     "Time spent with other people?",
@@ -72,12 +71,13 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How was your mood?",
                     "How distressed were you overall?",
                     "How distressed was the patient overall?",
+                    "Where did you spend most time?",
+                    "Ready to submit your answers?",
             };
     private final String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very"},
-                    {"Living Room", "Bedroom", "Kitchen", "Outside the house", "Other"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
@@ -86,13 +86,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
+                    {"Living Room", "Bedroom", "Kitchen", "Outside the home", "Other"},
+                    {"Yes", "No"},
             };
 
     private final String[] PatientQuestions =      // These are strictly the patient questions.
             {
                     "How active were you?",
                     "How busy was your home?",
-                    "Where did you spend most of your time today?",
                     "Time spent outside the home?",
                     "Time spent with your caregiver?",
                     "Time spent with other people?",
@@ -101,12 +102,13 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How was your mood?",
                     "How distressed were you overall?",
                     "How distressed was your caregiver overall?",
+                    "Where did you spend most time?",
+                    "Ready to submit your answers?",
             };
     private final String[][] PatientAnswers =      // These are strictly the patient answers.
             {
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very"},
-                    {"Living Room", "Bedroom", "Kitchen", "Outside the house", "Other"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
@@ -115,6 +117,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
+                    {"Living Room", "Bedroom", "Kitchen", "Outside the home", "Other"},
+                    {"Yes", "No"},
             };
 
     @SuppressLint("WakelockTimeout")
@@ -250,26 +254,31 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
     private void QuestionSystem()       // This is the logic behind the question system.
     {
+        res.setVisibility(View.VISIBLE);      // Makes the answer toggle visible
         res2.setVisibility(View.INVISIBLE);     // Sets the second button to be invisible at all times.
 
         if (CurrentQuestion == 0)       // If the current question is the first question.
         {
-            back.setBackgroundColor(getColor(R.color.grey));        // Make the back button greyed out and unresponsive.
+            back.setBackgroundColor(getColor(R.color.grey));        // Make the back button gone.
+            back.setText("");   // Resets the text on the watch
         }
         else        // If we are in any other question.
         {
             back.setBackgroundColor(getColor(R.color.dark_red));        // make the back button dark red and activate it.
+            back.setText("Back");       // Resets the text on the watch
         }
 
         if (CurrentQuestion == Questions.length-1)      // If we are on the last question available
         {
-            next.setText("Done");     // Change the text of the next button to be submit.
+            res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+            res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
+            next.setText(Answers[Questions.length-1][0]);       // Leave the text of the button as the first option in the question
+            back.setText(Answers[Questions.length-1][1]);     // Sets the back button to the second option in the questions
         }
         else        // if we are on any other question
         {
             next.setText("Next");       // Leave the text of the button as next.
         }
-
         if (CurrentQuestion < Questions.length)     // If there are still question left to answer.
         {
             resTaps = UserResponseIndex[CurrentQuestion];       // Get the amount of taps from res taps.
@@ -324,6 +333,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
                         // Do nothing for this first question only.
+                    }
+                    if (CurrentQuestion == Questions.length-1)      // If there are no more questions left or this is the last question
+                    {
+                        CurrentQuestion = 0;      // The number of questions answered is set to the first question.
+                        QuestionSystem();       // The question system method is called again for the next question.
                     }
                     else        // If we are not on the first question
                     {

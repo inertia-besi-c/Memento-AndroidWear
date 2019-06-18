@@ -2,5 +2,5 @@
 <resources>
     <color name="background">#000000</color>
     <color name="digital_text">#ffffff</color>
-    <color name="blue">#ff2979ff</color>
+    <color name="blue">#2979FF</color>
 </resources>
