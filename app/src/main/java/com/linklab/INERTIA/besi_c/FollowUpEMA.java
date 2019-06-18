@@ -62,7 +62,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "What is the patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
-                    "Did the patient take another opioid for the pain?"
+                    "Did the patient take another opioid for the pain?",
+                    "Why not?",
+                    "Ready to submit your answers?",
             };
     private final String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
@@ -70,7 +72,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
-                    {"Yes", "No", "Unsure"}
+                    {"Yes", "No", "Unsure"},
+                    {"Not time yet", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason", "Unsure"},
+                    {"Yes", "No"},
             };
 
     private final String[] PatientQuestions =         // These are the patient questions in order.
@@ -79,7 +83,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
-                    "Did you take another opioid for the pain?"
+                    "Did you take another opioid for the pain?",
+                    "Why not?",
+                    "Ready to submit your answers?",
             };
     private final String[][] PatientAnswers =        // These are the patient answers in order.
             {
@@ -87,7 +93,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
-                    {"Yes", "No"}
+                    {"Yes", "No"},
+                    {"Not time yet", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
+                    {"Yes", "No"},
             };
 
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock from the system.
@@ -200,21 +208,31 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
     private void QuestionSystem()       // This is the logic behind the question system.
     {
-        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
+        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1 || CurrentQuestion == Questions.length-3)       // If the current question is the first question.
         {
-            res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
-            next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
-            back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
-
-            if (Preference.Role.equals("CG"))        // If this is the caregiver watch
+            if (CurrentQuestion == Questions.length-1)      // If this is the last question
             {
-                res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
-                res2.setBackgroundColor(Color.GRAY);        // Makes the button grey
-                res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
-            }
-            if (Preference.Role.equals("PT"))        // If this is the patient watch
-            {
+                res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
                 res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
+                next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+            }
+            else
+            {
+                res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
+                next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+
+                if (Preference.Role.equals("CG"))        // If this is the caregiver watch
+                {
+                    res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
+                    res2.setBackgroundColor(Color.BLUE);        // Makes the button grey
+                    res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
+                }
+                if (Preference.Role.equals("PT"))        // If this is the patient watch
+                {
+                    res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
+                }
             }
         }
         else        // If we are in any other question.
@@ -261,7 +279,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                     v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
 
-                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
+                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-2 || CurrentQuestion == Questions.length-3)       // If the current question is the first question.
                     {
                         if (Preference.Role.equals("CG"))    // If this is the caregiver watch
                         {
@@ -270,12 +288,18 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
-                                CurrentQuestion++;      // Increments the current question.
+                                CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
                             }
-                            if (CurrentQuestion == Questions.length - 1)        // if this is the last question
+                            if (CurrentQuestion == Questions.length - 2)        // if this is the last question
                             {
-                                Submit();       // Submits the survey
+                                CurrentQuestion ++;      // Increments the current question.
+                                QuestionSystem();       // The question system method is called again for the next question.
+                            }
+                            if (CurrentQuestion == Questions.length - 3)        // if this is the last question
+                            {
+                                CurrentQuestion += 2;      // Increments the current question.
+                                QuestionSystem();       // The question system method is called again for the next question.
                             }
                         }
 
@@ -315,6 +339,14 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                         Submit();       // Submit the survey
                     }
+                    else if (CurrentQuestion == Questions.length-3)      // If this is the last question
+                    {
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion += 2;     // Increment the question amount to go forward to the next question
+                        QuestionSystem();       // Call the question method again.
+                    }
                     else        // If we are not on the first question
                     {
                         UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
@@ -351,7 +383,16 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
 
-                        Submit();       // Submit the survey
+                        CurrentQuestion = 0;        // Current question is 0
+                        QuestionSystem();       // Calls the question system method
+                    }
+                    else if (CurrentQuestion == Questions.length-3)     // If this is the last question
+                    {
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion++;        // Current question is 0
+                        QuestionSystem();       // Calls the question system method
                     }
                     else        // If we are not on the first question
                     {
