@@ -45,31 +45,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
     @Override
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
-        File sensors = new File(new Preferences().Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File steps = new File(new Preferences().Directory + SystemInformation.Steps_Path);     // Gets the path to the Sensors from the system.
-        if (steps.exists())      // If the file exists
-        {
-            Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceActivities, Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
+        CheckFiles();       // Checks that the files needed are present
 
         if (!Started)       // If the system is not started.
         {
@@ -88,11 +64,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
             public void run()       // This is run in the thread.
             {
                 File pedometer = new File(new Preferences().Directory + SystemInformation.Pedometer_Path);     // Gets the path to the Pedometer from the system.
-                if (pedometer.exists())      // If the file exists
-                {
-                    Log.i("Pedometer Sensor", "No Header Created");     // Logs to console
-                }
-                else        // If the file does not exist
+                if (!pedometer.exists())      // If the file exists
                 {
                     Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
 
@@ -104,6 +76,27 @@ public class PedometerSensor extends Service implements SensorEventListener     
                 dataLogger.LogData();   // Logs the data to the directory.
             }
         }).start();     // Starts the runnable.
+    }
+
+    private void CheckFiles()
+    {
+        File sensors = new File(new Preferences().Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (!sensors.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, new Preferences().Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File steps = new File(new Preferences().Directory + SystemInformation.Steps_Path);     // Gets the path to the Sensors from the system.
+        if (!steps.exists())      // If the file exists
+        {
+            Log.i("Pedometer Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceActivities, Steps, new Preferences().Step_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
     }
 
     @Override
