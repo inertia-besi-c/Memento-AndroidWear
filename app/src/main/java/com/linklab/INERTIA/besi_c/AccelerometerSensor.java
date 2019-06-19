@@ -72,11 +72,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
                 public void run()       // Re-runs every time.
                 {
                     File accelerometer = new File(Preference.Directory + SystemInformation.Accelerometer_Path);     // Gets the path to the accelerometer from the system.
-                    if (accelerometer.exists())      // If the file exists
-                    {
-                        Log.i("Accelerometer", "No Header Created");     // Logs to console
-                    }
-                    else        // If the file does not exist
+                    if (!accelerometer.exists())      // If the file exists
                     {
                         Log.i("Accelerometer", "Creating Header");     // Logs on Console.
 

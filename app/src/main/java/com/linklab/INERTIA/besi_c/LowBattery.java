@@ -10,6 +10,7 @@ import android.widget.Button;
 public class LowBattery extends WearableActivity
 {
     private final Preferences Preference = new Preferences();     // Gets the preferences list from preferences class
+    private final MainActivity MainActivity = new MainActivity();       // Gets the main activity preferences class
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
     private final String System = Preference.System;     // Gets the sensors from preferences.
@@ -21,7 +22,7 @@ public class LowBattery extends WearableActivity
         super.onCreate(savedInstanceState);     // Makes the screen and saves the instance
         setContentView(R.layout.activity_low_battery);      // Sets the view to show the low battery screen
 
-        if (SystemInformation.isSystemCharging(this))       // If the watch is currently charging,
+        if (SystemInformation.isSystemCharging(this) || MainActivity.SleepMode)       // If the watch is currently charging,
         {
             finish();       // End
         }

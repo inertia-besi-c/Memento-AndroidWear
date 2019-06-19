@@ -125,56 +125,17 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File EODResults = new File(Preference.Directory + SystemInformation.EndOfDay_Results_Path);     // Gets the path to the End of day from the system.
-        if (EODResults.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("End of Day EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, EndOfDay_Results, Preference.EndOfDay_EMA_Results_Headers);        /* Logs the End of day data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File EODActivity = new File(Preference.Directory + SystemInformation.EndOfDay_Activity_Path);     // Gets the path to the End of day from the system.
-        if (EODActivity.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("End of Day EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, EndOfDay_Activity, Preference.EndOfDay_EMA_Activity_Headers);        /* Logs the End of day data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
         Log.i("End of Day EMA", "Starting End of Day EMA Service");     // Logs on Console.
 
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
         wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
-        v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
-
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
+        CheckFiles();       // Calls the check files method.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
+        v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
 
         back = findViewById(R.id.Back);         // Sets the back button to a variable.
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
@@ -351,6 +312,36 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         else        // If there are no more questions to be asked.
         {
             Submit();       // Submit the survey.
+        }
+    }
+
+    private void CheckFiles()       // Checks that the files in the system needed are present
+    {
+        File EODResults = new File(Preference.Directory + SystemInformation.EndOfDay_Results_Path);     // Gets the path to the End of day from the system.
+        if (!EODResults.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, EndOfDay_Results, Preference.EndOfDay_EMA_Results_Headers);        /* Logs the End of day data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File EODActivity = new File(Preference.Directory + SystemInformation.EndOfDay_Activity_Path);     // Gets the path to the End of day from the system.
+        if (!EODActivity.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, EndOfDay_Activity, Preference.EndOfDay_EMA_Activity_Headers);        /* Logs the End of day data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+        if (!system.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
         }
     }
 
