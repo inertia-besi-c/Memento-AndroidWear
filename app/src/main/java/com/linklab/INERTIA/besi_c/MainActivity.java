@@ -600,15 +600,16 @@ public class MainActivity extends WearableActivity  // This is the activity that
             Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
             SLEEP.setVisibility(INVISIBLE);     // Sets the sleep button to invisible
         }
-        else if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
-        {
-            Daily_Survey.setVisibility(INVISIBLE);       // Sets the daily EMA button to visible.
-            SLEEP.setVisibility(View.VISIBLE);      // Sets the sleep button to visible.
-        }
         else        // If we are not in the range of time we are looking for.
         {
             Daily_Survey.setVisibility(INVISIBLE);     // Sets the daily EMA button to invisible.
             SLEEP.setVisibility(View.VISIBLE);      // Sets the sleep button to visibile
+        }
+
+        if (lastLine.equals(String.valueOf(dateFormat.format(date))))       // If the EOD EMA has been done for that day
+        {
+            Daily_Survey.setVisibility(INVISIBLE);       // Sets the daily EMA button to visible.
+            SLEEP.setVisibility(View.VISIBLE);      // Sets the sleep button to visible.
         }
     }
 

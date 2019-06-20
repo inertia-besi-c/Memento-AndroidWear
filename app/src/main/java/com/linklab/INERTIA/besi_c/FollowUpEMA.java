@@ -251,6 +251,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
+                                UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                                LogActivity();      // The log activity method is called.
+
                                 CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
                             }
@@ -305,6 +308,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     else if (CurrentQuestion == Questions.length-3)      // If this is the last question
                     {
                         UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
                         LogActivity();      // The log activity method is called.
 
                         CurrentQuestion += 2;     // Increment the question amount to go forward to the next question

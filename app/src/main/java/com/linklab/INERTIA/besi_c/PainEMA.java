@@ -241,7 +241,10 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {
                         UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
+
                         UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                        LogActivity();      // The log activity method is called.
+
                         CurrentQuestion += 2;       // Skips one question not pertaining to this answer
                         QuestionSystem();       // Calls the question system method
                     }

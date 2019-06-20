@@ -293,9 +293,9 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
                     if (CurrentQuestion == 0)       // If we are on the first question
                     {
-                        // Do nothing for this first question only.
+                        // Do nothing
                     }
-                    if (CurrentQuestion == Questions.length-1)      // If there are no more questions left or this is the last question
+                    else if (CurrentQuestion == Questions.length-1)      // If there are no more questions left or this is the last question
                     {
                         CurrentQuestion = 0;      // The number of questions answered is set to the first question.
                         QuestionSystem();       // The question system method is called again for the next question.
