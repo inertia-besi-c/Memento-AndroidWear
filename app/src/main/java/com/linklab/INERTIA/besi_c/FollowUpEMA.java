@@ -55,6 +55,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private Vibrator v;      // The vibrator that provides haptic feedback.
+    private boolean firstRes2 = false;       // This is the boolean that checks if the res2 was clicked for the caregiver.
 
     private final String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
@@ -251,6 +252,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
+                                firstRes2 = true;       // Sets the value of the res2 button to be true
                                 UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
                                 LogActivity();      // The log activity method is called.
 
@@ -264,6 +266,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                             }
                             if (CurrentQuestion == Questions.length - 3)        // if this is the last question
                             {
+                                UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                                LogActivity();      // The log activity method is called.
+
                                 CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
                             }
@@ -346,6 +351,14 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         LogActivity();      // The log activity method is called.
 
                         Submit();       // Submit the survey
+                    }
+                    else if (Preference.Role.equals("CG") && CurrentQuestion == 2)
+                    {
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion = 0;        // Current question is 0
+                        QuestionSystem();       // Calls the question system method
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
