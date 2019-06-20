@@ -361,7 +361,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             {
                 while (!Main_Timer.isInterrupted())       // While the timer updater is not interrupted by some other system.
                 {
-                    Thread.sleep(10000);     // Wait 10 seconds.
+                    Thread.sleep(5000);     // Wait 10 seconds.
                     runOnUiThread(new Runnable()        // Run this while the user interface is on.
                     {
                         @Override
@@ -446,11 +446,9 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             }
                             else        // If the watch is not charging.
                             {
-                                wifi.setWifiEnabled(false);     // Disable the wifi.
-
-                                if (wifi.isWifiEnabled())       // If the wifi is still when the watch is not charging
+                                if (isDeviceOnline())       // If the wifi is still when the watch is not charging
                                 {
-                                    String data =  ("Main Thread," + "Wifi is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                    String data =  ("Main Thread," + "Internet is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                     DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                                     datalog.LogData();      // Saves the data into the directory.
 
