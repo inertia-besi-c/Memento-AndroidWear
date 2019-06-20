@@ -253,6 +253,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
                                 firstRes2 = true;       // Sets the value of the res2 button to be true
+
                                 UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
                                 LogActivity();      // The log activity method is called.
 
@@ -354,10 +355,18 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     }
                     else if (Preference.Role.equals("CG") && CurrentQuestion == 2)
                     {
+                        if (firstRes2)
+                        {
+                            CurrentQuestion = 0;        // Current question is 0
+                            firstRes2 = false;      // Resets the initial variable
+                        }
+                        else
+                        {
+                            CurrentQuestion = 1;     // Moves back one question
+                        }
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
 
-                        CurrentQuestion = 0;        // Current question is 0
                         QuestionSystem();       // Calls the question system method
                     }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
