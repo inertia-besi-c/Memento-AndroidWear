@@ -362,7 +362,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         }
                         else
                         {
-                            CurrentQuestion = 1;     // Moves back one question
+                            CurrentQuestion --;     // Moves back one question
                         }
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
