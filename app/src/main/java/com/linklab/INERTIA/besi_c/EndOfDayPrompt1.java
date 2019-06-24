@@ -33,31 +33,7 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
     @Override
     protected void onCreate(Bundle savedInstanceState)      // When it is created this is initially run.
     {
-        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
+        CheckFiles();       // Checks the files needed
 
         super.onCreate(savedInstanceState);     // Creates a saved instance.
         setContentView(R.layout.activity_end_of_day_prompt);        // Gets the layout from the activity EOD-EMA
@@ -83,15 +59,17 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Proceed Clicked, Starting End of Day EMA");     // Logs on Console.
 
                 String data =  ("First End of Day EMA Prompt," + "'Proceed' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
-                datalog.LogData();      // Saves the data into the directory.
-
                 String data1 =  ("First End of Day EMA Prompt," + "Started End of Day EMA at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
                 DataLogger datalog1 = new DataLogger(Subdirectory_DeviceLogs, Sensors, data1);      // Logs it into a file called System Activity.
+
+                datalog.LogData();      // Saves the data into the directory.
                 datalog1.LogData();      // Saves the data into the directory.
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
                 startActivity(StartEMAActivity);        // Starts the EOD EMA file.
+
                 finish();       // Finished the EOD EMA screen.
             }
         });
@@ -140,11 +118,12 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Dismiss Clicked, Stopping all End of Day EMA Services");     // Logs on Console.
 
                 String data =  ("First End of Day EMA Prompt," + "'Dismiss' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
-                datalog.LogData();      // Saves the data into the directory.
-
                 String data1 =  ("End of Day Prompt 1," + "Dismissed End of Day EMA at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
                 DataLogger datalog1 = new DataLogger(Subdirectory_DeviceLogs, Sensors, data1);      // Logs it into a file called System Activity.
+
+                datalog.LogData();      // Saves the data into the directory.
                 datalog1.LogData();      // Saves the data into the directory.
 
                 finish();       // Finishes the EOD EMA.
@@ -170,6 +149,27 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
 
         setAmbientEnabled();        // Enables the ambient mode on the system.
         setAutoResumeEnabled(true);     // Resumes the main activity.
+    }
+
+    private void CheckFiles()       // Checks that the files in the system needed are present
+    {
+        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (!sensors.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+        if (!system.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
     }
 
     @Override

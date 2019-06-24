@@ -14,6 +14,8 @@ public class Preferences        // System wide one stop place to set all setting
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
+    public int ThreadUpdater = 5000;        // This is how often the main thread is run
+    public int UIUpdate = 60;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
     public int ActivityReminder = 1000;          // How the system vibrates when an activity reminds the person to continue survey
@@ -64,6 +66,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Low Battery | Time in ms |
     public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
+    public int LowBatteryAlert = 5 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
     public String Accelerometer = "Accelerometer_Data";     // This is the Accelerometer File (DO NOT ADD .CSV here as the accelerometer data are saved differently)
@@ -93,12 +96,14 @@ public class Preferences        // System wide one stop place to set all setting
 
     /* Headers to individual files that are being logged to <--------------------------------------------- This is the order that the headers will appear in */
     public String EndOfDay_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for EndOfDay_EMA_Activity
-    public String EndOfDay_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
-                                                 "Question 6 Answer, Question 7 Answer, Question 8 Answer, Question 9 Answer, Question 10 Answer";        // Column Headers for EndOfDay_EMA_Results
+    public String EndOfDay_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, Question 6 Answer, Question 7 Answer, Question 8" +
+                                                 "Answer, Question 9 Answer, Question 10 Answer, Question 11 Answer, Question 12 Answer";        // Column Headers for EndOfDay_EMA_Results
     public String Pain_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Pain_EMA_Activity
-    public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";       // Column Headers for Pain_EMA_Results
+    public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
+                                             "Question 6 Answer, Question 7 Answer";       // Column Headers for Pain_EMA_Results
     public String Followup_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Followup_EMA_Activity
-    public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";        // Column Headers for Followup_EMA_Results
+    public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
+                                                 "Question 6 Answer, Question 7 Answer";        // Column Headers for Followup_EMA_Results
     public String Heart_Rate_Data_Headers = "Date --- Time, System Time Stamp, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
     public String Accelerometer_Data_Headers = "Date --- Time, System Time Stamp, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
     public String Pedometer_Data_Headers = "Date --- Time, System Time Stamp, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data

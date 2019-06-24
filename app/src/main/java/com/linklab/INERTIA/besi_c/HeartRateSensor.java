@@ -30,31 +30,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
-        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Heart Rate Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File HRSensors = new File(Preference.Directory + SystemInformation.Heart_Rate_Path);     // Gets the path to the Sensors from the system.
-        if (HRSensors.exists())      // If the file exists
-        {
-            Log.i("Heart Rate Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_Heartrate, Heart_Rate, Preference.Heart_Rate_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
+        CheckFiles();       // Checks that the files needed are present
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Starts the sensor service for any sensor in the system.
         Sensor mHeartRate = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);        // Makes sure it is for the Heart Rate sensor.
@@ -75,6 +51,27 @@ public class HeartRateSensor extends Service implements SensorEventListener     
         }, Duration);       // Waits for this amount of duration.
 
         return START_NOT_STICKY;        // Makes sure the timer is started again if it is killed.
+    }
+
+    private void CheckFiles()
+    {
+        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (!sensors.exists())      // If the file exists
+        {
+            Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File HRSensors = new File(Preference.Directory + SystemInformation.Heart_Rate_Path);     // Gets the path to the Sensors from the system.
+        if (!HRSensors.exists())      // If the file exists
+        {
+            Log.i("Heart Rate Sensor", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_Heartrate, Heart_Rate, Preference.Heart_Rate_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
     }
 
     @Override

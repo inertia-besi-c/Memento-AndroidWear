@@ -34,11 +34,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Estimote Timer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!sensors.exists())      // If the file exists
         {
             Log.i("Estimote Timer Sensor", "Creating Header");     // Logs on Console.
 
@@ -72,8 +68,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
         else        // If the system is not charging or is not asked to stop
         {
             ESTimerService = new Timer();          // Makes a new timer.
-            // Starts a delay of 0
-            int delay = 0;
+            int delay = 0;            // Starts a delay of 0
             ESTimerService.schedule(new TimerTask()     // Initializes a timer.
             {
                 public void run()       // Runs the imported file based on the timer specified.

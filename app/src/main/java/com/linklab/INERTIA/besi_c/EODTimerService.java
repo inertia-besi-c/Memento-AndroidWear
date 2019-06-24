@@ -37,11 +37,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
     public void onCreate()      // Creates the instance when it is started.
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!sensors.exists())      // If the file exists
         {
             Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
 
@@ -98,10 +94,11 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
 
                         String data = ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
-                        datalog.LogData();      // Saves the data into the directory.
 
+                        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                         DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, "Date");      // Logs date data to the file.
+
+                        datalog.LogData();      // Saves the data into the directory.
                         DailyActivity.LogData();      // Logs the data to the BESI_C directory.
 
                         Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.
@@ -116,10 +113,11 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                         Log.i("End of Day EMA", "End of Day EMA Timer is starting First EMA Prompt");     // Logs on Console.
 
                         String data = ("End of Day Timer Service," + "Started Prompt 1 at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
-                        datalog.LogData();      // Saves the data into the directory.
 
+                        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
                         DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, "Date");      // Logs date data to the file.
+
+                        datalog.LogData();      // Saves the data into the directory.
                         DailyActivity.LogData();      // Logs the data to the BESI_C directory.
 
                         Intent StartEMAActivity = new Intent(thisContext, EndOfDayPrompt1.class);     // Starts the first EOD EMA prompt.

@@ -48,5 +48,6 @@ public class LowBattery extends WearableActivity
                 }
             });
             setAmbientEnabled();            // Enables Always-on
-        }}
+        }
+    }
 }

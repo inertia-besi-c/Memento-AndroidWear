@@ -145,31 +145,7 @@ public class EstimoteService extends Service
         @Override
         public void run()
         {
-            File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-            if (sensors.exists())      // If the file exists
-            {
-                Log.i("Estimote Sensor", "No Header Created");     // Logs to console
-            }
-            else        // If the file does not exist
-            {
-                Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
-
-                DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-                dataLogger.LogData();       // Saves the data to the directory.
-            }
-
-            File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
-            if (estimote.exists())      // If the file exists
-            {
-                Log.i("Estimote Sensor", "No Header Created");     // Logs to console
-            }
-            else        // If the file does not exist
-            {
-                Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
-
-                DataLogger dataLogger = new DataLogger(Subdirectory_Estimote, Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
-                dataLogger.LogData();       // Saves the data to the directory.
-            }
+            CheckFiles();
 
             try
             {
@@ -216,11 +192,7 @@ public class EstimoteService extends Service
     private void CheckFiles()
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Estimote Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!sensors.exists())      // If the file exists
         {
             Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
@@ -229,17 +201,12 @@ public class EstimoteService extends Service
         }
 
         File estimote = new File(Preference.Directory + SystemInformation.Estimote_Path);     // Gets the path to the Sensors from the system.
-        if (estimote.exists())      // If the file exists
-        {
-            Log.i("Estimote Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!estimote.exists())      // If the file exists
         {
             Log.i("Estimote Sensor", "Creating Header");     // Logs on Console.
 
             DataLogger dataLogger = new DataLogger(Subdirectory_Estimote, Estimote, Preference.Estimote_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
-
     }
 }

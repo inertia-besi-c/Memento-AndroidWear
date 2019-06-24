@@ -55,6 +55,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private Vibrator v;      // The vibrator that provides haptic feedback.
+    private boolean firstRes2 = false;       // This is the boolean that checks if the res2 was clicked for the caregiver.
 
     private final String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
@@ -102,44 +103,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(Preference.Directory + SystemInformation.Followup_EMA_Results_Path);     // Gets the path to the system from the system.
-        if (Result.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Followup_Results, Preference.Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File Activity = new File(Preference.Directory + SystemInformation.Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
-        if (Activity.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, Followup_Activity, Preference.Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
+        CheckFiles();       // Checks that the file needed dby the system are present
 
         Log.i("Followup EMA", "Starting Followup Service");     // Logs on Console.
 
@@ -288,6 +252,11 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
+                                firstRes2 = true;       // Sets the value of the res2 button to be true
+
+                                UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                                LogActivity();      // The log activity method is called.
+
                                 CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
                             }
@@ -298,6 +267,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                             }
                             if (CurrentQuestion == Questions.length - 3)        // if this is the last question
                             {
+                                UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                                LogActivity();      // The log activity method is called.
+
                                 CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
                             }
@@ -344,6 +316,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
 
+                        UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                        LogActivity();      // The log activity method is called.
+
                         CurrentQuestion += 2;     // Increment the question amount to go forward to the next question
                         QuestionSystem();       // Call the question method again.
                     }
@@ -378,6 +353,22 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                         Submit();       // Submit the survey
                     }
+                    else if (Preference.Role.equals("CG") && CurrentQuestion == 2)
+                    {
+                        if (firstRes2)
+                        {
+                            CurrentQuestion = 0;        // Current question is 0
+                            firstRes2 = false;      // Resets the initial variable
+                        }
+                        else
+                        {
+                            CurrentQuestion --;     // Moves back one question
+                        }
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        QuestionSystem();       // Calls the question system method
+                    }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
@@ -410,6 +401,36 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         else        // If there are no more questions to ask.
         {
             Submit();       // Submits the survey.
+        }
+    }
+
+    private void CheckFiles()       // Checks that the files in the system needed are present
+    {
+        File Result = new File(Preference.Directory + SystemInformation.Followup_EMA_Results_Path);     // Gets the path to the system from the system.
+        if (!Result.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Followup_Results, Preference.Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File Activity = new File(Preference.Directory + SystemInformation.Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
+        if (!Activity.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, Followup_Activity, Preference.Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+        if (!system.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
         }
     }
 
