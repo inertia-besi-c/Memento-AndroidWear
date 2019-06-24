@@ -73,7 +73,12 @@ public class MainActivity extends WearableActivity  // This is the activity that
     private int endMinute = Preference.EoDEMA_ManualEnd_Minute;     // This is the minute the button goes away
     private int endSecond = Preference.EoDEMA_ManualEnd_Second;     // This is the seconds the button goes away
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    private int LowBatteryAlert = Preference.LowBatteryAlert;       // This is the low batteryu alert.
+    private int UIUpdater = Preference.UIUpdate;        // This is the UI Update variable from Preferences
+    private int ThreadUpdater = Preference.ThreadUpdater;       // This is how often the main thread is run
     private int UIUpdatevariable = 0;       // This is the update cycle of the screen
+    private int LowBatteryTimer = 0;        // This is the update cycle for the low battery screen
+    private int BatteryLevelText;        // This is the battery level
     public boolean SleepMode = false;      // This is the boolean that runs the sleep cycle.
     private boolean BatteryCharge = false;      // This is the boolean that runs the battery charge cycle.
     private boolean isCharging;     // Boolean value that keeps track of if the watch is charging or not.
@@ -130,14 +135,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
             startService(PedomService);        // Starts the service.
         }
 
-        final Intent EstimService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
+        final Intent ESService = new Intent(getBaseContext(), ESTimerService.class);        // Creates an intent for calling the Estimote Timer service.
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
             String data =  ("Main Activity," + "Started Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger("Activity", Sensors, data);      // Logs it into a file called System Activity.
             datalog.LogData();      // Saves the data into the directory.
 
-            startService(EstimService);        // Starts the service.
+            startService(ESService);        // Starts the service.
         }
 
 
@@ -261,7 +266,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
                         datalogA.LogData();      // Saves the data into the directory.
                         datalogB.LogData();      // Saves the data into the directory.
 
-                        stopService(EstimService);        // Stop the service.
+                        stopService(ESService);        // Stop the service.
                         stopService(AccelService);        // Stop the service.
                         stopService(HRService);     // It stops the service
                     }
@@ -306,7 +311,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         stopService(HRService);     // Stops the service
                         stopService(AccelService);        // Stop the service.
-                        stopService(EstimService);        // Stop the service.
+                        stopService(ESService);        // Stop the service.
 
                         SleepMode = true;       // And it sets the boolean value to true.
                     }
@@ -329,7 +334,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                         startService(HRService);     // It starts the service
                         startService(AccelService);        // It starts the service.
-                        startService(EstimService);        // It starts the service.
+                        startService(ESService);        // It starts the service.
 
                         SleepMode = false;      // It sets the boolean value to false.
                     }
@@ -361,7 +366,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
             {
                 while (!Main_Timer.isInterrupted())       // While the timer updater is not interrupted by some other system.
                 {
-                    Thread.sleep(5000);     // Wait 10 seconds.
+                    Thread.sleep(ThreadUpdater);     // Wait the alloted time in seconds.
                     runOnUiThread(new Runnable()        // Run this while the user interface is on.
                     {
                         @Override
@@ -371,15 +376,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();      // Gets the bluetooth system on the watch
                             WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);        // Gets the wifi system on the watch.
                             isCharging = systemInformation.isSystemCharging(getApplicationContext());     // Checks if the battery is currently charging.
+                            BatteryLevelText = Integer.parseInt(systemInformation.getBatteryLevel(getApplicationContext()));     // Gets the battery level of the system in text
 
                             DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
-                            batteryLevel.setText("Battery: " + String.valueOf(systemInformation.getBatteryLevel(getApplicationContext())) + "%");       // Sets the text view for the battery to show the battery level.
+                            batteryLevel.setText("Battery: " + String.valueOf(BatteryLevelText) + "%");       // Sets the text view for the battery to show the battery level.
 
-                            UIUpdatevariable += 10;     // Increments the timer to update the UI
+                            UIUpdatevariable += ThreadUpdater/1000;     // Increments the timer to update the UI
+                            LowBatteryTimer += ThreadUpdater/1000;      // Increments the timer for the low battery screen
                             time.setText(systemInformation.getTime());       // The current time is set to show on the time text view.
                             date.setText(systemInformation.getDate());       // The current date is set to show on the date text view.
 
-                            if (UIUpdatevariable >= 120)     // This makes the UI update at the specified rate multiplied by the delay abocve.
+                            if (UIUpdatevariable >= UIUpdater)     // This makes the UI update at the specified rate multiplied by the delay abocve.
                             {
                                 EODEMAUIUpdater();      // Calls the UI updater method
                                 UIUpdatevariable = 0;       // Resets the variable
@@ -400,6 +407,17 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                 {
                                     Intent Estimote = new Intent(getBaseContext(),ESTimerService.class);        // Create an intent
                                     startService(Estimote);     // Start the estimote timer
+                                }
+
+                                if (LowBatteryTimer >= LowBatteryAlert)     // This makes the low batery screen at the specified rate multiplied by the delay abocve.
+                                {
+                                    if (BatteryLevelText <= Preference.LowBatPercent)   // Checks whether battery is low
+                                    {
+                                        Intent intent = new Intent(getApplicationContext(), LowBattery.class);       // Calls the low battery class
+                                        startActivity(intent);      // Starts low battery screen
+
+                                        LowBatteryTimer = 0;        // Resets the low battery timer screen
+                                    }
                                 }
                             }
 

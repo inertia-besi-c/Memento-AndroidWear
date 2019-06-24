@@ -8,12 +8,14 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "DEVICE-IDENTIFICATION";        // Internal ID of Device assigned to Dyad
+    public String DeviceID = "DEVICE";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "P3D1-V";      // Deployment ID
     public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
+    public int ThreadUpdater = 5000;        // This is how often the main thread is run
+    public int UIUpdate = 60;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
     public int ActivityReminder = 1000;          // How the system vibrates when an activity reminds the person to continue survey
@@ -64,6 +66,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Low Battery | Time in ms |
     public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
+    public int LowBatteryAlert = 5 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
     public String Accelerometer = "Accelerometer_Data";     // This is the Accelerometer File (DO NOT ADD .CSV here as the accelerometer data are saved differently)
