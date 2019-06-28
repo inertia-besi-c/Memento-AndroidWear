@@ -63,21 +63,6 @@
         </service>
 
         <service
-            android:name=".FollowUpEMASchedulerService"
-            android:enabled="true">
-        </service>
-
-        <service
-            android:name=".HeartRateSensor"
-            android:launchMode="singleInstance">
-        </service>
-
-        <service
-            android:name=".AccelerometerSensor"
-            android:launchMode="singleInstance">
-        </service>
-
-        <service
             android:name=".HRTimerService"
             android:launchMode="singleInstance">
         </service>
@@ -85,6 +70,27 @@
         <service
             android:name=".ESTimerService"
             android:launchMode="singleInstance">
+        </service>
+
+        <service
+            android:name=".FollowUpEMASchedulerService"
+            android:enabled="true">
+        </service>
+
+        <service
+            android:name=".HeartRateSensor"
+            android:enabled="true"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            tools:ignore="ExportedService">
+        </service>
+
+        <service
+            android:name=".AccelerometerSensor"
+            android:enabled="true"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            tools:ignore="ExportedService">
         </service>
 
         <service
