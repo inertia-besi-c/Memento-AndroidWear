@@ -23,6 +23,8 @@ import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,6 +98,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         CheckPermissions();     // Checks the permissions needed for the device to save files and operate within normal parameter.
         CheckFiles();       // Runs the check files method to make sure all the files needed are up
+        unlockScreen();     // Unlocks the screen
+
         Main_Timer.start();       // The time updater
 
         EMA_Start = findViewById(R.id.EMA_Start);      // This is the second ema button that is used
@@ -320,6 +324,21 @@ public class MainActivity extends WearableActivity  // This is the activity that
                     {
                         SLEEP.setBackgroundColor(Color.BLUE);      // Changes the color of the Sleep button.
 
+                        if (LowBatteryTimer >= LowBatteryAlert)     // This makes the low batery screen at the specified rate multiplied by the delay abocve.
+                        {
+                            if (BatteryLevelText <= Preference.LowBatPercent)   // Checks whether battery is low
+                            {
+                                String dataLB =  ("Main Thread," + "Enabling Low Battery Warning at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                DataLogger datalogLB = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataLB);      // Logs it into a file called System Activity.
+                                datalogLB.LogData();      // Saves the data into the directory.
+
+                                Intent intent = new Intent(getApplicationContext(), LowBattery.class);       // Calls the low battery class
+                                startActivity(intent);      // Starts low battery screen
+
+                                LowBatteryTimer = 0;        // Resets the low battery timer screen
+                            }
+                        }
+
                         String dataHR =  ("Sleep Button," + "Started Heart Rate Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                         String dataA =  ("Sleep Button," + "Started Accelerometer Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                         String dataB =  ("Sleep Button," + "Started Estimote Sensor while NOT charging at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -408,13 +427,20 @@ public class MainActivity extends WearableActivity  // This is the activity that
                                     Intent Estimote = new Intent(getBaseContext(),ESTimerService.class);        // Create an intent
                                     startService(Estimote);     // Start the estimote timer
                                 }
+                            }
 
+                            if (!SleepMode)     // If it is not in sleep mode
+                            {
                                 if (LowBatteryTimer >= LowBatteryAlert)     // This makes the low batery screen at the specified rate multiplied by the delay abocve.
                                 {
                                     if (BatteryLevelText <= Preference.LowBatPercent)   // Checks whether battery is low
                                     {
-                                        Intent intent = new Intent(getApplicationContext(), LowBattery.class);       // Calls the low battery class
-                                        startActivity(intent);      // Starts low battery screen
+                                        String dataLB =  ("Main Thread," + "Enabling Low Battery Warning at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                                        DataLogger datalogLB = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataLB);      // Logs it into a file called System Activity.
+                                        datalogLB.LogData();      // Saves the data into the directory.
+
+                                        Intent lowbattery = new Intent(getApplicationContext(), LowBattery.class);       // Calls the low battery class
+                                        startActivity(lowbattery);      // Starts low battery screen
 
                                         LowBatteryTimer = 0;        // Resets the low battery timer screen
                                     }
@@ -756,6 +782,14 @@ public class MainActivity extends WearableActivity  // This is the activity that
         TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
         text.setTextColor(Color.WHITE);     // Changes the color of the text
         msg.show();       // Shows the toast.
+    }
+
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
     }
 
     private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver()    /* Gets the current battery level, date, and time and sets the text field data */

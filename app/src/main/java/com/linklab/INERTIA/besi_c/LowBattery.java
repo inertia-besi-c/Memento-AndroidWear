@@ -1,10 +1,14 @@
 package com.linklab.INERTIA.besi_c;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 public class LowBattery extends WearableActivity
@@ -15,9 +19,14 @@ public class LowBattery extends WearableActivity
     private final String System = Preference.System;     // Gets the sensors from preferences.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
 
+    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is run on creation
     {
+        unlockScreen();     // Unlocks the screen
+
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);      // Sets the vibrator service.
+
         super.onCreate(savedInstanceState);     // Makes the screen and saves the instance
         setContentView(R.layout.activity_low_battery);      // Sets the view to show the low battery screen
 
@@ -27,7 +36,6 @@ public class LowBattery extends WearableActivity
         }
         else    // If the system is not charging
         {
-            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);      // Sets the vibrator service.
             vibrator.vibrate(vibrationDuration);        // Sets the system to vibrate for that long.
             Button dismiss = findViewById(R.id.Dismiss);        // Sets the dismiss button
 
@@ -49,5 +57,22 @@ public class LowBattery extends WearableActivity
             });
             setAmbientEnabled();            // Enables Always-on
         }
+    }
+
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
+    }
+
+    @Override
+    public void onDestroy()     // This is called when the activity is destroyed.
+    {
+        Log.i("Low Battery", "Destroying Low  Battery Screen");     // Logs on Console.
+
+        super.onDestroy();      // The activity is killed.
     }
 }

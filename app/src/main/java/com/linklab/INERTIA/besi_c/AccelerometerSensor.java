@@ -10,7 +10,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import java.io.File;
@@ -18,7 +17,6 @@ import java.io.File;
 public class AccelerometerSensor extends Service implements SensorEventListener     // This initializes the accelerometer sensor.
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private PowerManager.WakeLock wakeLock;     // Creates the ability for the screen to turn on partially.
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final String Accelerometer = Preference.Accelerometer + "_" + SystemInformation.getDateStamp() + ".csv";     // This is the file name set from preferences.
@@ -31,12 +29,6 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)        // Establishes the sensor and the ability to collect data at the start of the data collection
     {
-        Log.i("Accelerometer", "Started Accelerometer Sensor Service");     // Logs on Console.
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);    // Controls the power distribution of the system.
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AccelService:wakeLock");      // Gets partial power to run the sensor.
-        wakeLock.acquire();     // Turns on the wakelock and acquires what is needed.
-
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Initializes the ability to get a sensor from the system.
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);     // Gets the specific sensor called accelerometer.
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);       // It listens to the data acquires from the accelerometer
@@ -97,7 +89,6 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         Log.i("Accelerometer", "Destroying Accelerometer Sensor Service");     // Logs on Console.
 
         mSensorManager.unregisterListener(this);    // Kills the service that listens to the accelerometer sensor.
-        wakeLock.release();     // Releases the wakelock on the service.
     }
 
     @Override

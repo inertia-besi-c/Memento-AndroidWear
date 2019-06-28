@@ -10,7 +10,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import java.io.File;
@@ -18,7 +17,6 @@ import java.io.File;
 public class PedometerSensor extends Service implements SensorEventListener     // Starts a service for the pedometer.
 {
     private SensorManager mSensorManager;       // Creates the sensor manager that looks into the sensor
-    private PowerManager.WakeLock wakeLock;     // Creates a wakelock power manager for the service.
     private boolean Started = false;        // Creates a boolean to check if it is started.
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
@@ -32,10 +30,6 @@ public class PedometerSensor extends Service implements SensorEventListener     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Regulates the power to the service.
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Pedometer Service:wakeLock");      // Calls a partial wakelock for the service.
-        wakeLock.acquire();     // Calls the wakelock.
-
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Starts a sensor data collection service
         Sensor mPedometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);      // Starts it for the sensor pedometer.
         mSensorManager.registerListener(this, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);       // Calls the sensor delay to normal.
@@ -105,7 +99,6 @@ public class PedometerSensor extends Service implements SensorEventListener     
         Log.i("Pedometer Sensor", "Stopping Sensor");     // Logs on Console.
 
         mSensorManager.unregisterListener(this);        // Kills the listener for the service.
-        wakeLock.release();     // Releases the wakelock power.
     }
 
     @Override

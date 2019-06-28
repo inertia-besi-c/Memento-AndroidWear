@@ -6,12 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,6 @@ import java.util.TimerTask;
 
 public class EndOfDayEMA extends WearableActivity       // This is the main service file for the End of Day EMA questions
 {
-    private PowerManager.WakeLock wakeLock;
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private final ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
@@ -125,16 +125,13 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        Log.i("End of Day EMA", "Starting End of Day EMA Service");     // Logs on Console.
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "End of Day EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
-        wakeLock.acquire();      // The screen turns off after the timeout is passed.
+        CheckFiles();       // Calls the check files method.
+        unlockScreen();     // Unlocks the screen
 
         super.onCreate(savedInstanceState);     // Creates an instance for the activity.
-        CheckFiles();       // Calls the check files method.
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
 
         back = findViewById(R.id.Back);         // Sets the back button to a variable.
@@ -391,6 +388,15 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         datalog.LogData();      // Logs the data into the directory specified.
     }
 
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
+    }
+
     private int Cycle_Responses()       // This cycles through all the possible responses that the person can provide.
     {
         int index = resTaps%responses.size();       // Index gets the size of all the possible responses.
@@ -403,7 +409,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     {
         Log.i("End of Day EMA", "Destroying End Of Day EMA");     // Logs on Console.
 
-        wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
     }

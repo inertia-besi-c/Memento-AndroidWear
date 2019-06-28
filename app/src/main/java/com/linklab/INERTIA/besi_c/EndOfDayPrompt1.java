@@ -11,6 +11,8 @@ import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import java.io.File;
@@ -34,13 +36,10 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
     protected void onCreate(Bundle savedInstanceState)      // When it is created this is initially run.
     {
         CheckFiles();       // Checks the files needed
+        unlockScreen();     // Unlocks the screen
 
         super.onCreate(savedInstanceState);     // Creates a saved instance.
         setContentView(R.layout.activity_end_of_day_prompt);        // Gets the layout from the activity EOD-EMA
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Gets the power manager from the system and controls the power distribution
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 1:wakeLock");     // Gets a full wakelock ability from the system
-        wakeLock.acquire();     // Acquires the wakelock without any timeout.
 
         final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from system
         v.vibrate(ActivityBeginning);     // Vibrates for the specified amount of milliseconds.
@@ -170,6 +169,15 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
+    }
+
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
     }
 
     @Override

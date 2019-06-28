@@ -6,12 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import java.util.TimerTask;
 
 public class FollowUpEMA extends WearableActivity       // This is the followup activity for the EMA questions
 {
-    private PowerManager.WakeLock wakeLock;
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private final ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
@@ -104,12 +104,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
         CheckFiles();       // Checks that the file needed dby the system are present
+        unlockScreen();     // Unlocks the screen
 
         Log.i("Followup EMA", "Starting Followup Service");     // Logs on Console.
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "FollowUpEMA: WakeLock");        // The wakelock that turns on the screen.
-        wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
@@ -476,12 +473,20 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         datalog.LogData();      // Logs the data into the directory specified.
     }
 
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
+    }
+
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
         Log.i("Followup EMA", "Destroying Followup EMA");     // Logs on Console.
 
-        wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
     }

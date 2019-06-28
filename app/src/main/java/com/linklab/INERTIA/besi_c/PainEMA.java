@@ -7,12 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,6 @@ import java.util.TimerTask;
 
 public class PainEMA extends WearableActivity       // This is the main activity for the pain survey questions.
 {
-    private PowerManager.WakeLock wakeLock;     // This is the power manager service for the system.
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
@@ -105,10 +105,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
         CheckFiles();       // Checks that the files needed are present
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Pain EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
-        wakeLock.acquire();      // The screen turns off after the timeout is passed.
+        unlockScreen();     // Unlocks the screen
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
@@ -394,12 +391,20 @@ public class PainEMA extends WearableActivity       // This is the main activity
         datalog.LogData();      // Logs the data into the directory specified.
     }
 
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
+    }
+
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
-        Log.i("Pain EMA", "Destroying Followup EMA");     // Logs on Console.
+        Log.i("Pain EMA", "Destroying Pain EMA");     // Logs on Console.
 
-        wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
     }

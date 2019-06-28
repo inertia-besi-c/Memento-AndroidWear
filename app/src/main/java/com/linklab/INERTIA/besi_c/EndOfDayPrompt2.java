@@ -11,6 +11,8 @@ import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import java.io.File;
@@ -34,6 +36,7 @@ public class EndOfDayPrompt2 extends WearableActivity       // This is the EOD E
     protected void onCreate(Bundle savedInstanceState)      // When the service is created it runs this
     {
         CheckFiles();       // Checks for the files needed
+        unlockScreen();     // Unlocks the screen
 
         super.onCreate(savedInstanceState);     // Starts a saved instance in the system.
         setContentView(R.layout.activity_end_of_day_prompt);        // Gets the EOD EMA prompt activity from the res files.
@@ -140,6 +143,15 @@ public class EndOfDayPrompt2 extends WearableActivity       // This is the EOD E
             DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
+    }
+
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
     }
 
     @Override
