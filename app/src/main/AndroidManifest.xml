@@ -109,8 +109,8 @@
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!--<category android:name="android.intent.category.HOME" />          &lt;!&ndash; Comment this out to be able to return to the regular home settings for the watch&ndash;&gt;-->
-                <!--<category android:name="android.intent.category.DEFAULT" />       &lt;!&ndash;Comment this out to be able to have the default watch activity be the default for the watch&ndash;&gt;-->
+                <category android:name="android.intent.category.HOME" />          <!-- Comment this out to be able to return to the regular home settings for the watch-->
+                <category android:name="android.intent.category.DEFAULT" />       <!--Comment this out to be able to have the default watch activity be the default for the watch-->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -119,10 +119,10 @@
             android:name=".LowBattery"
             android:label="BESI: Low Battery"
             android:launchMode="singleInstance">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+             <!--<intent-filter>-->
+                 <!--<action android:name="android.intent.action.MAIN" />-->
+                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -139,50 +139,50 @@
             android:name=".FollowUpEMA"
             android:label="BESI: Follow-up EMA"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
             android:name=".PainEMA"
             android:label="BESI: Pain EMA"
             android:launchMode="singleInstance">
-             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+             <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
 
         <activity
             android:name=".EndOfDayEMA"
             android:label="BESI: EoD EMA"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
             android:name=".EndOfDayPrompt1"
             android:label="BESI: EoD Prompt 1"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
             android:name=".EndOfDayPrompt2"
             android:label="BESI: EoD Prompt 2"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
     </application>
