@@ -21,7 +21,6 @@ import java.util.TimerTask;
 
 public class EndOfDayPrompt1 extends WearableActivity       // Starts the first EOD-EMA prompt.
 {
-    private PowerManager.WakeLock wakeLock;     // Starts the power manager in the system.
     private final Timer promptTimeOut = new Timer();      // Creates a new timer.
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
@@ -185,7 +184,6 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
     {
         Log.i("End of Day EMA Prompts", "Prompt 1 - Service is Destroyed");     // Logs on Console.
 
-        wakeLock.release();     // Kills the wakelock.
         promptTimeOut.cancel(); // Cancels snooze timer
         super.onDestroy();      // Kills the service.
     }
