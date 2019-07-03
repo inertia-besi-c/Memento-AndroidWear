@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -12,48 +13,107 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ManualDailyEMA extends WearableActivity
 {
-    private final Preferences Preference = new Preferences();     // Gets the preferences list from preferences class
+    private final Timer promptTimeOut = new Timer();
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private final int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
-    private final String System = Preference.System;     // Gets the sensors from preferences.
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String System = Preference.System;       // Gets the system from preferences.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
+    @SuppressLint("SetTextI18n")       // Suppresses the timeouts.
 
-    @SuppressLint("WakelockTimeout")
     @Override
-    protected void onCreate(Bundle savedInstanceState)      // This is run on creation
+    protected void onCreate(Bundle savedInstanceState)      // When the service is created it runs this
     {
+        CheckFiles();       // Checks for the files needed
         unlockScreen();     // Unlocks the screen
 
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);      // Sets the vibrator service.
+        super.onCreate(savedInstanceState);     // Starts a saved instance in the system.
+        setContentView(R.layout.activity_end_of_day_prompt);        // Gets the EOD EMA prompt activity from the res files.
 
-        super.onCreate(savedInstanceState);     // Makes the screen and saves the instance
-        setContentView(R.layout.activity_manual_daily_survey);      // Sets the view to show the manual ema screen
-        Button OK = findViewById(R.id.OK);        // Sets the dismiss button
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from the system
+        v.vibrate(ActivityBeginning);     // Vibrates for the specified amount of time in milliseconds.
 
-        vibrator.vibrate(vibrationDuration);        // Sets the system to vibrate for that long.
+        Button proceed = findViewById(R.id.Proceed);        // Sets the button proceed to the variable proceed.
+        Button snooze = findViewById(R.id.Snooze);        // Sets the button snooze to the variable snooze.
+        Button dismiss = findViewById(R.id.Dismiss);        // Sets the button dismiss to the variable dismiss.
 
-        String data =  ("Manual Daily EMA," + "Started at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
-        datalog.LogData();      // Saves the data into the directory.
+        dismiss.setVisibility(View.INVISIBLE);      // Hides the dismiss button from view and disables the button.
+        snooze.setVisibility(View.INVISIBLE);       // Hides the snooze button from view and disables the button
+        proceed.setText("GO");      // Changes the text on the snooze button to dismiss
 
-        OK.setOnClickListener(new View.OnClickListener() // Waits for the dismiss button to be clicked.
+        proceed.setOnClickListener(new View.OnClickListener()       // Constantly listens to the proceed button, If proceed is clicked
         {
             @Override
-            public void onClick(View v)         // When the button is clicked
+            public void onClick(View view)     // When it is clicked.
             {
-                String data =  ("Manual Daily EMA," + " Clicked at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
+                Log.i("Manual EMA Prompts", "Go Clicked, Starting End of Day EMA");     // Logs on Console.
+
+                String data =  ("Manual EMA Prompt," + "'Go' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                String data1 =  ("Manual EMA Prompt," + "Started End of Day EMA at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
                 DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
+                DataLogger datalog1 = new DataLogger(Subdirectory_DeviceLogs, Sensors, data1);      // Logs it into a file called System Activity.
+
                 datalog.LogData();      // Saves the data into the directory.
+                datalog1.LogData();      // Saves the data into the directory.
 
-                Intent EODEMA = new Intent(getApplicationContext(), EndOfDayEMA.class);       // Calls the low battery class
-                startActivity(EODEMA);      // Starts low battery screen
+                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Starts the EOD EMA file
+                startActivity(StartEMAActivity);    // Moves to the new activity.
 
-                finish();       // Ends the screen
+                finish();       // Finishes the EOD EMA prompt 3.
             }
         });
-        setAmbientEnabled();            // Enables Always-on
+
+        promptTimeOut.schedule(new TimerTask()      // A timer is started by the service
+        {
+            @Override
+            public void run()       // This is run when the timeout is initiated
+            {
+                v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
+
+                Log.i("Manual EMA", "Timeout Initiated");     // Logs on Console.
+
+                String data =  ("Manual EMA," + "Dismissed End of Day EMA at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+                datalog.LogData();      // Saves the data into the directory.
+
+                finish();       // Finishes the screen
+            }
+        }, Preference.EoDPrompt_TimeOut);        // Gets the timeout from preferences
+
+        setAmbientEnabled();        // Makes the system ambient.
+        setAutoResumeEnabled(true);     // Resumes the main activity.
+    }
+
+    private void CheckFiles()       // Checks that the files in the system needed are present
+    {
+        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (!sensors.exists())      // If the file exists
+        {
+            Log.i("Manual EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+        if (!system.exists())      // If the file exists
+        {
+            Log.i("Manual EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
     }
 
     private void unlockScreen()         // This unlocks the screen if called
@@ -69,8 +129,9 @@ public class ManualDailyEMA extends WearableActivity
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
-        Log.i("Low Battery", "Destroying Low  Battery Screen");     // Logs on Console.
+        Log.i("Manual EMA", "Destroying Low Battery Screen");     // Logs on Console.
 
+        promptTimeOut.cancel(); // Cancels dismiss timer
         super.onDestroy();      // The activity is killed.
     }
 }

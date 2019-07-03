@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -21,7 +20,6 @@ import java.util.TimerTask;
 
 public class EndOfDayPrompt2 extends WearableActivity       // This is the EOD EMA that is run for the second and last time.
 {
-    private PowerManager.WakeLock wakeLock;     // Starts the power manager and the wakelock from the system.
     private final Timer promptTimeOut = new Timer();
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
@@ -40,10 +38,6 @@ public class EndOfDayPrompt2 extends WearableActivity       // This is the EOD E
 
         super.onCreate(savedInstanceState);     // Starts a saved instance in the system.
         setContentView(R.layout.activity_end_of_day_prompt);        // Gets the EOD EMA prompt activity from the res files.
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Gets the wakelock from the system
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "EOD Prompt 2:wakeLock");     // The system is started with a full wakelock.
-        wakeLock.acquire();     // Keeps the wakelock from a timeout.
 
         final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);     // Gets the vibrator service from the system
         v.vibrate(ActivityBeginning);     // Vibrates for the specified amount of time in milliseconds.
@@ -160,7 +154,6 @@ public class EndOfDayPrompt2 extends WearableActivity       // This is the EOD E
     {
         Log.i("End of Day EMA Prompts", "Prompt 2 - Service is Destroyed");     // Logs on Console.
 
-        wakeLock.release();     // The wakelock is released.
         promptTimeOut.cancel(); // Cancels dismiss timer
         super.onDestroy();      // The service is killed.
     }
