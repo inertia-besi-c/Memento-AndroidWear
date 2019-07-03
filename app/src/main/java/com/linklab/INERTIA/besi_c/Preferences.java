@@ -10,7 +10,7 @@ public class Preferences        // System wide one stop place to set all setting
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "DEVICE";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "P3D1-V";      // Deployment ID
-    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for Vibration | Time is in ms |
@@ -19,6 +19,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
     public int ActivityReminder = 1000;          // How the system vibrates when an activity reminds the person to continue survey
+    public int ToastDuration = 5000;            // How long should the image toast stay up
 
     // Settings for Pain EMA | Time is in ms |
     public int PainEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema

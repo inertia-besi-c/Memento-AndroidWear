@@ -4,13 +4,13 @@ package com.linklab.INERTIA.besi_c;
 // Imports
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -362,21 +362,18 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, String.valueOf(dateFormatII.format(date)));      // Logs date data to the file.
         DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
 
-        ThankYou();     // Calls the thank you method.
+        imageToast();       // Calls the image toast
     }
 
-    private void ThankYou()     // This is a little thank you toast.
+    private void imageToast()       // This is the image toast
     {
-        Context context = getApplicationContext();      // Gets a context from the system.
-        CharSequence showntext = "Thank You!";       // Pop up information to the person
-        int duration = Toast.LENGTH_SHORT;      // Shows the toast only for a short amount of time.
-        Toast toast = Toast.makeText(context, showntext, duration);          // A short message at the end to say thank you.
-        View view = toast.getView();        // Gets the view from the toast maker
-        TextView text = view.findViewById(android.R.id.message);        // Finds the text being used
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);        // Sets the toast to show up at the center of the screen
-        text.setTextColor(Color.WHITE);     // Changes the color of the text
-        toast.show();       // Shows the toast.
-        finish();       // Finishes the toast.
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
     }
 
     private void LogActivity()      // Logs the activity of the person.

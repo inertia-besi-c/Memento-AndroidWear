@@ -23,4 +23,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="sleep">Sleep</string>
     <string name="ok">OK</string>
+    <string name="thank_you">THANK YOU!</string>
+    <string name="todo">TODO</string>
 </resources>

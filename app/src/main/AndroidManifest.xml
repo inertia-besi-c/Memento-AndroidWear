@@ -133,6 +133,36 @@
         </activity>
 
         <activity
+            android:name=".ManualDailyEMA"
+            android:label="Manual EoD EMA"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt1"
+            android:label="BESI: EoD Prompt 1"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".EndOfDayPrompt2"
+            android:label="BESI: EoD Prompt 2"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".FireBase_Upload"
             android:label="BESI: Upload Files"
             android:launchMode="singleInstance">
@@ -171,27 +201,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".EndOfDayPrompt1"
-            android:label="BESI: EoD Prompt 1"
-            android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".EndOfDayPrompt2"
-            android:label="BESI: EoD Prompt 2"
-            android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ManualDailyEMA" />
-
     </application>
 </manifest>
