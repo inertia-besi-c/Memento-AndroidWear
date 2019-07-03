@@ -61,9 +61,10 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
     private final String[] CaregiverQuestions =       // These are strictly the care giver questions.
             {
-                    "How active were you?",
                     "How busy was your home?",
                     "Time spent outside the home?",
+                    "How active were you?",
+                    "Where did you spend most time?",
                     "Time spent with the patient?",
                     "Time spent with other people?",
                     "How was your sleep?",
@@ -71,14 +72,14 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How was your mood?",
                     "How distressed were you overall?",
                     "How distressed was the patient overall?",
-                    "Where did you spend most time?",
                     "Ready to submit your answers?",
             };
     private final String[][] CaregiverAnswers =      // These are strictly the care giver answers.
             {
                     {"Not at all", "A little", "Fairly", "Very"},
-                    {"Not at all", "A little", "Fairly", "Very"},
                     {"None", "A little", "Medium", "A lot"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Living Room", "Bedroom", "Kitchen", "Outside the home", "Other"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
@@ -86,30 +87,30 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
-                    {"Living Room", "Bedroom", "Kitchen", "Outside the home", "Other"},
                     {"Yes", "No"},
             };
 
     private final String[] PatientQuestions =      // These are strictly the patient questions.
             {
-                    "How active were you?",
                     "How busy was your home?",
                     "Time spent outside the home?",
-                    "Time spent with your caregiver?",
+                    "How active were you?",
+                    "Where did you spend most time?",
+                    "Time spent with the caregiver?",
                     "Time spent with other people?",
                     "How was your sleep?",
                     "How much did pain bother you?",
                     "How was your mood?",
                     "How distressed were you overall?",
-                    "How distressed was your caregiver overall?",
-                    "Where did you spend most time?",
+                    "How distressed was the patient overall?",
                     "Ready to submit your answers?",
             };
     private final String[][] PatientAnswers =      // These are strictly the patient answers.
             {
                     {"Not at all", "A little", "Fairly", "Very"},
-                    {"Not at all", "A little", "Fairly", "Very"},
                     {"None", "A little", "Medium", "A lot"},
+                    {"Not at all", "A little", "Fairly", "Very"},
+                    {"Living Room", "Bedroom", "Kitchen", "Outside the home", "Other"},
                     {"None", "A little", "Medium", "A lot"},
                     {"None", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
@@ -117,7 +118,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
-                    {"Living Room", "Bedroom", "Kitchen", "Outside the home", "Other"},
                     {"Yes", "No"},
             };
 

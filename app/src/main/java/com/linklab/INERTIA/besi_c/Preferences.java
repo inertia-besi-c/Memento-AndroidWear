@@ -43,7 +43,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The start time should always be on the exact time that you want them to start */
-    public int EoDEMA_ManualStart_Hour = 17;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Hour = 15;       // Hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The end time should always be one second off from desired mark. */
@@ -67,6 +67,14 @@ public class Preferences        // System wide one stop place to set all setting
     public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
     public int LowBatteryAlert = 5 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
+    /* The start time should always be on the exact time that you want them to start */
+    public int LowBattery_ManualStart_Hour = 00;       // Hour at which the automatic LowBattery should stop
+    public int LowBattery_ManualStart_Minute = 00;      // Minute of hour at which the automatic LowBattery should stop
+    public int LowBattery_ManualStart_Second = 00;      // Second of minute at which the automatic LowBattery should stop
+    /* The end time should always be one second off from desired mark. */
+    public int LowBattery_ManualEnd_Hour = 07;       // Hour at which the automatic LowBattery should start
+    public int LowBattery_ManualEnd_Minute = 59;      // Minute of hour at which the automatic LowBattery should start
+    public int LowBattery_ManualEnd_Second = 59;      // Second of minute at which the automatic LowBattery should start
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
     public String Accelerometer = "Accelerometer_Data";     // This is the Accelerometer File (DO NOT ADD .CSV here as the accelerometer data are saved differently)

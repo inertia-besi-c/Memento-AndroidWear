@@ -18,6 +18,12 @@ public class LowBattery extends WearableActivity
     private final int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
     private final String System = Preference.System;     // Gets the sensors from preferences.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private int startHour = Preference.LowBattery_ManualStart_Hour;     // This is the hour the button pops up
+    private int startMinute = Preference.LowBattery_ManualStart_Minute;     // This is the minute the button pops up
+    private int startSecond = Preference.LowBattery_ManualStart_Second;     // This is the second the button pops up
+    private int endHour = Preference.LowBattery_ManualEnd_Hour;     // This is the hour the button goes away
+    private int endMinute = Preference.LowBattery_ManualEnd_Minute;     // This is the minute the button goes away
+    private int endSecond = Preference.LowBattery_ManualEnd_Second;     // This is the seconds the button goes away
 
     @SuppressLint("WakelockTimeout")
     @Override
@@ -30,7 +36,8 @@ public class LowBattery extends WearableActivity
         super.onCreate(savedInstanceState);     // Makes the screen and saves the instance
         setContentView(R.layout.activity_low_battery);      // Sets the view to show the low battery screen
 
-        if (SystemInformation.isSystemCharging(this))       // If the watch is currently charging,
+        if (SystemInformation.isSystemCharging(this) ||
+                SystemInformation.isTimeBetweenTimes(SystemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))    // If the watch is currently charging,
         {
             finish();       // End
         }

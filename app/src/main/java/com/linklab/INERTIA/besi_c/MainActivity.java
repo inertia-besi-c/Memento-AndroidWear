@@ -208,7 +208,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
                 vibrator.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
 
-                Intent StartEMAActivity = new Intent(getBaseContext(), EndOfDayEMA.class);      // Links to the EOD EMA File and starts it.
+                Intent StartEMAActivity = new Intent(getBaseContext(), ManualDailyEMA.class);      // Links to the EOD EMA File prompt and starts it.
                 startActivity(StartEMAActivity);        // Starts the EOD EMA file.
 
                 finish();       // Finished the Main Activity screen.
@@ -490,14 +490,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             }
                             else        // If the watch is not charging.
                             {
-                                wifi.setWifiEnabled(false);     // Disable the wifi.
-
                                 if (isDeviceOnline())       // If the wifi is still when the watch is not charging
                                 {
-                                    String data =  ("Main Thread," + "Internet is disabled at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-                                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
-                                    datalog.LogData();      // Saves the data into the directory.
-
                                     wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
 
