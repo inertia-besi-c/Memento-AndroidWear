@@ -1,6 +1,5 @@
 package com.linklab.INERTIA.besi_c;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -25,7 +24,6 @@ public class LowBattery extends WearableActivity
     private int endMinute = Preference.LowBattery_ManualEnd_Minute;     // This is the minute the button goes away
     private int endSecond = Preference.LowBattery_ManualEnd_Second;     // This is the seconds the button goes away
 
-    @SuppressLint("WakelockTimeout")
     @Override
     protected void onCreate(Bundle savedInstanceState)      // This is run on creation
     {
@@ -37,7 +35,7 @@ public class LowBattery extends WearableActivity
         setContentView(R.layout.activity_low_battery);      // Sets the view to show the low battery screen
 
         if (SystemInformation.isSystemCharging(this) ||
-                SystemInformation.isTimeBetweenTimes(SystemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))    // If the watch is currently charging,
+                SystemInformation.isTimeBetweenTimes(SystemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))    // If the watch is currently charging or it is sleeping time,
         {
             finish();       // End
         }

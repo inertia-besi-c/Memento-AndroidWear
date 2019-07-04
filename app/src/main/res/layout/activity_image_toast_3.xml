@@ -14,8 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="-5dp"
         android:contentDescription="@string/todo"
-        android:src="@mipmap/besi_logo">
-    </ImageView>
+        android:src="@drawable/googleg_disabled_color_18"></ImageView>
 
     <TextView
         android:id="@+id/ThankYouImage"
@@ -30,7 +29,6 @@
         android:fontFamily="cursive"
         android:gravity="center"
         android:text="@string/thank_you"
-        android:textColor="@android:color/white"
-        android:textSize="18sp">
-    </TextView>
+        android:textColor="#D51187"
+        android:textSize="18sp"></TextView>
 </RelativeLayout>

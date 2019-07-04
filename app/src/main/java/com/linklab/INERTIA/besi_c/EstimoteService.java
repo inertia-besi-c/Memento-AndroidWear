@@ -2,11 +2,9 @@ package com.linklab.INERTIA.besi_c;
 
 // Imports
 
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import com.estimote.coresdk.observation.region.RegionUtils;
@@ -45,7 +43,6 @@ public class EstimoteService extends Service
     private final String Subdirectory_Estimote = Preference.Subdirectory_Estimote;        // This is where the estimote is kept
     private final Timer ESSensorTimer = new Timer();          // Makes a new timer for ESSensorTimer.
 
-    @SuppressLint("WakelockTimeout")
     @Override
     public void onCreate()
     {
@@ -54,9 +51,6 @@ public class EstimoteService extends Service
         CheckFiles(); // Checks Files
 
         super.onCreate();
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLockTag:");
-        wakeLock.acquire();
     }
 
     @Override

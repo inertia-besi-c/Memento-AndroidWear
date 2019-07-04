@@ -21,9 +21,12 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -362,13 +365,95 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, String.valueOf(dateFormatII.format(date)));      // Logs date data to the file.
         DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
 
-        imageToast();       // Calls the image toast
+        int imageToast = RandomToastImage();        // This is the image toast number
+
+        if (imageToast == 1)        // If the number is called
+        {
+            imageToast1();      // Calls the image toast
+        }
+        else if (imageToast == 2)        // If the number is called
+        {
+            imageToast2();      // Calls the image toast
+        }
+        else if (imageToast == 3)        // If the number is called
+        {
+            imageToast3();      // Calls the image toast
+        }
+        else if (imageToast == 4)        // If the number is called
+        {
+            imageToast4();      // Calls the image toast
+        }
+        else if (imageToast == 5)        // If the number is called
+        {
+            imageToast5();      // Calls the image toast
+        }
     }
 
-    private void imageToast()       // This is the image toast
+    public int RandomToastImage()       // This is the method that return a random number triggering an image toast.
+    {
+        List <Integer> imageToast = new ArrayList<>     // This is the list of all the possible images
+                (Arrays.asList      // As a list
+                        (
+                                1,      // Image one
+                                2,      // Image two
+                                3,      // Image three
+                                4,      // Image four
+                                5      // Image five
+                        )
+                );
+
+        Random rand = new Random();     // Gets the random module
+        return imageToast.get(rand.nextInt(imageToast.size()));     // Returns a random item from the list
+    }
+
+    private void imageToast1()       // This is the image toast
     {
         LayoutInflater inflater = getLayoutInflater();      // Calls a layout
-        View view = inflater.inflate(R.layout.activity_image_toast, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        View view = inflater.inflate(R.layout.activity_image_toast_1, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast2()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_2, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast3()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_3, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast4()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_4, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast5()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_5, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
         Toast toast = new Toast(this);      // Calls the toast
         toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
         toast.setView(view);        // Sets the view
