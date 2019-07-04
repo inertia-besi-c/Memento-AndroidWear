@@ -31,11 +31,7 @@ public class HRTimerService extends Service         /* This runs the delay timer
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Heart Rate Timer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!sensors.exists())      // If the file exists
         {
             Log.i("Heart Rate Timer Sensor", "Creating Header");     // Logs on Console.
 
@@ -44,18 +40,13 @@ public class HRTimerService extends Service         /* This runs the delay timer
         }
 
         File battery = new File(Preference.Directory + SystemInformation.Battery_Path);     // Gets the path to the Sensors from the system.
-        if (battery.exists())      // If the file exists
-        {
-            Log.i("Heart Rate Timer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!battery.exists())      // If the file exists
         {
             Log.i("Heart Rate Timer Sensor", "Creating Header");     // Logs on Console.
 
             DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Battery, Preference.Battery_Data_Headers);        /* Logs the Sensors data in a csv format */
             dataLogger.LogData();       // Saves the data to the directory.
         }
-
 
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Starts the power manager service from the system
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
@@ -92,18 +83,13 @@ public class HRTimerService extends Service         /* This runs the delay timer
 
                     SystemInformation info = SystemInformation;       // Gets system information into the system
 
-                    if (SystemInformation.getBatteryPercent(getApplicationContext()) <= Preference.LowBatPercent)   // Checks whether battery is low
-                    {
-                        Intent intent = new Intent(getApplicationContext(), LowBattery.class);       // Calls the low battery class
-                        startActivity(intent);      // Starts low battery screen
-                    }
-
                     String data = info.getTimeStamp() + ", Unplugged," + info.getBatteryLevel(getApplicationContext());        // Gets the battery level information and logs it
-                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Battery, data);      // Logs it into a file called Charging time.
-                    datalog.LogData();      // Saves the data into the directory.
-
                     String dataHRT =  ("Heart Rate Timer Service," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Battery, data);      // Logs it into a file called Charging time.
                     DataLogger datalogHRT = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHRT);      // Logs it into a file called System Activity.
+
+                    datalog.LogData();      // Saves the data into the directory.
                     datalogHRT.LogData();      // Saves the data into the directory.
 
                     startService(HRService);    // Starts the Heart Rate Sensor

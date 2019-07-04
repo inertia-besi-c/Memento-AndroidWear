@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.estimote:cloud-plugin:0.4.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/79c29683580b7267b516d0c5f8498a61/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/79c29683580b7267b516d0c5f8498a61/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/776c440fc38c207b99aeb490cfa4190b/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/776c440fc38c207b99aeb490cfa4190b/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

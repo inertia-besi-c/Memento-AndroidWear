@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import java.io.File;
@@ -22,7 +21,6 @@ public class ESTimerService extends Service         /* This runs the delay timer
     private final long period = Preference.ESMeasurementInterval + 30000;      // This is the duty cycle rate in format (minutes, seconds, milliseconds)
     private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private Timer ESTimerService;         // Starts the variable timer.
-    private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
     private final String Step = Preference.Steps;     // Gets the step file from preferences.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
@@ -34,11 +32,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("Estimote Timer Sensor", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!sensors.exists())      // If the file exists
         {
             Log.i("Estimote Timer Sensor", "Creating Header");     // Logs on Console.
 
@@ -48,9 +42,6 @@ public class ESTimerService extends Service         /* This runs the delay timer
 
         Log.i("Estimote Timer Sensor", "Starting Estimote Timer Service");     // Logs on Console.
 
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Starts the power manager service from the system
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ESService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
-        wakeLock.acquire();     // Starts the wakelock without any timeout.
         PeriodicService(false);     // Makes the periodic service false initially.
         return START_STICKY;    // This allows it to restart if the service is killed
     }
@@ -72,8 +63,7 @@ public class ESTimerService extends Service         /* This runs the delay timer
         else        // If the system is not charging or is not asked to stop
         {
             ESTimerService = new Timer();          // Makes a new timer.
-            // Starts a delay of 0
-            int delay = 0;
+            int delay = 0;            // Starts a delay of 0
             ESTimerService.schedule(new TimerTask()     // Initializes a timer.
             {
                 public void run()       // Runs the imported file based on the timer specified.
@@ -125,7 +115,6 @@ public class ESTimerService extends Service         /* This runs the delay timer
             PeriodicService(true);      // Stops the periodic service.
         }
         ESTimerService.cancel();        //  Cancels the ES Timer Service.
-        wakeLock.release();     // Releases the wakelock
     }
 
     private boolean Active()     // Checks if the person is active

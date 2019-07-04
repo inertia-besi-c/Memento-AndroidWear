@@ -24,11 +24,7 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
     public int onStartCommand(Intent intent, int flags, int startId)        // When the service is called this is started.
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (sensors.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA Prompts", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
+        if (!sensors.exists())      // If the file exists
         {
             Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
 
@@ -49,6 +45,10 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
         catch (Exception ex)   // If it cannot
         {
             Log.i("Followup EMA", "In Catch Block");     // Logs on Console.
+
+            String dataC =  ("Followup EMA Scheduler Timer," + "Failed to Cancel at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalogC = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataC);      // Logs it into a file called System Activity.
+            datalogC.LogData();      // Saves the data into the directory.
         }
 
         FollowUpEMATimer = new Timer();     // Creates a timer for the follow up EMA
@@ -65,6 +65,7 @@ public class FollowUpEMASchedulerService extends Service        // This is a ser
 
                 Intent StartEMAActivity = new Intent(getBaseContext(), FollowUpEMA.class);      // Links to the Follow up EMA file
                 startActivity(StartEMAActivity);    // Starts the Follow up EMA file.
+
                 stopSelf();     // Automatically stops and kills this service.
             }
         }, FollowUpEMADelay);        // Waits the specified time as specified in the preference section.

@@ -7,12 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,6 @@ import java.util.TimerTask;
 
 public class PainEMA extends WearableActivity       // This is the main activity for the pain survey questions.
 {
-    private PowerManager.WakeLock wakeLock;     // This is the power manager service for the system.
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private Timer EMARemindertimer;     // This is a timer that is called after the person stops in the middle of  the survey.
@@ -66,7 +66,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "How distressed is the patient?",
                     "Did patient take an opioid for the pain?",
                     "Why not?",
-                    "Are you satisfied with your answers?"
+                    "Ready to submit your answers?",
             };
     private final String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
@@ -75,7 +75,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
                     {"Yes", "No", "Unsure"},
-                    {"Not time", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
+                    {"Not time yet", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason", "Unsure"},
                     {"Yes", "No"},
             };
 
@@ -87,7 +87,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     "How distressed is your caregiver?",
                     "Did you take an opioid for the pain?",
                     "Why not?",
-                    "Are you satisfied with your answers?"
+                    "Ready to submit your answers?",
             };
     private final String[][] PatientAnswers =         // These are the patient answers in order.
             {
@@ -96,7 +96,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
                     {"Yes", "No"},
-                    {"Not time", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
+                    {"Not time yet", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
                     {"Yes", "No"}
             };
 
@@ -104,50 +104,8 @@ public class PainEMA extends WearableActivity       // This is the main activity
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(Preference.Directory + SystemInformation.Pain_EMA_Results_Path);     // Gets the path to the system from the system.
-        if (Result.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Pain_Results, Preference.Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File Activity = new File(Preference.Directory + SystemInformation.Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
-        if (Activity.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, Pain_Activity, Preference.Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        Log.i("Pain EMA", "Starting Followup Service");     // Logs on Console.
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Pain EMA:wakeLock");        // It initiates a full wakelock to turn on the screen.
-        wakeLock.acquire();      // The screen turns off after the timeout is passed.
+        CheckFiles();       // Checks that the files needed are present
+        unlockScreen();     // Unlocks the screen
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
@@ -280,7 +238,10 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {
                         UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
+
                         UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                        LogActivity();      // The log activity method is called.
+
                         CurrentQuestion += 2;       // Skips one question not pertaining to this answer
                         QuestionSystem();       // Calls the question system method
                     }
@@ -347,6 +308,36 @@ public class PainEMA extends WearableActivity       // This is the main activity
         }
     }
 
+    private void CheckFiles()       // Checks that the files in the system needed are present
+    {
+        File Result = new File(Preference.Directory + SystemInformation.Pain_EMA_Results_Path);     // Gets the path to the system from the system.
+        if (!Result.exists())      // If the file exists
+        {
+            Log.i("Pain EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Pain_Results, Preference.Pain_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File Activity = new File(Preference.Directory + SystemInformation.Pain_EMA_Activity_Path);     // Gets the path to the system from the system.
+        if (!Activity.exists())      // If the file exists
+        {
+            Log.i("Pain EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, Pain_Activity, Preference.Pain_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+        if (!system.exists())      // If the file exists
+        {
+            Log.i("Pain EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+    }
+
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
@@ -361,7 +352,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Pain_Results, log.toString());        /* Logs the pain data in a csv format */
         dataLogger.LogData();       // Saves the data to the directory.
 
-        if(UserResponses[Questions.length -1] != null && UserResponses[Questions.length - 1].toLowerCase().contains("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
+        if(UserResponses[Questions.length - 3] != null && UserResponses[Questions.length - 3].toLowerCase().contains("yes"))     // Checks if the person answered yes to the first question of the pain EMA.
         {
             Intent FollowUpScheduler = new Intent(getApplicationContext(), FollowUpEMASchedulerService.class);      // Gets an intent for the followup EMA
             startService(FollowUpScheduler);        // Starts the service with the scheduler.
@@ -400,12 +391,21 @@ public class PainEMA extends WearableActivity       // This is the main activity
         datalog.LogData();      // Logs the data into the directory specified.
     }
 
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
+        window.addFlags(WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING);        // Keeps the Screen on while waking up
+    }
+
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
-        Log.i("Pain EMA", "Destroying Followup EMA");     // Logs on Console.
+        Log.i("Pain EMA", "Destroying Pain EMA");     // Logs on Console.
 
-        wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
     }

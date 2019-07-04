@@ -5,16 +5,17 @@ import android.os.Environment;
 @SuppressWarnings("ALL")    // Service wide suppression for the Errors.
 public class Preferences        // System wide one stop place to set all settings for a particular individual
 {
-    SystemInformation systemInformation = new SystemInformation();      // Imports the system information settings.
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "DEVICE-IDENTIFICATION";        // Internal ID of Device assigned to Dyad
+    public String DeviceID = "DEVICE";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "P3D1-V";      // Deployment ID
-    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
-    // Settings for Vibration | Time is in ms |
+    // Settings for General Watch Features | Time is in ms |
+    public int ThreadUpdater = 5000;        // This is how often the main thread is run
+    public int UIUpdate = 60;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
     public int ActivityReminder = 1000;          // How the system vibrates when an activity reminds the person to continue survey
@@ -42,7 +43,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The start time should always be on the exact time that you want them to start */
-    public int EoDEMA_ManualStart_Hour = 17;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_ManualStart_Hour = 15;       // Hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The end time should always be one second off from desired mark. */
@@ -65,10 +66,19 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Low Battery | Time in ms |
     public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
+    public int LowBatteryAlert = 5 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
+    /* The start time should always be on the exact time that you want them to start */
+    public int LowBattery_ManualStart_Hour = 00;       // Hour at which the automatic LowBattery should stop
+    public int LowBattery_ManualStart_Minute = 00;      // Minute of hour at which the automatic LowBattery should stop
+    public int LowBattery_ManualStart_Second = 00;      // Second of minute at which the automatic LowBattery should stop
+    /* The end time should always be one second off from desired mark. */
+    public int LowBattery_ManualEnd_Hour = 07;       // Hour at which the automatic LowBattery should start
+    public int LowBattery_ManualEnd_Minute = 59;      // Minute of hour at which the automatic LowBattery should start
+    public int LowBattery_ManualEnd_Second = 59;      // Second of minute at which the automatic LowBattery should start
 
     /* Settings for Changing Individual File Name <----------------------------------------- This is where you change the file names, it updates everywhere */
-    public String Accelerometer = "Accelerometer_Data" + "_" + String.valueOf(systemInformation.getDataStamp()) + ".csv";     // This is the Accelerometer File
-    public String Battery = "Battery_Activity.csv";        // This is the Battery Information Folder
+    public String Accelerometer = "Accelerometer_Data";     // This is the Accelerometer File (DO NOT ADD .CSV here as the accelerometer data are saved differently)
+    public String Battery = "Battery_Activity.csv";        // This is the Battery Information File
     public String Estimote = "Estimote_Data.csv";      // This is the Estimote File
     public String Pedometer = "Pedometer_Data.csv";        // This is the Pedometer File
     public String Pain_Activity = "Pain_EMA_Activity.csv";     // This is the Pain EMA Activity File
@@ -94,12 +104,14 @@ public class Preferences        // System wide one stop place to set all setting
 
     /* Headers to individual files that are being logged to <--------------------------------------------- This is the order that the headers will appear in */
     public String EndOfDay_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for EndOfDay_EMA_Activity
-    public String EndOfDay_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
-            "Question 6 Answer, Question 7 Answer, Question 8 Answer, Question 9 Answer, Question 10 Answer";        // Column Headers for EndOfDay_EMA_Results
+    public String EndOfDay_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, Question 6 Answer, Question 7 Answer, Question 8" +
+                                                 "Answer, Question 9 Answer, Question 10 Answer, Question 11 Answer, Question 12 Answer";        // Column Headers for EndOfDay_EMA_Results
     public String Pain_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Pain_EMA_Activity
-    public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";       // Column Headers for Pain_EMA_Results
+    public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
+                                             "Question 6 Answer, Question 7 Answer";       // Column Headers for Pain_EMA_Results
     public String Followup_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Followup_EMA_Activity
-    public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer";        // Column Headers for Followup_EMA_Results
+    public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
+                                                 "Question 6 Answer, Question 7 Answer";        // Column Headers for Followup_EMA_Results
     public String Heart_Rate_Data_Headers = "Date --- Time, System Time Stamp, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
     public String Accelerometer_Data_Headers = "Date --- Time, System Time Stamp, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
     public String Pedometer_Data_Headers = "Date --- Time, System Time Stamp, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data
@@ -109,5 +121,4 @@ public class Preferences        // System wide one stop place to set all setting
     public String System_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the System Logs.
     public String Step_Data_Headers = "yes";        // Column Headers for Steps.
     public String EODEMA_Date_Headers = "Date";     // Column Header for the EODEMA daily.
-
 }

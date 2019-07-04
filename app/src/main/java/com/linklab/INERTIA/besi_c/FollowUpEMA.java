@@ -6,12 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import java.util.TimerTask;
 
 public class FollowUpEMA extends WearableActivity       // This is the followup activity for the EMA questions
 {
-    private PowerManager.WakeLock wakeLock;
     private Button res, res2, back, next;     // These are the buttons shown on the screen to navigate the watch
     private TextView req;   // This is a text view for the question
     private final ArrayList<String> responses = new ArrayList<>();    // This is a string that is appended to.
@@ -55,6 +55,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private Vibrator v;      // The vibrator that provides haptic feedback.
+    private boolean firstRes2 = false;       // This is the boolean that checks if the res2 was clicked for the caregiver.
 
     private final String[] CaregiverQuestions =       // These are the questions for the care giver in order.
             {
@@ -62,7 +63,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "What is the patient's pain level?",
                     "How distressed are you?",
                     "How distressed is the patient?",
-                    "Did the patient take another opioid for the pain?"
+                    "Did the patient take another opioid for the pain?",
+                    "Why not?",
+                    "Ready to submit your answers?",
             };
     private final String[][] CaregiverAnswers =       // These are the answers for the care giver in order.
             {
@@ -70,7 +73,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
-                    {"Yes", "No", "Unsure"}
+                    {"Yes", "No", "Unsure"},
+                    {"Not time yet", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason", "Unsure"},
+                    {"Yes", "No"},
             };
 
     private final String[] PatientQuestions =         // These are the patient questions in order.
@@ -79,7 +84,9 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     "What is your pain level?",
                     "How distressed are you?",
                     "How distressed is your caregiver?",
-                    "Did you take another opioid for the pain?"
+                    "Did you take another opioid for the pain?",
+                    "Why not?",
+                    "Ready to submit your answers?",
             };
     private final String[][] PatientAnswers =        // These are the patient answers in order.
             {
@@ -87,57 +94,19 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"1","2","3","4","5","6","7","8","9","10"},
                     {"Not at all", "A little", "Fairly", "Very"},
                     {"Not at all", "A little", "Fairly", "Very", "Unsure"},
-                    {"Yes", "No"}
+                    {"Yes", "No"},
+                    {"Not time yet", "Side effects", "Out of pills", "Worried taking too many", "Pain not bad enough", "Other Reason"},
+                    {"Yes", "No"},
             };
 
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock from the system.
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
-        File Result = new File(Preference.Directory + SystemInformation.Followup_EMA_Results_Path);     // Gets the path to the system from the system.
-        if (Result.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Followup_Results, Preference.Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File Activity = new File(Preference.Directory + SystemInformation.Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
-        if (Activity.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, Followup_Activity, Preference.Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
-        if (system.exists())      // If the file exists
-        {
-            Log.i("Followup EMA", "No Header Created");     // Logs to console
-        }
-        else        // If the file does not exist
-        {
-            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
+        CheckFiles();       // Checks that the file needed dby the system are present
+        unlockScreen();     // Unlocks the screen
 
         Log.i("Followup EMA", "Starting Followup Service");     // Logs on Console.
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Power manager calls the power distribution service.
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "FollowUpEMA: WakeLock");        // The wakelock that turns on the screen.
-        wakeLock.acquire();      // The screen turns off after the timeout is passed.
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
@@ -200,21 +169,31 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @SuppressLint("SetTextI18n")        // Suppresses an error encountered.
     private void QuestionSystem()       // This is the logic behind the question system.
     {
-        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
+        if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1 || CurrentQuestion == Questions.length-3)       // If the current question is the first question.
         {
-            res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
-            next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
-            back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
-
-            if (Preference.Role.equals("CG"))        // If this is the caregiver watch
+            if (CurrentQuestion == Questions.length-1)      // If this is the last question
             {
-                res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
-                res2.setBackgroundColor(Color.GRAY);        // Makes the button grey
-                res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
-            }
-            if (Preference.Role.equals("PT"))        // If this is the patient watch
-            {
+                res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
                 res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
+                next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+            }
+            else
+            {
+                res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
+                next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+
+                if (Preference.Role.equals("CG"))        // If this is the caregiver watch
+                {
+                    res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
+                    res2.setBackgroundColor(Color.BLUE);        // Makes the button grey
+                    res2.setText(Answers[0][2]);       // Makes the answer on the button the third option in the answer choices
+                }
+                if (Preference.Role.equals("PT"))        // If this is the patient watch
+                {
+                    res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
+                }
             }
         }
         else        // If we are in any other question.
@@ -261,7 +240,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                     v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
 
-                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1)       // If the current question is the first question.
+                    if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-2 || CurrentQuestion == Questions.length-3)       // If the current question is the first question.
                     {
                         if (Preference.Role.equals("CG"))    // If this is the caregiver watch
                         {
@@ -270,12 +249,26 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                             if (CurrentQuestion == 0)       // If this is the first question
                             {
-                                CurrentQuestion++;      // Increments the current question.
+                                firstRes2 = true;       // Sets the value of the res2 button to be true
+
+                                UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                                LogActivity();      // The log activity method is called.
+
+                                CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
                             }
-                            if (CurrentQuestion == Questions.length - 1)        // if this is the last question
+                            if (CurrentQuestion == Questions.length - 2)        // if this is the last question
                             {
-                                Submit();       // Submits the survey
+                                CurrentQuestion ++;      // Increments the current question.
+                                QuestionSystem();       // The question system method is called again for the next question.
+                            }
+                            if (CurrentQuestion == Questions.length - 3)        // if this is the last question
+                            {
+                                UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                                LogActivity();      // The log activity method is called.
+
+                                CurrentQuestion += 2;      // Increments the current question.
+                                QuestionSystem();       // The question system method is called again for the next question.
                             }
                         }
 
@@ -315,6 +308,17 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                         Submit();       // Submit the survey
                     }
+                    else if (CurrentQuestion == Questions.length-3)      // If this is the last question
+                    {
+                        UserResponses[CurrentQuestion] = next.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        UserResponses[CurrentQuestion+1] = null;        // Resets the response index value to null
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion += 2;     // Increment the question amount to go forward to the next question
+                        QuestionSystem();       // Call the question method again.
+                    }
                     else        // If we are not on the first question
                     {
                         UserResponses[CurrentQuestion] = res.getText().toString();      // The user response question is moved.
@@ -346,12 +350,37 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                         Submit();       // Submit the survey
                     }
+                    else if (Preference.Role.equals("CG") && CurrentQuestion == 2)
+                    {
+                        if (firstRes2)
+                        {
+                            CurrentQuestion = 0;        // Current question is 0
+                            firstRes2 = false;      // Resets the initial variable
+                        }
+                        else
+                        {
+                            CurrentQuestion --;     // Moves back one question
+                        }
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        QuestionSystem();       // Calls the question system method
+                    }
                     else if (CurrentQuestion == Questions.length-1)     // If this is the last question
                     {
                         UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
                         LogActivity();      // The log activity method is called.
 
-                        Submit();       // Submit the survey
+                        CurrentQuestion = 0;        // Current question is 0
+                        QuestionSystem();       // Calls the question system method
+                    }
+                    else if (CurrentQuestion == Questions.length-3)     // If this is the last question
+                    {
+                        UserResponses[CurrentQuestion] = back.getText().toString();      // The user response question is moved.
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion++;        // Current question is 0
+                        QuestionSystem();       // Calls the question system method
                     }
                     else        // If we are not on the first question
                     {
@@ -369,6 +398,36 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         else        // If there are no more questions to ask.
         {
             Submit();       // Submits the survey.
+        }
+    }
+
+    private void CheckFiles()       // Checks that the files in the system needed are present
+    {
+        File Result = new File(Preference.Directory + SystemInformation.Followup_EMA_Results_Path);     // Gets the path to the system from the system.
+        if (!Result.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Followup_Results, Preference.Followup_EMA_Results_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File Activity = new File(Preference.Directory + SystemInformation.Followup_EMA_Activity_Path);     // Gets the path to the system from the system.
+        if (!Activity.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_EMAActivities, Followup_Activity, Preference.Followup_EMA_Activity_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        File system = new File(Preference.Directory + SystemInformation.System_Path);     // Gets the path to the system from the system.
+        if (!system.exists())      // If the file exists
+        {
+            Log.i("Followup EMA", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, System, Preference.System_Data_Headers);        /* Logs the system data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
         }
     }
 
@@ -414,12 +473,21 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         datalog.LogData();      // Logs the data into the directory specified.
     }
 
+    private void unlockScreen()         // This unlocks the screen if called
+    {
+        Window window = this.getWindow();       // Gets the window that is being used
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);      // Dismisses the button
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);      // Ignores the screen if locked
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);        // Turns on the screen
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        // Keeps the Screen on
+        window.addFlags(WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING);        // Keeps the Screen on while waking up
+    }
+
     @Override
     public void onDestroy()     // This is called when the activity is destroyed.
     {
         Log.i("Followup EMA", "Destroying Followup EMA");     // Logs on Console.
 
-        wakeLock.release();     // The wakelock system is released.
         EMARemindertimer.cancel();      // The timers are canceled.
         super.onDestroy();      // The activity is killed.
     }
