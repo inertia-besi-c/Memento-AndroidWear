@@ -13,26 +13,24 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="-5dp"
+        android:layout_marginTop="0dp"
         android:contentDescription="@string/todo"
-        android:src="@mipmap/besi_logo">
-    </ImageView>
+        android:src="@mipmap/beach"></ImageView>
 
     <TextView
         android:id="@+id/ThankYouImage"
-        android:layout_width="109dp"
-        android:layout_height="26dp"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ImageToast"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="47dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="99dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="cursive"
         android:gravity="center"
         android:text="@string/thank_you"
-        android:textColor="@android:color/white"
-        android:textSize="18sp">
-    </TextView>
+        android:textColor="#000000"
+        android:textSize="18sp"></TextView>
 
 </RelativeLayout>
