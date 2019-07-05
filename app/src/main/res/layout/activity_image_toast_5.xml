@@ -14,21 +14,21 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="-5dp"
         android:contentDescription="@string/todo"
-        android:src="@drawable/close_button"></ImageView>
+        android:src="@mipmap/treeoflife_round"></ImageView>
 
     <TextView
         android:id="@+id/ThankYouImage"
-        android:layout_width="109dp"
-        android:layout_height="26dp"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ImageToast"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="46dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="21dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="cursive"
         android:gravity="center"
         android:text="@string/thank_you"
-        android:textColor="@color/blue"
+        android:textColor="#E91E63"
         android:textSize="18sp"></TextView>
 </RelativeLayout>

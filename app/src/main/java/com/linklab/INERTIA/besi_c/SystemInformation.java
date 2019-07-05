@@ -148,7 +148,7 @@ class SystemInformation     // Class that acquires the current time from the sys
         {
             String hourString = currentTime.split(":")[0];     // It set the first string to the hour
             String minuteString = currentTime.split(":")[1];       // It sets the second string to the minutes
-            String secondString = currentTime.split(":")[2];       // Ir sets the thrid string to the seconds
+            String secondString = currentTime.split(":")[2];       // It sets the thrid string to the seconds
 
             int hour = Integer.parseInt(hourString);        // Makes the string an integer for the hour
             int minute = Integer.parseInt(minuteString);        // Makes the string an integer for the minute

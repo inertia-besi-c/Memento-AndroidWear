@@ -490,6 +490,8 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             }
                             else        // If the watch is not charging.
                             {
+                                wifi.setWifiEnabled(false);     // Disable the wifi.
+
                                 if (isDeviceOnline())       // If the wifi is still when the watch is not charging
                                 {
                                     wifi.setWifiEnabled(false);     // Disable the wifi.
