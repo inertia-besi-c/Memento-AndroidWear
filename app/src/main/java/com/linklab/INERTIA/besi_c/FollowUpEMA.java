@@ -99,7 +99,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"Yes", "No"},
             };
 
-    @SuppressLint("WakelockTimeout")        // Suppresses the wakelock from the system.
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
