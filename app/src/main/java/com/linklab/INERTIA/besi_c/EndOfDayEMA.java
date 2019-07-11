@@ -105,7 +105,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "How much did pain bother you?",
                     "How was your mood?",
                     "How distressed were you overall?",
-                    "How distressed was the patient overall?",
                     "Ready to submit your answers?",
             };
     private final String[][] PatientAnswers =      // These are strictly the patient answers.
@@ -120,7 +119,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     {"Not at all", "A little", "Medium", "A lot"},
                     {"Poor", "Fair", "Good", "Very Good"},
                     {"Not at all", "A little", "Fairly", "Very"},
-                    {"Not at all", "A little", "Fairly", "Very", "Unsure"},
                     {"Yes", "No"},
             };
 

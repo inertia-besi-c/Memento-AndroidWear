@@ -66,7 +66,7 @@ public class Preferences        // System wide one stop place to set all setting
     // Settings for Low Battery | Time in ms |
     public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
     public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
-    public int LowBatteryAlert = 5 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
+    public int LowBatteryAlert = 10 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
     /* The start time should always be on the exact time that you want them to start */
     public int LowBattery_ManualStart_Hour = 00;       // Hour at which the automatic LowBattery should stop
     public int LowBattery_ManualStart_Minute = 00;      // Minute of hour at which the automatic LowBattery should stop
