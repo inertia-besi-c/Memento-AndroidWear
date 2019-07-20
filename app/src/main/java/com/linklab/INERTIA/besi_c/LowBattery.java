@@ -14,7 +14,7 @@ public class LowBattery extends WearableActivity
 {
     private final Preferences Preference = new Preferences();     // Gets the preferences list from preferences class
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-//    private final int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
+    private final int vibrationDuration = Preference.LowBatBuzzDuration;      // This is th vibration duration for the low battery
     private final String System = Preference.System;     // Gets the sensors from preferences.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
@@ -42,7 +42,7 @@ public class LowBattery extends WearableActivity
         }
         else    // If the system is not charging
         {
-//            vibrator.vibrate(vibrationDuration);        // Sets the system to vibrate for that long.
+            vibrator.vibrate(vibrationDuration);        // Sets the system to vibrate for that long.
             Button dismiss = findViewById(R.id.Dismiss);        // Sets the dismiss button
 
             String data =  ("Low Battery," + "Started at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
