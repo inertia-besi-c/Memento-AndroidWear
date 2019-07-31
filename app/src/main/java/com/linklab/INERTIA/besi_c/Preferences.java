@@ -65,7 +65,7 @@ public class Preferences        // System wide one stop place to set all setting
 
     // Settings for Low Battery | Time in ms |
     public int LowBatPercent = 15;      // Battery percentage at which to trigger low battery warning.
-    public int LowBatBuzzDuration = 3000;       // How long to vibrate for to alert user that battery is low.
+    public int LowBatBuzzDuration = 0;       // How long to vibrate for to alert user that battery is low.
     public int LowBatteryAlert = 10 * 60;        // This is how often the low battery screen should be called if enabled. (TIME IS IN SECONDS!!)
     /* The start time should always be on the exact time that you want them to start */
     public int LowBattery_ManualStart_Hour = 00;       // Hour at which the automatic LowBattery should stop
@@ -108,10 +108,10 @@ public class Preferences        // System wide one stop place to set all setting
                                                  "Answer, Question 9 Answer, Question 10 Answer, Question 11 Answer, Question 12 Answer";        // Column Headers for EndOfDay_EMA_Results
     public String Pain_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Pain_EMA_Activity
     public String Pain_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
-                                             "Question 6 Answer, Question 7 Answer";       // Column Headers for Pain_EMA_Results
+                                             "Question 6 Answer, Question 7 Answer, EMA Duration";       // Column Headers for Pain_EMA_Results
     public String Followup_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Followup_EMA_Activity
     public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
-                                                 "Question 6 Answer, Question 7 Answer";        // Column Headers for Followup_EMA_Results
+                                                 "Question 6 Answer, Question 7 Answer, EMA Duration";        // Column Headers for Followup_EMA_Results
     public String Heart_Rate_Data_Headers = "Date --- Time, System Time Stamp, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
     public String Accelerometer_Data_Headers = "Date --- Time, System Time Stamp, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
     public String Pedometer_Data_Headers = "Date --- Time, System Time Stamp, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data
