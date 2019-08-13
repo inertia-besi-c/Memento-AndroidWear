@@ -3,6 +3,7 @@ package com.linklab.INERTIA.besi_c;
 // Imports
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,6 +42,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final String System = Preference.System;      // Gets the System File label from Preferences
+    private String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private final String Pain_Activity = Preference.Pain_Activity;      // Gets the Followup Activity File label from Preferences
     private final String Pain_Results = Preference.Pain_Results;      // Gets the Followup Results File label from Preferences
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
@@ -56,6 +58,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
     private int resTaps = 0;        // This is the number of taps that dictates what answer option is visible.
+    private long PainEMAStartTime;      // This is the start time of the pain EMA
     private Vibrator v;      // The vibrator that provides haptic feedback.
 
     private final String[] CaregiverQuestions =       // These are the questions for the care giver in order.
@@ -100,6 +103,11 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     {"Yes", "No"}
             };
 
+    final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);        // Gets an intent for the start of the heartrate sensor.
+    final Intent HRTService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+    final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);        // Gets an intent for the start of the heartrate sensor.
+    final Intent ESTService = new Intent(getBaseContext(), ESTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock for the system
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
@@ -114,6 +122,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
 
         EMARemindertimer = new Timer();     // Creates the EMA reminder timer.
+        PainEMAStartTime = Long.parseLong(SystemInformation.getTimeStamp());     // This is the time that the EMA started.
 
         back = findViewById(R.id.Back);         // Sets the back button to a variable.
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
@@ -226,6 +235,51 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
                         CurrentQuestion++;      // Increments the current question.
                         QuestionSystem();       // The question system method is called again for the next question.
+
+                        stopService(HRTService);     // Stops the Heart Rate Timer Service
+                        stopService(ESTService);        // Stops the Estimote Timer Service
+
+                        String dataHRT =  ("Pain EMA," + "Stopped Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                        String dataEST =  ("Pain EMA," + "Stopped Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+                        DataLogger datalogHRT = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHRT);      // Logs it into a file called System Activity.
+                        DataLogger datalogEST = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataEST);      // Logs it into a file called System Activity.
+
+                        datalogEST.LogData();      // Saves the data into the directory.
+                        datalogHRT.LogData();      // Saves the data into the directory.
+
+
+                        if (isRunning(HeartRateSensor.class) || isRunning(EstimoteService.class))       // Starts the heart rate timer controller
+                        {
+                            stopService(HRService);        // This stops the heartrate sensor class
+                            stopService(ESService);         // This stops the estimote sensor class
+
+                            startService(HRService);        // This starts the heartrate sensor class
+                            startService(ESService);        // This starts the estimote sensor class
+
+                            String dataHR =  ("Pain EMA," + "Stopped and Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                            String dataES =  ("Pain EMA," + "Stopped and Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+                            DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+                            DataLogger datalogES = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataES);      // Logs it into a file called System Activity.
+
+                            datalogHR.LogData();      // Saves the data into the directory.
+                            datalogES.LogData();      // Saves the data into the directory.
+                        }
+                        else
+                        {
+                            startService(HRService);        // This starts the heartrate sensor if it is not already running.
+                            startService(ESService);        // This starts the estimote sensor class if it is not running
+
+                            String dataHR =  ("Pain EMA," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                            String dataES =  ("Pain EMA," + "Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+                            DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+                            DataLogger datalogES = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataES);      // Logs it into a file called System Activity.
+
+                            datalogHR.LogData();      // Saves the data into the directory.
+                            datalogES.LogData();      // Saves the data into the directory.
+                        }
                     }
                     else if (CurrentQuestion == Questions.length-1)      // If this is the last question
                     {
@@ -340,6 +394,9 @@ public class PainEMA extends WearableActivity       // This is the main activity
 
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
+        long painEMAStopTime = Long.parseLong(SystemInformation.getTimeStamp());     // This is the time that the EMA started.
+        String painEMADuration = String.valueOf((PainEMAStartTime - painEMAStopTime) / 1000);      // This is the time between the EMAs
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         Date date = new Date();     // Makes a new date call from the system
         StringBuilder log = new StringBuilder(dateFormat.format(date));     // Starts to log the data
@@ -348,6 +405,7 @@ public class PainEMA extends WearableActivity       // This is the main activity
         {
             log.append(",").append(UserResponse);       // Any string that has data, get it and append it to the file.
         }
+        log.append(",").append(painEMADuration);        // Adds the duration of the EMA to the responses
 
         DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Pain_Results, log.toString());        /* Logs the pain data in a csv format */
         dataLogger.LogData();       // Saves the data to the directory.
@@ -357,6 +415,33 @@ public class PainEMA extends WearableActivity       // This is the main activity
             Intent FollowUpScheduler = new Intent(getApplicationContext(), FollowUpEMASchedulerService.class);      // Gets an intent for the followup EMA
             startService(FollowUpScheduler);        // Starts the service with the scheduler.
         }
+
+        if (!isRunning(HeartRateSensor.class) || !isRunning(EstimoteService.class))       // Starts the heart rate timer controller
+        {
+            startService(HRService);        // This starts the heartrate sensor class
+            startService(ESService);        // This starts the estimote sensor class
+
+            String dataHR =  ("Pain EMA," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            String dataES =  ("Pain EMA," + "Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+            DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+            DataLogger datalogES = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataES);      // Logs it into a file called System Activity.
+
+            datalogHR.LogData();      // Saves the data into the directory.
+            datalogES.LogData();      // Saves the data into the directory.
+        }
+
+        startService(HRTService);        // This starts the heartrate sensor if it is not already running.
+        startService(ESTService);        // This starts the estimote sensor class if it is not running
+
+        String dataHRT =  ("Pain EMA," + "Started Heart Rate Timers at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+        String dataEST =  ("Pain EMA," + "Started Estimote Timers at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+
+        DataLogger datalogHRT = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHRT);      // Logs it into a file called System Activity.
+        DataLogger datalogEST = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataEST);      // Logs it into a file called System Activity.
+
+        datalogHRT.LogData();      // Saves the data into the directory.
+        datalogEST.LogData();      // Saves the data into the directory.
 
         ThankYou();     // Calls the thank you method.
     }
@@ -373,6 +458,19 @@ public class PainEMA extends WearableActivity       // This is the main activity
         textSeen.setTextColor(Color.WHITE);     // Changes the color of the text
         toast.show();       // Shows the toast.
         finish();       // Finishes the toast.
+    }
+
+    private boolean isRunning(Class<?> serviceClass)        // A general file that checks if a system is running.
+    {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);     // Starts the activity manager to check the service called.
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))        // For each service called by the running service.
+        {
+            if (serviceClass.getName().equals(service.service.getClassName()))      // It checks if it is running.
+            {
+                return true;        // Returns true
+            }
+        }
+        return false;       // If not, it returns false.
     }
 
     private int Cycle_Responses()       // This cycles through all the possible responses that the person can provide.

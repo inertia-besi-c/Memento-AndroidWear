@@ -71,7 +71,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                     "Time spent with the patient?",
                     "Time spent with other people?",
                     "How was your sleep?",
-                    "How did patient's pain bother you?",
+                    "How much did patient's pain bother you?",
                     "How was your mood?",
                     "How distressed were you overall?",
                     "How distressed was the patient overall?",
