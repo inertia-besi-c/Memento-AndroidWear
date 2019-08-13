@@ -5,7 +5,6 @@ package com.linklab.INERTIA.besi_c;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +37,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private String[] UserResponses;     // This is the user response.
     private String[] Questions;     // This is the variable question that is assigned a position from the preference menu
     private String[][] Answers;     // Based on the assigned questions the variable answer is modified.
+    private String followupEMAStartTime;      // This is the start time of the followup EMA
+    private String followupEMAStopTime;      // This is the stop time of the followup EMA
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final String System = Preference.System;      // Gets the System File label from Preferences
@@ -57,7 +59,6 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     private final int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private int ReminderCount = 0;      // This is the reminder count that keeps track of the reminders.
     private int CurrentQuestion = 0;        // This is the current question that the person is on.
-    private long FollowupEMAStartTime;      // This is the start time of the pain EMA
     private Vibrator v;      // The vibrator that provides haptic feedback.
     private boolean firstRes2 = false;       // This is the boolean that checks if the res2 was clicked for the caregiver.
 
@@ -103,10 +104,10 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     {"Yes", "No"},
             };
 
-    final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);        // Gets an intent for the start of the heartrate sensor.
-    final Intent HRTService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
-    final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);        // Gets an intent for the start of the heartrate sensor.
-    final Intent ESTService = new Intent(getBaseContext(), ESTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+//    final Intent HRService = new Intent(getBaseContext(), HeartRateSensor.class);        // Gets an intent for the start of the heartrate sensor.
+//    final Intent HRTService = new Intent(getBaseContext(), HRTimerService.class);        // Gets an intent for the start of the heartrate sensor.
+//    final Intent ESService = new Intent(getBaseContext(), EstimoteService.class);        // Gets an intent for the start of the heartrate sensor.
+//    final Intent ESTService = new Intent(getBaseContext(), ESTimerService.class);        // Gets an intent for the start of the heartrate sensor.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
@@ -123,7 +124,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         setContentView(R.layout.activity_ema);      // Get the layout made for the general EMA in the res files.
 
         EMARemindertimer = new Timer();     // Creates the EMA reminder timer.
-        FollowupEMAStartTime = Long.parseLong(SystemInformation.getTimeStamp());     // This is the time that the EMA started.
+        followupEMAStartTime = String.valueOf(SystemInformation.getTimeMilitary());     // This is the time that the EMA started.
 
         back = findViewById(R.id.Back);         // Sets the back button to a variable.
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
@@ -266,8 +267,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                                 CurrentQuestion += 2;      // Increments the current question.
                                 QuestionSystem();       // The question system method is called again for the next question.
 
-                                stopService(HRTService);     // Stops the Heart Rate Timer Service
-                                stopService(ESTService);        // Stops the Estimote Timer Service
+//                                stopService(HRTService);     // Stops the Heart Rate Timer Service
+//                                stopService(ESTService);        // Stops the Estimote Timer Service
 
                                 String dataHRT =  ("Followup EMA," + "Stopped Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                 String dataEST =  ("Followup EMA," + "Stopped Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -280,11 +281,11 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                                 if (isRunning(HeartRateSensor.class) || isRunning(EstimoteService.class))       // Starts the heart rate timer controller
                                 {
-                                    stopService(HRService);        // This stops the heartrate sensor class
-                                    stopService(ESService);         // This stops the estimote sensor class
+//                                    stopService(HRService);        // This stops the heartrate sensor class
+//                                    stopService(ESService);         // This stops the estimote sensor class
 
-                                    startService(HRService);        // This starts the heartrate sensor class
-                                    startService(ESService);        // This starts the estimote sensor class
+//                                    startService(HRService);        // This starts the heartrate sensor class
+//                                    startService(ESService);        // This starts the estimote sensor class
 
                                     String dataHR =  ("Followup EMA," + "Stopped and Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                     String dataES =  ("Followup EMA," + "Stopped and Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -297,8 +298,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                                 }
                                 else
                                 {
-                                    startService(HRService);        // This starts the heartrate sensor if it is not already running.
-                                    startService(ESService);        // This starts the estimote sensor class if it is not running
+//                                    startService(HRService);        // This starts the heartrate sensor if it is not already running.
+//                                    startService(ESService);        // This starts the estimote sensor class if it is not running
 
                                     String dataHR =  ("Followup EMA," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                                     String dataES =  ("Followup EMA," + "Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -354,8 +355,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         CurrentQuestion++;      // Increments the current question.
                         QuestionSystem();       // The question system method is called again for the next question.
 
-                        stopService(HRTService);     // Stops the Heart Rate Timer Service
-                        stopService(ESTService);        // Stops the Estimote Timer Service
+//                        stopService(HRTService);     // Stops the Heart Rate Timer Service
+//                        stopService(ESTService);        // Stops the Estimote Timer Service
 
                         String dataHRT =  ("Followup EMA," + "Stopped Heart Rate Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                         String dataEST =  ("Followup EMA," + "Stopped Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -368,11 +369,11 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
                         if (isRunning(HeartRateSensor.class) || isRunning(EstimoteService.class))       // Starts the heart rate timer controller
                         {
-                            stopService(HRService);        // This stops the heartrate sensor class
-                            stopService(ESService);         // This stops the estimote sensor class
+//                            stopService(HRService);        // This stops the heartrate sensor class
+//                            stopService(ESService);         // This stops the estimote sensor class
 
-                            startService(HRService);        // This starts the heartrate sensor class
-                            startService(ESService);        // This starts the estimote sensor class
+//                            startService(HRService);        // This starts the heartrate sensor class
+//                            startService(ESService);        // This starts the estimote sensor class
 
                             String dataHR =  ("Followup EMA," + "Stopped and Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                             String dataES =  ("Followup EMA," + "Stopped and Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -385,8 +386,8 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                         }
                         else
                         {
-                            startService(HRService);        // This starts the heartrate sensor if it is not already running.
-                            startService(ESService);        // This starts the estimote sensor class if it is not running
+//                            startService(HRService);        // This starts the heartrate sensor if it is not already running.
+//                            startService(ESService);        // This starts the estimote sensor class if it is not running
 
                             String dataHR =  ("Followup EMA," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
                             String dataES =  ("Followup EMA," + "Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
@@ -530,8 +531,7 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
 
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
-        long FollowupEMAStopTime = Long.parseLong(SystemInformation.getTimeStamp());     // This is the time that the EMA started.
-        String FollowupEMADuration = String.valueOf((FollowupEMAStartTime - FollowupEMAStopTime) / 1000);      // This is the time between the EMAs
+        followupEMAStopTime = String.valueOf(SystemInformation.getTimeMilitary());     // This is the time that the EMA stopped.
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         Date date = new Date();     // Makes a new date call from the system
@@ -541,39 +541,62 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         {
             log.append(",").append(UserResponse);       // Any string that has data, get it and append it to the file.
         }
-        log.append(",").append(FollowupEMADuration);        // This logs the duration of the followup EMA
+        log.append(",").append(EMADuration());        // This logs the duration of the followup EMA
 
         DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, Followup_Results, log.toString());        /* Logs the pain data in a csv format */
         dataLogger.LogData();       // Saves the data to the directory.
 
-        if (!isRunning(HeartRateSensor.class) || !isRunning(EstimoteService.class))       // Starts the heart rate timer controller
-        {
-            startService(HRService);        // This starts the heartrate sensor class
-            startService(ESService);        // This starts the estimote sensor class
-
-            String dataHR =  ("Followup EMA," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            String dataES =  ("Followup EMA," + "Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-
-            DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
-            DataLogger datalogES = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataES);      // Logs it into a file called System Activity.
-
-            datalogHR.LogData();      // Saves the data into the directory.
-            datalogES.LogData();      // Saves the data into the directory.
-        }
-
-        startService(HRTService);        // This starts the heartrate sensor if it is not already running.
-        startService(ESTService);        // This starts the estimote sensor class if it is not running
-
-        String dataHRT =  ("Followup EMA," + "Started Heart Rate Timers at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-        String dataEST =  ("Followup EMA," + "Started Estimote Timers at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-
-        DataLogger datalogHRT = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHRT);      // Logs it into a file called System Activity.
-        DataLogger datalogEST = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataEST);      // Logs it into a file called System Activity.
-
-        datalogHRT.LogData();      // Saves the data into the directory.
-        datalogEST.LogData();      // Saves the data into the directory.
+//        if (!isRunning(HeartRateSensor.class) || !isRunning(EstimoteService.class))       // Starts the heart rate timer controller
+//        {
+//            startService(HRService);        // This starts the heartrate sensor class
+//            startService(ESService);        // This starts the estimote sensor class
+//
+//            String dataHR =  ("Followup EMA," + "Started Heart Rate Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//            String dataES =  ("Followup EMA," + "Started Estimote Sensor at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//
+//            DataLogger datalogHR = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHR);      // Logs it into a file called System Activity.
+//            DataLogger datalogES = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataES);      // Logs it into a file called System Activity.
+//
+//            datalogHR.LogData();      // Saves the data into the directory.
+//            datalogES.LogData();      // Saves the data into the directory.
+//        }
+//
+//        startService(HRTService);        // This starts the heartrate sensor if it is not already running.
+//        startService(ESTService);        // This starts the estimote sensor class if it is not running
+//
+//        String dataHRT =  ("Followup EMA," + "Started Heart Rate Timers at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//        String dataEST =  ("Followup EMA," + "Started Estimote Timers at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+//
+//        DataLogger datalogHRT = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataHRT);      // Logs it into a file called System Activity.
+//        DataLogger datalogEST = new DataLogger(Subdirectory_DeviceLogs, Sensors, dataEST);      // Logs it into a file called System Activity.
+//
+//        datalogHRT.LogData();      // Saves the data into the directory.
+//        datalogEST.LogData();      // Saves the data into the directory.
 
         ThankYou();     // Calls the thank you method.
+    }
+
+    private String EMADuration()      // This is the duration of the EMA
+    {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");        // This is the format that the times given for comparison will be in.
+        String EMADurationFormat;        // This is the pain EMA duration time.
+
+        try     // The system tires the following.
+        {
+            Date startTime = timeFormatter.parse(followupEMAStartTime);     // Sets the start time to the start time
+            Date stopTime = timeFormatter.parse(followupEMAStopTime);     // Sets the stop time to be the immediate time
+            long EMADuration = stopTime.getTime() - startTime.getTime();        // Gets the difference between both times
+            String EMADurationHours = String.valueOf(EMADuration / (60 * 60 * 1000) % 24);      // Sets the hour difference to the variable
+            String EMADurationMinutes = String.valueOf(EMADuration / (60 * 1000) % 60);     // Sets the minutes difference to the variable
+            String EMADurationSeconds = String.valueOf((EMADuration / 1000) % 60);      // Sets the seconds difference to the variable
+            EMADurationFormat = EMADurationHours + ":" + EMADurationMinutes + ":" + EMADurationSeconds;       // Sets the duration to the variable
+        }
+        catch (ParseException e)        // If an error occurs in the process
+        {
+            EMADurationFormat = "Error, Please Consult the Followup EMA Activities File for the EMA Duration";      // This is the time between the EMAs
+        }
+
+        return EMADurationFormat;     // Returns the duration time as a string
     }
 
     private void ThankYou()     // This is a little thank you toast.

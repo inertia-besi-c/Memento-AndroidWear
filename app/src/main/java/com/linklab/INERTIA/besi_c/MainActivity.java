@@ -490,11 +490,11 @@ public class MainActivity extends WearableActivity  // This is the activity that
                             }
                             else        // If the watch is not charging.
                             {
-                                wifi.setWifiEnabled(false);     // Disable the wifi.
+//                                wifi.setWifiEnabled(false);     // Disable the wifi.
 
                                 if (isDeviceOnline())       // If the wifi is still when the watch is not charging
                                 {
-                                    wifi.setWifiEnabled(false);     // Disable the wifi.
+//                                    wifi.setWifiEnabled(false);     // Disable the wifi.
                                 }
 
                                 BatteryCharge = false;      // Set the battery charge boolean to false.
@@ -600,7 +600,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         if(!isRunning(ESTimerService.class))       // If the Estimote Timer service is not running
         {
             String data =  ("Main Activity," + "Restarted Estimote Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
-            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called System Activity.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called Sensors Activity.
             datalog.LogData();      // Saves the data into the directory.
 
             startService(EstimService);        // Starts the service.
@@ -637,6 +637,10 @@ public class MainActivity extends WearableActivity  // This is the activity that
 
         if (systemInformation.isTimeBetweenTimes(systemInformation.getTimeMilitary(), startHour, endHour, startMinute, endMinute, startSecond, endSecond))         /* Checks if the daily EMA button should be up */
         {
+            String data =  ("Main Activity," + "Displayed Daily Survey Button," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+            DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called System Activity.
+            datalog.LogData();      // Saves the data into the directory.
+
             Daily_Survey.setVisibility(View.VISIBLE);       // Sets the daily EMA button to visible.
             SLEEP.setVisibility(INVISIBLE);     // Sets the sleep button to invisible
         }

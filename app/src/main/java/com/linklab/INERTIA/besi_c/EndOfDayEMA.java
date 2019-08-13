@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +40,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private String[] UserResponses;     // This sets the person whose watch it is.
     private String [] Questions;        // These are the questions present
     private String[][] Answers;         // These are their possible answers.
+    private String EndOfDayEMAStartTime;      // This is the start time of the EndOfDay EMA
+    private String EndOfDayEMAStopTime;      // This is the stop time of the EndOfDay EMA
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final String System = Preference.System;      // Gets the System File label from Preferences
@@ -134,6 +137,8 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);          /* Vibrator values and their corresponding requirements */
         v.vibrate(ActivityBeginning);        // The watch vibrates for the allotted amount of time.
+
+        EndOfDayEMAStartTime = String.valueOf(SystemInformation.getTimeMilitary());     // This is the time that the EMA started.
 
         back = findViewById(R.id.Back);         // Sets the back button to a variable.
         next = findViewById(R.id.Next);         // Sets the next button to a variable.
@@ -345,7 +350,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
 
     private void Submit()    /* This is the end of survey part. It submits the data. */
     {
-        Log.i("End of Day EMA", "Submitting Results");     // Logs on Console.
+        EndOfDayEMAStopTime = String.valueOf(SystemInformation.getTimeMilitary());     // This is the time that the EMA stopped.
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);     // A date variable is initialized
         DateFormat dateFormatII = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
@@ -356,6 +361,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         {
             log.append(",").append(UserResponse);       // The data is logged and appended to a string.
         }
+        log.append(",").append(EMADuration());        // This logs the duration of the followup EMA
 
         DataLogger dataLogger = new DataLogger(Subdirectory_EMAResults, EndOfDay_Results, log.toString());     // Logs the data in a csv format.
         dataLogger.LogData();       // Logs the data into the BESI_C directory.
@@ -385,6 +391,29 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         {
             imageToast5();      // Calls the image toast
         }
+    }
+
+    private String EMADuration()      // This is the duration of the EMA
+    {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");        // This is the format that the times given for comparison will be in.
+        String EMADurationFormat;        // This is the pain EMA duration time.
+
+        try     // The system tires the following.
+        {
+            Date startTime = timeFormatter.parse(EndOfDayEMAStartTime);     // Sets the start time to the start time
+            Date stopTime = timeFormatter.parse(EndOfDayEMAStopTime);     // Sets the stop time to be the immediate time
+            long EMADuration = stopTime.getTime() - startTime.getTime();        // Gets the difference between both times
+            String EMADurationHours = String.valueOf(EMADuration / (60 * 60 * 1000) % 24);      // Sets the hour difference to the variable
+            String EMADurationMinutes = String.valueOf(EMADuration / (60 * 1000) % 60);     // Sets the minutes difference to the variable
+            String EMADurationSeconds = String.valueOf((EMADuration / 1000) % 60);      // Sets the seconds difference to the variable
+            EMADurationFormat = EMADurationHours + ":" + EMADurationMinutes + ":" + EMADurationSeconds;       // Sets the duration to the variable
+        }
+        catch (ParseException e)        // If an error occurs in the process
+        {
+            EMADurationFormat = "Error, Please Consult the EndOfDay EMA Activities File for the EMA Duration";      // This is the time between the EMAs
+        }
+
+        return EMADurationFormat;     // Returns the duration time as a string
     }
 
     public int RandomToastImage()       // This is the method that return a random number triggering an image toast.
