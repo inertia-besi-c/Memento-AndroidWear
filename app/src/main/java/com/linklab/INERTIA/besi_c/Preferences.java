@@ -10,7 +10,7 @@ public class Preferences        // System wide one stop place to set all setting
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
     public String DeviceID = "Device";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "Deployment";      // Deployment ID
-    public String Role = "Role";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for General Watch Features | Time is in ms |
@@ -39,7 +39,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMAReminderInterval = 5 * 60 * 1000;      // How long to wait between each ping reminding user to complete ema
     public int EoDEMAReminderNumber = 2;        // How many times to remind the wearer to complete ema
     /* The times should be exactly on the time you want it to come on */
-    public int EoDEMA_Time_Hour = 20;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_Time_Hour = 21;       // Hour at which the automatic daily ema should start
     public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The start time should always be on the exact time that you want them to start */
@@ -47,7 +47,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The end time should always be one second off from desired mark. */
-    public int EoDEMA_ManualEnd_Hour = 19;       // Hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop
 

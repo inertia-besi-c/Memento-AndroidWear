@@ -134,7 +134,7 @@
 
         <activity
             android:name=".ManualDailyEMA"
-            android:label="Manual EoD EMA"
+            android:label="BESI: Manual EoD EMA"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
