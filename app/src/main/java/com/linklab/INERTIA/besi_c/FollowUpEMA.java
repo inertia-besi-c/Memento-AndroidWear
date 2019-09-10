@@ -181,10 +181,27 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
             {
                 res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
                 res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
-                next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
-                back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+                next.setText(Answers[Questions.length-1][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[Questions.length-1][1]);     // Sets the back button to the second option in the questions
             }
-            else
+            else if (CurrentQuestion == Questions.length-3)      // If this is the 3rd to last question
+            {
+                res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
+                next.setText(Answers[Questions.length-3][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[Questions.length-3][1]);     // Sets the back button to the second option in the questions
+
+                if (Preference.Role.equals("CG"))        // If this is the caregiver watch
+                {
+                    res2.setVisibility(View.VISIBLE);           // Sets the second button to visible.
+                    res2.setBackgroundColor(Color.BLUE);        // Makes the button grey
+                    res2.setText(Answers[Questions.length-3][2]);       // Makes the answer on the button the third option in the answer choices
+                }
+                if (Preference.Role.equals("PT"))        // If this is the patient watch
+                {
+                    res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible.
+                }
+            }
+            else if (CurrentQuestion == 0)      // If this is the 3rd to last question
             {
                 res.setVisibility(View.INVISIBLE);        // Makes the first answer button visible
                 next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question

@@ -177,10 +177,35 @@ public class PainEMA extends WearableActivity       // This is the main activity
     {
         if (CurrentQuestion == 0 || CurrentQuestion == Questions.length-1 || CurrentQuestion == Questions.length-3)       // If the current question is the first question, last question, or third to last question
         {
-            res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
-            res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
-            next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
-            back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+            if (CurrentQuestion == 0)      // If this is the first question
+            {
+                res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+                res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
+                next.setText(Answers[0][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[0][1]);     // Sets the back button to the second option in the questions
+            }
+            else if (CurrentQuestion == Questions.length-1)     // If this is the last question
+            {
+                res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+                res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
+                next.setText(Answers[Questions.length-1][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[Questions.length-1][1]);     // Sets the back button to the second option in the questions
+            }
+            else if (CurrentQuestion == Questions.length-3)
+            {
+                res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+                res2.setVisibility(View.INVISIBLE);     // Makes the second answer button invisible
+                next.setText(Answers[Questions.length-3][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[Questions.length-3][1]);     // Sets the back button to the second option in the questions
+            }
+            if (CurrentQuestion == Questions.length-3 && Preference.Role.equals("CG"))       // If we are on the third question and the system is a caregiver
+            {
+                res.setVisibility(View.INVISIBLE);      // Makes the answer toggle invisible
+                res2.setVisibility(View.VISIBLE);     // Makes the second answer button visible
+                next.setText(Answers[Questions.length-3][0]);       // Leave the text of the button as the first option in the question
+                back.setText(Answers[Questions.length-3][1]);     // Sets the back button to the second option in the questions
+                res2.setText(Answers[Questions.length-3][2]);       // Sets the answer to be the third option in the sequence.
+            }
         }
         else        // If we are in any other question.
         {
@@ -211,6 +236,30 @@ public class PainEMA extends WearableActivity       // This is the main activity
                     v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
                     resTaps+=1;     // Increments the amount of taps by 1
                     Cycle_Responses();      // Calls the Cycles response method to show the next available answer in the list.
+                }
+            });
+
+            res2.setOnClickListener( new View.OnClickListener()        /* This is the haptic feedback feel that is done when the EMA buttons are pressed. */
+            {
+                public void onClick(View view)      // When the res button is clicked, this is run.
+                {
+                    Log.i("Pain EMA", "Second Answer Button Tapped");     // Logs on Console.
+
+                    String data =  ("Pain EMA," + "'Second Answer Toggle' Button Tapped at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
+                    DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, System, data);      // Logs it into a file called Preferences.
+                    datalog.LogData();      // Saves the data into the directory.
+
+                    v.vibrate(HapticFeedback);      // A slight vibration for haptic feedback.
+
+                    if (CurrentQuestion == Questions.length-3 && Preference.Role.equals("CG"))
+                    {
+                        UserResponses[CurrentQuestion] = res2.getText().toString();      // The user response question is moved.
+                        UserResponseIndex[CurrentQuestion] = Cycle_Responses();     // The question index is incremented
+                        LogActivity();      // The log activity method is called.
+
+                        CurrentQuestion += 2;     // Increment the question amount to go forward two times to the next question
+                        QuestionSystem();       // Call the question method again.
+                    }
                 }
             });
 
