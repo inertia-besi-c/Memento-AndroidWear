@@ -393,6 +393,22 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         {
             imageToast5();      // Calls the image toast
         }
+        else if (imageToast == 6)        // If the number is called
+        {
+            imageToast6();      // Calls the image toast
+        }
+        else if (imageToast == 7)        // If the number is called
+        {
+            imageToast7();      // Calls the image toast
+        }
+        else if (imageToast == 8)        // If the number is called
+        {
+            imageToast8();      // Calls the image toast
+        }
+        else if (imageToast == 9)        // If the number is called
+        {
+            imageToast9();      // Calls the image toast
+        }
     }
 
     private String EMADuration()      // This is the duration of the EMA
@@ -427,7 +443,11 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
                                 2,      // Image two
                                 3,      // Image three
                                 4,      // Image four
-                                5      // Image five
+                                5,      // Image five
+                                6,      // Image six
+                                7,      // Image seven
+                                8,      // Image eight
+                                9      // Image nine
                         )
                 );
 
@@ -483,6 +503,50 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     {
         LayoutInflater inflater = getLayoutInflater();      // Calls a layout
         View view = inflater.inflate(R.layout.activity_image_toast_5, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast6()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_6, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast7()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_7, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast8()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_8, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
+        Toast toast = new Toast(this);      // Calls the toast
+        toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
+        toast.setView(view);        // Sets the view
+        toast.show();       // Shows the toast
+        finish();       // Finishes the activity
+    }
+
+    private void imageToast9()       // This is the image toast
+    {
+        LayoutInflater inflater = getLayoutInflater();      // Calls a layout
+        View view = inflater.inflate(R.layout.activity_image_toast_9, (ViewGroup)findViewById(R.id.relativeLayout1));     // Sets the layout to the view
         Toast toast = new Toast(this);      // Calls the toast
         toast.setDuration(Toast.LENGTH_LONG);       // Makes the toast longer
         toast.setView(view);        // Sets the view
