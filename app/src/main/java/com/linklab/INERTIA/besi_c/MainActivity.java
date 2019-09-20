@@ -150,7 +150,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         final Intent EODScheduler = new Intent(getBaseContext(), EODTimerService.class);        // Creates an intent for calling the Estimote Timer service.
-        if(!isRunning(EODTimerService.class))       // If the Estimote Timer service is not running
+        if(true)//!isRunning(EODTimerService.class))       // If the Estimote Timer service is not running
         {
             String data =  ("Main Activity," + "Restarted EOD Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called Sensors Activity.
@@ -616,7 +616,7 @@ public class MainActivity extends WearableActivity  // This is the activity that
         }
 
         final Intent EODScheduler = new Intent(getBaseContext(), EODTimerService.class);        // Creates an intent for calling the Estimote Timer service.
-        if(!isRunning(EODTimerService.class))       // If the Estimote Timer service is not running
+        if(true)//!isRunning(EODTimerService.class))       // If the Estimote Timer service is not running
         {
             String data =  ("Main Activity," + "Restarted EOD Timer at," + SystemInformation.getTimeStamp());       // This is the format it is logged at.
             DataLogger datalog = new DataLogger(Subdirectory_DeviceLogs, Sensors, data);      // Logs it into a file called Sensors Activity.
