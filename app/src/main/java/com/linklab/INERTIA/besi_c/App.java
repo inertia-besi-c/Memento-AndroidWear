@@ -1,10 +1,10 @@
 package com.linklab.INERTIA.besi_c;
 
-import android.app.Service;
+// Imports.
+
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -19,33 +19,9 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EODTimerService extends Service {
-    public EODTimerService() {
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
-    {
-        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
-        if (!sensors.exists())      // If the file exists
-        {
-            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
-
-            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
-            dataLogger.LogData();       // Saves the data to the directory.
-        }
-
-        Log.i("End of Day EMA", "End of Day EMA Timer is starting");     // Logs on Console.
-
-        ScheduleEndOfDayEMA(this);      // Links the schedule EOD EMA to this.
-        return START_STICKY;    // This allows it to restart if the service is killed
-    }
-
+@SuppressWarnings("ALL")
+public class App extends Application        // Starts the EOD EMA Timer Service when called.
+{
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
@@ -58,7 +34,25 @@ public class EODTimerService extends Service {
     private String lastLine;        // Last line variable
     Timer EODTimerService;
 
-    public void ScheduleEndOfDayEMA(Context context)       // When the timer is called, the schedule is activated.
+    @Override
+    public void onCreate()      // Creates the instance when it is started.
+    {
+        File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
+        if (!sensors.exists())      // If the file exists
+        {
+            Log.i("End of Day EMA prompts", "Creating Header");     // Logs on Console.
+
+            DataLogger dataLogger = new DataLogger(Subdirectory_DeviceLogs, Sensors, Preference.Sensor_Data_Headers);        /* Logs the Sensors data in a csv format */
+            dataLogger.LogData();       // Saves the data to the directory.
+        }
+
+        Log.i("End of Day EMA", "End of Day EMA Timer is starting");     // Logs on Console.
+
+        super.onCreate();       // Starts the creation.
+        //ScheduleEndOfDayEMA(this);      // Links the schedule EOD EMA to this.
+    }
+
+    private void ScheduleEndOfDayEMA(Context context)       // When the timer is called, the schedule is activated.
     {
         EODTimerService.cancel();
         final Context thisContext = context;        // Gets a context for the file name.
@@ -157,3 +151,4 @@ public class EODTimerService extends Service {
         }
     }
 }
+

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.linklab.INERTIA.besi_c">
 
     <uses-feature android:name="android.hardware.type.watch" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
-        android:name=".EODTimerService"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/besi_logo"
         android:label="@string/app_name"
@@ -29,6 +29,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <service
+            android:name=".EODTimerService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -37,7 +41,6 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -59,56 +62,43 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
+
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".HRTimerService"
-            android:launchMode="singleInstance">
-        </service>
-
+            android:launchMode="singleInstance"></service>
         <service
             android:name=".ESTimerService"
-            android:launchMode="singleInstance">
-        </service>
-
+            android:launchMode="singleInstance"></service>
         <service
             android:name=".FollowUpEMASchedulerService"
-            android:enabled="true">
-        </service>
-
+            android:enabled="true"></service>
         <service
             android:name=".HeartRateSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService">
-        </service>
-
+            tools:ignore="ExportedService"></service>
         <service
             android:name=".AccelerometerSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService">
-        </service>
-
+            tools:ignore="ExportedService"></service>
         <service
             android:name=".PedometerSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService">
-        </service>
-
+            tools:ignore="ExportedService"></service>
         <service
             android:name=".EstimoteService"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService">
-        </service>
+            tools:ignore="ExportedService"></service>
 
         <activity
             android:name=".MainActivity"
@@ -116,90 +106,91 @@
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!--<category android:name="android.intent.category.HOME" />          &lt;!&ndash; Comment this out to be able to return to the regular home settings for the watch&ndash;&gt;-->
-                <!--<category android:name="android.intent.category.DEFAULT" />       &lt;!&ndash;Comment this out to be able to have the default watch activity be the default for the watch&ndash;&gt;-->
+                <!-- <category android:name="android.intent.category.HOME" />          &lt;!&ndash; Comment this out to be able to return to the regular home settings for the watch&ndash;&gt; -->
+                <!-- <category android:name="android.intent.category.DEFAULT" />       &lt;!&ndash;Comment this out to be able to have the default watch activity be the default for the watch&ndash;&gt; -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LowBattery"
             android:label="BESI: Low Battery"
             android:launchMode="singleInstance">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ManualDailyEMA"
             android:label="BESI: Manual EoD EMA"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".EndOfDayPrompt1"
             android:label="BESI: EoD Prompt 1"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".EndOfDayPrompt2"
             android:label="BESI: EoD Prompt 2"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".FireBase_Upload"
             android:label="BESI: Upload Files"
             android:launchMode="singleInstance">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".FollowUpEMA"
             android:label="BESI: Follow-up EMA"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".PainEMA"
             android:label="BESI: Pain EMA"
             android:launchMode="singleInstance">
-             <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-        </activity>
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".EndOfDayEMA"
             android:label="BESI: EoD EMA"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
