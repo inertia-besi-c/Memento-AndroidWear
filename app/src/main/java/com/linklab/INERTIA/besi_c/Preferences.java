@@ -8,14 +8,20 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
+<<<<<<< Updated upstream
     public String DeviceID = "Device-ID";        // Internal ID of Device assigned to Dyad
     public String DeploymentID = "Deployment";      // Deployment ID
     public String Role = "Role";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+=======
+    public String DeviceID = "DEMO_PT";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "P2D2";      // Deployment ID
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+>>>>>>> Stashed changes
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for General Watch Features | Time is in ms |
-    public int ThreadUpdater = 5000;        // This is how often the main thread is run
-    public int UIUpdate = 60;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
+    public int ThreadUpdater = 1000;        // This is how often the main thread is run
+    public int UIUpdate = 30;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
     public int ActivityReminder = 1000;          // How the system vibrates when an activity reminds the person to continue survey

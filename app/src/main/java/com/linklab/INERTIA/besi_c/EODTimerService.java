@@ -32,6 +32,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
     private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
     private String currentLine;     // Line reader variable
     private String lastLine;        // Last line variable
+    Timer EODTimerService;
 
     @Override
     public void onCreate()      // Creates the instance when it is started.
@@ -51,8 +52,9 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
         ScheduleEndOfDayEMA(this);      // Links the schedule EOD EMA to this.
     }
 
-    private void ScheduleEndOfDayEMA(Context context)       // When the timer is called, the schedule is activated.
+    public void ScheduleEndOfDayEMA(Context context)       // When the timer is called, the schedule is activated.
     {
+        EODTimerService.cancel();
         final Context thisContext = context;        // Gets a context for the file name.
         Calendar calendar = Calendar.getInstance();     // Gets the calendar.
         calendar.set(Calendar.HOUR_OF_DAY, Preference.EoDEMA_Time_Hour);     // Gets the hour of the day from the preference.
@@ -63,7 +65,7 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
         {
             long delay = calendar.getTimeInMillis() - System.currentTimeMillis();       // Starts a long delay variable.
 
-            Timer EODTimerService = new Timer();      // When called the timer is started.
+            EODTimerService = new Timer();      // When called the timer is started.
             EODTimerService.schedule(new TimerTask()        // Starts the EODTimerService
             {
                 @Override
