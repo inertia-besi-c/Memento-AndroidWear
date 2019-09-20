@@ -31,6 +31,7 @@ public class EODTimerService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
     {
+        EODTimerService.cancel();
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
         if (!sensors.exists())      // If the file exists
         {
