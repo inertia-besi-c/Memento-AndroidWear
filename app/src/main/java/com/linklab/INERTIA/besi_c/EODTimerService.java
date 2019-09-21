@@ -73,7 +73,6 @@ public class EODTimerService extends Application        // Starts the EOD EMA Ti
                     Date date = new Date();     // Starts a new date call.
                     File file = new File(Directory, FileName);       // Looks for a filename with the new filename
 
-
                     try     // Tries to run the following.
                     {
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));      // Reads the buffer in the system
