@@ -29,10 +29,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <service
-            android:name=".EODTimerService"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -62,43 +58,53 @@
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
-
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
         <service
             android:name=".HRTimerService"
-            android:launchMode="singleInstance"></service>
+            android:launchMode="singleInstance">
+        </service>
         <service
             android:name=".ESTimerService"
-            android:launchMode="singleInstance"></service>
+            android:launchMode="singleInstance">
+        </service>
+        <service
+            android:name=".EODTimerService"
+            android:launchMode="singleInstance">
+        </service>
         <service
             android:name=".FollowUpEMASchedulerService"
-            android:enabled="true"></service>
+            android:enabled="true">
+        </service>
         <service
             android:name=".HeartRateSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService"></service>
+            tools:ignore="ExportedService">
+        </service>
         <service
             android:name=".AccelerometerSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService"></service>
+            tools:ignore="ExportedService">
+        </service>
         <service
             android:name=".PedometerSensor"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService"></service>
+            tools:ignore="ExportedService">
+        </service>
         <service
             android:name=".EstimoteService"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            tools:ignore="ExportedService"></service>
+            tools:ignore="ExportedService">
+        </service>
 
         <activity
             android:name=".MainActivity"
