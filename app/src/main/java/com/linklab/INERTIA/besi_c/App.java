@@ -1,9 +1,10 @@
 package com.linklab.INERTIA.besi_c;
 
-import android.app.Service;
+// Imports.
+
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -18,9 +19,23 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EODTimerService extends Service
+@SuppressWarnings("ALL")
+public class App extends Application        // Starts the EOD EMA Timer Service when called.
 {
-    public int onStartCommand(Intent intent, int flags, int startId)    /* Establishes the sensor and the ability to collect data at the start of the data collection */
+    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
+    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
+    private final String Directory = Preference.Directory;     // Gets the directory from the preferences class.
+    private final String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
+    private final String EODEMA_Date = Preference.EODEMA_Date;        // This is the file name from preferences
+    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
+    private String currentLine;     // Line reader variable
+    private String lastLine;        // Last line variable
+    Timer EODTimerService;
+
+    @Override
+    public void onCreate()      // Creates the instance when it is started.
     {
         File sensors = new File(Preference.Directory + SystemInformation.Sensors_Path);     // Gets the path to the Sensors from the system.
         if (!sensors.exists())      // If the file exists
@@ -33,24 +48,13 @@ public class EODTimerService extends Service
 
         Log.i("End of Day EMA", "End of Day EMA Timer is starting");     // Logs on Console.
 
-        ScheduleEndOfDayEMA(this);      // Links the schedule EOD EMA to this.
-        return START_STICKY;    // This allows it to restart if the service is killed
+        super.onCreate();       // Starts the creation.
+        //ScheduleEndOfDayEMA(this);      // Links the schedule EOD EMA to this.
     }
 
-    private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
-    private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
-    private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
-    private final String Directory = Preference.Directory;     // Gets the directory from the preferences class.
-    private final String FileName = SystemInformation.EODEMA_Date_Path;        // Initiates a variable for the filename from preferences
-    private final String EODEMA_Date = Preference.EODEMA_Date;        // This is the file name from preferences
-    private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
-    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;        // This is where all the system logs and data are kept.
-    private String currentLine;     // Line reader variable
-    private String lastLine;        // Last line variable
-    Timer EODTimerService;      // The timer for the service.
-
-    public void ScheduleEndOfDayEMA(Context context)       // When the timer is called, the schedule is activated.
+    private void ScheduleEndOfDayEMA(Context context)       // When the timer is called, the schedule is activated.
     {
+        EODTimerService.cancel();
         final Context thisContext = context;        // Gets a context for the file name.
         Calendar calendar = Calendar.getInstance();     // Gets the calendar.
         calendar.set(Calendar.HOUR_OF_DAY, Preference.EoDEMA_Time_Hour);     // Gets the hour of the day from the preference.
@@ -62,7 +66,7 @@ public class EODTimerService extends Service
             long delay = calendar.getTimeInMillis() - System.currentTimeMillis();       // Starts a long delay variable.
 
             EODTimerService = new Timer();      // When called the timer is started.
-            EODTimerService.schedule(new TimerTask()        // Starts the Application
+            EODTimerService.schedule(new TimerTask()        // Starts the App
             {
                 @Override
                 public void run()       // Runs when it is called.
@@ -70,6 +74,7 @@ public class EODTimerService extends Service
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
                     Date date = new Date();     // Starts a new date call.
                     File file = new File(Directory, FileName);       // Looks for a filename with the new filename
+
 
                     try     // Tries to run the following.
                     {
@@ -145,11 +150,5 @@ public class EODTimerService extends Service
             }, delay, Preference.EoDEMA_Period);     // Gets the preferences setting from the preference system.
         }
     }
-
-    @Override
-    public IBinder onBind(Intent intent)
-    {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 }
+
