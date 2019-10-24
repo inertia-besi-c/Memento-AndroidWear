@@ -56,7 +56,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         String linearz = decimalformat.format(linear_accel[2]);     // Limits the length of the double to 4 digits
 
         final String accelerometerValues =      // Shows the values in a string.
-                SystemInformation.getTimeStamp() + "," + "," +          // Starts a new string line.
+                SystemInformation.getTimeStamp() + "," +          // Starts a new string line.
                 linearx + "," +         // Acceleration value on x-axis
                 lineary + "," +         // Acceleration value on y-axis
                 linearz;        // Acceleration value on z-axis

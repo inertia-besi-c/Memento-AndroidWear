@@ -113,7 +113,7 @@ public class Preferences        // System wide one stop place to set all setting
     public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
                                                  "Question 6 Answer, Question 7 Answer, EMA Duration (Hours:Minutes:Seconds)";        // Column Headers for Followup_EMA_Results
     public String Heart_Rate_Data_Headers = "Date --- Time, System Time Stamp, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
-    public String Accelerometer_Data_Headers = "Date --- Time, System Time Stamp, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
+    public String Accelerometer_Data_Headers = "Date --- Time, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
     public String Pedometer_Data_Headers = "Date --- Time, System Time Stamp, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data
     public String Estimote_Data_Headers = "Estimote ID, RSSI, Calculated Distance, Date --- Time";       // Column Headers for Estimote_Data
     public String Battery_Data_Headers = "Date --- Time, Charging State, Battery Level";       // Column Headers for the Battery.
