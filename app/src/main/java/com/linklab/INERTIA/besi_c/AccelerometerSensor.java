@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
+import java.text.*;
 
 import java.io.File;
 
@@ -23,7 +24,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     private final int MaxDataCount = Preference.AccelDataCount;        // Gets the Data count number from preferences.
     private final String Subdirectory_Accelerometer = Preference.Subdirectory_Accelerometer;       // This is where the accelerometer data is kept
     private int currentCount = 0;       // This is the initial data count for the sensor
-    private StringBuilder stringBuilder;
+    private StringBuilder stringBuilder1, stringBuilder2;
 
     @SuppressLint("WakelockTimeout")        // Stops the error message from the wakelock
     @Override
@@ -32,7 +33,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);       // Initializes the ability to get a sensor from the system.
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);     // Gets the specific sensor called accelerometer.
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);       // It listens to the data acquires from the accelerometer
-        stringBuilder = new StringBuilder();
+        stringBuilder1 = new StringBuilder();
+        stringBuilder2 = new StringBuilder();
         return START_STICKY;        // Restarts the sensor if it is killed by the system.
     }
 
@@ -40,6 +42,7 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
         Log.i("Accelerometer", "Logging to StringBuilder");     // Logs to console
+        DecimalFormat decimalformat = new DecimalFormat("#.####");
 
         currentCount ++;
         double[] linear_accel = new double[3];      // Initializes the accelerometer value from the sensor.
@@ -48,17 +51,25 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[1] = event.values[1];     // Accelerometer value with gravity on the y-axis
         linear_accel[2] = event.values[2];     // Accelerometer value with gravity on the z-axis
 
+        String linearx = decimalformat.format(linear_accel[0]);     // Limits the length of the double to 4 digits
+        String lineary = decimalformat.format(linear_accel[1]);     // Limits the length of the double to 4 digits
+        String linearz = decimalformat.format(linear_accel[2]);     // Limits the length of the double to 4 digits
+
         final String accelerometerValues =      // Shows the values in a string.
-                SystemInformation.getTimeStamp() + "," + event.timestamp + "," +          // Starts a new string line.
-                linear_accel[0] + "," +         // Acceleration value on x-axis
-                linear_accel[1] + "," +         // Acceleration value on y-axis
-                linear_accel[2];        // Acceleration value on z-axis
+                SystemInformation.getTimeStamp() + "," + "," +          // Starts a new string line.
+                linearx + "," +         // Acceleration value on x-axis
+                lineary + "," +         // Acceleration value on y-axis
+                linearz;        // Acceleration value on z-axis
 
-        stringBuilder.append(accelerometerValues);      // Appends the values to the string builder
-        stringBuilder.append("\n");     // Makes a new line
+        stringBuilder1.append(accelerometerValues);      // Appends the values to the string builder
+        stringBuilder1.append("\n");     // Makes a new line
 
-        if ((currentCount >= MaxDataCount) && (stringBuilder != null))      // If the string builder length is thing and it is not empty
+        if ((currentCount >= MaxDataCount) && (stringBuilder1 != null))      // If the string builder length is thing and it is not empty
         {
+            stringBuilder2 = stringBuilder1;        // Sets the second stringBuilder to the first stringBuilder
+            currentCount = 0;       // Reset the count
+            stringBuilder1.setLength(0);     // Empties the stringBuilder before next set.
+
             new Thread(new Runnable()       // Runs this when one or more of the values change
             {
                 public void run()       // Re-runs every time.
@@ -74,10 +85,9 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 
                     Log.i("Accelerometer", "Saving Accelerometer Sensor Service Values");     // Logs on Console.
 
-                    DataLogger dataLogger = new DataLogger(Subdirectory_Accelerometer, Accelerometer, stringBuilder.toString());       // Logs the data into a file that can be retrieved from the watch.
+                    DataLogger dataLogger = new DataLogger(Subdirectory_Accelerometer, Accelerometer, stringBuilder2.toString());       // Logs the data into a file that can be retrieved from the watch.
                     dataLogger.LogData();       // Logs the data to a folder on the watch.
-                    stringBuilder.setLength(0);     //Empties the stringBuilder before next set.
-                    currentCount = 0;       // Reset the count
+                    stringBuilder2.setLength(0);     // Empties the stringBuilder before next set.
                 }
             }).start();     // This starts the runnable thread.
         }
