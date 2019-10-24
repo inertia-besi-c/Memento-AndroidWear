@@ -15,6 +15,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,7 +29,9 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
     private final String Sensors = Preference.Sensors;     // Gets the sensors from preferences.
     private final String System = Preference.System;       // Gets the system from preferences.
+    private final String EODEMA_Date = Preference.EODEMA_Date;     // Gets the EODEMA date File label from Preferences
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
+    private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
     private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
     private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock timer.
@@ -110,6 +116,9 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
             @Override
             public void onClick(View view)     // WHen it is clicked this is run.
             {
+                DateFormat dateFormatII = new SimpleDateFormat("yyyy/MM/dd", Locale.US);     // A date variable is initialized
+                Date date = new Date();     // Starts a new date call.
+
                 v.vibrate(HapticFeedback);     // Vibrates for the specified amount of time in milliseconds.
 
                 Log.i("End of Day EMA Prompts", "Prompt 1 - Dismiss Clicked, Stopping all End of Day EMA Services");     // Logs on Console.
@@ -122,6 +131,9 @@ public class EndOfDayPrompt1 extends WearableActivity       // Starts the first 
 
                 datalog.LogData();      // Saves the data into the directory.
                 datalog1.LogData();      // Saves the data into the directory.
+
+                DataLogger DailyActivity = new DataLogger(Subdirectory_DeviceActivities, EODEMA_Date, String.valueOf(dateFormatII.format(date)));      // Logs date data to the file.
+                DailyActivity.WriteData();      // Logs the data to the BESI_C directory.
 
                 finish();       // Finishes the EOD EMA.
             }

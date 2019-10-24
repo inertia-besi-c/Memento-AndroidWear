@@ -14,7 +14,7 @@ public class Preferences        // System wide one stop place to set all setting
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for General Watch Features | Time is in ms |
-    public int ThreadUpdater = 1000;        // This is how often the main thread is run
+    public int ThreadUpdater = 5000;        // This is how often the main thread is run
     public int UIUpdate = 30;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
