@@ -51,9 +51,9 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
         linear_accel[1] = event.values[1];     // Accelerometer value with gravity on the y-axis
         linear_accel[2] = event.values[2];     // Accelerometer value with gravity on the z-axis
 
-        String linearx = decimalformat.format(linear_accel[0]);     // Limits the length of the double to 4 digits
-        String lineary = decimalformat.format(linear_accel[1]);     // Limits the length of the double to 4 digits
-        String linearz = decimalformat.format(linear_accel[2]);     // Limits the length of the double to 4 digits
+        String linearx = decimalformat.format(linear_accel[0]);     // Limits the length of the x-axis value to 4 digits
+        String lineary = decimalformat.format(linear_accel[1]);     // Limits the length of the y-axis value to 4 digits
+        String linearz = decimalformat.format(linear_accel[2]);     // Limits the length of the z-axis value to 4 digits
 
         final String accelerometerValues =      // Shows the values in a string.
                 SystemInformation.getTimeStamp() + "," +          // Starts a new string line.
@@ -66,8 +66,8 @@ public class AccelerometerSensor extends Service implements SensorEventListener 
 
         if ((currentCount >= MaxDataCount) && (stringBuilder1 != null))      // If the string builder length is thing and it is not empty
         {
-            stringBuilder2 = stringBuilder1;        // Sets the second stringBuilder to the first stringBuilder
-            currentCount = 0;       // Reset the count
+            stringBuilder2.append(stringBuilder1);        // Appends all the values from the the first string builder to the second string builder
+            currentCount = 0;       // Reset the count so that stringBuilder1 can now be ready to start gathering of more data without duplication
             stringBuilder1.setLength(0);     // Empties the stringBuilder before next set.
 
             new Thread(new Runnable()       // Runs this when one or more of the values change
