@@ -8,9 +8,9 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "DEVICE";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "DEPLOYMENT";      // Deployment ID
-    public String Role = "ROLE";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String DeviceID = "CG2";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "P2D3";      // Deployment ID
+    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for General Watch Features | Time is in ms |
@@ -39,7 +39,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMAReminderInterval = 5 * 60 * 1000;      // How long to wait between each ping reminding user to complete ema
     public int EoDEMAReminderNumber = 2;        // How many times to remind the wearer to complete ema
     /* The times should be exactly on the time you want it to come on */
-    public int EoDEMA_Time_Hour = 21;       // Hour at which the automatic daily ema should start
+    public int EoDEMA_Time_Hour = 20;       // Hour at which the automatic daily ema should start
     public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The start time should always be on the exact time that you want them to start */
