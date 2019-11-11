@@ -78,7 +78,7 @@ public class HeartRateSensor extends Service implements SensorEventListener     
     public void onSensorChanged(SensorEvent event)      // This is where the data collected by the sensor is saved into a csv file which can be accessed.
     {
         String HeartRateMonitor = String.valueOf(event.values[0]);      // This changes the value of the sensor data to a string.
-        final String logstring = SystemInformation.getTimeStamp() + "," + event.timestamp + "," + HeartRateMonitor + "," + event.accuracy;     // Appends the Heart Rate value onto the string
+        final String logstring = SystemInformation.getTimeStamp() + "," + HeartRateMonitor + "," + event.accuracy;     // Appends the Heart Rate value onto the string
 
         new Thread(new Runnable()       // Starts a new runnable file.
         {

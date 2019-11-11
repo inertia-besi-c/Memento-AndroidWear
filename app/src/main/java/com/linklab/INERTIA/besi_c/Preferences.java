@@ -14,7 +14,7 @@ public class Preferences        // System wide one stop place to set all setting
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for General Watch Features | Time is in ms |
-    public int ThreadUpdater = 1000;        // This is how often the main thread is run
+    public int ThreadUpdater = 5000;        // This is how often the main thread is run
     public int UIUpdate = 30;       // This is how ofthen the User Interface is updated (TIME IN SECONDS)
     public int HapticFeedback = 20;           // How should the system vibrate when a button is clicked
     public int ActivityBeginning = 1000;          // How the system vibrates when an activity begins
@@ -112,9 +112,9 @@ public class Preferences        // System wide one stop place to set all setting
     public String Followup_EMA_Activity_Headers = "Date --- Time, EMA Type, Question Number, Answer Picked";       // Column Headers for Followup_EMA_Activity
     public String Followup_EMA_Results_Headers = "Date --- Time, Question 1 Answer, Question 2 Answer, Question 3 Answer, Question 4 Answer, Question 5 Answer, " +
                                                  "Question 6 Answer, Question 7 Answer, EMA Duration (Hours:Minutes:Seconds)";        // Column Headers for Followup_EMA_Results
-    public String Heart_Rate_Data_Headers = "Date --- Time, System Time Stamp, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
-    public String Accelerometer_Data_Headers = "Date --- Time, System Time Stamp, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
-    public String Pedometer_Data_Headers = "Date --- Time, System Time Stamp, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data
+    public String Heart_Rate_Data_Headers = "Date --- Time, Heart Rate Value, Confidence Level";         // Column Headers for Heart_Rate_Data
+    public String Accelerometer_Data_Headers = "Date --- Time, X-Value, Y-Value, Z-Value";      // Column Headers for Accelerometer_Data
+    public String Pedometer_Data_Headers = "Date --- Time, Number of Steps, Confidence Level";      // Column Headers for Pedometer_Data
     public String Estimote_Data_Headers = "Estimote ID, RSSI, Calculated Distance, Date --- Time";       // Column Headers for Estimote_Data
     public String Battery_Data_Headers = "Date --- Time, Charging State, Battery Level";       // Column Headers for the Battery.
     public String Sensor_Data_Headers = "Screen, Action, Date --- Time";       // Column Headers for the Sensor Logs.

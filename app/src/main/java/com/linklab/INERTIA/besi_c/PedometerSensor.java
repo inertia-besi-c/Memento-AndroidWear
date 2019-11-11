@@ -51,7 +51,7 @@ public class PedometerSensor extends Service implements SensorEventListener     
             datalogger.WriteData();       // Start logging yes to the file.
         }
 
-        final String logstring = SystemInformation.getTimeStamp() + "," + event.timestamp + "," + event.values[0] + "," + event.accuracy;     // Format the data
+        final String logstring = SystemInformation.getTimeStamp() + "," +  event.values[0] + "," + event.accuracy;     // Format the data
 
         new Thread(new Runnable()       // Starts a new thread for the service.
         {
