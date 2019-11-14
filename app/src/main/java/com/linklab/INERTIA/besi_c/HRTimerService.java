@@ -24,7 +24,6 @@ public class HRTimerService extends Service         /* This runs the delay timer
     private final String Battery = Preference.Battery;     // Gets the sensors from preferences.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private Timer HRTimerService;         // Starts the variable timer.
-    private PowerManager.WakeLock wakeLock;     // Starts the wakelock service from the system.
     @SuppressLint("WakelockTimeout")        // Suppresses the wakelock.
 
     @Override
@@ -48,9 +47,6 @@ public class HRTimerService extends Service         /* This runs the delay timer
             dataLogger.LogData();       // Saves the data to the directory.
         }
 
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);     // Starts the power manager service from the system
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HRService: wakeLock");         // Starts a partial wakelock for the heartrate sensor.
-        wakeLock.acquire();     // Starts the wakelock without any timeout.
         PeriodicService(false);     // Makes the periodic service false initially.
 
         return START_STICKY;    // This allows it to restart if the service is killed
@@ -118,8 +114,6 @@ public class HRTimerService extends Service         /* This runs the delay timer
         Log.i("Heart Rate Timer Sensor", "Destroying Timer Service");     // Logs on Console.
 
         HRTimerService.cancel();        //  Cancels the HR Timer Service.
-        wakeLock.release();     // Releases the wakelock
-
         if (isRunning(HeartRateSensor.class))        // If the periodic service is running
         {
             PeriodicService(true);      // Stops the periodic service.
