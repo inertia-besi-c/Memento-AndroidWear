@@ -44,6 +44,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private String EndOfDayEMAStopTime;      // This is the stop time of the EndOfDay EMA
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private String Step = Preference.Steps;     // Gets the step file from preferences.
     private final String System = Preference.System;      // Gets the System File label from Preferences
     private final String EODEMA_Date = Preference.EODEMA_Date;     // Gets the EODEMA date File label from Preferences
     private final String EndOfDay_Activity = Preference.EndOfDay_Activity;      // Gets the End of Day Activity File label from Preferences
@@ -55,7 +56,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private final long EMAReminderInterval = Preference.EoDEMAReminderInterval; //    Time before pinging user after not finishing EMA
     private final int ReminderNumber = Preference.EoDEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
     private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
-    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
     private final int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
@@ -131,6 +132,12 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
+        if (stepActivity.ReadData().contains("no"))        // If the file contains yes
+        {
+            onDestroy();       // Finishes the EMA
+        }
+
         CheckFiles();       // Calls the check files method.
         unlockScreen();     // Unlocks the screen
 

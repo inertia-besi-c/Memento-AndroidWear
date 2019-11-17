@@ -8,9 +8,9 @@ public class Preferences        // System wide one stop place to set all setting
     /* ------------------------------------------------------------------------------- Settings for Deployment, Read Notes Carefully ------------------------------------------------------------------------------*/
 
     // There should be **NO CHARACTERS OTHER THAN LETTERS, NUMBERS, - or _ ** in file or directory names!
-    public String DeviceID = "CG2";        // Internal ID of Device assigned to Dyad
-    public String DeploymentID = "P2D3";      // Deployment ID
-    public String Role = "CG";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
+    public String DeviceID = "Unknown";        // Internal ID of Device assigned to Dyad
+    public String DeploymentID = "DEPLOYMENT-ID";      // Deployment ID
+    public String Role = "PT";         // Role of user wearing the watch; CG for Caregiver or PT for Patient
     public String Directory = Environment.getExternalStorageDirectory() + "/BESI-C/";        // Directory on the watch where all files are saved
 
     // Settings for General Watch Features | Time is in ms |
@@ -26,7 +26,7 @@ public class Preferences        // System wide one stop place to set all setting
     public int PainEMAReminderNumber = 2;       // How many times to remind the wearer to complete ema
 
     // Settings for Follow-up EMA | Time is in ms |
-    public int FollowUpEMATimer = 30 * 60 * 1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
+    public int FollowUpEMATimer =  30 * 60 * 1000;       // How long to wait after PainEMA submitted to prompt follow-up ema
     public int FollowupEMAReminderDelay = 0;        // How long to give the user before starting the timer to remind user to complete the ema
     public int FollowUpEMAReminderNumber = 3;       // How many times to remind the wearer to complete the follow-up ema
     public int FollowUpEMAReminderInterval = 5 * 60 * 1000;         // How long to wait between each ping reminding user to complete ema
@@ -40,14 +40,14 @@ public class Preferences        // System wide one stop place to set all setting
     public int EoDEMAReminderNumber = 2;        // How many times to remind the wearer to complete ema
     /* The times should be exactly on the time you want it to come on */
     public int EoDEMA_Time_Hour = 20;       // Hour at which the automatic daily ema should start
-    public int EoDEMA_Time_Minute = 00;      // Minute of hour at which the automatic daily ema should start
+    public int EoDEMA_Time_Minute = 30;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_Time_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The start time should always be on the exact time that you want them to start */
     public int EoDEMA_ManualStart_Hour = 17;       // Hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Minute = 00;      // Minute of hour at which the automatic daily ema should start
     public int EoDEMA_ManualStart_Second = 00;      // Second of minute at which the automatic daily ema should start
     /* The end time should always be one second off from desired mark. */
-    public int EoDEMA_ManualEnd_Hour = 20;       // Hour at which the automatic daily ema should stop
+    public int EoDEMA_ManualEnd_Hour = 23;       // Hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Minute = 59;      // Minute of hour at which the automatic daily ema should stop
     public int EoDEMA_ManualEnd_Second = 59;      // Second of minute at which the automatic daily ema should stop
 
