@@ -56,7 +56,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private final long EMAReminderInterval = Preference.EoDEMAReminderInterval; //    Time before pinging user after not finishing EMA
     private final int ReminderNumber = Preference.EoDEMAReminderNumber;       // This is the number of reminders i will get to finish the EMA.
     private final int HapticFeedback = Preference.HapticFeedback;      // This is the haptic feedback for button presses.
-    private final int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
+    private int ActivityBeginning = Preference.ActivityBeginning;      // This is the haptic feedback for button presses.
     private final int ActivityReminder = Preference.ActivityReminder;      // This is the haptic feedback for button presses.
     private final String Subdirectory_DeviceLogs = Preference.Subdirectory_DeviceLogs;        // This is where all the system logs and data are kept.
     private final String Subdirectory_DeviceActivities = Preference.Subdirectory_DeviceActivities;       // This is where the device data that is used to update something in the app is kept
@@ -132,6 +132,12 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
+        if (stepActivity.ReadData().contains("no"))        // If the file contains yes
+        {
+            onDestroy();       // Finishes the EMA
+        }
+
         CheckFiles();       // Calls the check files method.
         unlockScreen();     // Unlocks the screen
 
@@ -148,12 +154,6 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         req = findViewById(R.id.EMA_req);       // Sets the req button to a variable.
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
         res2 = findViewById(R.id.EMA_res2);      // Sets the res2 button to a variable.
-
-        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
-        if (stepActivity.ReadData().contains("no"))        // If the file contains yes
-        {
-            finish();
-        }
 
         if (Preference.Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {

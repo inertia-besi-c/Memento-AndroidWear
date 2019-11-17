@@ -110,6 +110,12 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
     @Override
     protected void onCreate(Bundle savedInstanceState)    // When the screen is created, this is run.
     {
+        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
+        if (stepActivity.ReadData().contains("no"))        // If the file contains yes
+        {
+            onDestroy();       // Finishes the EMA
+        }
+
         CheckFiles();       // Checks that the file needed dby the system are present
         unlockScreen();     // Unlocks the screen
 
@@ -130,20 +136,13 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
         res2 = findViewById(R.id.EMA_res2);       // Sets the res button to a variable.
 
-        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
-        if (stepActivity.ReadData().contains("no"))        // If the file contains yes
-        {
-            finish();
-        }
-
         if (Preference.Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
             Log.i("Followup EMA", "This is Patient");     // Logs on Console.
 
             Questions = PatientQuestions;       // If it is, it sets the set of questions to be asked to the patient questions.
             Answers = PatientAnswers;       // And it sets the available answers to be asked to the patient answers.
-        }
-        else if (Preference.Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
+        } else if (Preference.Role.equals("CG"))        // This is where the role is set, it checks if the role is CG
         {
             Log.i("Followup EMA", "This is Care Giver");     // Logs on Console.
 
@@ -164,16 +163,16 @@ public class FollowUpEMA extends WearableActivity       // This is the followup 
                     Log.i("Followup EMA", "Reminding User to Continue Survey");     // Logs on Console.
 
                     v.vibrate(ActivityReminder);     // Vibrate for the assigned time.
-                    ReminderCount ++;       // Increment the reminder count by 1.
-                }
-                else        // If their are no more questions left to ask
+                    ReminderCount++;       // Increment the reminder count by 1.
+                } else        // If their are no more questions left to ask
                 {
                     Log.i("Followup EMA", "Automatically Ending Survey");     // Logs on Console.
 
                     Submit();       // Submit the response to the questions.
                 }
             }
-        },EMAReminderDelay,EMAReminderInterval);        // Sets the time and the delay that they should follow.
+        }, EMAReminderDelay, EMAReminderInterval);        // Sets the time and the delay that they should follow.
+
 
         QuestionSystem();       // Calls the question system method
         setAmbientEnabled();        // Keeps the screen awake when working.
