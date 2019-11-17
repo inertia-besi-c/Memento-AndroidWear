@@ -75,7 +75,7 @@ public class DataLogger     // A function that runs the data logging data
         }
     }
 
-    public void WriteData()     // This writes the data to the sdcard.
+    public void WriteData()     // This erases and rewrites the data to the sdcard
     {
         if (isExternalStorageWritable())        // Checks if we can write data to the card.
         {

@@ -44,6 +44,7 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
     private String EndOfDayEMAStopTime;      // This is the stop time of the EndOfDay EMA
     private final Preferences Preference = new Preferences();     // Gets an instance from the preferences module.
     private final SystemInformation SystemInformation = new SystemInformation();  // Gets an instance from the system information module
+    private String Step = Preference.Steps;     // Gets the step file from preferences.
     private final String System = Preference.System;      // Gets the System File label from Preferences
     private final String EODEMA_Date = Preference.EODEMA_Date;     // Gets the EODEMA date File label from Preferences
     private final String EndOfDay_Activity = Preference.EndOfDay_Activity;      // Gets the End of Day Activity File label from Preferences
@@ -147,6 +148,12 @@ public class EndOfDayEMA extends WearableActivity       // This is the main serv
         req = findViewById(R.id.EMA_req);       // Sets the req button to a variable.
         res = findViewById(R.id.EMA_res);       // Sets the res button to a variable.
         res2 = findViewById(R.id.EMA_res2);      // Sets the res2 button to a variable.
+
+        DataLogger stepActivity = new DataLogger(Subdirectory_DeviceActivities, Step,"no");      // Logs step data to the file.
+        if (stepActivity.ReadData().contains("no"))        // If the file contains yes
+        {
+            finish();
+        }
 
         if (Preference.Role.equals("PT"))        // This is where the role is set, it checks if the role is PT
         {
