@@ -127,6 +127,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MainActivityEODEMA"
+            android:label="BESI: Main Activity EODEMA Button"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".LowBattery"
             android:label="BESI: Low Battery"
             android:launchMode="singleInstance">
